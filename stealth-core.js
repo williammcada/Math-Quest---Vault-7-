@@ -2,7 +2,7 @@
 export const REVISION='vault7-stealth-1';
 export const RULES={width:1024,height:176,tile:16,viewWidth:320,viewHeight:180,step:1/60,speed:72,groundAccel:600,airAccel:320,friction:800,gravity:620,jump:-225,jumpCut:-90,maxFall:300,coyote:.1,buffer:.12,limit:180000,teamWindow:300000};
 export const CHECKPOINTS={none:{x:32,y:136},A:{x:180,y:136},B:{x:648,y:136},C:{x:840,y:136}};
-export const EQUIPMENT={map:{name:'Maintenance Map',effect:'Safe zones and sensor timing revealed.'},toolkit:{name:'Silent Toolkit',effect:'The hardest route spotlight is disabled.'},scanner:{name:'Code Scanner',effect:'Dashed cones forecast each beam 2 seconds ahead.'}};
+export const EQUIPMENT={map:{name:'Maintenance Map',effect:'Look for green SAFE boxes and ON/OFF countdowns beside sensors.'},toolkit:{name:'Silent Toolkit',effect:'One route spotlight is switched OFF before you enter. Movement speed is unchanged.'},scanner:{name:'Code Scanner',effect:'Cyan dashed cones show where searchlights will point in 2 seconds.'}};
 const common=[[0,10,64,1],[0,0,1,11],[63,0,1,11],[6,6,4,1],[10,9,1,1],[42,6,4,1],[47,9,2,1],[50,5,3,1],[57,9,1,1],[60,4,3,1]];
 const corridor=[[16,9,2,1],[21,5,4,1],[27,9,1,1],[31,9,2,1],[34,5,4,1],[39,9,1,1]];
 const shaft=[[14,9,2,1],[17,8,2,2],[20,7,6,1,2],[28,8,4,1,2],[33,7,4,1,2],[38,9,2,1]];

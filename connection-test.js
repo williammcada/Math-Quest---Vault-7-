@@ -1,4 +1,4 @@
-import { hostingFor, fetchApi } from './hosting.js?v=0.6.1-relay2';
+import { hostingFor, fetchApi } from './hosting.js?v=0.6.2';
 const hosting = hostingFor(location.href);
 const button = document.querySelector('#run-test');
 const result = document.querySelector('#result');

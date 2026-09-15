@@ -5,7 +5,7 @@ export class TeacherAudio {
   bind(){
     const play=document.querySelector('#audio-play'),mute=document.querySelector('#audio-mute'),volume=document.querySelector('#audio-volume'),status=document.querySelector('#audio-status');
     if(!play)return;
-    play.onclick=async()=>{if(this.audio.paused){try{await this.audio.play();this.message='Soundtrack playing.';}catch{this.message='Audio could not load. You can continue the mission and retry Play.';}}else{this.audio.pause();this.message='Soundtrack paused.';}play.textContent=this.audio.paused?'Play soundtrack':'Pause soundtrack';status.textContent=this.message;};
+    play.onclick=async()=>{if(this.audio.paused){try{await this.audio.play();this.message='Soundtrack playing.';}catch{this.message='Audio could not load. Check that assets/vault7/audio is uploaded beside index.html, then retry Play.';}}else{this.audio.pause();this.message='Soundtrack paused.';}play.textContent=this.audio.paused?'Play soundtrack':'Pause soundtrack';status.textContent=this.message;};
     mute.onclick=()=>{this.audio.muted=!this.audio.muted;if(this.cue)this.cue.muted=this.audio.muted;mute.textContent=this.audio.muted?'Unmute':'Mute';};
     volume.oninput=()=>{this.audio.volume=Number(volume.value)/100;if(this.cue)this.cue.volume=this.audio.volume;};
     document.querySelector('#audio-finale').onclick=async()=>{this.audio.pause();play.textContent='Play soundtrack';this.cue?.pause();this.cue=new Audio('./assets/vault7/audio/vault7-finale.mp3');this.cue.volume=this.audio.volume;this.cue.muted=this.audio.muted;try{await this.cue.play();status.textContent='Finale cue playing. Press Play soundtrack to return to the loop.';}catch{status.textContent='Finale audio unavailable.';}};

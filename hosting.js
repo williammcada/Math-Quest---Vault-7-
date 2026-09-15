@@ -1,4 +1,4 @@
-import { HOSTING } from './hosting-config.js?v=0.6.1-relay2';
+import { HOSTING } from './hosting-config.js?v=0.6.2';
 
 // Keep the repository directory in every navigation and QR link. The API is
 // deliberately separate: student browsers never connect to workers.dev.

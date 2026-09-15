@@ -1,8 +1,8 @@
-import { hostingFor, fetchApi } from './hosting.js?v=0.6.1-relay2';
-import { CATALOG } from './catalog.js?v=0.6.1-relay2';
-import { StealthRuntime } from './stealth.js?v=0.6.1-relay2';
-import { SceneAssets } from './vault7-assets.js?v=0.6.1-relay2';
-import { TeacherAudio } from './teacher-audio.js?v=0.6.1-relay2';
+import { hostingFor, fetchApi } from './hosting.js?v=0.6.2';
+import { CATALOG } from './catalog.js?v=0.6.2';
+import { StealthRuntime } from './stealth.js?v=0.6.2';
+import { SceneAssets } from './vault7-assets.js?v=0.6.2';
+import { TeacherAudio } from './teacher-audio.js?v=0.6.2';
 const app = document.querySelector("#app");
 const hosting = hostingFor(location.href);
 const params = new URLSearchParams(location.search);
@@ -86,7 +86,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.6.1</span></header>
+    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.6.2</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -530,7 +530,7 @@ function renderedAnswer(type) {
 
 function serializeAnswer(type) {
   if (type === "mixed") return `${draft.whole} ${draft.numerator}/${draft.denominator}`;
-  if (type === "fraction") return `${draft.numerator}/${draft.denominator}`;
+  if (type === "fraction") return `${draft.numerator}/${draft.integerMode ? 1 : draft.denominator}`;
   if (type === "ratio") return `${draft.left}:${draft.right}`;
   if (type === "scientific") return `${draft.coefficient}e${draft.exponent}`;
   return type === "choice" ? draft.choice : draft.main;
@@ -539,7 +539,7 @@ function serializeAnswer(type) {
 function answerMarkup(item) {
   const slot=(field,label)=>`<button class="answer-slot ${activeField===field?'active':''}" data-answer-field="${field}" aria-label="${label}">${escapeHtml(draft[field]||'□')}</button>`;
   const fraction=`<span class="fraction-input">${slot('numerator','Numerator')}${slot('denominator','Denominator')}</span>`;
-  if(item.answerType==='fraction') return fraction;
+  if(item.answerType==='fraction') return draft.integerMode ? slot('numerator','Integer answer') : fraction;
   if(item.answerType==='mixed') return `${slot('whole','Whole number')}${fraction}`;
   if(item.answerType==='scientific') return `${slot('coefficient','Coefficient')}<span>× 10<sup>${slot('exponent','Exponent')}</sup></span>`;
   if(item.answerType==='ratio') return `${slot('left','First value')} : ${slot('right','Second value')}`;
@@ -547,11 +547,11 @@ function answerMarkup(item) {
 }
 function mathInput(item) {
   if(item.answerType==='choice') return `<div class="answer-options">${item.options.map(option=>`<button class="answer-option ${draft.choice===option?'selected':''}" aria-pressed="${draft.choice===option}" data-answer-choice="${escapeHtml(option)}"><span class="selection-check">✓</span>${escapeHtml(option)}</button>`).join('')}</div>`;
-  const fields=inputParts(item.answerType);
+  const fields=item.answerType==='fraction'&&draft.integerMode? [['numerator','Integer answer']]:inputParts(item.answerType);
   if(!fields.some(([key])=>key===activeField))activeField=fields[0][0];
   const tabs=fields.length>1?`<div class="input-tabs">${fields.map(([key,label])=>`<button data-answer-field="${key}" class="${activeField===key?'active':''}">${label}</button>`).join('')}</div>`:'';
   const decimal=['number','decimal','percent','scientific','money','unit'].includes(item.answerType)&&activeField!=='exponent';
-  return `${tabs}<div class="answer-display math-answer" aria-live="polite">${answerMarkup(item)}</div><p class="fine">${item.expectedForm?escapeHtml(item.expectedForm)+'. ':''}Select a box, then use the keypad or your keyboard.</p>
+  return `${item.answerType==='fraction'?`<div class="input-tabs"><button data-integer-mode="false" aria-pressed="${!draft.integerMode}">Fraction</button><button data-integer-mode="true" aria-pressed="${!!draft.integerMode}">Integer (e.g. 3 or −3)</button></div><p class="fine">If your result is an integer, select Integer. No denominator is needed.</p>`:''}${tabs}<div class="answer-display math-answer" aria-live="polite">${answerMarkup(item)}</div><p class="fine">${item.expectedForm?escapeHtml(item.expectedForm)+'. ':''}Select a box, then use the keypad or your keyboard.</p>
     <div class="keypad math-native" aria-label="Math answer keypad">${['7','8','9','4','5','6','1','2','3'].map(k=>`<button data-answer-key="${k}">${k}</button>`).join('')}<button data-answer-key="minus">−</button><button data-answer-key="0">0</button><button data-answer-key="backspace" aria-label="Delete">⌫</button>${decimal?'<button class="decimal-key" data-answer-key=".">.</button>':''}</div>`;
 }
 function formatMath(prompt) {
@@ -677,6 +677,7 @@ function bindStudentActions(item, student) {
   document.querySelectorAll("[data-finale-vote]").forEach(button => button.onclick = () => command("finale.vote", { choice: button.dataset.finaleVote }));
   document.querySelectorAll("[data-market-select]").forEach(button => button.onclick = () => command("market.select", { item: button.dataset.marketSelect }));
   document.querySelectorAll("[data-market-buy]").forEach(button => button.onclick = () => command("market.buy", { item: button.dataset.marketBuy }));
+  document.querySelectorAll("[data-integer-mode]").forEach(button => button.onclick = () => { draft.integerMode = button.dataset.integerMode === "true"; activeField = "numerator"; renderStudent(); });
   document.querySelectorAll("[data-answer-field]").forEach(button => button.onclick = () => { activeField = button.dataset.answerField; renderStudent(); });
   document.querySelectorAll("[data-answer-key]").forEach(button => button.onclick = () => {
     const key = button.dataset.answerKey;
