@@ -1,0 +1,56 @@
+// Trusted content registry. Academic selection belongs to question-provider.js.
+export const NIGHTFALL = {
+  id: 'nightfall', title: 'Nightfall: Last Bus Out', revision: 'nightfall-1',
+  contract: 'mq.cartridge/1.0', gameId: 'topdown-combat', activeLimitMs: 90000,
+  teamWindowMs: 150000, budget: 40,
+  gates: ['Dead Frequency', 'A Door Still Open', 'Last Ignition'],
+  inserts: ['The Rooftop Relay', 'The Passenger Ledger'],
+  routes: [
+    {id:'clinic',title:'Answer the clinic',text:'Bring medic Imani and her emergency bag to the bus. The depot must wait.'},
+    {id:'depot',title:'Answer the depot',text:'Bring mechanic Tomas and the replacement battery. The clinic must wait.'}
+  ],
+  choices: [
+    {id:'depart',title:'Leave now',text:'Protect everyone already aboard. Leave the unanswered call behind.'},
+    {id:'return',title:'Make one more stop',text:'Keep the promise to the other shelter. Spend the last reserve fuel on a rescue.'},
+    {id:'broadcast',title:'Light the way',text:'Transmit the escape route to the whole city. Survivors will hear it, but the signal also draws attention.'}
+  ],
+  items: [
+    {id:'ammo-pouch',title:'Ammo pouch',cost:20,text:'Start with 60 rounds instead of 36. Pickups still replenish ammunition.'},
+    {id:'vest',title:'Protective vest',cost:20,text:'Blocks your first two contacts. The HUD shows both charges.'},
+    {id:'medkit',title:'Medical kit',cost:20,text:'Automatically restores one health when you first drop to one health.'},
+    {id:'carbine',title:'Heavy carbine',cost:35,text:'Every shot deals two damage instead of one. Less ammunition spent per target.'}
+  ],
+  endings: {
+    depart: ['The Lights Behind Us', 'Sol closes the doors. Nobody cheers. The bus climbs the empty flyover, and the city falls away in the rear window, one dark intersection at a time. Everyone aboard has a place beyond the quarantine line. That was the promise you chose to keep.', 'At dawn, the radio catches the other shelter again. The voice is weaker, but it is still there. Sol writes its location on the windshield. Leaving tonight did not make the problem disappear. It made you the people who survived long enough to decide what to do tomorrow. The last line in the evacuation log reads: one bus accounted for; one call unresolved.'],
+    return: ['One More Stop', 'At the junction, Sol turns back. The fuel needle rests against its final mark. For a moment the shelter looks abandoned. Then someone opens a second-floor window and waves a white bedsheet into the headlights. The bus doors fold open. There is room if everyone moves closer.', 'The engine stops just beyond the quarantine barrier. Your crew pushes the bus the last few metres while the new passengers push beside you. Nobody can pretend the choice was free: the bus will not run again today. But when the roll is called, the names from the unanswered transmission are there. The city has lost its last working bus. It has not lost the people inside it.'],
+    broadcast: ['A City Listening', 'You send the route on every emergency frequency. Sol protests that a quiet road will not stay quiet once everyone knows about it. He is right. By the next intersection, figures are emerging from shuttered buildings. Some wave flashlights. Others move toward the noise without speaking.', 'The bus cannot collect them all. Your transmission becomes something larger than an evacuation plan: a chain of people passing directions from rooftop to rooftop. At sunrise, the checkpoint reports arrivals from streets nobody had searched. It also reports a growing crowd beyond the barrier. You gave the city a way out. Now the people who control the gate must decide whether to open it.']
+  },
+  assets: { cover:'./assets/nightfall/cover.png', radio:'./assets/nightfall/radio.png', market:'./assets/nightfall/market.png', ending:'./assets/nightfall/ending.png', ambient:'./assets/nightfall/ambient.mp3', finale:'./assets/nightfall/finale.mp3' }
+};
+export const CARTRIDGES = [{id:'vault-7',title:'Vault 7',revision:'legacy',gameId:'stealth'}, NIGHTFALL];
+export const cartridgeFor = id => CARTRIDGES.find(c=>c.id===id);
+export function gateNames(c, count) { return [...c.gates.slice(0,2),...c.inserts.slice(0,count-3),c.gates[2]]; }
+export function sceneFor(c, team, names, crew) {
+  const rescued=team.route==='clinic'?'Imani, the medic':'Tomas, the mechanic';
+  const roster=crew.map(s=>s.alias).join(', ');
+  const scenes={
+    briefing:['The Silent Terminal', `The terminal clock stopped at 11:47. Its departure board still promises buses to places that have stopped answering the telephone. Outside, the emergency shutters shudder whenever something leans against them. Inside, a single engine coughs and dies.`, `The driver introduces himself as Sol. He has counted the seats three times. He has fuel for one journey, a failing battery, and a radio that only works when somebody holds its broken wire against the dashboard. Your crew, ${roster}, is the last team still moving between buildings.`, `Two calls break through the static. A medic is trapped in the clinic. A mechanic is waiting at the depot. Both say the same thing: do not leave without us. Sol looks from the radio to the fuel gauge. He cannot promise both. Neither can you.`, 'Restore the radio, recover the battery, and get this bus running. Then your crew must decide what it owes the people who are still waiting. At the end, each of you crosses the street alone to recover an override key and reach the bus. You do not have to clear the city. You only have to get through it.'],
+    decision:['Two Voices in the Static','The radio is working. That should feel like a victory. Instead, it makes the silence between the two calls harder to bear. Imani has patients waiting behind a barricade. Tomas has tools and a battery, but the depot doors are bending inward.','Sol marks both locations on a paper map. One approach is all the crew can make before the streets close. Vote together. The person you collect will remember the choice; the person you leave will still be on the radio.'],
+    market:['The Last Supply Cage','The ignition catches. For the first time tonight, the departure board might be telling the truth. Sol opens the terminal supply cage. Forty supply credits remain in the emergency ledger: enough for two basic items or one heavy carbine.','Every purchase equips every crew member for their own crossing. Charges and ammunition belong to each player independently. Choose your basket, mark your plan ready, and let the Event Lead authorize the most-supported plan.'],
+    finale:['The Road We Choose', `${rescued} is aboard. The other shelter calls again. Sol keeps his hand on the gear lever and waits for your answer. The crew has solved the immediate problem. Now it must choose what kind of escape this will be.`, 'Leave immediately, turn back for one more stop, or broadcast the route. Your final street crossing will not undo this choice. Even someone who needs rescuing will live in the world the crew chooses tonight.'],
+    minigame:['Cross Before Dawn','Take the override key from the north-east security booth, then reach the bus in the south-east. Avoid the infected or fire when you have a clear shot. You have ninety seconds. Sol is watching the road.'],
+  };
+  let content=scenes[team.stage];
+  if(team.stage==='gate'){
+    const title=names[team.gateIndex];
+    const bodies={
+      'Dead Frequency':['A battery-powered radio sits under the ticket counter. Its emergency circuit has been deliberately disconnected. Somewhere beyond the shutters, a recorded announcement keeps asking passengers to stand behind the yellow line.','Rebuild the signal one calculation at a time. Every member must complete their assigned work before the crew can hear the two calls clearly. The city has plenty of noise tonight. What it needs is an answer.'],
+      'A Door Still Open':[`The ${team.route} door opens just wide enough for the crew to slip inside. ${rescued} has been waiting with a bag packed and the lights switched off. Nobody wastes time asking whether you are really going to help.`, 'A replacement battery sits beside an emergency charger. Its indicator flickers. Complete the checks before carrying it back. On the radio, the other caller asks whether anyone is coming. Sol turns the volume down, but not off.'],
+      'The Rooftop Relay':['On the way back, a rooftop repeater flashes above a locked stairwell. It could send the escape route beyond the terminal, reaching people whose radios cannot hear Sol.','Restore its settings before leaving. This is not another rescue, but it could make one possible. From the roof, you see small lights moving between apartment blocks. The city is not empty. It is hiding.'],
+      'The Passenger Ledger':['A paper ledger lies beneath the dispatch console. Beside each route are handwritten names and shelter locations. The final page has no departure time.','Preserve the record before the terminal loses power. Numbers on a departure board are easy to abandon. A list of people is harder. If the crew survives, this ledger will tell the next rescue team where to begin.'],
+      'Last Ignition':['The replacement battery is connected. Sol asks everyone to step back, then turns the key. The engine fires with a sound so ordinary that, for a second, the terminal feels like a terminal again.','One problem remains: the street-side barrier needs an override key from the security booth. Finish the departure checks and claim forty supply credits. After choosing equipment and a destination, each crew member must cross the last dangerous stretch to the bus.']
+    }; content=[title,...bodies[title]];
+  }
+  if(team.stage==='victory') content=[...c.endings[team.finalAction], `${rescued} stays with the crew. ${team.route==='clinic'?'The medic begins treating exhausted passengers before the bus reaches daylight.':'The mechanic coaxes the engine through its final kilometres, listening to every change in its rhythm.'}`, ...(names.includes(c.inserts[0])?['The rooftop relay keeps repeating your location long after the terminal goes dark.']:[]),...(names.includes(c.inserts[1])?['The passenger ledger is delivered intact. The missing now have names and places to search.']:[])];
+  return content?{title:content[0],paragraphs:content.slice(1),eyebrow:c.title,artId:`nightfall.${team.stage}`,image:team.stage==='victory'?c.assets.ending:team.stage==='market'?c.assets.market:team.stage==='decision'||team.stage==='gate'?c.assets.radio:c.assets.cover}:null;
+}

@@ -3,6 +3,12 @@ import { CATALOG } from './catalog.js?v=0.6.2';
 import { StealthRuntime } from './stealth.js?v=0.6.2';
 import { SceneAssets } from './vault7-assets.js?v=0.6.2';
 import { TeacherAudio } from './teacher-audio.js?v=0.6.2';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js';
+import { expansionBody, bindExpansion } from './expansion-ui.js';
+import { FinaleHost } from './finale-host.js';
+import { CartridgeAudio } from './cartridge-audio.js';
+let setupCartridge='vault-7';
+let finaleHost=null;
 const app = document.querySelector("#app");
 const hosting = hostingFor(location.href);
 const params = new URLSearchParams(location.search);
@@ -27,13 +33,14 @@ const selectedDefaults = { 'number.integer-operations':4, 'number.gcf':2, 'numbe
 const PRESETS = CATALOG.map(({id,title}) => ({id,title,selected:id in selectedDefaults,itemCount:selectedDefaults[id]||3,defaultItemCount:selectedDefaults[id]||3,band:'intermediate'}));
 let extractionRuntime = null;
 const teacherAudio = new TeacherAudio();
+const cartridgeAudio = new CartridgeAudio();
 
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
 const endpoint = suffix => hosting.api(`sessions/${encodeURIComponent(session)}/${suffix}`);
 const currentTeam = () => state?.teams?.[0];
-const gateLabel = item => item.stage === "gate" ? `Gate ${item.gateIndex + 1} of ${state.config.gateCount} · ${item.gateName}` : ({ lobby:"Waiting in lobby", briefing:"Mission Briefing", decision:"Route Decision", market:"Resource Market", code:"Secret Message", finale:"Asterion's Fate", extraction:"Solo Extraction", victory:"Mission Complete" })[item.stage] || item.stage;
+const gateLabel = item => item.stage === "gate" ? `Gate ${item.gateIndex + 1} of ${state.config.gateCount} · ${item.gateName}` : ({ lobby:"Waiting in lobby", briefing:"Mission Briefing", decision:"Route Decision", market:"Resource Market", code:"Secret Message", finale:state.config.cartridgeId==='nightfall'?"The Last Call":"Asterion's Fate", minigame:"Last Bus Out", extraction:"Solo Extraction", victory:"Mission Complete" })[item.stage] || item.stage;
 
 async function parseResponse(response) {
   const text = await response.text();
@@ -86,7 +93,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.6.2</span></header>
+    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.7.0</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -128,6 +135,8 @@ function renderLanding() {
     <section class="hero vault"><div><p class="eyebrow">TEACHER SESSION BUILDER</p><h1>MathQuest</h1><p>Choose the story. Control every question.</p></div><div class="vault-mark">VII</div></section>
     <section class="panel setup-builder">
       <h2>1 · Game Select</h2>
+      <label>Cartridge<select id="cartridge-select">${CARTRIDGES.map(c=>`<option value="${c.id}" ${setupCartridge===c.id?'selected':''}>${escapeHtml(c.title)}</option>`).join('')}</select></label>
+      ${setupCartridge==='nightfall'?`<p>Nightfall: Last Bus Out | 3–5 math gates | team equipment | 90-second top-down finale</p><p><a href="./practice-nightfall.html" target="_blank" rel="noopener">Play Nightfall practice (no math)</a></p>`:''}
       <button class="game-card selected" aria-pressed="true"><span class="game-cover"><img src="./assets/vault7/scenes/cover.webp" width="960" height="540" alt="Vault 7 under a storm-lit mountain"></span><span><b>Vault 7</b><small>Science-fiction infiltration · 3–5 gates · cipher finale</small></span><span class="selected-pill">Selected</span></button>
       <div class="form-row"><label>Team names <small>Separate with commas; 1–6 teams. Empty teams are removed at launch.</small><input id="teams" value="${escapeHtml(setupTeams)}"></label><label>Vault gates<select id="gate-count"><option value="3" ${gateCount === 3 ? "selected" : ""}>3 · Condensed mission</option><option value="4" ${gateCount === 4 ? "selected" : ""}>4 · Standard mission</option><option value="5" ${gateCount === 5 ? "selected" : ""}>5 · Full mission</option></select></label></div>
     </section>
@@ -147,13 +156,15 @@ function renderLanding() {
       <div><h2>3 · Automatic Allocation</h2><p><b>${questionTotal} questions per student</b> will be shuffled across ${gateCount} gates. No gate belongs to one skill.</p></div>
       <div class="gate-allocation">${distribution.map((count, index) => `<span><b>Gate ${index + 1}</b>${count} questions</span>`).join("")}</div>
       ${questionTotal > 200 ? `<p class="notice bad">Reduce the session to 200 questions or fewer.</p>` : questionTotal < gateCount ? `<p class="notice bad">Select at least ${gateCount} questions so every gate contains mathematics.</p>` : ""}
-      <button class="primary wide" id="create" ${questionTotal < gateCount || questionTotal > 200 || moduleCount() > 20 ? "disabled" : ""}>Create Vault 7 session</button>
+      <button class="primary wide" id="create" ${questionTotal < gateCount || questionTotal > 200 || moduleCount() > 20 ? "disabled" : ""}>Create ${escapeHtml(cartridgeFor(setupCartridge).title)} session</button>
       <p class="fine">Difficulty labels are provisional until their exact module definitions are finalized. Imported questions use the answer type supplied by the teacher.</p>
     </section>`);
   bindSetup();
+  if(setupCartridge==='nightfall'){const card=document.querySelector('.game-card');card.innerHTML=`<span class="game-cover"><img src="${cartridgeFor('nightfall').assets.cover}" width="960" height="540" alt="The last evacuation bus waits at the terminal"></span><span><b>Nightfall: Last Bus Out</b><small>Answer the calls. Equip the crew. Reach the bus.</small></span>`;}
 }
 
 function bindSetup() {
+  document.querySelector('#cartridge-select')?.addEventListener('change',e=>{captureSetup();setupCartridge=e.target.value;renderLanding();});
   document.querySelectorAll("[data-module] input, [data-module] select").forEach(control => control.addEventListener("change", () => { captureSetup(); renderLanding(); }));
   document.querySelector("#gate-count")?.addEventListener("change", () => { captureSetup(); renderLanding(); });
   document.querySelector("#discipline")?.addEventListener("change", event => { setupDiscipline = event.target.value; });
@@ -275,6 +286,10 @@ async function createSession() {
   const button = document.querySelector("#create");
   button.disabled = true;
   try {
+    if(setupCartridge==='nightfall'){
+      const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
+      if(!catalog.cartridges?.some(c=>c.id==='nightfall'&&c.revision==='nightfall-1'))throw new Error('Update the backend with the v0.7.0 deployment batch before creating Nightfall.');
+    }
     const teamNames = setupTeams.split(",").map(value => value.trim()).filter(Boolean);
     const modules = [
       ...PRESETS.filter(record => record.selected).map(record => ({ id: record.id, source: "preset", band: record.band, itemCount: Number(record.itemCount) })),
@@ -285,7 +300,7 @@ async function createSession() {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         teamNames,
-        cartridgeId: "vault-7",
+        cartridgeId: setupCartridge,
         disciplineId: setupDiscipline,
         courseBankId: "prealgebra",
         gateCount: setupGates,
@@ -335,11 +350,16 @@ function renderTeacher() {
     <div class="dashboard-grid">
       <section class="panel join-panel"><h2>Student access</h2><canvas id="qr" width="180" height="180" aria-label="QR code for the student join link"></canvas><p id="qr-error" class="fine" hidden>QR unavailable—open the link below.</p><div class="url">${escapeHtml(joinUrl)}</div><p>Team codes</p>${state.teams.map(item => `<div class="code-row"><b>${escapeHtml(item.name)}</b><code>${escapeHtml(item.pin)}</code></div>`).join("")}</section>
       <section class="panel controls"><h2>Session controls</h2><button class="primary" data-teacher-command="start" ${state.status !== "setup" || studentCount === 0 || launchPending ? "disabled" : ""}>${launchPending ? "Launching…" : "Launch briefing"}</button><button class="secondary" data-teacher-command="pause" ${state.status !== "active" || busy ? "disabled" : ""}>${state.paused ? "Resume" : "Pause"}</button><button class="secondary" data-teacher-command="report-csv">Download CSV</button><button class="secondary" data-teacher-command="report">Download JSON</button><button class="danger" data-teacher-command="end" ${state.status === "ended" || busy ? "disabled" : ""}>End session</button><p class="launch-status ${launchPending ? "pending" : ""}">${escapeHtml(launchStatus)}</p>${launchPending ? "" : noticeHtml()}<p class="fine">${state.attempts} answer attempts recorded · revision ${state.revision}</p></section>
-      ${teacherAudio.markup()}
+      ${state.cartridge.id==='vault-7'?teacherAudio.markup():cartridgeAudio.markup()}
       <section class="panel teams"><h2>Team progress</h2><div class="teams-grid">${teamCards}</div></section>
     </div>`);
   drawQr(document.querySelector("#qr"), joinUrl);
   teacherAudio.bind();
+  cartridgeAudio.bind();
+  if(state.cartridge.id!=='vault-7'){
+    document.querySelector('.hero h1').textContent=`${state.cartridge.title} Dashboard`;
+    document.querySelectorAll('.team-card').forEach((card,i)=>{const t=state.teams[i];if(t.stage==='minigame'){const button=document.createElement('button');button.textContent='Finish remaining crossings';button.onclick=()=>command('teacher.advanceFinale',{teamId:t.id});card.append(button);const p=document.createElement('p');p.textContent=(t.finale?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status}`).join(' | ');card.append(p);}});
+  }
 }
 
 function rememberTeacherSecrets() {
@@ -408,6 +428,7 @@ function renderJoin() {
   app.innerHTML = shell(`
     <section class="hero compact"><div><p class="eyebrow">VAULT 7</p><h1>Join the mission</h1><p>Session ${escapeHtml(session)}</p></div><div class="vault-mark small">VII</div></section>
     <section class="panel setup"><label>Student name<input id="alias" maxlength="24" autocomplete="name" placeholder="Name your teacher recognizes"></label><label>Four-character team code<input id="pin" maxlength="4" inputmode="text" autocapitalize="characters" placeholder="ABCD"></label><button class="primary wide" id="join">Enter Vault 7</button><p class="fine">This device remains locked to its assigned team for this session. Difficulty assignments are private.</p></section>`, true);
+  if(state?.cartridge?.id!=='vault-7'&&state?.cartridge?.title){document.querySelector('.hero .eyebrow').textContent=state.cartridge.title;document.querySelector('#join').textContent='Join the crew';document.querySelector('.vault-mark').textContent='NF';}
   document.querySelector("#join").onclick = async () => {
     const enteredAlias = document.querySelector("#alias").value.trim();
     const teamPin = document.querySelector("#pin").value.trim();
@@ -452,13 +473,25 @@ function memberStatus(item, member) {
 function renderStudent() {
   if (!state) return renderLoading();
   const item = currentTeam(), student = state.student;
+  if(finaleHost&&(item.stage!=='minigame'||state.status==='ended')){finaleHost.destroy();finaleHost=null;}
+  if(item.stage==='minigame'&&state.status!=='ended'){
+    if(!finaleHost){
+      app.innerHTML=shell(`<section class="mission-head"><h1>Nightfall: Last Bus Out</h1></section><div id="finale-root"></div>`,true);
+      finaleHost=new FinaleHost(document.querySelector('#finale-root'),{run:item.finale.run,route:item.route,deadline:item.finale.deadline,paused:state.paused,send:async(type,extra)=>{
+        const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
+        const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(currentTeam()?.stage!=='minigame')render();}return incoming;
+      }});
+    }else finaleHost.update(item.finale.run,state.paused,item.finale.deadline);
+    return;
+  }
   if (state.status === "setup" || item.stage === "lobby") return renderWaiting(item, student);
   if (state.status === "ended") { extractionRuntime?.destroy(); extractionRuntime=null; return renderEnded(item); }
   if (item.stage === 'extraction') return renderExtraction(item, student);
   if (extractionRuntime) { extractionRuntime.destroy(); extractionRuntime=null; }
   if (state.paused) return renderPaused(item);
   let body = "";
-  if (item.stage === "briefing") body = renderBriefing(item, student);
+  if(state.cartridge.id!=='vault-7'&&item.stage!=='gate')body=expansionBody(state,item,sceneBlock(item))||'';
+  else if (item.stage === "briefing") body = renderBriefing(item, student);
   else if (item.stage === "gate") body = renderMath(item, student);
   else if (item.stage === "decision") body = renderDecision(item, student);
   else if (item.stage === "market") body = renderMarket(item, student);
@@ -467,6 +500,7 @@ function renderStudent() {
   else body = renderVictory(item, student);
   app.innerHTML = shell(`${narrativeHeader(item)}${leadBanner(item, student)}${noticeHtml()}${body}${memberProgress(item)}${statusBar(item, student)}`, true);
   bindStudentActions(item, student);
+  if(state.cartridge.id!=='vault-7')bindExpansion(item,command);
 }
 
 function renderWaiting(item, student) {
@@ -478,6 +512,7 @@ function renderWaiting(item, student) {
 
 function renderPaused(item) {
   app.innerHTML = shell(`${narrativeHeader(item)}<section class="panel centered"><div class="pause-icon">Ⅱ</div><h2>Mission paused</h2><p>Your teacher has frozen Vault 7. Keep your work and wait for the signal.</p></section>`, true);
+  if(state.cartridge.id!=='vault-7')document.querySelector('.centered p').textContent='Your teacher has paused the mission. Keep your work and wait for the signal.';
 }
 
 function renderEnded(item) {
@@ -487,6 +522,7 @@ function renderEnded(item) {
 function sceneBlock(item, compact = false) {
   const scene=item.scene;
   if (!scene) return '';
+  if(scene.image)return `<section class="panel scene-card"><figure class="scene-image"><img src="${escapeHtml(scene.image)}" width="960" height="540" alt="Nightfall evacuation terminal" loading="lazy"></figure><div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${scene.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
   const asset=SceneAssets[scene.artId] || SceneAssets['scene.cover'];
   return `<section class="panel scene-card ${compact?'compact-scene':''}">
     <figure class="scene-image" data-art-slot="${escapeHtml(scene.artId)}"><img src="${asset.src}" srcset="${asset.srcset}" sizes="(max-width:600px) calc(100vw - 28px), 672px" alt="${escapeHtml(asset.alt)}" width="960" height="540" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure>

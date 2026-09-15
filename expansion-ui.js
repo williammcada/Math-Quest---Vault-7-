@@ -1,0 +1,24 @@
+import {cartridgeFor} from './cartridges.js';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function expansionBody(state,team,scene){
+  const c=cartridgeFor(state.cartridge.id),s=state.student;
+  if(team.stage==='briefing')return `${scene}<section class="panel"><p>${esc(s.alias)}, complete your individual work at each gate, then help your crew choose its route and equipment.</p><button class="primary wide" data-action="briefing.ready" ${s.briefingReady?'disabled':''}>${s.briefingReady?'Mission accepted. Waiting for crew.':'Accept mission'}</button></section>`;
+  if(['decision','finale'].includes(team.stage)){
+    const final=team.stage==='finale',opts=final?c.choices:c.routes,my=final?team.myFinalVote:team.myVote,totals=final?team.finalVoteTotals:team.voteTotals,count=final?team.finalVoteCount:team.voteCount;
+    return `${scene}<section class="panel"><div class="choice-grid">${opts.map(o=>`<button class="choice ${my===o.id?'selected':''}" aria-pressed="${my===o.id}" data-exp-vote="${o.id}"><b>${esc(o.title)}</b><span>${esc(o.text)}</span><strong>${my===o.id?'YOUR VOTE | ':''}${totals?.[o.id]||0} votes</strong></button>`).join('')}</div><p>${count}/${team.memberCount} votes recorded. Ties use the Event Lead's vote when it is tied for first.</p>${s.isLead?`<button class="primary wide" data-action="choice.resolve" ${count<team.memberCount?'disabled':''}>Authorize team decision</button>`:`<p>Event Lead ${esc(team.lead?.alias)} submits after everyone votes.</p>`}</section>`;
+  }
+  if(team.stage==='market'){
+    const basket=(team.myMarketSelection||'').split('|'),ready=team.members.find(m=>m.id===s.id)?.marketReady;
+    return `${scene}<section class="panel"><h2>Supply credits: ${team.currency}</h2><div class="choice-grid">${c.items.map(i=>`<button class="choice ${basket.includes(i.id)?'selected':''}" aria-pressed="${basket.includes(i.id)}" data-exp-item="${i.id}"><b>${esc(i.title)} | ${i.cost}</b><span>${esc(i.text)}</span><strong>${basket.includes(i.id)?'IN YOUR BASKET':'Add to basket'}</strong></button>`).join('')}</div><button class="secondary" data-exp-save>Save all credits</button><p>Your basket: ${basket.filter(Boolean).map(id=>esc(c.items.find(i=>i.id===id)?.title)).join(' + ')||'No purchase'}.</p><button class="primary wide" data-action="market.ready" ${team.myMarketSelection===null||ready?'disabled':''}>${ready?'Plan ready':'My plan is ready'}</button><p>${team.marketReadyCount}/${team.memberCount} plans ready. Changing a basket clears that player's ready status.</p><div>${Object.entries(team.marketSelectionTotals||{}).map(([k,n])=>`<p>${esc(k||'Save all credits')}: ${n} votes</p>`).join('')}</div>${s.isLead?`<button class="primary wide" data-action="market.commit" ${team.marketReadyCount<team.memberCount?'disabled':''}>Purchase the winning basket</button>`:''}</section>`;
+  }
+  if(team.stage==='victory'){
+    const r=team.finale?.run,personal={success:'You reached the bus under your own cover.',setback:'Sol threw a rescue line across the road and pulled you aboard.',timed_out:'A second pickup collected you after the crossing window closed.',teacher_advanced:'Mission control closed your crossing without recording an arcade success.',skipped:'You continued with the crew without an arcade crossing.'}[r?.outcome]||'Your crossing is recorded.';
+    return `${scene}<section class="panel"><h2>${esc(s.alias)}: personal record</h2><p>${personal}</p><p>${r?.mode==='assisted'?'You used the assisted route.':''} Your crew's final choice still stands.</p><p>Equipment: ${team.inventory.map(id=>esc(c.items.find(i=>i.id===id)?.title)).join(', ')||'Standard kit'}. Credits saved: ${team.currency}.</p><p>First-attempt accuracy: ${Math.round(s.firstAttemptCorrect/Math.max(1,state.config.totalQuestions)*100)}%. Gameplay does not change this evidence.</p></section>`;
+  }
+  return null;
+}
+export function bindExpansion(team,command){
+  document.querySelectorAll('[data-exp-vote]').forEach(b=>b.onclick=()=>command('choice.vote',{choice:b.dataset.expVote}));
+  document.querySelectorAll('[data-exp-item]').forEach(b=>b.onclick=()=>{const items=(team.myMarketSelection||'').split('|').filter(Boolean),id=b.dataset.expItem;command('market.propose',{items:items.includes(id)?items.filter(x=>x!==id):[...items,id]});});
+  document.querySelector('[data-exp-save]')?.addEventListener('click',()=>command('market.propose',{items:[]}));
+}
