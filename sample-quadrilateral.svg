@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Quadrilateral with one pair of parallel sides</title>
+  <desc id="desc">A dark blue trapezoid on a warm ivory grid.</desc>
+  <rect width="800" height="450" fill="#eee6d5"/>
+  <g stroke="#d5cbb8" stroke-width="2" opacity=".65">
+    <path d="M0 75h800M0 150h800M0 225h800M0 300h800M0 375h800"/>
+    <path d="M100 0v450M200 0v450M300 0v450M400 0v450M500 0v450M600 0v450M700 0v450"/>
+  </g>
+  <path d="M235 110H565L680 350H120Z" fill="#173f60" stroke="#171b20" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M270 88h260M170 372h460" stroke="#e46755" stroke-width="8" stroke-linecap="round"/>
+</svg>
