@@ -18,7 +18,7 @@ button.addEventListener('click', async () => {
     if (!catalogResponse.ok) throw new Error(`Session server returned HTTP ${catalogResponse.status}.`);
     const catalog = await catalogResponse.json();
     if (!Array.isArray(catalog.modules)) throw new Error('The address did not return the MathQuest catalog.');
-    if (catalog.version !== '0.7.0') throw new Error(`Backend is v${catalog.version || 'unknown'}. Run the v0.7.0 backend update first.`);
+    if (catalog.version !== '0.8.0') throw new Error(`Backend is v${catalog.version || 'unknown'}. Run the v0.8.0 backend update first.`);
     read.textContent = `Session server connected · v${catalog.version} · ${catalog.modules.length} modules.`;
     read.className = 'pass'; stage = write;
     write.textContent = 'Checking two-way access…';
@@ -29,7 +29,7 @@ button.addEventListener('click', async () => {
     });
     if (!response.ok) throw new Error(`Two-way check returned HTTP ${response.status}.`);
     const health = await response.json();
-    if (health.service !== 'MathQuest' || health.ok !== true || health.version !== '0.7.0') throw new Error('Unexpected response from the session server.');
+    if (health.service !== 'MathQuest' || health.ok !== true || health.version !== '0.8.0') throw new Error('Unexpected response from the session server.');
     write.textContent = 'Two-way access passed.'; write.className = 'pass';
     result.textContent = 'Connection checks passed. Open MathQuest, create a new session, and test with two iPads.';
     open.hidden = false;

@@ -13,7 +13,7 @@ export function expansionBody(state,team,scene){
   }
   if(team.stage==='victory'){
     const r=team.finale?.run,personal={success:'You reached the bus under your own cover.',setback:'Sol threw a rescue line across the road and pulled you aboard.',timed_out:'A second pickup collected you after the crossing window closed.',teacher_advanced:'Mission control closed your crossing without recording an arcade success.',skipped:'You continued with the crew without an arcade crossing.'}[r?.outcome]||'Your crossing is recorded.';
-    return `${scene}<section class="panel"><h2>${esc(s.alias)}: personal record</h2><p>${personal}</p><p>${r?.mode==='assisted'?'You used the assisted route.':''} Your crew's final choice still stands.</p><p>Equipment: ${team.inventory.map(id=>esc(c.items.find(i=>i.id===id)?.title)).join(', ')||'Standard kit'}. Credits saved: ${team.currency}.</p><p>First-attempt accuracy: ${Math.round(s.firstAttemptCorrect/Math.max(1,state.config.totalQuestions)*100)}%. Gameplay does not change this evidence.</p></section>`;
+    return `${scene}<section class="panel"><h2>${esc(s.alias)}: personal record</h2><p>${personal}</p><p>${r?.mode==='assisted'?'You used the assisted route.':''} Your crew's final choice still stands.</p><p>Equipment: ${team.inventory.map(id=>esc(c.items.find(i=>i.id===id)?.title)).join(', ')||'Standard kit'}. Credits saved: ${team.currency}.</p><p>First-attempt accuracy: ${Math.round(s.firstAttemptCorrect/Math.max(1,s.assignedTotal??state.config.totalQuestions)*100)}%. Gameplay does not change this evidence.</p></section>`;
   }
   return null;
 }

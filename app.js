@@ -7,6 +7,7 @@ import { CARTRIDGES, cartridgeFor } from './cartridges.js';
 import { expansionBody, bindExpansion } from './expansion-ui.js';
 import { FinaleHost } from './finale-host.js';
 import { CartridgeAudio } from './cartridge-audio.js';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js';
 let setupCartridge='vault-7';
 let finaleHost=null;
 const app = document.querySelector("#app");
@@ -93,7 +94,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.7.0</span></header>
+    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.8.0</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -136,9 +137,9 @@ function renderLanding() {
     <section class="panel setup-builder">
       <h2>1 · Game Select</h2>
       <label>Cartridge<select id="cartridge-select">${CARTRIDGES.map(c=>`<option value="${c.id}" ${setupCartridge===c.id?'selected':''}>${escapeHtml(c.title)}</option>`).join('')}</select></label>
-      ${setupCartridge==='nightfall'?`<p>Nightfall: Last Bus Out | 3–5 math gates | team equipment | 90-second top-down finale</p><p><a href="./practice-nightfall.html" target="_blank" rel="noopener">Play Nightfall practice (no math)</a></p>`:''}
+      ${developerTools()}${setupCartridge==='nightfall'?`<p>Nightfall: Last Bus Out | 3–5 math gates | team equipment | city survival finale · manual aiming</p><p><a href="./practice-nightfall.html" target="_blank" rel="noopener">Play Nightfall practice (no math)</a></p>`:''}
       <button class="game-card selected" aria-pressed="true"><span class="game-cover"><img src="./assets/vault7/scenes/cover.webp" width="960" height="540" alt="Vault 7 under a storm-lit mountain"></span><span><b>Vault 7</b><small>Science-fiction infiltration · 3–5 gates · cipher finale</small></span><span class="selected-pill">Selected</span></button>
-      <div class="form-row"><label>Team names <small>Separate with commas; 1–6 teams. Empty teams are removed at launch.</small><input id="teams" value="${escapeHtml(setupTeams)}"></label><label>Vault gates<select id="gate-count"><option value="3" ${gateCount === 3 ? "selected" : ""}>3 · Condensed mission</option><option value="4" ${gateCount === 4 ? "selected" : ""}>4 · Standard mission</option><option value="5" ${gateCount === 5 ? "selected" : ""}>5 · Full mission</option></select></label></div>
+      <div class="form-row"><label>Team names <small>Separate with commas; 1–6 teams. Empty teams are removed at launch.</small><input id="teams" value="${escapeHtml(setupTeams)}"></label><label>Mission gates<select id="gate-count"><option value="3" ${gateCount === 3 ? "selected" : ""}>3 · Condensed mission</option><option value="4" ${gateCount === 4 ? "selected" : ""}>4 · Standard mission</option><option value="5" ${gateCount === 5 ? "selected" : ""}>5 · Full mission</option></select></label></div>
     </section>
     <section class="panel setup-builder">
       <div class="section-title"><div><h2>2 · Academic Content</h2><p>Choose a discipline, then select up to 20 preset or teacher-built modules. Every selected question is used.</p></div><span class="selection-count">${moduleCount()} / 20 modules</span></div>
@@ -288,7 +289,7 @@ async function createSession() {
   try {
     if(setupCartridge==='nightfall'){
       const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
-      if(!catalog.cartridges?.some(c=>c.id==='nightfall'&&c.revision==='nightfall-1'))throw new Error('Update the backend with the v0.7.0 deployment batch before creating Nightfall.');
+      if(!catalog.cartridges?.some(c=>c.id==='nightfall'&&c.revision===cartridgeFor('nightfall').revision))throw new Error('Update the backend with the v0.8.0 deployment batch before creating Nightfall.');
     }
     const teamNames = setupTeams.split(",").map(value => value.trim()).filter(Boolean);
     const modules = [
@@ -340,12 +341,12 @@ function renderTeacher() {
       <div class="team-heading"><div><span class="team-name">${escapeHtml(item.name)}</span><span class="stage-tag">${escapeHtml(gateLabel(item))}</span></div><div class="pin">${escapeHtml(item.pin)}</div></div>
       ${item.secretNumbers.length ? `<div class="teacher-secret"><small>SECRET MESSAGE</small><b>${item.secretNumbers.join(" · ")}</b><span>Teacher key: ${escapeHtml(item.secretAnswer)}</span></div>` : ""}
       <div class="metrics"><span><b>${item.memberCount}</b> students</span><span><b>${item.currency}</b> credits</span><span><b>${item.adverseEvents.length}</b> adverse</span></div>
-      <div class="member-list teacher-roster">${item.members.length ? item.members.map(member => `<div><span class="presence ${member.active ? "on" : ""}"></span><b>${escapeHtml(member.alias)}</b><span>${member.itemsCompleted}/${state.config.totalQuestions} total${member.fate ? ` · ${escapeHtml(member.fate.label)}` : ""}</span><label class="difficulty-control"><span class="sr-only">Difficulty for ${escapeHtml(member.alias)}</span><select data-student-difficulty="${escapeHtml(member.id)}" aria-label="Question difficulty for ${escapeHtml(member.alias)}"><option value="session" ${member.difficultyPolicy === "session" ? "selected" : ""}>Session level</option><option value="foundation" ${member.difficultyPolicy === "foundation" ? "selected" : ""}>Foundation</option><option value="standard" ${member.difficultyPolicy === "standard" ? "selected" : ""}>Standard</option><option value="challenge" ${member.difficultyPolicy === "challenge" ? "selected" : ""}>Challenge</option></select></label></div>`).join("") : `<p class="empty-label">No players joined · removed at launch</p>`}</div>
+      <div class="member-list teacher-roster">${item.members.length ? item.members.map(member => `<div><span class="presence ${member.active ? "on" : ""}"></span><b>${escapeHtml(member.alias)}</b><span>${member.itemsCompleted}/${member.assignedTotal??state.config.totalQuestions} total${member.fate ? ` · ${escapeHtml(member.fate.label)}` : ""}</span><label class="difficulty-control"><span class="sr-only">Difficulty for ${escapeHtml(member.alias)}</span><select data-student-difficulty="${escapeHtml(member.id)}" aria-label="Question difficulty for ${escapeHtml(member.alias)}"><option value="session" ${member.difficultyPolicy === "session" ? "selected" : ""}>Session level</option><option value="foundation" ${member.difficultyPolicy === "foundation" ? "selected" : ""}>Foundation</option><option value="standard" ${member.difficultyPolicy === "standard" ? "selected" : ""}>Standard</option><option value="challenge" ${member.difficultyPolicy === "challenge" ? "selected" : ""}>Challenge</option></select></label></div>`).join("") : `<p class="empty-label">No players joined · removed at launch</p>`}</div>
       ${teacherExtraction(item)}
       ${item.lead ? `<p class="lead">Event Lead: ${escapeHtml(item.lead.alias)}</p>` : ""}
     </article>`).join("");
   app.innerHTML = shell(`
-    <section class="hero compact"><div><p class="eyebrow">TEACHER CONTROL</p><h1>Vault 7 Dashboard</h1><p>Session ${escapeHtml(state.code)} · ${state.config.modules.length} modules · ${state.config.totalQuestions} questions · ${state.config.gateCount} gates</p></div><div class="live-dot">${state.paused ? "PAUSED" : state.status.toUpperCase()}</div></section>
+    <section class="hero compact"><div><p class="eyebrow">TEACHER CONTROL</p><h1>MathQuest Dashboard</h1><p>Session ${escapeHtml(state.code)} · ${state.config.modules.length} modules · ${state.config.totalQuestions} questions · ${state.config.gateCount} gates</p></div><div class="live-dot">${state.paused ? "PAUSED" : state.status.toUpperCase()}</div></section>
     <section class="panel mission-plan"><div><h2>Mission content · ${escapeHtml(state.config.disciplineTitle || "Mathematics")}</h2><p>${state.config.modules.map(module => escapeHtml(module.title)).join(" · ")}</p><small>Player difficulty changes are private and affect only the next unissued preset question.</small></div><div class="gate-allocation">${distribution}</div></section>
     <div class="dashboard-grid">
       <section class="panel join-panel"><h2>Student access</h2><canvas id="qr" width="180" height="180" aria-label="QR code for the student join link"></canvas><p id="qr-error" class="fine" hidden>QR unavailable—open the link below.</p><div class="url">${escapeHtml(joinUrl)}</div><p>Team codes</p>${state.teams.map(item => `<div class="code-row"><b>${escapeHtml(item.name)}</b><code>${escapeHtml(item.pin)}</code></div>`).join("")}</section>
@@ -354,10 +355,13 @@ function renderTeacher() {
       <section class="panel teams"><h2>Team progress</h2><div class="teams-grid">${teamCards}</div></section>
     </div>`);
   drawQr(document.querySelector("#qr"), joinUrl);
+  app.insertAdjacentHTML('beforeend',developerTools());
+  document.querySelector('.hero h1').textContent='MathQuest Dashboard';
+  if(state.status==='active'){const b=document.createElement('button');b.textContent='Extend activity';b.className='secondary';b.onclick=()=>extensionDialog(state,async(type,extra)=>parseResponse(await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,teacherKey,commandId:uid(),...extra})})),incoming=>{state=incoming;notice={correct:true,message:'Additional questions assigned.'};render();});document.querySelector('.controls').append(b);}
   teacherAudio.bind();
   cartridgeAudio.bind();
   if(state.cartridge.id!=='vault-7'){
-    document.querySelector('.hero h1').textContent=`${state.cartridge.title} Dashboard`;
+    document.querySelector('.hero h1').textContent='MathQuest Dashboard';
     document.querySelectorAll('.team-card').forEach((card,i)=>{const t=state.teams[i];if(t.stage==='minigame'){const button=document.createElement('button');button.textContent='Finish remaining crossings';button.onclick=()=>command('teacher.advanceFinale',{teamId:t.id});card.append(button);const p=document.createElement('p');p.textContent=(t.finale?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status}`).join(' | ');card.append(p);}});
   }
 }
@@ -413,7 +417,7 @@ function handleDelegatedTeacherControl(event) {
   const action = button.dataset.teacherCommand;
   if (action === "start") return launchBriefing();
   if (action === "pause") return command("teacher.pause", {}, { pendingMessage: state.paused ? "Resuming session…" : "Pausing session…" });
-  if (action === "end") return confirm("End this session and stop new answers?") && command("teacher.end", {}, { pendingMessage: "Ending session…", successMessage: "Session ended." });
+  if (action === "end") return confirm(`End and freeze this session? ${state.teams.length} teams, ${state.attempts} attempts recorded. Unfinished work stays incomplete; reports remain available.`) && command("teacher.end", {}, { pendingMessage: "Ending session…", successMessage: "Session ended." });
   if (action === "report") location.href = `${endpoint("report")}?teacherKey=${encodeURIComponent(teacherKey)}`;
   if (action === "report-csv") location.href = `${endpoint("report.csv")}?teacherKey=${encodeURIComponent(teacherKey)}`;
 }
@@ -462,7 +466,7 @@ function memberStatus(item, member) {
   if (item.stage === "extraction") return member.extractionComplete ? "finished" : "extracting";
   if (item.stage === "lobby") return "joined";
   if (item.stage === "briefing") return member.briefingReady ? "ready" : "reading";
-  if (item.stage === "gate") return `${member.gateProgress}/${item.gateLoad}`;
+  if (item.stage === "gate") return `${member.gateProgress}/${member.gateLoad??item.gateLoad}`;
   if (item.stage === "decision") return member.voted ? "voted" : "waiting";
   if (item.stage === "market") return member.marketReady ? "ready" : "discussing";
   if (item.stage === "code") return "decoding";
@@ -511,7 +515,7 @@ function renderWaiting(item, student) {
 }
 
 function renderPaused(item) {
-  app.innerHTML = shell(`${narrativeHeader(item)}<section class="panel centered"><div class="pause-icon">Ⅱ</div><h2>Mission paused</h2><p>Your teacher has frozen Vault 7. Keep your work and wait for the signal.</p></section>`, true);
+  app.innerHTML = shell(`${narrativeHeader(item)}<section class="panel centered"><div class="pause-icon">Ⅱ</div><h2>Mission paused</h2><p>Your teacher has paused the mission. Keep your work and wait for the signal.</p></section>`, true);
   if(state.cartridge.id!=='vault-7')document.querySelector('.centered p').textContent='Your teacher has paused the mission. Keep your work and wait for the signal.';
 }
 
@@ -597,13 +601,13 @@ function formatMath(prompt) {
 
 function renderMath(item, student) {
   if (student.gateComplete) {
-    return `${sceneBlock(item, true)}<section class="panel centered"><div class="success-mark">✓</div><h2>Your gate contribution is complete</h2><p>Stay with your crew. Vault 7 opens the next stage only when every agent finishes.</p></section>`;
+    return `${sceneBlock(item, true)}<section class="panel centered"><div class="success-mark">✓</div><h2>Your gate contribution is complete</h2><p>Stay with your crew. The next stage opens only when every team member finishes.</p></section>`;
   }
   const problem = student.currentItem;
   if (!problem) return `<section class="panel centered"><div class="spinner"></div><h2>Loading challenge</h2></section>`;
   const media = problem.media ? `<figure class="question-media"><img src="${escapeHtml(problem.media.src)}" alt="${escapeHtml(problem.media.alt || "Question image")}" loading="lazy">${problem.media.caption ? `<figcaption>${escapeHtml(problem.media.caption)}</figcaption>` : ""}</figure>` : "";
   return `${sceneBlock(item, true)}<section class="panel math-card">
-    <div class="progress-line"><span>${escapeHtml(problem.moduleTitle)}</span><b>${student.gateProgress + 1} of ${item.gateLoad}</b></div>
+    <div class="progress-line"><span>${escapeHtml(problem.moduleTitle)}</span><b>${student.gateProgress + 1} of ${student.gateLoad??item.gateLoad}</b></div>
     ${media}<div class="problem ${problem.prompt.length>100?"word-problem":""}">${problem.promptMarkup || formatMath(problem.prompt)}</div>
     ${mathInput(problem)}
     <button class="primary wide" data-action="math.submit">Submit answer</button>
@@ -685,7 +689,7 @@ function renderVictory(item, student) {
   const title = item.scene?.title || (item.finalAction === "release" ? "The signal escaped" : "Mission accomplished");
   return `<section class="hero victory"><div><p class="eyebrow">VAULT 7 // FINAL RECORD</p><h1>${escapeHtml(title)}</h1><p>The crew's decision is now part of the world beyond Vault 7.</p></div><div class="vault-mark">✓</div></section>
     ${sceneBlock(item)}
-    <section class="panel ending"><h2>Extraction report: Agent ${escapeHtml(student.alias)}</h2><p class="transmission">${escapeHtml(extractionLabel(r))} · ${r?.detections||0} detections · ${Math.round((r?.activeElapsedMs||0)/1000)} seconds</p><p>${escapeHtml(operational)} Agent ${escapeHtml(student.alias)} ${outcome}.</p><p>${escapeHtml(aftermath)}</p><div class="fate-card ${fate?.id}"><small>PERSONNEL RECORD</small><b>${escapeHtml(fate?.label || "Recorded")}</b><span>First-attempt accuracy: ${Math.round(student.firstAttemptCorrect / Math.max(1, state.config.totalQuestions) * 100)}%</span></div><div class="summary"><span>Final action<b>${escapeHtml(FINAL_ACTIONS[item.finalAction]?.[0] || "—")}</b></span><span>Route<b>${escapeHtml(item.route || "—")}</b></span><span>Equipment<b>${escapeHtml(equipment)}</b></span><span>Credits left<b>${item.currency}</b></span><span>Decoded message<b>${escapeHtml(item.decodedSecret || "—")}</b></span><span>Code attempts<b>${item.codeAttempts}</b></span></div></section>`;
+    <section class="panel ending"><h2>Extraction report: Agent ${escapeHtml(student.alias)}</h2><p class="transmission">${escapeHtml(extractionLabel(r))} · ${r?.detections||0} detections · ${Math.round((r?.activeElapsedMs||0)/1000)} seconds</p><p>${escapeHtml(operational)} Agent ${escapeHtml(student.alias)} ${outcome}.</p><p>${escapeHtml(aftermath)}</p><div class="fate-card ${fate?.id}"><small>PERSONNEL RECORD</small><b>${escapeHtml(fate?.label || "Recorded")}</b><span>First-attempt accuracy: ${Math.round(student.firstAttemptCorrect / Math.max(1, student.assignedTotal??state.config.totalQuestions) * 100)}%</span></div><div class="summary"><span>Final action<b>${escapeHtml(FINAL_ACTIONS[item.finalAction]?.[0] || "—")}</b></span><span>Route<b>${escapeHtml(item.route || "—")}</b></span><span>Equipment<b>${escapeHtml(equipment)}</b></span><span>Credits left<b>${item.currency}</b></span><span>Decoded message<b>${escapeHtml(item.decodedSecret || "—")}</b></span><span>Code attempts<b>${item.codeAttempts}</b></span></div></section>`;
 }
 
 function noticeHtml() {
