@@ -1,4 +1,5 @@
-import { HOSTING } from './hosting-config.js?v=0.6.1-relay2';
+import { HOSTING } from './hosting-config.js?v=0.9.1';
+import {credentialFor,forgetRoom} from './privacy.js?v=0.9.1';
 
 // Keep the repository directory in every navigation and QR link. The API is
 // deliberately separate: student browsers never connect to workers.dev.
@@ -33,13 +34,18 @@ export function hostingFor(pageHref, config = HOSTING) {
 // No cookies or ambient credentials are needed: the existing session/device
 // keys are still checked by the server. Bound waits for creation and polling.
 export async function fetchApi(url, options = {}) {
+  const code=new URL(url,globalThis.location?.href||'http://localhost').pathname.match(/\/sessions\/([A-Z0-9]+)(?:\/|$)/i)?.[1];
+  const headers=new Headers(options.headers||{}),credential=code&&credentialFor(code);
+  if(credential)headers.set('authorization',`Bearer ${credential}`);
   const controller = options.signal ? null : new AbortController();
   const timeout = controller && setTimeout(() => controller.abort(), 15000);
   try {
-    return await fetch(url, {
-      ...options, credentials: 'omit', referrerPolicy: 'no-referrer',
+    const response=await fetch(url, {
+      ...options,headers, credentials: 'omit', referrerPolicy: 'no-referrer',
       signal: options.signal || controller.signal
     });
+    if(response.status===410&&code){forgetRoom(code);globalThis.dispatchEvent?.(new CustomEvent('mq-session-gone',{detail:{code}}));}
+    return response;
   } finally {
     if (timeout) clearTimeout(timeout);
   }
