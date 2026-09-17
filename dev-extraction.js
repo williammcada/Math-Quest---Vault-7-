@@ -1,11 +1,11 @@
-import {StealthRuntime} from './stealth.js?v=0.6.2';
-import {TeacherAudio} from './teacher-audio.js?v=0.6.2';
-import {SceneAssets} from './vault7-assets.js?v=0.6.2';
+import {StealthRuntime} from './stealth.js?v=0.9.0';
+import {TeacherAudio} from './teacher-audio.js?v=0.9.0';
+import {SceneAssets} from './vault7-assets.js?v=0.9.0';
 let runtime;
 function restart(){
   if(runtime){runtime.destroy();localStorage.removeItem(runtime.key);}
-  const extraction={route:document.querySelector('#route').value,equipment:document.querySelector('#equipment').value||null,adverseCount:Number(document.querySelector('#alerts').value),stageEnteredAt:Date.now(),completedCount:0,rosterCount:1,result:{}};
-  runtime=new StealthRuntime(document.querySelector('#practice'),{developerMode:true,session:'developer',studentId:'practice',deviceId:'practice',team:{extraction,finalAction:'isolate'},onState:()=>{}});
+  const extraction={route:document.querySelector('#route').value,equipment:document.querySelector('#equipment').value||null,adverseCount:Number(document.querySelector('#alerts').value),stageEnteredAt:Date.now(),completedCount:0,rosterCount:1,result:{checkpoint:document.querySelector('#checkpoint').value||null}};
+  runtime=new StealthRuntime(document.querySelector('#practice'),{developerMode:true,session:'developer',studentId:'practice',deviceId:'practice',team:{extraction,finalAction:document.querySelector('#final-action').value},onState:()=>{}});
 }
 document.querySelector('#restart').onclick=restart;
 restart();

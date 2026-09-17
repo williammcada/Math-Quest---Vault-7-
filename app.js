@@ -1,12 +1,13 @@
-import { hostingFor, fetchApi } from './hosting.js?v=0.6.2';
-import { CATALOG } from './catalog.js?v=0.6.2';
-import { StealthRuntime } from './stealth.js?v=0.6.2';
-import { SceneAssets } from './vault7-assets.js?v=0.6.2';
-import { TeacherAudio } from './teacher-audio.js?v=0.6.2';
+import { hostingFor, fetchApi } from './hosting.js?v=0.9.0';
+import { CATALOG } from './catalog.js?v=0.9.0';
+import { StealthRuntime } from './stealth.js?v=0.9.0';
+import { SceneAssets } from './vault7-assets.js?v=0.9.0';
+import { TeacherAudio } from './teacher-audio.js?v=0.9.0';
 import { CARTRIDGES, cartridgeFor } from './cartridges.js';
 import { expansionBody, bindExpansion } from './expansion-ui.js';
 import { FinaleHost } from './finale-host.js';
 import { CartridgeAudio } from './cartridge-audio.js';
+import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js';
 import {developerTools,extensionDialog} from './engine/teacher-tools.js';
 let setupCartridge='vault-7';
 let finaleHost=null;
@@ -94,7 +95,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.8.0</span></header>
+    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.9.0</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -137,7 +138,7 @@ function renderLanding() {
     <section class="panel setup-builder">
       <h2>1 · Game Select</h2>
       <label>Cartridge<select id="cartridge-select">${CARTRIDGES.map(c=>`<option value="${c.id}" ${setupCartridge===c.id?'selected':''}>${escapeHtml(c.title)}</option>`).join('')}</select></label>
-      ${developerTools()}${setupCartridge==='nightfall'?`<p>Nightfall: Last Bus Out | 3–5 math gates | team equipment | city survival finale · manual aiming</p><p><a href="./practice-nightfall.html" target="_blank" rel="noopener">Play Nightfall practice (no math)</a></p>`:''}
+      ${developerTools()}
       <button class="game-card selected" aria-pressed="true"><span class="game-cover"><img src="./assets/vault7/scenes/cover.webp" width="960" height="540" alt="Vault 7 under a storm-lit mountain"></span><span><b>Vault 7</b><small>Science-fiction infiltration · 3–5 gates · cipher finale</small></span><span class="selected-pill">Selected</span></button>
       <div class="form-row"><label>Team names <small>Separate with commas; 1–6 teams. Empty teams are removed at launch.</small><input id="teams" value="${escapeHtml(setupTeams)}"></label><label>Mission gates<select id="gate-count"><option value="3" ${gateCount === 3 ? "selected" : ""}>3 · Condensed mission</option><option value="4" ${gateCount === 4 ? "selected" : ""}>4 · Standard mission</option><option value="5" ${gateCount === 5 ? "selected" : ""}>5 · Full mission</option></select></label></div>
     </section>
@@ -161,7 +162,7 @@ function renderLanding() {
       <p class="fine">Difficulty labels are provisional until their exact module definitions are finalized. Imported questions use the answer type supplied by the teacher.</p>
     </section>`);
   bindSetup();
-  if(setupCartridge==='nightfall'){const card=document.querySelector('.game-card');card.innerHTML=`<span class="game-cover"><img src="${cartridgeFor('nightfall').assets.cover}" width="960" height="540" alt="The last evacuation bus waits at the terminal"></span><span><b>Nightfall: Last Bus Out</b><small>Answer the calls. Equip the crew. Reach the bus.</small></span>`;}
+  if(setupCartridge==='nightfall'){const card=document.querySelector('.game-card');card.innerHTML=`<span class="game-cover"><img src="${cartridgeFor('nightfall').assets.cover}" width="960" height="540" alt="The last evacuation bus waits at the terminal"></span><span><b>Nightfall: Last Bus Out</b><small>Answer the calls. Equip the crew. Reach the bus.</small></span><span class="selected-pill">Selected</span>`;}
 }
 
 function bindSetup() {
@@ -287,10 +288,8 @@ async function createSession() {
   const button = document.querySelector("#create");
   button.disabled = true;
   try {
-    if(setupCartridge==='nightfall'){
-      const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
-      if(!catalog.cartridges?.some(c=>c.id==='nightfall'&&c.revision===cartridgeFor('nightfall').revision))throw new Error('Update the backend with the v0.8.0 deployment batch before creating Nightfall.');
-    }
+    const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
+    if(catalog.version!=='0.9.0'||!catalog.cartridges?.some(c=>c.id===setupCartridge&&c.revision===cartridgeFor(setupCartridge).revision))throw new Error('Update the backend with the v0.9.0 deployment batch, then reload this page. Frontend and backend must match.');
     const teamNames = setupTeams.split(",").map(value => value.trim()).filter(Boolean);
     const modules = [
       ...PRESETS.filter(record => record.selected).map(record => ({ id: record.id, source: "preset", band: record.band, itemCount: Number(record.itemCount) })),
@@ -342,7 +341,7 @@ function renderTeacher() {
       ${item.secretNumbers.length ? `<div class="teacher-secret"><small>SECRET MESSAGE</small><b>${item.secretNumbers.join(" · ")}</b><span>Teacher key: ${escapeHtml(item.secretAnswer)}</span></div>` : ""}
       <div class="metrics"><span><b>${item.memberCount}</b> students</span><span><b>${item.currency}</b> credits</span><span><b>${item.adverseEvents.length}</b> adverse</span></div>
       <div class="member-list teacher-roster">${item.members.length ? item.members.map(member => `<div><span class="presence ${member.active ? "on" : ""}"></span><b>${escapeHtml(member.alias)}</b><span>${member.itemsCompleted}/${member.assignedTotal??state.config.totalQuestions} total${member.fate ? ` · ${escapeHtml(member.fate.label)}` : ""}</span><label class="difficulty-control"><span class="sr-only">Difficulty for ${escapeHtml(member.alias)}</span><select data-student-difficulty="${escapeHtml(member.id)}" aria-label="Question difficulty for ${escapeHtml(member.alias)}"><option value="session" ${member.difficultyPolicy === "session" ? "selected" : ""}>Session level</option><option value="foundation" ${member.difficultyPolicy === "foundation" ? "selected" : ""}>Foundation</option><option value="standard" ${member.difficultyPolicy === "standard" ? "selected" : ""}>Standard</option><option value="challenge" ${member.difficultyPolicy === "challenge" ? "selected" : ""}>Challenge</option></select></label></div>`).join("") : `<p class="empty-label">No players joined · removed at launch</p>`}</div>
-      ${teacherExtraction(item)}
+      ${teamProgressMarkup(item)}${teacherExtraction(item)}${teamToolsMarkup(state,item)}
       ${item.lead ? `<p class="lead">Event Lead: ${escapeHtml(item.lead.alias)}</p>` : ""}
     </article>`).join("");
   app.innerHTML = shell(`
@@ -358,6 +357,7 @@ function renderTeacher() {
   app.insertAdjacentHTML('beforeend',developerTools());
   document.querySelector('.hero h1').textContent='MathQuest Dashboard';
   if(state.status==='active'){const b=document.createElement('button');b.textContent='Extend activity';b.className='secondary';b.onclick=()=>extensionDialog(state,async(type,extra)=>parseResponse(await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,teacherKey,commandId:uid(),...extra})})),incoming=>{state=incoming;notice={correct:true,message:'Additional questions assigned.'};render();});document.querySelector('.controls').append(b);}
+  bindTeamTools(state,command);
   teacherAudio.bind();
   cartridgeAudio.bind();
   if(state.cartridge.id!=='vault-7'){
@@ -685,7 +685,7 @@ function renderVictory(item, student) {
   const equipment=item.inventory.length?MARKET[item.inventory[0]][0]:'No upgrade';
   const outcome=r?.outcome==='captured'?'was intercepted by Helix security; their beacon went silent':r?.outcome==='timeout'?'missed the extraction window and is listed missing in action':r?.outcome==='advanced'?'has an extraction record closed by mission control':r?.outcome==='fallback_extracted'?'reached the elevator through a carefully planned escape route':'reached the surface elevator';
   const operational=`${item.route==='shaft'?'The ventilation system':'The security corridor'} was the last barrier between the crew and the surface. ${item.inventory.length?`The ${equipment} shaped their escape.`:'They entered without equipment support.'}`;
-  const aftermath=['extracted','fallback_extracted'].includes(r?.outcome)?fate?.id==='lost'?'The elevator made it out. During the surface transfer, injuries sustained earlier in the mission overwhelmed the recovery team. Your beacon stopped transmitting; mission control lists you missing in action.':fate?.id==='wounded'?'At the surface, the recovery team treats injuries sustained earlier in the mission. You leave Vault 7 wounded, but alive.':'You board the recovery transport alive. Behind you, the mountain disappears into the clouds.':r?.outcome==='advanced'?'Mission control closed this run without a simulated escape. The personnel record retains the condition established during the mission.':'The recovery team records your last known position. The crew’s choice still takes effect, even for the agents who never see its consequences.';
+  const aftermath=['extracted','fallback_extracted'].includes(r?.outcome)?fate?.id==='lost'?'The elevator made it out. During the surface transfer, injuries sustained earlier in the mission overwhelmed the recovery team. Your beacon stopped transmitting; mission control lists you missing in action.':fate?.id==='wounded'?'At the surface, the recovery team treats injuries sustained earlier in the mission. You leave Vault 7 wounded, but alive.':'You board the recovery transport alive. Behind you, the mountain disappears into the clouds.':r?.outcome==='advanced'?'Mission control closed this run without a simulated escape. No arcade success or failure is inferred. Your academic record remains separate.':'The recovery team records your last known position. The crew’s choice still takes effect, even for the agents who never see its consequences.';
   const title = item.scene?.title || (item.finalAction === "release" ? "The signal escaped" : "Mission accomplished");
   return `<section class="hero victory"><div><p class="eyebrow">VAULT 7 // FINAL RECORD</p><h1>${escapeHtml(title)}</h1><p>The crew's decision is now part of the world beyond Vault 7.</p></div><div class="vault-mark">✓</div></section>
     ${sceneBlock(item)}
@@ -786,7 +786,7 @@ async function poll() {
     const query = teacherKey ? `teacherKey=${encodeURIComponent(teacherKey)}` : deviceId ? `deviceId=${encodeURIComponent(deviceId)}` : "";
     const response = await fetchApi(`${endpoint("state")}${query ? `?${query}` : ""}`, { cache: "no-store" });
     const incoming = await parseResponse(response);
-    const focusedJoinField = document.activeElement?.matches?.("#alias, #pin, [data-student-difficulty], #audio-volume");
+    const focusedJoinField = document.activeElement?.matches?.("#alias, #pin, [data-student-difficulty], #audio-volume, [data-threat], [data-supply-count], [data-supply-reuse]")||document.querySelector('dialog[open]');
     const changed = !state || incoming.revision !== state.revision || incoming.status !== state.status || incoming.paused !== state.paused;
     state = incoming;
     if (extractionRuntime && incoming.teams?.[0]?.stage === "extraction") extractionRuntime.update(incoming.teams[0], incoming.paused);

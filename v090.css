@@ -1,0 +1,39 @@
+/* Essential text is DOM text, independent of the pixel-art scene resolution. */
+.mq-thumb-controls{display:flex;justify-content:space-between;gap:24px;padding:10px max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:#101e2d;touch-action:none;user-select:none}
+.mq-thumb-left,.mq-thumb-right{display:grid;grid-template-columns:repeat(2,minmax(68px,116px));gap:8px;align-items:center}
+.mq-thumb-right{grid-template-columns:repeat(3,minmax(68px,112px))}
+.mq-thumb-right.mq-two{grid-template-columns:repeat(2,minmax(68px,112px))}
+.mq-tank{grid-template-columns:repeat(3,minmax(56px,88px))}.mq-tank [data-game-key="up"]{grid-column:2}.mq-tank [data-game-key="left"]{grid-column:1;grid-row:2}.mq-tank [data-game-key="down"]{grid-column:2;grid-row:2}.mq-tank [data-game-key="right"]{grid-column:3;grid-row:2}
+.mq-thumb-controls button{min-width:56px;min-height:56px;font:700 16px/1.15 system-ui;color:#fff;background:#294259;border:2px solid #7894a8;border-radius:12px;padding:8px;touch-action:none;-webkit-user-select:none}
+.mq-thumb-controls button.held{background:#056d6a;border-color:#74fff0;box-shadow:0 0 0 3px #3cb7b755}
+.mq-thumb-controls [data-game-key="fire"]{background:#8d3b33}
+.nf-hud,.stealth-hud,.stealth-instructions,.stealth-connection,.stealth-progress,.mq-objective,.nf-status{font:500 16px/1.5 system-ui!important;letter-spacing:normal!important;color:#edf5ff;background:#13273b;padding:12px;border-radius:8px}
+.mq-objective{font-size:18px!important;border-left:4px solid #6ce4d1;min-height:54px}
+.nf-overlay,.stealth-overlay{font:18px/1.5 system-ui!important;overflow:auto;max-height:100%;box-sizing:border-box}
+.nf-overlay p,.stealth-overlay p{font-size:18px!important}
+.nf-toolbar,.stealth-options{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.nf-toolbar button,.stealth-options button{min-height:44px;font:600 16px system-ui}
+.nf-screen canvas,.stealth-stage canvas{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.nf-game,.stealth-shell{max-width:1100px;margin:auto}
+.stealth-touch{display:block;padding:0}
+.mq-focus{position:fixed;inset:0;z-index:1000;background:#101e2d;overflow:auto;padding:env(safe-area-inset-top) 0 0}
+.mq-focus .nf-game,.mq-focus .stealth-shell{max-width:none;border:0;border-radius:0}
+.mq-focus .stealth-brief,.mq-focus .stealth-instructions,.mq-focus .stealth-progress{display:none}
+.mq-focus .nf-screen,.mq-focus .stealth-stage{height:calc(100dvh - 330px);min-height:180px;max-height:none;aspect-ratio:auto;max-width:none}
+.mq-focus canvas{height:100%;width:100%;max-height:none!important;object-fit:contain}
+.mq-focus .nf-status,.mq-focus .stealth-connection{margin:0;font-size:14px!important;padding:4px 12px}
+.mq-focus .nf-equipment{margin:4px}.mq-focus .nf-hud,.mq-focus .mq-objective{margin:0;padding:5px 12px}
+.mq-focus{height:100dvh;box-sizing:border-box;overflow:hidden}
+.mq-focus .nf-game{height:100%;box-sizing:border-box;display:grid;grid-template-rows:auto auto minmax(100px,1fr) auto auto auto auto;padding:8px}
+.mq-focus .stealth-shell{height:100%;box-sizing:border-box;display:grid;grid-template-rows:auto auto minmax(100px,1fr) auto auto auto}
+.mq-focus .nf-screen,.mq-focus .stealth-stage{height:auto;min-height:100px;width:100%;margin:0;aspect-ratio:auto;overflow:hidden}
+.mq-focus .nf-screen canvas,.mq-focus .stealth-stage canvas{position:absolute;inset:0;height:100%;width:100%;aspect-ratio:auto;object-fit:contain}
+.mq-focus .mq-thumb-controls{position:static;padding-top:6px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+.mq-focus .mq-objective{min-height:0;max-height:82px;overflow:auto}
+.mq-focus .stealth-options{margin:4px 10px}
+.team-complete{padding:12px;border:2px solid #148365;border-radius:8px;background:#dcf9e9;font-weight:800;color:#075640}
+.team-action-status{padding:10px;background:#e7eefb;border-radius:8px;font-weight:700}
+.threat-control{display:block;border-top:1px solid #ccd5e1;padding:12px 0}.threat-control input{display:block;width:100%;min-height:44px}
+.nf-equipment{font:600 16px/1.5 system-ui}.nf-practice .setup{display:flex;flex-wrap:wrap;gap:12px}.nf-practice label{display:block}
+@media (orientation:landscape) and (max-height:900px){.nf-screen,.stealth-stage{max-width:900px;margin:auto}.mq-thumb-controls{position:sticky;bottom:0;z-index:5}.nf-screen canvas,.stealth-stage canvas{max-height:52vh;object-fit:contain}.nf-hud,.mq-objective{padding:6px 12px}}
+@media(max-width:620px){.mq-thumb-controls{gap:12px}.mq-thumb-left,.mq-thumb-right{grid-template-columns:repeat(2,minmax(56px,1fr));gap:5px}.mq-thumb-controls button{font-size:14px}.nf-overlay,.stealth-overlay{padding:14px!important}.nf-screen,.stealth-stage{min-height:260px}}

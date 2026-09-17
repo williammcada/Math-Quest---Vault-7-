@@ -1,4 +1,5 @@
-import { fetchApi } from './hosting.js?v=0.6.2';
+import {CONTROL_PROFILES,controlMarkup,bindGameInput,crispCanvas} from './engine/controls.js';
+import { fetchApi } from './hosting.js?v=0.9.0';
 import { StealthSimulation, RULES, REVISION, EQUIPMENT, angleAt, sensorActive, conePolygon, CHECKPOINTS } from './stealth-core.js';
 const safe=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const id=()=>crypto.randomUUID();
@@ -7,7 +8,7 @@ export function mergeRecovery(server={},local={}){
   if(server.status==='terminal')return {...server};
   const checkpoint=ranks[Math.max(ranks.indexOf(server.checkpoint??null),ranks.indexOf(local.checkpoint??null))];
   const detections=Math.min(3,Math.max(server.detections||0,local.detections||0));
-  return {...server,...local,checkpoint,detections,integrityRemaining:3-detections,activeElapsedMs:Math.min(180000,Math.max(server.activeElapsedMs||0,local.activeElapsedMs||0)),fallbackUsed:!!(server.fallbackUsed||local.fallbackUsed),fallbackStep:Math.max(server.fallbackStep||0,local.fallbackStep||0)};
+  return {...server,...local,checkpoint,detections,integrityRemaining:3-detections,activeElapsedMs:Math.min(180000,Math.max(server.activeElapsedMs||0,local.activeElapsedMs||0)),fallbackUsed:!!(server.fallbackUsed||local.fallbackUsed),fallbackStep:Math.max(server.fallbackStep||0,local.fallbackStep||0),jams:[...new Set([...(server.jams||[]),...(local.jams||[])])],objectives:{panel:!!(server.objectives?.panel||local.objectives?.panel),card:!!(server.objectives?.card||local.objectives?.card)}};
 }
 
 export function fallbackScene(route,step,equipment,adverse=0){
@@ -20,7 +21,7 @@ export function fallbackScene(route,step,equipment,adverse=0){
 export class StealthRuntime{
   constructor(root,options){
     this.root=root;this.options=options;this.team=options.team;this.ex=this.team.extraction;this.paused=!!options.paused;
-    this.key=`mq-extraction-${options.session}-${options.studentId}-${this.ex.stageEnteredAt}`;
+    this.key=`mq-v09-extraction-${options.session}-${options.studentId}-${this.ex.stageEnteredAt}`;
     let saved;try{saved=JSON.parse(localStorage.getItem(this.key)||'null');}catch{}
     this.recovery=mergeRecovery(this.ex.result,saved?.summary);this.queue=saved?.queue||[];
     this.sim=new StealthSimulation(this.ex,this.recovery);if(this.recovery.outcome&&this.recovery.status==='terminal'){this.sim.state='terminal';this.sim.outcome=this.recovery.outcome;}this.fallback=!!this.recovery.fallbackUsed;this.fallbackStep=this.recovery.fallbackStep||0;this.eliminated=saved?.eliminated||{};
@@ -36,48 +37,39 @@ export class StealthRuntime{
   save(){try{localStorage.setItem(this.key,JSON.stringify({summary:this.summary(),queue:this.queue,eliminated:this.eliminated}));}catch{this.connection.textContent='Device storage unavailable. Keep this page open until your result is saved.';}}
   mount(){
     const equip=EQUIPMENT[this.ex.equipment];
-    this.root.innerHTML=`<section class="stealth-shell"><div class="stealth-brief"><p class="transmission">${this.ex.route==='shaft'?'VENTILATION SHAFT':'SECURITY CORRIDOR'} · ${this.ex.adverseCount?'ALERT '+this.ex.adverseCount:'QUIET FACILITY'}</p><h2>Your crew made its choice. Now get out.</h2><p>${this.team.finalAction==='release'?'Asterion is already beyond containment.':this.team.finalAction==='destroy'?'The core is collapsing behind you.':this.team.finalAction==='copy'?'The copied archive pulses inside your jacket.':'Containment doors seal behind you.'} Reach the surface elevator before security closes the facility.</p><p class="equipment-effect"><b>${equip?.name||'No extraction equipment'}</b> · ${equip?.effect||'Every route can be completed at standard speed.'}</p></div>
+    this.root.innerHTML=`<section class="stealth-shell"><div class="stealth-brief"><p class="transmission">${this.ex.route==='shaft'?'VENTILATION SHAFT':'SECURITY CORRIDOR'} · ${this.ex.adverseCount?'ALERT '+this.ex.adverseCount:'QUIET FACILITY'}</p><h2>Your crew made its choice. Now get out.</h2><p>${this.team.finalAction==='release'?'Asterion is already beyond containment.':this.team.finalAction==='destroy'?'The core is collapsing behind you.':this.team.finalAction==='copy'?'The copied archive pulses inside your jacket.':'Containment doors seal behind you.'} The core has accepted your command. Alarms sound and containment shutters begin to close. Disable the security panel, cross the search sector, collect the access card, and reach the surface elevator.</p><p class="equipment-effect"><b>${equip?.name||'No extraction equipment'}</b> · ${equip?.effect||'Every route can be completed at standard speed.'}</p></div>
       <div class="stealth-hud" aria-label="Extraction status"><span>Integrity <b data-hud="integrity">● ● ●</b></span><span>Visibility <meter data-hud="visibility" min="0" max="100" value="0"></meter></span><span>Run <b data-hud="time">3:00</b></span><span>Checkpoint <b data-hud="checkpoint">—</b></span></div>
       <div class="stealth-stage"><canvas width="320" height="180" tabindex="0" aria-label="Side-view escape: avoid spotlights, jump sensors, reach the elevator. Accessible extraction is available below."></canvas><div class="stealth-overlay" hidden></div></div>
-      <div class="stealth-touch"><button data-hold="left" aria-label="Move left">◀</button><button data-hold="right" aria-label="Move right">▶</button><button data-hold="jump">JUMP</button><button data-hold="interact">ELEVATOR</button></div>
-      <p class="stealth-instructions">Move: ← → or A / D · Jump: Space / W / ↑ · Elevator: hold E for 0.6 seconds. Touch: hold a direction and Jump together. Yellow beams build visibility; red sensors trigger immediately. Three detections end your run.</p>
-      <div class="stealth-options"><button data-run="pause">Pause run</button><button data-run="reset-input">Reset controls</button><button data-run="fallback">Use accessible extraction</button><label><input type="checkbox" data-option="contrast"> High contrast</label><label><input type="checkbox" data-option="reduced" ${this.reduced?'checked':''}> Reduced motion</label><label><input type="checkbox" data-option="sound"> Sound effects</label></div>
+      <p class="mq-objective" role="status"></p><div class="stealth-touch">${controlMarkup(CONTROL_PROFILES.vault)}</div>
+      <p class="stealth-instructions">${CONTROL_PROFILES.vault.help}</p>
+      <div class="stealth-options"><button data-run="view">Expand game</button><button data-run="pause">Pause run</button><button data-run="help">Controls</button><button data-run="reset-input">Reset controls</button><button data-run="fallback">Use accessible extraction</button><label><input type="checkbox" data-option="contrast"> High contrast</label><label><input type="checkbox" data-option="reduced" ${this.reduced?'checked':''}> Reduced motion</label><label><input type="checkbox" data-option="sound"> Sound effects</label></div>
       <section class="stealth-fallback" hidden></section><p class="stealth-connection" role="status">Your result will be saved to mission control.</p><p class="stealth-progress"></p>
     </section>`;
     this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d',{alpha:false});if(this.ctx)this.ctx.imageSmoothingEnabled=false;else this.fallback=true;this.sprite=new Image();this.sprite.src='./assets/vault7/sprites/agent-16x24.png';
+    this.root.querySelector('.stealth-shell').prepend(this.root.querySelector('.stealth-options'));
     this.overlay=this.root.querySelector('.stealth-overlay');this.fallbackRoot=this.root.querySelector('.stealth-fallback');this.connection=this.root.querySelector('.stealth-connection');this.hud=Object.fromEntries([...this.root.querySelectorAll('[data-hud]')].map(e=>[e.dataset.hud,e]));
   }
   bind(){
-    const signal=this.abort.signal,reset=()=>{this.input={};this.pointers.clear();this.root.querySelectorAll('[data-hold]').forEach(b=>b.classList.remove('held'));};this.resetInput=reset;
-    for(const button of this.root.querySelectorAll('[data-hold]')){
-      button.addEventListener('pointerdown',event=>{event.preventDefault();if(this.blocked()||!this.started)return;try{button.setPointerCapture(event.pointerId);}catch{}if(['left','right'].includes(button.dataset.hold)){const opposite=button.dataset.hold==='left'?'right':'left';this.input[opposite]=false;for(const [id,key]of this.pointers)if(key===opposite)this.pointers.delete(id);this.root.querySelector(`[data-hold="${opposite}"]`)?.classList.remove('held');}this.pointers.set(event.pointerId,button.dataset.hold);this.input[button.dataset.hold]=true;button.classList.add('held');},{signal});
-      const release=event=>{const key=this.pointers.get(event.pointerId);this.pointers.delete(event.pointerId);if(key){this.input[key]=[...this.pointers.values()].includes(key);button.classList.remove('held');}};
-      for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,release,{signal});
-      button.addEventListener('contextmenu',e=>e.preventDefault(),{signal});
-    }
-    const releaseAnywhere=e=>{const key=this.pointers.get(e.pointerId);this.pointers.delete(e.pointerId);if(key){this.input[key]=[...this.pointers.values()].includes(key);this.root.querySelector(`[data-hold="${key}"]`)?.classList.toggle('held',!!this.input[key]);}};
-    window.addEventListener('pointerup',releaseAnywhere,{signal});window.addEventListener('pointercancel',releaseAnywhere,{signal});
-    window.addEventListener('pointermove',e=>{if(e.buttons===0&&this.pointers.has(e.pointerId))releaseAnywhere(e);},{signal});
-    const keys={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',ArrowUp:'jump',w:'jump',W:'jump',' ':'jump',e:'interact',E:'interact'};
-    document.addEventListener('keydown',e=>{if(this.fallback||!this.started||this.blocked()||e.target.matches('input,select,textarea,button')&&e.key===' ')return;if(keys[e.key]){e.preventDefault();this.input[keys[e.key]]=true;}if(e.key==='Escape'){this.localPaused=true;reset();this.showOverlay();}},{signal});
-    document.addEventListener('keyup',e=>{if(keys[e.key]){this.input[keys[e.key]]=false;if(!this.fallback)e.preventDefault();}},{signal});
-    window.addEventListener('blur',()=>{if(this.started&&this.sim.state!=='terminal'){this.localPaused=true;reset();this.showOverlay();if(this.fallback)this.showFallback();this.save();}},{signal});
-    document.addEventListener('visibilitychange',()=>{if(document.hidden){this.localPaused=true;reset();this.save();}this.showOverlay();if(this.fallback)this.showFallback();},{signal});
-    window.addEventListener('pagehide',()=>this.save(),{signal});window.addEventListener('online',()=>this.flush(),{signal});
+    const signal=this.abort.signal;
+    this.inputBinding=bindGameInput(this.root,CONTROL_PROFILES.vault,{signal,onChange:v=>this.input=v,blocked:()=>this.fallback||!this.started||this.blocked()||this.sim.state==='terminal',onPause:()=>{if(this.started&&this.sim.state!=='terminal'){this.localPaused=true;this.showOverlay();if(this.fallback)this.showFallback();this.save();}}});
+    const reset=()=>this.inputBinding.clear();this.resetInput=reset;
+    window.addEventListener('online',()=>this.flush(),{signal});
     this.root.addEventListener('click',e=>{const action=e.target.closest('[data-run]')?.dataset.run;if(!action)return;
-      if(action==='reset-input'){reset();this.localPaused=true;this.showOverlay();}if(action==='start')this.start();if(action==='resume'){this.localPaused=false;this.networkPaused=false;this.lastFrame=0;this.showOverlay();if(this.fallback)this.showFallback();else this.canvas.focus({preventScroll:true});}
-      if(action==='pause'){this.localPaused=!this.localPaused;reset();this.showOverlay();if(this.fallback)this.showFallback();}
+      if(action==='view'){this.root.classList.toggle('mq-focus');e.target.textContent=this.root.classList.contains('mq-focus')?'Window view':'Expand game';reset();}
+      if(action==='help'){this.help=true;this.localPaused=true;reset();this.overlayKey='';this.showOverlay();}
+      if(action==='reset-input'){reset();this.localPaused=true;this.showOverlay();}if(action==='start')this.start();if(action==='resume'){this.help=false;this.localPaused=false;this.networkPaused=false;this.lastFrame=0;this.showOverlay();if(this.fallback)this.showFallback();else this.canvas.focus({preventScroll:true});}
+      if(action==='pause'){this.help=false;this.localPaused=!this.localPaused;reset();this.showOverlay();if(this.fallback)this.showFallback();}
       if(action==='fallback')this.switchFallback();
       if(action==='confirm-choice')this.confirmFallback();
       if(action==='next-scene'){this.choice=null;this.sceneFeedback='';this.showFallback();}
     },{signal});
     this.root.addEventListener('change',e=>{const key=e.target.dataset.option;if(!key)return;this[key]=e.target.checked;if(key==='sound'&&this.sound)this.enableSound();this.root.classList.toggle('high-contrast',this.contrast);},{signal});
   }
-  start(){if(this.started||this.paused)return;this.started=true;this.sim.start();this.localPaused=false;this.enqueue('start',{mapRevision:REVISION});if(this.fallback)this.enqueue('switchFallback');this.showOverlay();if(this.fallback)this.showFallback();else this.canvas.focus({preventScroll:true});}
+  start(){if(this.started||this.paused)return;this.started=true;if(!this.fallback)this.root.classList.add('mq-focus');this.root.querySelector('[data-run="view"]').textContent='Window view';this.sim.start();this.localPaused=false;this.enqueue('start',{mapRevision:REVISION});if(this.fallback)this.enqueue('switchFallback');this.showOverlay();if(this.fallback)this.showFallback();else this.canvas.focus({preventScroll:true});}
   blocked(){return this.paused||this.localPaused||this.networkPaused||document.hidden;}
   switchFallback(){
     if(this.sim.state==='terminal'||this.paused)return;
-    if(!this.started)this.start();this.fallback=true;this.resetInput();this.enqueue('switchFallback');this.showFallback();this.showOverlay();
+    if(!this.started)this.start();this.fallback=true;this.root.classList.remove('mq-focus');this.fallbackStep=Math.max(this.fallbackStep,Math.min(2,ranks.indexOf(this.sim.checkpoint)));this.resetInput();this.enqueue('switchFallback');this.showFallback();this.showOverlay();
   }
   update(team,paused){
     if(this.destroyed)return;this.lastContact=Date.now();this.connection.textContent=this.queue.length?`Saving ${this.queue.length} update${this.queue.length===1?'':'s'}…`:'Connected · progress saved';
@@ -86,11 +78,11 @@ export class StealthRuntime{
     if(this.paused!==paused){this.paused=paused;this.resetInput();this.lastFrame=0;}
     if(this.networkPaused){this.networkPaused=false;this.localPaused=true;}
     if(r?.status==='terminal'){
-      this.sim.state='terminal';this.sim.outcome=r.outcome;this.sim.checkpoint=r.checkpoint;this.sim.detections=r.detections;this.sim.integrity=r.integrityRemaining;this.sim.elapsed=r.activeElapsedMs/1000;this.queue=[];this.fallback=!!r.fallbackUsed;this.fallbackStep=r.fallbackStep||0;
+      this.sim.state='terminal';this.sim.outcome=r.outcome;this.sim.checkpoint=r.checkpoint;this.sim.panel=!!r.objectives?.panel||['A','B','C'].includes(r.checkpoint);this.sim.card=!!r.objectives?.card||r.checkpoint==='C';this.sim.detections=r.detections;this.sim.integrity=r.integrityRemaining;this.sim.elapsed=r.activeElapsedMs/1000;this.queue=[];this.fallback=!!r.fallbackUsed;this.fallbackStep=r.fallbackStep||0;
     }else if(r){
       if(r.detections>this.sim.detections){this.sim.detections=r.detections;this.sim.integrity=3-r.detections;}
       if(r.activeElapsedMs>this.sim.elapsed*1000)this.sim.elapsed=r.activeElapsedMs/1000;
-      if(ranks.indexOf(r.checkpoint)>ranks.indexOf(this.sim.checkpoint)){this.sim.checkpoint=r.checkpoint;Object.assign(this.sim.player,CHECKPOINTS[r.checkpoint],{vx:0,vy:0});}
+      if(ranks.indexOf(r.checkpoint)>ranks.indexOf(this.sim.checkpoint)){this.sim.checkpoint=r.checkpoint;this.sim.panel=['A','B','C'].includes(r.checkpoint);this.sim.card=r.checkpoint==='C';Object.assign(this.sim.player,CHECKPOINTS[r.checkpoint],{vx:0,vy:0});}
       if(r.fallbackUsed&&!this.fallback){this.fallback=true;this.fallbackStep=r.fallbackStep;this.started=true;this.resetInput();this.showFallback();}
     }
     this.root.querySelector('.stealth-progress').textContent=`${this.ex.completedCount} of ${this.ex.rosterCount} crew members finished. Mission control can close extraction for anyone still away.`;
@@ -117,19 +109,19 @@ export class StealthRuntime{
   }
   showOverlay(){
     const terminal=this.sim.state==='terminal',mode=terminal?'terminal':this.paused?'teacher-pause':this.networkPaused?'network':this.localPaused?'paused':!this.started?'ready':this.sim.state==='detected'||this.sim.state==='respawning'?'detected':'';
-    const key=`${mode}-${this.sim.integrity}-${this.queue.length===0}`;if(key===this.overlayKey)return;this.overlayKey=key;
+    const key=`${mode}-${this.sim.integrity}-${this.queue.length===0}-${!!this.help}`;if(key===this.overlayKey)return;this.overlayKey=key;
     this.overlay.hidden=!mode||this.fallback&&mode==='detected';this.root.querySelector('.stealth-touch').hidden=this.fallback||terminal;
     if(!mode)return;
     const title=mode==='terminal'?({extracted:'Elevator reached',fallback_extracted:'Extraction complete',captured:'Signal lost · captured',timeout:'Extraction window closed',advanced:'Mission control closed the run'})[this.sim.outcome]:mode==='teacher-pause'?'Mission paused by your teacher':mode==='network'?'Waiting for mission control':mode==='paused'?'Run paused':mode==='detected'?'Detected!':'Extraction ready';
     const body=mode==='terminal'?`${this.options.developerMode?'Practice finished. Use Restart practice above to try another loadout.':`${this.queue.length?'Saving your result…':'Your result is recorded.'} Wait for the crew’s epilogue. Your mathematics record is unchanged.`}`:mode==='ready'?'Avoid the yellow searchlights. Jump low sensors and wait for vertical beams to switch off. At the elevator, hold E or ELEVATOR.':mode==='detected'?`${this.sim.integrity} integrity remaining. Returning to your checkpoint.`:mode==='network'?'Progress is safe on this device. Reconnect to continue.':'Physics and the run timer are frozen.';
-    this.overlay.innerHTML=`<div role="status"><h2>${title}</h2><p>${body}</p>${mode==='ready'?'<button data-run="start">Start extraction</button><button data-run="fallback">Use accessible extraction</button>':mode==='paused'?'<button data-run="resume">Resume run</button>':mode==='detected'&&this.sim.integrity>0?'<button data-run="fallback">Switch to accessible extraction</button>':''}</div>`;
+    this.overlay.innerHTML=`<div role="status"><h2>${title}</h2><p>${this.help||mode==='ready'?safe(CONTROL_PROFILES.vault.help):body}</p>${mode==='ready'?'<button data-run="start">Start extraction</button><button data-run="fallback">Use accessible extraction</button>':mode==='paused'?'<button data-run="resume">Resume run</button>':mode==='detected'&&this.sim.integrity>0?'<button data-run="fallback">Switch to accessible extraction</button>':''}</div>`;
   }
   showFallback(){
     this.fallbackRoot.hidden=false;this.root.querySelector('.stealth-stage').hidden=true;this.root.querySelector('.stealth-touch').hidden=true;this.root.querySelector('.stealth-instructions').hidden=true;
     if(this.sim.state==='terminal'){this.fallbackRoot.innerHTML=`<h2>${this.sim.outcome==='captured'?'Captured · signal lost':'Extraction complete'}</h2><p>Your run has been recorded. Waiting for the crew’s epilogue.</p>`;return;}
     if(this.blocked()){this.fallbackRoot.innerHTML=`<h2>Extraction paused</h2><p>${this.paused?'Mission control has paused the session.':'Resume when you are ready.'}</p>${!this.paused&&!this.networkPaused?'<button data-run="resume">Resume run</button>':''}`;return;}
     const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.equipment,this.ex.adverseCount),removed=this.eliminated[this.fallbackStep]||[];
-    if(scene.toolkit&&!this.sceneFeedback){this.choice=scene.correct;this.sceneFeedback='Your Silent Toolkit disables this sensor. This sector is clear.';this.fallbackStep++;this.sim.checkpoint='B';this.enqueue('checkpoint');}
+    if(scene.toolkit&&!this.sceneFeedback){this.choice=scene.correct;this.sceneFeedback='Your Silent Toolkit disables this sensor. This sector is clear.';this.fallbackStep++;this.sim.checkpoint='B';this.sim.panel=true;this.enqueue('checkpoint');}
     const displayed=scene;
     this.fallbackRoot.innerHTML=`<p class="transmission">ACCESSIBLE EXTRACTION · ${Math.min(this.fallbackStep+1,3)} / 3</p><h2>${displayed.title}</h2><p>${displayed.text}</p>${this.ex.equipment==='scanner'&&scene.forecast?`<p class="equipment-effect">SCANNER: ${scene.forecast}</p>`:''}${this.ex.equipment==='map'?`<p class="equipment-effect">MAP: ${scene.options[scene.correct]} is marked safe.</p>`:''}<div class="fallback-choices">${scene.options.map((o,i)=>`<button data-fallback-choice="${i}" aria-pressed="${this.choice===i}" ${removed.includes(i)||this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'disabled':''}>${safe(o)}${removed.includes(i)?' · unsafe':''}${this.choice===i?' ✓':''}</button>`).join('')}</div>${this.sceneFeedback?`<p class="fallback-feedback" role="status">${safe(this.sceneFeedback)}</p>`:''}${this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'<button data-run="next-scene">Continue to next sector</button>':`<button class="fallback-confirm" data-run="${this.fallbackStep===2?'hold-final':'confirm-choice'}" ${this.choice==null?'disabled':''}>${this.fallbackStep===2?'Hold Confirm · 0.6 seconds':'Confirm choice'}</button>`}<p class="fine">Read at your own pace. The teacher controls the shared extraction window.</p>`;
     for(const b of this.fallbackRoot.querySelectorAll('[data-fallback-choice]'))b.onclick=()=>{this.choice=Number(b.dataset.fallbackChoice);this.showFallback();};
@@ -140,10 +132,10 @@ export class StealthRuntime{
     if(this.blocked()||this.choice==null||this.sim.state==='terminal')return;
     const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.equipment,this.ex.adverseCount);
     if(this.choice!==scene.correct){this.sim.detections++;this.sim.integrity--;this.eliminated[this.fallbackStep]||=[];this.eliminated[this.fallbackStep].push(this.choice);this.choice=null;this.sceneFeedback=`Detected. ${scene.explanation} ${this.sim.integrity} integrity remains.`;this.enqueue('detected');if(!this.sim.integrity){this.sim.complete('captured');this.sim.events=[];this.enqueue('complete',{outcome:'captured'});}}
-    else{this.sceneFeedback=scene.explanation;this.fallbackStep++;this.sim.checkpoint=['A','B','C'][this.fallbackStep-1];this.enqueue('checkpoint');if(this.fallbackStep===3){this.sim.complete('fallback_extracted');this.sim.events=[];this.enqueue('complete',{outcome:'fallback_extracted'});}}
+    else{this.sceneFeedback=scene.explanation;this.fallbackStep++;this.sim.checkpoint=['A','B','C'][this.fallbackStep-1];this.sim.panel=true;this.sim.card=this.fallbackStep===3;this.enqueue('checkpoint');if(this.fallbackStep===3){this.sim.complete('fallback_extracted');this.sim.events=[];this.enqueue('complete',{outcome:'fallback_extracted'});}}
     this.updateHUD();this.showFallback();this.save();
   }
-  updateHUD(){this.hud.integrity.textContent='● '.repeat(this.sim.integrity)+'○ '.repeat(3-this.sim.integrity);this.hud.visibility.value=this.sim.visibility;this.hud.visibility.setAttribute('aria-label',`Visibility ${Math.round(this.sim.visibility)} percent`);const left=Math.ceil((180000-this.sim.elapsed*1000)/1000);this.hud.time.textContent=this.fallback?'No speed timer':`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;this.hud.checkpoint.textContent=this.sim.checkpoint||'Start';}
+  updateHUD(){this.hud.integrity.textContent='● '.repeat(this.sim.integrity)+'○ '.repeat(3-this.sim.integrity);this.hud.visibility.value=this.sim.visibility;this.hud.visibility.setAttribute('aria-label',`Visibility ${Math.round(this.sim.visibility)} percent`);const left=Math.ceil((180000-this.sim.elapsed*1000)/1000);this.hud.time.textContent=this.fallback?'No speed timer':`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;this.hud.checkpoint.textContent=this.sim.checkpoint||'Start';this.root.querySelector('.mq-objective').textContent=this.sim.objective()+' · '+this.sim.alert+(this.ex.equipment==='scanner'?' · Drone: '+this.sim.drone.state:this.ex.equipment==='toolkit'?' · Jam '+(this.sim.elapsed<this.sim.jamUntil?'ACTIVE':this.sim.jams.includes(this.sim.checkpoint||'start')?'used at this checkpoint':'READY'):this.ex.equipment==='map'?' · MAP: shutter bypass available; '+this.sim.level.sensors.map(sensor=>sensor.off===0?'low beam: JUMP':(sensorActive(sensor,this.sim.elapsed)?'beam ON':'beam OFF')).join(', '):'');}
   async enableSound(){try{this.audioContext||=new (window.AudioContext||window.webkitAudioContext)();await this.audioContext.resume();this.beep('preview');}catch{this.connection.textContent='Sound could not start. Tap Sound effects again to retry.';}}
   beep(kind){if(!this.sound)return;try{this.audioContext||=new (window.AudioContext||window.webkitAudioContext)();if(this.audioContext.state!=='running')return;const a=this.audioContext,o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=kind==='detected'?130:kind==='complete'?520:380;g.gain.setValueAtTime(.06,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.15);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.16);}catch{}}
   loop(stamp){
@@ -158,7 +150,7 @@ export class StealthRuntime{
     this.frame=requestAnimationFrame(this.loop);
   }
   draw(){
-    if(!this.ctx)return;const c=this.ctx,s=this.sim,l=s.level,t=s.elapsed,cam=Math.max(0,Math.min(704,Math.round(s.player.x-112)));c.fillStyle='#09131e';c.fillRect(0,0,320,180);c.save();c.translate(-cam,0);
+    if(!this.ctx)return;this.ctx=crispCanvas(this.canvas,320,180);const c=this.ctx,s=this.sim,l=s.level,t=s.elapsed,cam=Math.max(0,Math.min(704,Math.round(s.player.x-112)));c.fillStyle='#09131e';c.fillRect(0,0,320,180);c.save();c.translate(-cam,0);
     // Pixel geometry remains readable if optional texture assets fail to load.
     for(let x=Math.floor(cam/64)*64;x<cam+384;x+=64){c.fillStyle='#102433';c.fillRect(x+8,24,46,124);c.fillStyle='#214253';c.fillRect(x+13,32,3,105);c.fillStyle='#1c3443';for(let y=48;y<130;y+=24)c.fillRect(x+20,y,24,9);c.fillStyle='#2c6370';c.fillRect(x+20,38,14,2);}
     c.fillStyle='#193543';c.fillRect(cam,4,320,4);
@@ -168,10 +160,15 @@ export class StealthRuntime{
       c.fillStyle=e.disabled?'#426a67':'#cad4cc';c.fillRect(e.x-4,e.y-5,8,6);c.fillStyle=e.disabled?'#66bc99':'#f9d872';c.fillRect(e.x-2,e.y+1,4,3);
     }
     for(let y=0;y<11;y++)for(let x=Math.max(0,Math.floor(cam/16));x<=Math.min(63,Math.ceil((cam+320)/16));x++){const tile=l.grid[y][x];if(!tile)continue;c.fillStyle=tile===2?'#567482':'#29434c';c.fillRect(x*16,y*16,16,tile===2?4:16);c.fillStyle=tile===2?'#a6d1d2':'#5e7c81';c.fillRect(x*16,y*16,16,2);if(tile===1){c.fillStyle='#183037';c.fillRect(x*16+2,y*16+4,12,10);c.fillStyle='#314e57';c.fillRect(x*16+4,y*16+6,8,6);}}
-    for(const sensor of l.sensors){const on=sensorActive(sensor,t);c.fillStyle=on?'#ff6266':'#255854';c.fillRect(sensor.x,sensor.y,sensor.w,sensor.h);c.fillStyle='#e9a391';c.fillRect(sensor.x-2,sensor.y-2,4,3);if(l.equipment==='map'){const cycle=sensor.on+sensor.off,phase=(t+sensor.phase)%cycle,remain=on?sensor.on-phase:cycle-phase;c.fillStyle='#d0ffee';c.font='5px monospace';c.fillText(sensor.off===0?'JUMP':`${on?'ON':'OFF'} ${Math.max(0,remain).toFixed(1)}`,sensor.x-8,sensor.y-6);}}
-    if(l.equipment==='map')for(const z of l.safeZones){c.fillStyle='#49dbb529';c.fillRect(z.x,z.y,z.w,z.h);c.strokeStyle='#62eac4';c.strokeRect(z.x,z.y,z.w,z.h);c.fillStyle='#aeffdf';c.font='5px monospace';c.fillText('SAFE',z.x+5,z.y+9);}
+    for(const sensor of l.sensors){const on=sensorActive(sensor,t);c.fillStyle=on?'#ff6266':'#255854';c.fillRect(sensor.x,sensor.y,sensor.w,sensor.h);c.fillStyle='#e9a391';c.fillRect(sensor.x-2,sensor.y-2,4,3);if(l.equipment==='map'){const cycle=sensor.on+sensor.off,phase=(t+sensor.phase)%cycle,remain=on?sensor.on-phase:cycle-phase;c.fillStyle='#d0ffee';c.font='5px monospace';}}
+    if(l.equipment==='map')for(const z of l.safeZones){c.fillStyle='#49dbb529';c.fillRect(z.x,z.y,z.w,z.h);c.strokeStyle='#62eac4';c.strokeRect(z.x,z.y,z.w,z.h);c.fillStyle='#aeffdf';}
     for(const[key,x]of [['A',176],['B',656],['C',848]]){c.fillStyle=ranks.indexOf(s.checkpoint)>=ranks.indexOf(key)?'#6af4c6':'#738b99';c.fillRect(x,150,3,10);c.font='6px monospace';c.fillText(key,x-1,147);}
-    c.fillStyle='#133f43';c.fillRect(964,92,40,68);c.strokeStyle='#74f4dd';c.strokeRect(964,92,40,68);c.fillStyle='#529386';c.fillRect(982,94,2,64);c.font='6px monospace';c.fillStyle='#bcffef';c.fillText('EXIT',973,103);if(s.player.x>934){c.fillText('HOLD E',970,86);c.fillStyle='#7ef8d4';c.fillRect(967,153,34*Math.min(1,s.exitHold/.6),3);}
+    c.fillStyle='#133f43';c.fillRect(964,92,40,68);c.strokeStyle='#74f4dd';c.strokeRect(964,92,40,68);c.fillStyle='#529386';c.fillRect(982,94,2,64);c.font='6px monospace';c.fillStyle='#bcffef';if(s.player.x>934){c.fillStyle='#7ef8d4';c.fillRect(967,153,34*Math.min(1,s.exitHold/.6),3);}
+    c.fillStyle=s.panel?'#60e2b9':'#f4b950';c.fillRect(181,119,12,18);c.fillStyle='#071a20';c.fillRect(183,122,8,6);
+    if(!s.card){c.fillStyle='#eacb6f';c.fillRect(853,130,10,7);c.fillStyle='#fff5cd';c.fillRect(855,132,5,2);}
+    if(s.shutterClosed&&l.equipment!=='map'){c.fillStyle='#be6455';c.fillRect(807,110,5,50);}else{c.fillStyle='#7fe1c6';c.fillRect(807,110,5,8);}
+    if(l.route==='corridor'){c.fillStyle='#92c5d3';c.fillRect(s.drone.x-8,s.drone.y,16,6);c.fillStyle=s.drone.state==='investigate'?'#f78664':'#7cdfe4';c.fillRect(s.drone.x-2,s.drone.y+6,4,3);}
+    if(s.alert==='Lockdown'){c.fillStyle='#f5685266';c.fillRect(cam,0,320,4);}
     const p=s.player,x=Math.round(p.x),y=Math.round(p.y);c.globalAlpha=s.immunity>0&&!this.reduced?.65:1;
     // Original code-drawn 16×24 agent sprite, with a restrained walk cycle.
     if(this.sprite.complete&&this.sprite.naturalWidth){const frame=!this.reduced&&Math.abs(p.vx)>1&&p.grounded?[0,1,0,2][Math.floor(t/.14)%4]:0;c.drawImage(this.sprite,p.facing>0?48:16,frame*24,16,24,x,y,16,24);}else{
@@ -179,5 +176,5 @@ export class StealthRuntime{
     c.globalAlpha=1;
     c.restore();c.fillStyle='#060e17';c.fillRect(0,176,320,4);
   }
-  destroy(){if(this.destroyed)return;this.save();this.destroyed=true;this.abort.abort();cancelAnimationFrame(this.frame);clearInterval(this.timer);clearInterval(this.retry);this.resetInput();this.audioContext?.close();}
+  destroy(){if(this.destroyed)return;this.save();this.destroyed=true;this.root.classList.remove('mq-focus');this.abort.abort();cancelAnimationFrame(this.frame);clearInterval(this.timer);clearInterval(this.retry);this.resetInput();this.audioContext?.close();}
 }

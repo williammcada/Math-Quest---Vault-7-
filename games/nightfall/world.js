@@ -1,4 +1,5 @@
-export const REVISION='nightfall-city-2';
+import {CONFIG_REVISION,threatFor} from './config.js';
+export const REVISION=CONFIG_REVISION;
 export const WORLD={width:2560,height:1280,tile:32,bus:{x:1168,y:1120}};
 export const BUILDINGS=[
  {id:'maintenance',name:'MAINTENANCE',x:224,y:128,w:416,h:352,door:416,floor:3},
@@ -34,26 +35,35 @@ export const PROPS=[
  {id:'rubble2',x:2048,y:416,w:192,h:96,art:11},
  {id:'lines',x:736,y:864,w:128,h:32,art:8,wire:true}
 ];
-const overlap=(x,y,r,b)=>x+r>b.x&&x-r<b.x+b.w&&y+r>b.y&&y-r<b.y+b.h;
-export function walls(s){
+export const DISTRACTIONS=[
+ {id:'alarm',kind:'alarm',label:'Car alarm · lure infected here',x:760,y:700,duration:12,radius:420},
+ {id:'pa',kind:'pa',label:'Emergency PA · lure infected east',x:1970,y:550,duration:10,radius:480},
+ {id:'barrel',kind:'barrel',label:'Fuel barrel · shoot from a distance',x:2000,y:1100,duration:8,radius:500}
+];
+export const doorRects=()=>BUILDINGS.filter(b=>b.id!=='garage').map(b=>({id:b.id,x:b.door,y:b.y+b.h-16,w:80,h:16,door:true}));
+// Circular actors slide around real art footprints instead of oversized square corners.
+const overlap=(x,y,r,b)=>{const nx=Math.max(b.x,Math.min(x,b.x+b.w)),ny=Math.max(b.y,Math.min(y,b.y+b.h));return (x-nx)**2+(y-ny)**2<r*r;};
+export function walls(s,{ignoreDoors=false}={}){
  const list=[];
  for(const b of BUILDINGS){
    list.push({x:b.x,y:b.y,w:b.w,h:16},{x:b.x,y:b.y,w:16,h:b.h},{x:b.x+b.w-16,y:b.y,w:16,h:b.h});
    list.push({x:b.x,y:b.y+b.h-16,w:b.door-b.x,h:16},{x:b.door+80,y:b.y+b.h-16,w:b.x+b.w-b.door-80,h:16});
    if(b.id==='garage'&&!s.tasks.power)list.push({x:b.door,y:b.y+b.h-16,w:80,h:16,gate:true});
  }
+ if(!ignoreDoors)for(const d of doorRects())if(s.doors?.[d.id]?.closed&&s.doors[d.id].hp>0)list.push(d);
  return list;
 }
-export function solid(s,x,y,r=11){
+export const propBounds=b=>({...b,x:b.x+(b.art<=3?10:3),y:b.y+(b.art<=3?10:3),w:b.w-(b.art<=3?20:6),h:b.h-(b.art<=3?20:6)});
+export function solid(s,x,y,r=10,ignoreDoors=false){
  if(x<r||y<r||x>WORLD.width-r||y>WORLD.height-r)return true;
- return walls(s).some(b=>overlap(x,y,r,b))||PROPS.some(b=>(!b.wire||!s.tasks.power)&&overlap(x,y,r,b));
+ return walls(s,{ignoreDoors}).some(b=>overlap(x,y,r,b))||PROPS.some(b=>(!b.wire||!s.tasks.power)&&overlap(x,y,r,propBounds(b)));
 }
 export function lineClear(s,a,b){const count=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/8);for(let i=1;i<=count;i++)if(solid(s,a.x+(b.x-a.x)*i/count,a.y+(b.y-a.y)*i/count,2))return false;return true;}
 export function nextObjective(s){return TASKS.find(t=>!t.optional&&!s.tasks[t.id]&&(t.requires||[]).every(id=>s.tasks[id]));}
-export function seededEnemies(){
+export function seededEnemies(threat=1){
  const enemies=[];let seed=1733;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
  const state={tasks:{}};
- for(let i=0;i<56;i++){
+ for(let i=0;i<threatFor(threat).placed;i++){
    let x,y,tries=0;do{x=48+rand()*2464;y=48+rand()*1184;tries++;}while(tries<200&&(solid(state,x,y,16)||Math.hypot(x-1168,y-1120)<260));
    const kind=i%11===0?'brute':i%5===0?'crawler':i%3===0?'runner':'shambler';
    enemies.push({id:`e${i}`,x,y,homeX:x,homeY:y,kind,hp:kind==='brute'?6:kind==='shambler'?2:1,phase:'wander',timer:0,angle:rand()*Math.PI*2,deathTime:0});
