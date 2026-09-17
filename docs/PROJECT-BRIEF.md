@@ -1,411 +1,84 @@
 # Project Brief — MathQuest
 
-**Brief status:** Draft for project migration
-**Brief version:** 0.1
-**Last updated:** 18 September 2026
-**Owner:** William McAda
-**Product credit:** A WILLIAM MCADA PRODUCT
+**Brief version:** 0.2 — audited documentation revision  
+**Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
+**Status:** Revised record for owner review; not an application release or fresh feature approval.  
+**Repository destination:** williammcada/Math-Quest---Vault-7- (verify existence/current branch before source edits).  
+**Current running version:** Not independently verified in this documentation task.  
+**Source/baseline:** Recorded GitHub baseline: 601184761b8247999b731a9720261788c79f3c66 (v0.9.0). Will reports v0.9.1 implementation/tests completed but packaging stalled. Recover that checkpoint; do not rebuild. Neither its exact bytes nor current deployment were inspected for this revision.  
+**Next work:** Recover and package v0.9.1, reconcile test evidence, then school-network pilot.
 
-**Handbook repository:** `williammcada/mcada-project-handbook`
-**Handbook baseline:** `6de4cbf33c3b9860125c412359fb64ef3d0b20d1`
-**Baseline adoption:** Selected for MathQuest development
+## 1. Purpose, audience and detailed scope
 
-**Canonical project repository:** `williammcada/Math-Quest---Vault-7-`
-**Canonical source checkpoint:** `601184761b8247999b731a9720261788c79f3c66`
-**Current repository baseline:** MathQuest v0.9.0
-**Hosted running version:** Not re-verified during this documentation migration
-**Requested next version:** MathQuest v0.9.1
+- Reusable teacher-led classroom engine with discrete cartridges, initially Vault Seven and Nightfall: Last Bus Out. Teacher Windows PC; approximately 23 student landscape iPads. Mathematics is the primary activity, narrative second, short individual minigame reward third.
+- Teacher selects academic modules, question counts, difficulty and teams; retain custom question-bank import and math-native answer controls. Every student contributes mathematical evidence. Allocate selected topics across gates; mixed modules per gate are allowed.
+- Retain teacher dashboard, launch/briefing flow, QR/join, voting and Event Lead, resources/market, hints, end-session reports, diagnostic export, pause/reconnect/recovery and supported question extensions. Academic accuracy and action-game success must remain separate.
+- Vault Seven combines infiltration narrative, gates, resource decisions, cipher-piece assembly and final choice/epilogue. Prior requested ending thresholds were <50%, <80%, and >=80%; reconcile their current scope against source before editing. Preserve variable cipher solutions rather than a fixed predictable word.
+- v0.9.1 accepted changes include clearer objectives, removal of Maintenance Map, Scanner as cipher insurance, one-use five-second Cloak; Nightfall collision/interactions, alarms, GAS barrels, breakable windows, key-collection-triggered horde, fire half damage to player/lethal damage to mobs with animation/warnings. The consolidated specification controls exact implementation.
+- One meaningful live action run per student where specified. Do not silently add retries or classroom multiplayer combat. Keep cartridge-specific mechanics, assets and outcomes distinct.
+- Pilot privacy target: generated aliases, no identifying metadata, 48-hour retention in the consolidated target, teacher deletion and credential expiration; verify exact rules against v0.9.1 spec. No GradePal connection, learner accounts, telemetry or new recurring paid dependency.
+- Preserve existing GitHub Pages frontend and relay/service architecture. School teacher/student Wi-Fi differ; prior Netlify success does not establish current end-to-end connectivity. Do not replace service infrastructure or rename repository during stabilization.
+- Future cartridge roadmap: Temple runner, Starfall Express vehicle shooter, Blackout Protocol circuit puzzle, Lost Observatory precision platformer. Roadmap is not current release scope.
 
----
+## 2. This task and boundaries
 
-## 1. Purpose and audience
+This revision repairs documentation only. It does not implement features, run application tests, upload source, deploy a site, or alter a repository. Retain the exact current source before implementation. Historical reported functionality is a preservation checklist to reconcile against that source, not permission to recreate the program from prose.
 
-MathQuest is a reusable classroom mathematics game platform.
+## 3. Standards and adoption
 
-The teacher configures mathematics content, teams, session settings, and cartridge options. Students complete mathematics and shared team decisions, earn or spend resources, and participate in cartridge-specific narrative events and individual action-game sequences.
+[Canonical handbook](https://github.com/williammcada/mcada-project-handbook). File blob revisions consulted: AI-START-HERE.md 6557a45aaa6d29d7d1abde808e6d0ac248b08820; UNIVERSAL-RULES.md aed6fe311aa2e88983f862a30a2d8f05d2ffc04d; CONDITIONAL-STANDARDS.md dad2d3a05ca0f18260196ea51ac6351bffffdc1c; PROJECT-TEMPLATE.md 574f4c6fcf19ecc2f9e27582fd856fb08123e8da. These are file blobs, not repository commit SHAs.
 
-The platform is intended primarily for teacher-supervised classroom use.
+Relevant rules: U-01 identity, U-02 help, U-03 input validation, U-04 unambiguous math/text where applicable, U-05 reader/device, U-06 preservation, U-07 verification, U-08 local scope. Conditional selection: S-02, S-03, S-04.
+Baseline adoption: selected for this documentation task within existing user instructions. Handbook still labels shared scope/modules seeded/draft; no new global rule ratification is inferred. Project-specific approved decisions control their own scope.
 
-The present cartridges are:
+## 4. Must-retain behavior
 
-1. **Vault Seven** — science-fiction infiltration/extraction cartridge with team decisions, equipment, security systems, cipher elements, and an individual stealth extraction.
-2. **Nightfall: Last Bus Out** — urban survival cartridge with resource pressure, objectives, exploration, environmental interactions, and an individual survival action sequence.
+The detailed scope above is the feature-preservation inventory. Preserve existing settings, data, accepted content, assets, exports and compatibility confirmed in source. Distinguish implemented behavior, accepted pending changes and historical requests during intake. A missing entry in this brief is not authorization to remove working behavior. Preserve valid user work during migrations and failures.
 
-MathQuest is the product. Cartridge names must not replace the MathQuest platform identity in shared engine code or shared product documentation.
+## 5. Source, release and deployment discipline
 
----
+Recorded GitHub baseline: 601184761b8247999b731a9720261788c79f3c66 (v0.9.0). Will reports v0.9.1 implementation/tests completed but packaging stalled. Recover that checkpoint; do not rebuild. Neither its exact bytes nor current deployment were inspected for this revision.
 
-## 2. Current task
+Record exact selected source filename/hash and repository commit when importing it; record live URL/version only after actually opening it. Unknown commit does not mean the product is unbuilt.
 
-The current development target is **MathQuest v0.9.1**.
+DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
 
-Version 0.9.1 is a stabilization, gameplay-repair, presentation, reliability, and pilot-privacy release.
+Use “implementation checkpoint” or “release candidate” before verification. Preserve candidate bytes and logs before packaging; recover that checkpoint after a ZIP/upload failure. Do not rebuild a verified implementation to fix delivery. Repository upload and website deployment are different operations; existing automatic deployments may run when main changes.
 
-The approved change specification is:
+## 6. Known issues, conflicts and open evidence
 
-`docs/change-specs/v0.9.1.md`
+Historical defects include blurred text/exponents, launch/empty-team behavior and mobile controls. Current resolved status requires source checks. 23-device school trial, Safari, deletion/expiration and deployed-version checks remain unverified here.
 
-The current task does **not** authorize:
+| Conflict or risk | Required handling |
+| --- | --- |
+| Historical claim versus current source | Inspect exact source; keep historical claim labeled until verified. |
+| Proposed next scope versus working baseline | Use the approved version-specific specification; do not silently promote proposals. |
+| Other project rules | Do not import AAC quotas, other-game retry counts, or a shared backend without explicit scope. |
+| Handbook proposals | No additional exception or proposal is adopted by this brief. |
 
-* a new cartridge;
-* real-time multiplayer combat;
-* persistent hosted learner accounts;
-* GradePal integration;
-* TestForge integration;
-* DataDiver integration;
-* a replacement hosting provider;
-* an infrastructure rename or migration;
-* a general rewrite of the MathQuest engine.
+## 7. Verification contract
 
----
+Run teacher + students through both cartridges; disconnect/rejoin at gates and action stages; verify one-run enforcement, answers, reports and privacy expiry; record hosted URLs/commit and actual 23-iPad results.
 
-## 3. Standards selection
+| Evidence required | Result in this task |
+| --- | --- |
+| Exact source candidate/commit identified and preserved | Not run — documentation revision only |
+| Project-specific checks above, with inputs and expected/actual results | Not run |
+| Save/import/export and malformed-input regression | Not run |
+| Intended devices and real deployment path, where applicable | Not run |
+| Version, release notes and delivered bytes agree | Not run |
 
-### Universal rules
+The next build report must name the candidate, environment and test results; historical reports of passing tests do not transfer to a changed candidate.
 
-Apply the relevant McAda Project Handbook universal rules:
+## 8. Handoff and provenance
 
-* **U-01** — Identify the product and delivered version
-* **U-02** — Explain consequential controls in place
-* **U-03** — Validate inputs at the point of use
-* **U-04** — Make mathematics and text unambiguous
-* **U-05** — Design for the actual reader and device
-* **U-06** — Preserve accepted behavior during iteration
-* **U-07** — Verify the real workflow and report the limits
-* **U-08** — Reuse shared principles without exporting local restrictions
+Required project records: MathQuest_v0.9.1_Technical_Specification.docx; MathQuest_v0.9_Technical_Specification.docx; recovered v0.9.1 checkpoint and logs; existing docs/change-specs/v0.9.1.md.
 
-### Conditional standards
+Provenance: previous migration brief and project-history audit in this conversation; directly read dossier/proposal where explicitly stated above. Records not explicitly marked read here are retrieval targets, not claims of fresh inspection. No current app code was tested for this brief.
 
-Apply:
+Before substantive implementation retrieve these records, the current source, approved change spec and applicable handbook. If an indispensable spec is inaccessible, report the gap instead of filling it with invented details. Do not delete unique historical chats/assets until their contents are independently preserved.
 
-* **S-02 — Curriculum, assessment, and evidence**
-* **S-03 — Live classroom and educational games**
-* **S-04 — Distribution, deployment, and classroom operation**
+## 9. Ecosystem boundary
 
-### Project-adopted safeguard
+Shared principles do not establish shared code, accounts or interfaces. MathQuest is engagement, TestForge assessment design, GradePal learner-level evidence, and DataDiver institutional analytics. Integration remains separately specified unless confirmed in source. Other projects remain independent unless their brief explicitly says otherwise.
 
-For the v0.9.1 classroom pilot, adopt the S-03 learner-data safeguard.
-
-Pilot privacy requirements are defined in the v0.9.1 change specification and include generated aliases, data minimization, short retention, hosted-session deletion, credential expiration, and no persistent learner identity.
-
----
-
-## 4. Project-specific requirements
-
-### Product architecture
-
-MathQuest must remain cartridge-driven.
-
-Shared engine responsibilities include:
-
-* classroom/session lifecycle;
-* team structure;
-* mathematics delivery;
-* teacher controls;
-* voting;
-* resource-market framework;
-* reporting framework;
-* action-game lifecycle interfaces;
-* reconnect/state synchronization;
-* common accessibility and input behavior.
-
-Cartridge-specific responsibilities include:
-
-* narrative;
-* cartridge-specific assets;
-* locations;
-* items;
-* events;
-* endings;
-* action-game maps;
-* cartridge-specific mechanics.
-
-Do not place new Vault Seven- or Nightfall-specific assumptions inside the shared MathQuest shell unless the behavior is genuinely part of the shared cartridge contract.
-
-### Teacher role
-
-The teacher must be able to:
-
-* configure the classroom session;
-* select or import mathematics;
-* configure question count and difficulty where supported;
-* launch the room;
-* supervise student/team state;
-* extend mathematics during an active session where supported;
-* end the session;
-* review/export evidence;
-* use applicable developer/practice tools;
-* manage hosted-session deletion during the pilot.
-
-### Student role
-
-Students must:
-
-* join the assigned room/team;
-* complete required mathematics;
-* participate in the intended team decision structure;
-* experience cartridge narrative and resource consequences;
-* complete one meaningful individual action-game run where specified;
-* receive understandable success, failure, recovery, and ending states.
-
-Gameplay failure must not silently rewrite academic mastery.
-
-### Mathematics and evidence
-
-Mathematics must remain unambiguous.
-
-Prompts, response controls, accepted answers, scoring, units, fractions, exponents, signs, percentages, and any required rounding must agree.
-
-Academic evidence and gameplay evidence remain distinct.
-
-Gameplay evidence may inform engagement, cartridge balancing, or supervision but must not silently become mathematical mastery evidence.
-
-### Devices and controls
-
-Primary classroom targets:
-
-* teacher Windows computer;
-* student iPads, primarily landscape orientation.
-
-Desktop/keyboard operation remains useful for development, teacher use, and supported play.
-
-Required student actions must have usable touch controls on the target iPads. Hover-only help or controls are insufficient.
-
-In-game text must remain crisp and readable. Retro presentation is not permission for blurry instructional or objective text.
-
-### Classroom network
-
-MathQuest is a networked classroom product.
-
-Hosted testing is not equivalent to school-network testing.
-
-A full simultaneous approximately 23-iPad school-network trial remains the final classroom device/network gate for the pilot.
-
-### Hosting
-
-Preserve the existing hosting/infrastructure path during v0.9.1:
-
-* GitHub Pages front end;
-* existing relay/service infrastructure;
-* existing Worker/Durable Object or equivalent established session infrastructure.
-
-Infrastructure migration requires its own specification, verification, and rollback plan.
-
-### Cost
-
-Do not introduce a paid recurring dependency without explicit approval.
-
-### Privacy — v0.9.1 pilot target
-
-The pilot must not require student real names.
-
-The server assigns short-lived generated aliases.
-
-The pilot uses:
-
-* opaque room identity;
-* separate teacher credentials;
-* minimized stored data;
-* default 48-hour retention;
-* teacher-controlled hosted-session deletion;
-* automatic expiration;
-* credential invalidation after deletion or expiry;
-* no advertising;
-* no analytics SDK;
-* no third-party behavioral telemetry;
-* no GradePal or persistent learner identity.
-
----
-
-## 5. Preserve from the current release
-
-Unless explicitly changed by the approved version specification, preserve:
-
-* MathQuest product identity;
-* Vault Seven cartridge identity;
-* Nightfall cartridge identity;
-* modular cartridge/engine boundaries established before v0.9;
-* mathematics engine;
-* teacher classroom setup;
-* team structure;
-* shared team decisions;
-* voting;
-* resource-market framework;
-* existing reporting separation;
-* one live action run per student;
-* academic evidence independent of action-game survival;
-* reconnect/state restoration;
-* End Session control;
-* supported live question extension behavior;
-* existing hosted classroom architecture;
-* bundled cartridge assets;
-* applicable accessibility fallback behavior;
-* existing report compatibility unless an approved schema revision explicitly changes it.
-
-Accepted functionality must not disappear merely because it is absent from the current change list.
-
----
-
-## 6. Relationship to other projects
-
-The intended long-term ecosystem is:
-
-**TestForge** → assessment intelligence
-**GradePal** → learner mastery model
-**MathQuest** → engagement/gameplay delivery and gameplay evidence
-**DataDiver** → institutional analytics
-
-This is an architecture vision, not proof of working integration.
-
-### Current integration status
-
-**TestForge:** no required live integration
-**GradePal:** disconnected during the v0.9.1 pilot
-**DataDiver:** no required live integration
-
-Do not invent account exchange, learner identity, question-provider APIs, or evidence writeback simply because they are plausible future integrations.
-
----
-
-## 7. Exceptions and conflicts
-
-| Shared rule or proposal                            | MathQuest requirement                     | Reason                                                      | Status                    |
-| -------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------- | ------------------------- |
-| S-03 learner-data safeguard                        | Apply during v0.9.1 pilot                 | Classroom pilot uses hosted session data                    | Adopted for v0.9.1        |
-| Standalone/offline patterns used by other projects | Not applicable as a MathQuest requirement | MathQuest is intentionally networked for classroom sessions | Project-specific boundary |
-| AAC assessment restrictions                        | Do not apply globally                     | AAC form rules are unrelated to MathQuest gameplay/practice | Not applicable            |
-
-No other approved handbook exceptions are currently recorded.
-
----
-
-## 8. Release workflow
-
-For substantial revisions use:
-
-**DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY → CLASSROOM VALIDATION**
-
-### Implementation stage
-
-Implement only the approved change specification against the identified canonical source.
-
-Do not package a final release before implementation has reached a recoverable checkpoint.
-
-### Verification stage
-
-Run the applicable automated, gameplay, reconnect, hosted-flow, rendering, privacy, and deployment checks.
-
-Use only:
-
-* Passed
-* Failed
-* Not run
-* Not applicable
-
-A passed build does not establish a passed hosted workflow.
-
-### Release stage
-
-Once verification is satisfactory:
-
-* preserve the verified source checkpoint;
-* update application version;
-* update documentation;
-* package the verified source;
-* deploy the same verified candidate;
-* verify the hosted application.
-
-Do not introduce new gameplay features during packaging.
-
-### Classroom stage
-
-Perform the real approximately 23-iPad classroom-network trial.
-
-Classroom testing is a separate status from automated and hosted testing.
-
----
-
-## 9. Definition of done
-
-| Requirement                          | Test or inspection                                      | Required evidence                          |
-| ------------------------------------ | ------------------------------------------------------- | ------------------------------------------ |
-| Correct product/version              | Inspect running application, README, source and package | All identify same release                  |
-| Mathematics remains correct          | Representative and boundary-case testing                | Recorded passed tests                      |
-| Existing accepted behavior preserved | Regression comparison against baseline                  | No unexplained feature loss                |
-| Vault Seven works end to end         | Teacher + student hosted flow                           | Successful completion and report           |
-| Nightfall works end to end           | Teacher + student hosted flow                           | Successful completion and report           |
-| Touch controls work                  | Target iPad inspection                                  | Required controls usable                   |
-| Text is readable                     | Inspect action-game and instructional screens           | No critical blurry/illegible text          |
-| Reconnect works                      | Interrupt/rejoin active session                         | State restored correctly                   |
-| Privacy mode works                   | Alias, retention, deletion, expiry tests                | Required pilot behavior demonstrated       |
-| Reports remain separated             | Inspect JSON/CSV/UI reports                             | Academic/gameplay evidence distinguishable |
-| Deployment is correct                | Open actual hosted release                              | Correct version/assets running             |
-| Classroom network is ready           | Approximately 23-iPad test                              | Real school-network result                 |
-
----
-
-## 10. Known issues and unverified claims
-
-### Current repository baseline
-
-The canonical repository currently represents the v0.9.0 baseline at:
-
-`601184761b8247999b731a9720261788c79f3c66`
-
-### v0.9.1 recovery
-
-A v0.9.1 implementation candidate was developed and tested in a separate prior workspace, but the completed source/package has not yet been established as the canonical GitHub release.
-
-Do not rebuild v0.9.1 merely because the final packaging operation failed if the completed candidate can be recovered.
-
-Once recovered:
-
-1. identify the exact candidate source;
-2. compare it against the canonical v0.9 baseline;
-3. verify that the approved v0.9.1 specification is represented;
-4. rerun or confirm required verification against that exact candidate;
-5. create an identifiable verified checkpoint;
-6. package and deploy from that checkpoint.
-
-### Hosted release
-
-The hosted running version was not independently re-verified during this documentation migration.
-
-### Classroom gate
-
-The full approximately 23-iPad school-network trial remains pending until actually performed.
-
-### Repository name
-
-The repository retains the historical name `Math-Quest---Vault-7-`.
-
-This does not change the product identity: the product is **MathQuest** and Vault Seven is a cartridge.
-
-A repository rename is not part of v0.9.1.
-
----
-
-## 11. Handoff files
-
-An implementation handoff should include or retrieve:
-
-1. current canonical MathQuest repository/source checkpoint;
-2. this `PROJECT-BRIEF.md`;
-3. approved version change specification;
-4. McAda Project Handbook:
-
-   * `AI-START-HERE.md`
-   * `UNIVERSAL-RULES.md`
-   * relevant sections of `CONDITIONAL-STANDARDS.md`
-   * `RELEASE-CHECKLIST.md`;
-5. required cartridge assets;
-6. applicable deployment configuration.
-
-A historical conversation summary is useful context but is not a substitute for the actual source code or approved specification.
-
----
-
-## 12. Ownership
-
-**William McAda**
-**A WILLIAM MCADA PRODUCT**
