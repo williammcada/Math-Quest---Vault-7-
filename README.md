@@ -11,14 +11,17 @@ The current cartridges are:
 
 ## Canonical project status
 
-**Current canonical release:** MathQuest v0.9.0
-**Canonical source checkpoint:** `601184761b8247999b731a9720261788c79f3c66`
-**Current development target:** MathQuest v0.9.1
+**Current canonical release:** MathQuest v0.9.0  
+**Current hosted release candidate:** MathQuest v0.9.1  
+**v0.9.0 baseline commit:** `601184761b8247999b731a9720261788c79f3c66`  
+**Recovered v0.9.1 implementation checkpoint:** `576b711c6a91689521aefc1d2543fb70c7dc999f`  
+**Deployment repair commit:** `66a0f59c17309398084bdfb831cc02a9eebeb75d`  
+**Canonical v0.9.1 source directory:** `public/`  
 **Repository:** `williammcada/Math-Quest---Vault-7-`
 
 The repository retains its historical name for the present deployment. The product is **MathQuest**; Vault Seven is one cartridge within MathQuest.
 
-MathQuest v0.9.1 is currently treated as a release target/candidate until the completed source is recovered, verified against the canonical repository, and committed. A specification, README, test report, or filename alone does not establish that a release has been delivered.
+The standard GitHub Pages URL now redirects to the already-committed `public/` v0.9.1 candidate while preserving room/query parameters and URL fragments. On 18 September 2026, the hosted page identified itself as v0.9.1 and its connection diagnostic passed. The full teacher/student workflow, real-iPad checks, and classroom concurrency gate have not yet been completed, so v0.9.1 remains a hosted release candidate rather than a verified classroom release.
 
 ## Architecture
 
@@ -37,6 +40,8 @@ Infrastructure replacement or renaming is a separate migration task and must not
 ## Project documentation
 
 * [Project Brief](docs/PROJECT-BRIEF.md)
+* [Migration Baseline](docs/MIGRATION-BASELINE.md)
+* [Technical Specifications](docs/specifications/)
 * [MathQuest v0.9.1 Change Specification](docs/change-specs/v0.9.1.md)
 * [McAda Project Handbook](https://github.com/williammcada/mcada-project-handbook)
 
@@ -54,38 +59,5 @@ Substantial MathQuest revisions follow this sequence:
 4. **Implementation checkpoint** — preserve an identifiable source state before extended verification.
 5. **Verify** — run applicable automated, hosted, gameplay, reconnect, device, and workflow checks.
 6. **Verified checkpoint** — preserve the tested candidate.
-7. **Release** — update versioning, documentation, packaging, and deployment files without adding new features.
-8. **Deploy and verify** — check the actual hosted application rather than assuming a successful build or README update proves deployment.
-9. **Classroom validation** — perform real-device/network testing when required.
-
-A packaging or deployment failure should not require reconstruction of an already verified implementation.
-
-## Classroom readiness
-
-MathQuest distinguishes between:
-
-* **Implemented**
-* **Automated tests passed**
-* **Hosted tests passed**
-* **Classroom tested**
-
-The planned full classroom-network gate is a simultaneous test using approximately 23 student iPads plus the teacher computer.
-
-A version must not be described as classroom-tested until that real-device test has actually occurred.
-
-## Product boundaries
-
-MathQuest is the engagement and gameplay layer of a larger intended educational ecosystem.
-
-Possible future relationships include:
-
-* **TestForge** — assessment and question-generation intelligence
-* **GradePal** — learner mastery model
-* **DataDiver** — institutional assessment analysis
-
-These relationships describe intended roles only. No integration, shared identity system, or common data interface should be assumed unless it has actually been implemented and documented.
-
-## Ownership
-
-**William McAda**
-**A WILLIAM MCADA PRODUCT**
+7. **Release** — approve the verified checkpoint as a release.
+8. **Deploy** — publish that exact released source.
