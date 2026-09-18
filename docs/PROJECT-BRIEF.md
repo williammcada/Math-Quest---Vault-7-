@@ -5,7 +5,7 @@
 **Status:** Canonical source and deployment record updated. v0.9.1 is a hosted release candidate, not yet a verified classroom release.  
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
 **Current running version:** v0.9.1 at the standard GitHub Pages URL. The root entry point redirects to `public/` while preserving query parameters and URL fragments; checked 18 September 2026.  
-**Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c6a91689521aefc1d2543fb70c7dc999f`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
+**Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
 **Next work:** Run a two-iPad teacher/student session, exercise the complete hosted workflow including reconnect/privacy/reporting, preserve the evidence, and then run the approximately 23-iPad school gate.
 
 ## 1. Purpose, audience and detailed scope
@@ -37,7 +37,7 @@ The detailed scope above is the feature-preservation inventory. Preserve existin
 
 ## 5. Source, release and deployment discipline
 
-The canonical v0.9.0 baseline is commit `601184761b8247999b731a9720261788c79f3c66`. The recovered v0.9.1 implementation checkpoint is commit `576b711c6a91689521aefc1d2543fb70c7dc999f`; its canonical source is the existing `public/` tree. The root deployment repair is commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`. It redirects the standard Pages URL to `public/` and preserves session/query parameters and URL fragments.
+The canonical v0.9.0 baseline is commit `601184761b8247999b731a9720261788c79f3c66`. The recovered v0.9.1 implementation checkpoint is commit `576b711c10b28b6d8491495c90f37c42bb57c8d9`; its canonical source is the existing `public/` tree. The root deployment repair is commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`. It redirects the standard Pages URL to `public/` and preserves session/query parameters and URL fragments.
 
 The hosted candidate identified itself as v0.9.1 on 18 September 2026. Its shipped JavaScript and CSS entry assets also declared v0.9.1, and the hosted connection diagnostic passed against session-server v0.9.1 with 25 modules and two-way access. This establishes a reachable hosted candidate and basic service connectivity; it does not establish the full teacher/student flow, reconnect behavior, privacy expiration, reporting, Safari/iPad compatibility, or classroom-scale reliability.
 
@@ -62,7 +62,7 @@ Run teacher + students through both cartridges; disconnect/rejoin at gates and a
 
 | Evidence required | Result as of 18 September 2026 |
 | --- | --- |
-| Exact source candidate/commit identified and preserved | Passed — `public/` at recovered checkpoint `576b711c6a91689521aefc1d2543fb70c7dc999f`; root deployment repair `66a0f59c17309398084bdfb831cc02a9eebeb75d` |
+| Exact source candidate/commit identified and preserved | Passed — `public/` at recovered checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; root deployment repair `66a0f59c17309398084bdfb831cc02a9eebeb75d` |
 | Hosted root version and entry assets | Passed — root redirected with query and fragment preserved; page and shipped entry assets identified v0.9.1 |
 | Hosted connection diagnostic | Passed — session-server v0.9.1, 25 modules, two-way access |
 | Previously reported automated suite | Not rerun — 112 passes are historical context only; durable logs have not yet been preserved in the repository |
