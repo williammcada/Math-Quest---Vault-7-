@@ -14,7 +14,7 @@ The current cartridges are:
 **Current canonical release:** MathQuest v0.9.0  
 **Current hosted release candidate:** MathQuest v0.9.1  
 **v0.9.0 baseline commit:** `601184761b8247999b731a9720261788c79f3c66`  
-**Recovered v0.9.1 implementation checkpoint:** `576b711c6a91689521aefc1d2543fb70c7dc999f`  
+**Recovered v0.9.1 implementation checkpoint:** `576b711c10b28b6d8491495c90f37c42bb57c8d9`  
 **Deployment repair commit:** `66a0f59c17309398084bdfb831cc02a9eebeb75d`  
 **Canonical v0.9.1 source directory:** `public/`  
 **Repository:** `williammcada/Math-Quest---Vault-7-`
