@@ -2,9 +2,9 @@
 export const CONTROL_PROFILES = {
   nightfall: {
     left:[['up','↑ Forward'],['left','↶ Turn left'],['down','↓ Reverse'],['right','↷ Turn right']],
-    right:[['run','Run'],['fire','Fire'],['interact','Search / Use']],
-    keys:{arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right',shift:'run',' ':'fire',e:'interact'},
-    help:'W / ↑: forward · S / ↓: reverse · A / ← and D / →: turn · Shift: run · Space: fire · hold E: search / use · M: map. Release Run to fire. Touch: left thumb steers; right thumb runs, fires or interacts. One live run; no restart after defeat.'
+    right:[['run','Run'],['fire','Fire'],['interact','Search / Use'],['weapon','Change weapon']],
+    keys:{arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right',shift:'run',' ':'fire',e:'interact',f:'weapon'},
+    help:'W / ↑: forward · S / ↓: reverse · A / ← and D / →: turn · Shift: run · Space: fire · hold E: search / use · M: map · F: change weapon. Release Run to fire. Touch: left thumb steers; right thumb runs, fires or interacts. One live run; no restart after defeat.'
   },
   vault: {
     left:[['left','◀ Move left'],['right','Move right ▶']],right:[['jump','Jump'],['interact','Interact (E)'],['jam','Jam (Q)'],['cloak','Cloak (R)']],
@@ -23,7 +23,7 @@ export function bindGameInput(root,profile,{signal,onChange,blocked=()=>false,on
   const clear=()=>{keys.clear();pointers.clear();sync();};
   const release=e=>{pointers.delete(e.pointerId);sync();};
   root.querySelectorAll('[data-game-key]').forEach(b=>{
-    on(b,'pointerdown',e=>{e.preventDefault();if(blocked())return;try{b.setPointerCapture(e.pointerId);}catch{}pointers.set(e.pointerId,b.dataset.gameKey);sync();});
+    on(b,'pointerdown',e=>{e.preventDefault();if(blocked()||globalThis.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches)return;try{b.setPointerCapture(e.pointerId);}catch{}pointers.set(e.pointerId,b.dataset.gameKey);sync();});
     for(const type of ['pointerup','pointercancel','lostpointercapture'])on(b,type,release);
     on(b,'contextmenu',e=>e.preventDefault());
   });
@@ -32,7 +32,7 @@ export function bindGameInput(root,profile,{signal,onChange,blocked=()=>false,on
   on(window,'keydown',e=>{
     if(e.target?.closest?.('input,select,textarea,[contenteditable="true"]'))return;
     const key=e.key.toLowerCase();if(key==='escape'){clear();onPause();return;}
-    if(blocked())return;if(key==='m'&&!e.repeat){onMap();return;}
+    if(blocked()||globalThis.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches)return;if(key==='m'&&!e.repeat){onMap();return;}
     if(profile.keys[key]){e.preventDefault();keys.add(profile.keys[key]);sync();}
   });
   on(window,'keyup',e=>{const key=profile.keys[e.key.toLowerCase()];if(key){keys.delete(key);sync();}});

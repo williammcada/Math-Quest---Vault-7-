@@ -1,0 +1,3 @@
+MathQuest Prototype v0.3.0 includes a browser-side QR code generator derived
+from QRCode.js / Kazuhiko Arase's QR Code Generator, distributed under the MIT
+License. See the source header in public/qrcode.js for the complete license.

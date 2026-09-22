@@ -1,15 +1,10 @@
-import {DISTRACTIONS,propBounds,WINDOWS} from './world.js?v=0.9.1';
-export function drawCar(c,p,s){
+import {DISTRACTIONS,propBounds,WINDOWS} from './world.js?v=0.9.2';
+// Authored vehicles from the same prop atlas as the bus; collision stays unchanged.
+export function drawCar(c,p,s,art){
  const b=propBounds(p),alarm=DISTRACTIONS.find(d=>d.propId===p.id),live=alarm&&s.distractions[alarm.id],active=live&&live.until>s.time;
- c.save();c.translate(b.x,b.y);const w=b.w,h=b.h;
- c.fillStyle='#080e13';c.fillRect(12,-2,16,5);c.fillRect(w-28,-2,16,5);c.fillRect(12,h-3,16,5);c.fillRect(w-28,h-3,16,5);
- const paint=c.createLinearGradient(0,0,0,h);paint.addColorStop(0,'#6c7677');paint.addColorStop(.5,'#313b3f');paint.addColorStop(1,'#171f26');c.fillStyle=paint;c.beginPath();c.roundRect(0,0,w,h,7);c.fill();c.strokeStyle='#879295';c.lineWidth=1;c.stroke();
- c.fillStyle='#122b38';c.beginPath();c.moveTo(w*.28,4);c.lineTo(w*.39,7);c.lineTo(w*.39,h-7);c.lineTo(w*.28,h-4);c.closePath();c.fill();c.strokeStyle='#7297a5';c.stroke();
- c.fillStyle='#101d27';c.fillRect(w*.68,5,w*.12,h-10);c.strokeStyle='#141c22';c.strokeRect(w*.4,4,w*.25,h-8);
- c.strokeStyle='#92765c';c.beginPath();c.moveTo(7,h*.5);c.lineTo(20,h*.7);c.lineTo(30,h*.4);c.moveTo(w-18,5);c.lineTo(w-8,h-6);c.stroke();
- c.fillStyle='#aa775f';c.fillRect(w-3,5,3,7);c.fillRect(w-3,h-12,3,7);
- if(alarm){c.fillStyle=active||!live&&Math.floor(s.time*2)%2?'#ff354c':'#5e1827';c.beginPath();c.arc(w*.52,h*.5,3,0,Math.PI*2);c.fill();if(active){c.strokeStyle='#ff596c';c.strokeRect(-5,-5,w+10,h+10);}}
- c.restore();
+ c.save();c.translate(b.x+b.w/2,b.y+b.h/2);c.rotate(Math.PI/2);
+ const sw=art.width/4,sh=art.height/4;c.drawImage(art,p.art*sw,0,sw,sh,-b.h*.64,-b.w*.58,b.h*1.28,b.w*1.16);c.restore();
+ if(alarm){const flash=active&&Math.floor((s.time-live.started)*6)%2===0;c.fillStyle=flash?'#ff6b65':'#591e25';for(const y of [b.y+4,b.y+b.h-7])c.fillRect(b.x+3,y,5,3);if(flash){c.fillStyle='#ff343426';c.beginPath();c.ellipse(b.x+3,b.y+b.h/2,22,b.h*.8,0,0,Math.PI*2);c.fill();}}
 }
 export function drawFixtures(c,s){
  for(const d of DISTRACTIONS){if(d.kind!=='barrel')continue;

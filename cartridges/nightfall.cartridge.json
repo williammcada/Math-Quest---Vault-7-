@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "mq.cartridge/1.1",
+  "id": "nightfall",
+  "title": "Nightfall: Last Bus Out",
+  "revision": "nightfall-city-4",
+  "narrativeModule": "public/cartridges.js",
+  "serverAdapter": "src/cartridges/nightfall/server.js",
+  "questionProvider": "src/question-provider.js",
+  "gameId": "topdown-combat",
+  "gameAdapter": "public/games/nightfall/adapter.js",
+  "practiceEntry": "public/practice-nightfall.html",
+  "academicEffectsFromGameplay": false,
+  "world": {
+    "width": 2560,
+    "height": 1280,
+    "taskModule": "public/games/nightfall/world.js",
+    "requiredObjectives": [
+      "fuse",
+      "power",
+      "keys",
+      "battery",
+      "installed",
+      "escape"
+    ],
+    "optionalObjectives": [
+      "survivor"
+    ]
+  },
+  "assetManifest": {
+    "base": "public/assets/nightfall/city/",
+    "atlases": [
+      {
+        "src": "actors.png",
+        "columns": 8,
+        "rows": 5
+      },
+      {
+        "src": "tiles.png",
+        "columns": 4,
+        "rows": 4
+      },
+      {
+        "src": "props.png",
+        "columns": 4,
+        "rows": 4
+      }
+    ],
+    "music": [
+      "ambient.mp3",
+      "danger.mp3",
+      "ending.mp3"
+    ],
+    "effects": {
+      "src": "effects.wav",
+      "cueLengthSeconds": 1,
+      "playLengthSeconds": 0.8,
+      "cues": [
+        "shot",
+        "dry",
+        "lunge",
+        "impact",
+        "enemy-death",
+        "hurt",
+        "heal",
+        "vest",
+        "pickup",
+        "objective",
+        "power",
+        "engine",
+        "step",
+        "locked"
+      ]
+    }
+  },
+  "input": {
+    "default": "tank",
+    "autoAim": false,
+    "keyboard": {
+      "forward": "W/ArrowUp",
+      "reverse": "S/ArrowDown",
+      "turn": "A,D/ArrowLeft,ArrowRight",
+      "fire": "Space",
+      "run": "Shift",
+      "interact": "E"
+    },
+    "touch": "held multi-pointer buttons",
+    "profile": "public/engine/controls.js#nightfall"
+  },
+  "failurePolicy": {
+    "missingArtwork": "assisted-route",
+    "missingAudio": "silent-with-notice",
+    "disconnect": "local-snapshot-and-retry"
+  },
+  "duration": {
+    "forcedTimer": false,
+    "designTargetMinutes": [
+      4,
+      6
+    ],
+    "validatedOnSchoolIPad": false
+  },
+  "resourceEffects": {
+    "ammo-pouch": {
+      "startAmmo": 36
+    },
+    "vest": {
+      "blockedHits": 2
+    },
+    "carbine": {
+      "projectileDamage": 2,
+      "noiseRadius": 580
+    }
+  },
+  "evidence": {
+    "kind": "engagement.gameplay",
+    "validation": "client-reported; server-validated envelope",
+    "masteryImpact": false
+  },
+  "resolution": {
+    "type": "final_decision",
+    "minigamePlacement": "pre_final_decision"
+  },
+  "threatConfig": "public/games/nightfall/config.js",
+  "attemptPolicy": {
+    "liveRuns": 1,
+    "practiceRestarts": "unlimited",
+    "technicalClosure": "neutral"
+  }
+}

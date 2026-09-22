@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathquest.example/schema/question-package-v0.5.json",
+  "title": "MathQuest Question Package v0.5",
+  "type": "object",
+  "required": ["schemaVersion", "disciplineId", "modules"],
+  "properties": {
+    "schemaVersion": { "const": "0.5.0" },
+    "packageId": { "type": "string" },
+    "disciplineId": { "type": "string", "examples": ["mathematics"] },
+    "source": { "enum": ["mathquest-preset", "teacher-import", "testforge"] },
+    "modules": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["moduleId", "title", "items"],
+        "properties": {
+          "moduleId": { "type": "string" },
+          "title": { "type": "string" },
+          "learningOutcomeIds": { "type": "array", "items": { "type": "string" } },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["prompt", "answerType", "answer"],
+              "properties": {
+                "itemId": { "type": "string" },
+                "prompt": { "type": "string" },
+                "answerType": { "enum": ["integer", "number", "decimal", "fraction", "percent", "ratio", "scientific", "choice"] },
+                "answer": { "type": ["string", "number"] },
+                "acceptedAnswers": { "type": "array", "items": { "type": ["string", "number"] } },
+                "options": { "type": "array", "items": { "type": "string" } },
+                "hint": { "type": "string" },
+                "media": {
+                  "type": "object",
+                  "required": ["src", "alt"],
+                  "properties": {
+                    "src": { "type": "string", "format": "uri", "description": "v0.5 accepts HTTPS images; managed uploads are future work." },
+                    "alt": { "type": "string" },
+                    "caption": { "type": "string" }
+                  }
+                },
+                "difficulty": { "enum": ["foundation", "standard", "challenge", "teacher-authored"] },
+                "standards": { "type": "array", "items": { "type": "string" } },
+                "dok": { "type": "integer", "minimum": 1, "maximum": 4 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

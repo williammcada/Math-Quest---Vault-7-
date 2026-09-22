@@ -1,0 +1,577 @@
+{
+  "schemaVersion": "0.6.0",
+  "engineCompatibility": ">=0.6.0",
+  "cartridgeId": "vault-7",
+  "title": "Vault 7",
+  "referenceImplementation": true,
+  "presentation": {
+    "fallbackMode": "text-with-functional-primitive-game",
+    "openingScene": "opening-briefing",
+    "endingSceneFamily": "ending.*",
+    "liveTextFields": [
+      "student.displayName",
+      "team.name",
+      "cipher.token"
+    ]
+  },
+  "assetManifest": {
+    "art": [
+      {
+        "assetId": "cover.vault-7",
+        "sceneId": "cover",
+        "source": "./assets/vault7/scenes/cover.webp",
+        "fallback": "text-only-scene",
+        "alt": "Vault 7 hidden inside a mountain",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/cover-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.opening-briefing",
+        "sceneId": "opening-briefing",
+        "source": "./assets/vault7/scenes/briefing.webp",
+        "fallback": "text-only-scene",
+        "alt": "A sealed underground facility receiving an emergency transmission",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/briefing-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.perimeter-power",
+        "sceneId": "perimeter-power",
+        "source": "./assets/vault7/scenes/gate1.webp",
+        "fallback": "text-only-scene",
+        "alt": "The dark perimeter tunnel of Vault 7",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/gate1-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.biometric-checkpoint",
+        "sceneId": "biometric-checkpoint",
+        "source": "./assets/vault7/scenes/gate2.webp",
+        "fallback": "text-only-scene",
+        "alt": "A biometric checkpoint scanning the infiltration crew",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/gate2-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.containment-laboratory",
+        "sceneId": "containment-laboratory",
+        "source": "./assets/vault7/scenes/gate3.webp",
+        "fallback": "text-only-scene",
+        "alt": "An abandoned containment laboratory",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/gate3-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.archive-mainframe",
+        "sceneId": "archive-mainframe",
+        "source": "./assets/vault7/scenes/gate4.webp",
+        "fallback": "text-only-scene",
+        "alt": "A vast archive deleting its own records",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/gate4-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.isolation-core",
+        "sceneId": "isolation-core",
+        "source": "./assets/vault7/scenes/gate5.webp",
+        "fallback": "text-only-scene",
+        "alt": "Seven smoked-glass fins surrounding the Asterion core",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/gate5-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.route-choice",
+        "sceneId": "route-choice",
+        "source": "./assets/vault7/scenes/route.webp",
+        "fallback": "text-only-scene",
+        "alt": "A ventilation shaft and security corridor splitting inside Vault 7",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/route-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.resource-market",
+        "sceneId": "resource-market",
+        "source": "./assets/vault7/scenes/market.webp",
+        "fallback": "text-only-scene",
+        "alt": "A covert equipment terminal",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/market-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.cipher-assembly",
+        "sceneId": "cipher-assembly",
+        "source": "./assets/vault7/scenes/cipher.webp",
+        "fallback": "text-only-scene",
+        "alt": "Agents assembling fragments of a secret message",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/cipher-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "scene.asterion-core",
+        "sceneId": "asterion-core",
+        "source": "./assets/vault7/scenes/finale.webp",
+        "fallback": "text-only-scene",
+        "alt": "The Asterion intelligence waking in the isolation core",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/finale-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "ending.isolate",
+        "sceneId": "ending-isolate",
+        "source": "./assets/vault7/scenes/ending-isolate.webp",
+        "fallback": "text-only-scene",
+        "alt": "Dawn outside the sealed mountain entrance",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/ending-isolate-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "ending.destroy",
+        "sceneId": "ending-destroy",
+        "source": "./assets/vault7/scenes/ending-destroy.webp",
+        "fallback": "text-only-scene",
+        "alt": "The dead core after its destruction",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/ending-destroy-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "ending.copy",
+        "sceneId": "ending-copy",
+        "source": "./assets/vault7/scenes/ending-copy.webp",
+        "fallback": "text-only-scene",
+        "alt": "A data shard leaving Vault 7",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/ending-copy-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      },
+      {
+        "assetId": "ending.release",
+        "sceneId": "ending-release",
+        "source": "./assets/vault7/scenes/ending-release.webp",
+        "fallback": "text-only-scene",
+        "alt": "City systems glowing with Asterion's coordinated signal",
+        "kind": "image",
+        "mimeType": "image/webp",
+        "width": 960,
+        "height": 540,
+        "revision": "0.6.0",
+        "focalPoint": [
+          0.5,
+          0.5
+        ],
+        "preload": "lazy",
+        "provenance": "docs/ART_PROVENANCE.md",
+        "derivatives": [
+          {
+            "source": "./assets/vault7/scenes/ending-release-480.webp",
+            "width": 480,
+            "height": 270
+          }
+        ]
+      }
+    ],
+    "music": [
+      {
+        "assetId": "music.vault-7-main",
+        "source": "./assets/vault7/audio/vault7-ambient.mp3",
+        "loop": true,
+        "defaultVolume": 0.22,
+        "fallback": "silence",
+        "rights": "Original generated composition; no sampled recordings",
+        "durationSeconds": 64,
+        "autoplay": false,
+        "surface": "teacher-only",
+        "revision": "0.6.0"
+      },
+      {
+        "assetId": "music.asterion-finale",
+        "source": "./assets/vault7/audio/vault7-finale.mp3",
+        "loop": false,
+        "defaultVolume": 0.22,
+        "fallback": "silence",
+        "rights": "Original generated composition; no sampled recordings",
+        "durationSeconds": 16,
+        "autoplay": false,
+        "surface": "teacher-only",
+        "revision": "0.6.0"
+      }
+    ],
+    "soundEffects": [
+      {
+        "assetId": "sfx.extraction-checkpoint",
+        "source": "procedural:WebAudio-triangle",
+        "fallback": "visible-hud",
+        "enabledByDefault": false,
+        "durationSeconds": 0.16
+      },
+      {
+        "assetId": "sfx.extraction-detected",
+        "source": "procedural:WebAudio-triangle",
+        "fallback": "visible-hud",
+        "enabledByDefault": false,
+        "durationSeconds": 0.16
+      },
+      {
+        "assetId": "sfx.extraction-complete",
+        "source": "procedural:WebAudio-triangle",
+        "fallback": "visible-hud",
+        "enabledByDefault": false,
+        "durationSeconds": 0.16
+      }
+    ],
+    "sprites": [
+      {
+        "assetId": "sprite.agent",
+        "source": "./assets/vault7/sprites/agent-16x24.png",
+        "mimeType": "image/png",
+        "width": 64,
+        "height": 72,
+        "frameWidth": 16,
+        "frameHeight": 24,
+        "revision": "0.6.0",
+        "fallback": "code-drawn-agent"
+      }
+    ]
+  },
+  "secretVariantPolicy": {
+    "catalogSize": 40,
+    "uniqueWithinSession": true,
+    "teacherBrowserRecentExclusion": 18,
+    "answerNeverEmbeddedInArt": true
+  },
+  "miniGameManifest": {
+    "enabled": true,
+    "type": "client-2d-solo-stealth",
+    "entrypoint": "./stealth.js",
+    "core": "./stealth-core.js",
+    "stylesheet": "./stealth.css",
+    "mapRevision": "vault7-stealth-3",
+    "launchAfter": "final-team-decision",
+    "nextStage": "personalized-epilogue",
+    "logicalViewport": [
+      320,
+      180
+    ],
+    "worldSize": [
+      1024,
+      176
+    ],
+    "tileSize": [
+      16,
+      16
+    ],
+    "playerSprite": [
+      16,
+      24
+    ],
+    "playerCollider": [
+      12,
+      22
+    ],
+    "simulationHz": 60,
+    "activePlayLimitMs": 180000,
+    "teamWindowMs": 300000,
+    "teacherPauseFreezesTeamWindow": true,
+    "hazards": [
+      "moving-spotlight",
+      "alarm-sensor",
+      "patrol-drone",
+      "timed-shutter"
+    ],
+    "input": [
+      "touch-direction",
+      "touch-jump",
+      "touch-elevator",
+      "keyboard"
+    ],
+    "accessibilityFallback": "three-scene-choice-extraction",
+    "serverEvidence": [
+      "start",
+      "checkpoint",
+      "detected",
+      "heartbeat",
+      "switchFallback",
+      "complete"
+    ],
+    "noPerFrameNetworking": true,
+    "academicEffects": false
+  },
+  "resourceModifiers": [
+    {
+      "resourceId": "toolkit",
+      "label": "Silent Toolkit",
+      "gameplay": "protects security corridor",
+      "cost": 30,
+      "miniGame": {
+        "effect": "manual-security-jam",
+        "seconds": 3,
+        "chargePolicy": "one per Start/A/B/C; non-stacking",
+        "input": "Q / Jam"
+      }
+    },
+    {
+      "resourceId": "scanner",
+      "label": "Code Scanner",
+      "gameplay": "restores one damaged cipher mapping",
+      "cost": 40,
+      "miniGame": {
+        "effect": "none"
+      }
+    },
+    {
+      "resourceId": "cloak",
+      "label": "Cloak",
+      "gameplay": "none",
+      "cost": 30,
+      "miniGame": {
+        "effect": "all-security-invisibility",
+        "seconds": 5,
+        "uses": 1,
+        "input": "R / Cloak"
+      }
+    }
+  ],
+  "futureModifierSlots": [
+    "speedMultiplier",
+    "jumpImpulseMultiplier",
+    "maxIntegrity",
+    "incomingDamageMultiplier",
+    "offensivePower",
+    "disabledHazards"
+  ],
+  "releaseVersion": "0.9.1",
+  "resolution": {
+    "type": "cipher",
+    "minigamePlacement": "post_final_decision"
+  },
+  "inputProfile": "public/engine/controls.js#vault",
+  "attemptPolicy": {
+    "liveRuns": 1,
+    "detections": 3,
+    "checkpointRecoveries": 2,
+    "activeLimitMs": 180000,
+    "technicalClosure": "neutral"
+  }
+}

@@ -1,15 +1,16 @@
-import { hostingFor, fetchApi } from './hosting.js?v=0.9.1';
-import { CATALOG } from './catalog.js?v=0.9.1';
-import { StealthRuntime } from './stealth.js?v=0.9.1';
-import { SceneAssets } from './vault7-assets.js?v=0.9.1';
-import { TeacherAudio } from './teacher-audio.js?v=0.9.1';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.1';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.1';
-import { FinaleHost } from './finale-host.js?v=0.9.1';
-import { CartridgeAudio } from './cartridge-audio.js?v=0.9.1';
-import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.1';
-import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.1';
-import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.1';
+import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.2';
+import { hostingFor, fetchApi } from './hosting.js?v=0.9.2';
+import { CATALOG } from './catalog.js?v=0.9.2';
+import { StealthRuntime } from './stealth.js?v=0.9.2';
+import { SceneAssets } from './vault7-assets.js?v=0.9.2';
+import { TeacherAudio } from './teacher-audio.js?v=0.9.2';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.2';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.2';
+import { FinaleHost } from './finale-host.js?v=0.9.2';
+import { CartridgeAudio } from './cartridge-audio.js?v=0.9.2';
+import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.2';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.2';
+import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.2';
 forgetExpiredRooms();
 let setupCartridge='vault-7';
 let finaleHost=null;
@@ -79,7 +80,7 @@ async function command(type, extra = {}, options = {}) {
     });
     state = await parseResponse(response);
     notice = state.feedback || (options.successMessage ? { correct: true, message: options.successMessage } : null);
-    resetDraft();
+    if(type!=="math.submit"||state.feedback?.correct)resetDraft();
   } catch (error) {
     reconcileAfterTimeout = error.name === "AbortError";
     notice = { correct: false, message: reconcileAfterTimeout
@@ -101,7 +102,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.9.1</span></header>
+    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.9.2</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -252,6 +253,7 @@ function normalizeImportedRecords(records, fallbackTitle) {
       prompt: record.prompt,
       answerType: record.answerType || record.answer_type || "number",
       answer: record.answer,
+      fractionPolicy:record.fractionPolicy,requiredDenominator:record.requiredDenominator,representationInstruction:record.representationInstruction,
       acceptedAnswers: Array.isArray(record.acceptedAnswers) ? record.acceptedAnswers : Array.isArray(record.accepted_answers) ? record.accepted_answers : String(record.accepted_answers || "").split("|").filter(Boolean),
       options: Array.isArray(record.options) ? record.options : String(record.options || "").split("|").filter(Boolean),
       hint: record.hint || "",
@@ -295,7 +297,7 @@ async function createSession() {
   button.disabled = true;
   try {
     const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
-    if(catalog.version!=='0.9.1'||!catalog.cartridges?.some(c=>c.id===setupCartridge&&c.revision===cartridgeFor(setupCartridge).revision))throw new Error('Update the backend with the v0.9.1 deployment batch, then reload this page. Frontend and backend must match.');
+    if(catalog.version!=='0.9.2'||!catalog.cartridges?.some(c=>c.id===setupCartridge&&c.revision===cartridgeFor(setupCartridge).revision))throw new Error('Update the backend with the v0.9.2 deployment batch, then reload this page. Frontend and backend must match.');
     const teamNames = setupTeams.split(",").map(value => value.trim()).filter(Boolean);
     const modules = [
       ...PRESETS.filter(record => record.selected).map(record => ({ id: record.id, source: "preset", band: record.band, itemCount: Number(record.itemCount) })),
@@ -345,7 +347,7 @@ function renderTeacher() {
     <article class="team-card stage-${item.stage} ${item.memberCount ? "" : "empty-team"}">
       <div class="team-heading"><div><span class="team-name">${escapeHtml(item.name)}</span><span class="stage-tag">${escapeHtml(gateLabel(item))}</span></div><div class="pin">${escapeHtml(item.pin)}</div></div>
       ${item.secretNumbers.length ? `<div class="teacher-secret"><small>SECRET MESSAGE</small><b>${item.secretNumbers.join(" · ")}</b><span>Teacher key: ${escapeHtml(item.secretAnswer)}</span></div>` : ""}
-      <div class="metrics"><span><b>${item.memberCount}</b> students</span><span><b>${item.currency}</b> credits</span><span><b>${item.adverseEvents.length}</b> adverse</span></div>
+      <div class="metrics"><span><b>${item.memberCount}</b> students</span><span><b>${item.equipmentSlots||1}</b> equipment slots</span><span><b>${item.adverseEvents.length}</b> adverse</span></div>
       <div class="member-list teacher-roster">${item.members.length ? item.members.map(member => `<div><span class="presence ${member.active ? "on" : ""}"></span><b>${escapeHtml(member.alias)}</b><span>${member.itemsCompleted}/${member.assignedTotal??state.config.totalQuestions} total${member.fate ? ` · ${escapeHtml(member.fate.label)}` : ""}</span><label class="difficulty-control"><span class="sr-only">Difficulty for ${escapeHtml(member.alias)}</span><select data-student-difficulty="${escapeHtml(member.id)}" aria-label="Question difficulty for ${escapeHtml(member.alias)}"><option value="session" ${member.difficultyPolicy === "session" ? "selected" : ""}>Session level</option><option value="foundation" ${member.difficultyPolicy === "foundation" ? "selected" : ""}>Foundation</option><option value="standard" ${member.difficultyPolicy === "standard" ? "selected" : ""}>Standard</option><option value="challenge" ${member.difficultyPolicy === "challenge" ? "selected" : ""}>Challenge</option></select></label></div>`).join("") : `<p class="empty-label">No players joined · removed at launch</p>`}</div>
       ${teamProgressMarkup(item)}${teacherExtraction(item)}${teamToolsMarkup(state,item)}
       ${item.lead ? `<p class="lead">Event Lead: ${escapeHtml(item.lead.alias)}</p>` : ""}
@@ -466,7 +468,7 @@ function renderJoin() {
 
 function narrativeHeader(item) {
   const eyebrow = item.stage === "gate" ? `GATE ${item.gateIndex + 1} / ${state.config.gateCount}` : ({ briefing:"INCOMING TRANSMISSION", decision:"ROUTE AUTHORIZATION", market:"FIELD QUARTERMASTER", code:"CIPHER ASSEMBLY", finale:"FINAL AUTHORIZATION", victory:"MISSION COMPLETE" })[item.stage];
-  return `<section class="mission-head"><div><p class="eyebrow">${eyebrow}</p><h1>${escapeHtml(gateLabel(item))}</h1></div><div class="currency">◈ ${item.currency}</div></section>`;
+  return `<section class="mission-head"><div><p class="eyebrow">${eyebrow}</p><h1>${escapeHtml(gateLabel(item))}</h1></div><div class="currency">${item.inventory?.length||0} resources</div></section>`;
 }
 
 function memberProgress(item) {
@@ -645,19 +647,7 @@ const MARKET = {
   none: ["Save the credits", 0, "Purchase nothing and accept the risk.", "Extraction: standard route, with no equipment advantage."]
 };
 
-function renderMarket(item, student) {
-  const allReady = item.marketReadyCount >= item.memberCount;
-  const recommendations = item.marketSelectionTotals ? `<div class="recommendations">${Object.entries(MARKET).map(([key, value]) => `<span>${value[0]} <b>${item.marketSelectionTotals[key] || 0}</b></span>`).join("")}</div>` : "";
-  const items = Object.entries(MARKET).map(([key, [name, cost, description, fieldEffect]]) => `<button class="market-item ${item.myMarketSelection === key ? "selected" : ""}" data-market-select="${key}"><span class="selection-mark">✓ YOUR PLAN</span><span><b>${name}</b><small>${description}</small><em>${fieldEffect}</em></span><strong>${cost ? `◈ ${cost}` : "KEEP"}</strong></button>`).join("");
-  return `${sceneBlock(item)}<section class="panel">
-    <p>Each agent recommends a plan; then the Event Lead makes the purchase.</p>
-    <div class="market-list">${items}</div>
-    ${item.myMarketSelection && !item.members.find(member => member.id === student.id)?.marketReady ? `<div class="next-step active">Your selection is highlighted. Now lock it so the Event Lead knows your plan is ready.</div><button class="primary wide" data-action="market.ready">My plan is ready</button>` : ""}
-    ${item.members.find(member => member.id === student.id)?.marketReady ? `<div class="ready-confirmed">✓ Plan locked — waiting for the crew</div>` : ""}
-    ${allReady ? recommendations : `<p class="fine">${item.marketReadyCount}/${item.memberCount} plans ready.</p>`}
-    ${student.isLead && allReady ? `<div class="leader-purchase"><h3>Event Lead purchase authorization</h3><p>Recommendations are advisory. Confirm one upgrade, or continue without buying.</p><div class="purchase-actions">${Object.entries(MARKET).filter(([key]) => key !== "none").map(([key, [name, cost]]) => `<button data-market-buy="${key}" ${item.currency < cost || item.inventory.length ? "disabled" : ""}>${name}<br>◈ ${cost}</button>`).join("")}</div>${item.inventory.length ? `<div class="purchase-confirmed">✓ Purchased: ${escapeHtml(MARKET[item.inventory[0]][0])}</div>` : ""}<button class="primary wide" data-action="market.continue">Enter the next sector</button></div>` : ""}
-  </section>`;
-}
+function renderMarket(item, student) { return equipmentMarkup(item,student); }
 
 function renderCode(item, student) {
   const mappings = student.myMappings.map(record => `<div class="mapping ${record.status === "corrupted" ? "lost" : ""}"><span>${record.number}</span><b>=</b><strong>${record.letter || "?"}</strong><small>${record.status === "corrupted" ? "CORRUPTED" : record.status === "restored" ? "SCANNER RESTORED" : "YOUR CIPHER"}</small></div>`).join("");
@@ -693,14 +683,14 @@ function renderFinale(item, student) {
 function renderVictory(item, student) {
   const fate = student.fate;
   const r=item.extraction?.result;
-  const equipment=item.inventory.length?MARKET[item.inventory[0]][0]:'No upgrade';
+  const equipment=item.inventory.map(id=>MARKET[id]?.[0]||id).join(' + ')||'No upgrade';
   const outcome=r?.outcome==='captured'?'was intercepted by Helix security; their beacon went silent':r?.outcome==='timeout'?'missed the extraction window and is listed missing in action':r?.outcome==='advanced'?'has an extraction record closed by mission control':r?.outcome==='fallback_extracted'?'reached the elevator through a carefully planned escape route':'reached the surface elevator';
   const operational=`${item.route==='shaft'?'The ventilation system':'The security corridor'} was the last barrier between the crew and the surface. ${item.inventory.length?`The ${equipment} shaped their escape.`:'They entered without equipment support.'}`;
   const aftermath=['extracted','fallback_extracted'].includes(r?.outcome)?fate?.id==='lost'?'The elevator made it out. During the surface transfer, injuries sustained earlier in the mission overwhelmed the recovery team. Your beacon stopped transmitting; mission control lists you missing in action.':fate?.id==='wounded'?'At the surface, the recovery team treats injuries sustained earlier in the mission. You leave Vault 7 wounded, but alive.':'You board the recovery transport alive. Behind you, the mountain disappears into the clouds.':r?.outcome==='advanced'?'Mission control closed this run without a simulated escape. No arcade success or failure is inferred. Your academic record remains separate.':'The recovery team records your last known position. The crew’s choice still takes effect, even for the agents who never see its consequences.';
   const title = item.scene?.title || (item.finalAction === "release" ? "The signal escaped" : "Mission accomplished");
   return `<section class="hero victory"><div><p class="eyebrow">VAULT 7 // FINAL RECORD</p><h1>${escapeHtml(title)}</h1><p>The crew's decision is now part of the world beyond Vault 7.</p></div><div class="vault-mark">✓</div></section>
     ${sceneBlock(item)}
-    <section class="panel ending"><h2>Extraction report: Agent ${escapeHtml(student.alias)}</h2><p class="transmission">${escapeHtml(extractionLabel(r))} · ${r?.detections||0} detections · ${Math.round((r?.activeElapsedMs||0)/1000)} seconds</p><p>${escapeHtml(operational)} Agent ${escapeHtml(student.alias)} ${outcome}.</p><p>${escapeHtml(aftermath)}</p><div class="fate-card ${fate?.id}"><small>PERSONNEL RECORD</small><b>${escapeHtml(fate?.label || "Recorded")}</b><span>First-attempt accuracy: ${Math.round(student.firstAttemptCorrect / Math.max(1, student.assignedTotal??state.config.totalQuestions) * 100)}%</span></div><div class="summary"><span>Final action<b>${escapeHtml(FINAL_ACTIONS[item.finalAction]?.[0] || "—")}</b></span><span>Route<b>${escapeHtml(item.route || "—")}</b></span><span>Equipment<b>${escapeHtml(equipment)}</b></span><span>Credits left<b>${item.currency}</b></span><span>Decoded message<b>${escapeHtml(item.decodedSecret || "—")}</b></span><span>Code attempts<b>${item.codeAttempts}</b></span></div></section>`;
+    <section class="panel ending"><h2>Extraction report: Agent ${escapeHtml(student.alias)}</h2><p class="transmission">${escapeHtml(extractionLabel(r))} · ${r?.detections||0} detections · ${Math.round((r?.activeElapsedMs||0)/1000)} seconds</p><p>${escapeHtml(operational)} Agent ${escapeHtml(student.alias)} ${outcome}.</p><p>${escapeHtml(aftermath)}</p><div class="fate-card ${fate?.id}"><small>PERSONNEL RECORD</small><b>${escapeHtml(fate?.label || "Recorded")}</b><span>First-attempt accuracy: ${Math.round(student.firstAttemptCorrect / Math.max(1, student.assignedTotal??state.config.totalQuestions) * 100)}%</span></div><div class="summary"><span>Final action<b>${escapeHtml(FINAL_ACTIONS[item.finalAction]?.[0] || "—")}</b></span><span>Route<b>${escapeHtml(item.route || "—")}</b></span><span>Equipment<b>${escapeHtml(equipment)}</b></span><span>Decoded message<b>${escapeHtml(item.decodedSecret || "—")}</b></span><span>Code attempts<b>${item.codeAttempts}</b></span></div></section>`;
 }
 
 function noticeHtml() {
@@ -726,6 +716,7 @@ function bindStudentActions(item, student) {
   });
   document.querySelectorAll("[data-vote]").forEach(button => button.onclick = () => command("decision.vote", { choice: button.dataset.vote }));
   document.querySelectorAll("[data-finale-vote]").forEach(button => button.onclick = () => command("finale.vote", { choice: button.dataset.finaleVote }));
+  bindEquipment(state.teams.find(t=>t.id===state.student?.teamId),command);
   document.querySelectorAll("[data-market-select]").forEach(button => button.onclick = () => command("market.select", { item: button.dataset.marketSelect }));
   document.querySelectorAll("[data-market-buy]").forEach(button => button.onclick = () => command("market.buy", { item: button.dataset.marketBuy }));
   document.querySelectorAll("[data-integer-mode]").forEach(button => button.onclick = () => { draft.integerMode = button.dataset.integerMode === "true"; activeField = "numerator"; renderStudent(); });

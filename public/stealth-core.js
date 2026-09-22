@@ -47,7 +47,7 @@ export const droneEmitter=s=>({x:s.drone.x,y:s.drone.y+8,center:Math.PI/2,amp:0,
 const approach=(value,target,amount)=>value<target?Math.min(target,value+amount):Math.max(target,value-amount);
 export class StealthSimulation{
   constructor(config={},recovery={}){
-    this.level=createLevel(config.route,config.equipment,config.adverseCount);this.checkpoint=recovery.checkpoint||null;
+    this.level=createLevel(config.route,config.equipment,config.adverseCount);this.level.loadout=[...(config.loadout||[config.equipment].filter(Boolean))];this.checkpoint=recovery.checkpoint||null;
     this.elapsed=(recovery.activeElapsedMs||0)/1000;this.detections=recovery.detections||0;this.integrity=3-this.detections;
     this.player={...CHECKPOINTS[this.checkpoint||'none'],vx:0,vy:0,grounded:false,facing:1};
     this.state='ready';this.visibility=0;this.darkDelay=0;this.immunity=recovery.status==='active'?1.25:0;
@@ -57,7 +57,7 @@ export class StealthSimulation{
     this.drone={x:748,y:83,home:748,target:748,until:0,state:'patrol'};
   }
   start(){if(this.state==='ready')this.state='playing';}
-  summary(){return{checkpoint:this.checkpoint,activeElapsedMs:Math.min(180000,Math.round(this.elapsed*1000)),detections:this.detections,integrityRemaining:this.integrity,resourcesUsed:this.level.equipment?[this.level.equipment]:[],mapRevision:REVISION,objectives:{panel:this.panel,card:this.card},jams:[...this.jams],cloakUsed:this.cloakUsed,alert:this.alert};}
+  summary(){return{checkpoint:this.checkpoint,activeElapsedMs:Math.min(180000,Math.round(this.elapsed*1000)),detections:this.detections,integrityRemaining:this.integrity,resourcesUsed:[...(this.jams.length?['toolkit']:[]),...(this.cloakUsed?['cloak']:[])],mapRevision:REVISION,objectives:{panel:this.panel,card:this.card},jams:[...this.jams],cloakUsed:this.cloakUsed,alert:this.alert};}
   objective(){return !this.panel?'1 · Security panel: hold Interact near the amber terminal.':!this.card?'2 · Cross the search sector. Recover the access card at checkpoint C (hold Interact).':'3 · Access card secured. Reach the elevator and hold Interact to leave.';}
   complete(outcome){if(this.state==='terminal')return;this.state='terminal';this.outcome=outcome;this.events.push({type:'complete',outcome,...this.summary()});}
   detect(sourceId){if(this.immunity>0||this.state!=='playing')return;this.detections++;this.integrity--;this.visibility=0;this.state='detected';this.stateTimer=.25;this.events.push({type:'detected',sourceId,...this.summary()});}
@@ -92,8 +92,8 @@ export class StealthSimulation{
     this.objectiveHold=input.interact&&(atPanel||atCard)?this.objectiveHold+dt:0;
     if(this.objectiveHold>=.6){if(atPanel){this.panel=true;this.checkpoint='A';}else{this.card=true;this.checkpoint='C';}this.objectiveHold=0;this.events.push({type:'checkpoint',...this.summary()});}
     if(p.x>=656&&this.panel&&this.checkpoint==='A'){this.checkpoint='B';this.events.push({type:'checkpoint',...this.summary()});}
-    const slot=this.checkpoint||'start';if(this.level.equipment==='toolkit'&&input.jam&&!this.prevJam&&!this.jams.includes(slot)){this.jams.push(slot);this.jamUntil=this.elapsed+3;this.events.push({type:'heartbeat',...this.summary()});}
-    if(this.level.equipment==='cloak'&&input.cloak&&!this.prevCloak&&!this.cloakUsed){this.cloakUsed=true;this.cloakUntil=this.elapsed+5;this.visibility=0;this.events.push({type:'heartbeat',...this.summary()});}
+    const slot=this.checkpoint||'start';if(this.level.loadout.includes('toolkit')&&input.jam&&!this.prevJam&&!this.jams.includes(slot)){this.jams.push(slot);this.jamUntil=this.elapsed+3;this.events.push({type:'heartbeat',...this.summary()});}
+    if(this.level.loadout.includes('cloak')&&input.cloak&&!this.prevCloak&&!this.cloakUsed){this.cloakUsed=true;this.cloakUntil=this.elapsed+5;this.visibility=0;this.events.push({type:'heartbeat',...this.summary()});}
     this.prevJam=!!input.jam;this.prevCloak=!!input.cloak;const cloaked=this.elapsed<this.cloakUntil;
     this.prevInteract=!!input.interact;const jammed=this.elapsed<this.jamUntil;
     this.level.emitters.forEach(e=>e.disabled=jammed);

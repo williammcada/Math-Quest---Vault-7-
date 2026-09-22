@@ -11,7 +11,10 @@ The current cartridges are:
 
 ## Canonical project status
 
-**Current canonical release:** MathQuest v0.9.0  
+**Current local implementation candidate:** MathQuest v0.9.2 (publication and hosted/device verification pending)
+
+**Last canonical release:** MathQuest v0.9.0
+
 **Current hosted release candidate:** MathQuest v0.9.1  
 **v0.9.0 baseline commit:** `601184761b8247999b731a9720261788c79f3c66`  
 **Recovered v0.9.1 implementation checkpoint:** `576b711c10b28b6d8491495c90f37c42bb57c8d9`  
@@ -22,6 +25,8 @@ The current cartridges are:
 The repository retains its historical name for the present deployment. The product is **MathQuest**; Vault Seven is one cartridge within MathQuest.
 
 The standard GitHub Pages URL now redirects to the already-committed `public/` v0.9.1 candidate while preserving room/query parameters and URL fragments. On 18 September 2026, the hosted page identified itself as v0.9.1 and its connection diagnostic passed. The full teacher/student workflow, real-iPad checks, and classroom concurrency gate have not yet been completed, so v0.9.1 remains a hosted release candidate rather than a verified classroom release.
+
+The v0.9.2 source includes `public/`, the recovered Worker in `src/`, and matching test/build tooling. See [v0.9.2 candidate report](docs/releases/v0.9.2-candidate.md) for changes, evidence, and outstanding release gates.
 
 ## Architecture
 
