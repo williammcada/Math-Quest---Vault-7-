@@ -1,8 +1,8 @@
-import {CONTROL_PROFILES,controlMarkup,bindGameInput,crispCanvas} from './engine/controls.js?v=0.9.1';
-import {drawHardware} from './vault-art.js?v=0.9.1';
-import {registerRecord} from './privacy.js?v=0.9.1';
-import { fetchApi } from './hosting.js?v=0.9.1';
-import { StealthSimulation, RULES, REVISION, EQUIPMENT, angleAt, sensorActive, conePolygon, CHECKPOINTS } from './stealth-core.js?v=0.9.1';
+import {CONTROL_PROFILES,controlMarkup,bindGameInput,crispCanvas} from './engine/controls.js?v=0.9.2';
+import {drawHardware} from './vault-art.js?v=0.9.2';
+import {registerRecord} from './privacy.js?v=0.9.2';
+import { fetchApi } from './hosting.js?v=0.9.2';
+import { StealthSimulation, RULES, REVISION, EQUIPMENT, angleAt, sensorActive, conePolygon, CHECKPOINTS } from './stealth-core.js?v=0.9.2';
 const safe=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const id=()=>crypto.randomUUID();
 const ranks=[null,'A','B','C'];
@@ -16,7 +16,7 @@ export function mergeRecovery(server={},local={}){
 export function fallbackScene(route,step,equipment,adverse=0){
   const offset=(route==='shaft'?1:0)+Math.min(adverse,3),lit=(offset+step)%3,safeIndex=(lit+1)%3;
   if(step===0)return {title:'1 · Cross the search sector',text:`The ${route==='shaft'?'ventilation gallery':'security corridor'} has three hiding positions. The beam will finish at position ${lit+1}. Only position ${safeIndex+1} is completely behind a steel wall; the third position is an open railing.`,options:['Position 1','Position 2','Position 3'],correct:safeIndex,explanation:'The solid wall blocks the beam. The open railing does not.',forecast:`In two seconds, the beam points at position ${lit+1}.`};
-  if(step===1){const active=offset%2===0;return{title:'2 · Bypass the sensor',text:`The vertical sensor is ${active?'ON for one more second, then OFF for two seconds':'OFF for two more seconds'}. Cover ends immediately before the beam; the ceiling is too low to jump over it.`,options:['Cross now','Wait for the OFF window','Jump through the beam'],correct:active?1:0,explanation:'A vertical beam must be crossed while it is off. Jumping through it still triggers the sensor.',toolkit:equipment==='toolkit'};}
+  if(step===1){const active=offset%2===0;return{title:'2 · Bypass the sensor',text:`The vertical sensor is ${active?'ON for one more second, then OFF for two seconds':'OFF for two more seconds'}. Cover ends immediately before the beam; the ceiling is too low to jump over it.`,options:['Cross now','Wait for the OFF window','Jump through the beam'],correct:active?1:0,explanation:'A vertical beam must be crossed while it is off. Jumping through it still triggers the sensor.',toolkit:(Array.isArray(equipment)?equipment:[equipment]).includes('toolkit')};}
   return {title:'3 · Board the elevator',text:`Three windows remain. During window ${lit+1}, a spotlight crosses the elevator. During window ${safeIndex+1}, the light points away and the doors are open. The remaining window has closed doors. Choose a window, then hold Confirm to board.`,options:['Window 1','Window 2','Window 3'],correct:safeIndex,explanation:'You entered while the spotlight faced away and the elevator doors were open.',forecast:`The clear approach is window ${safeIndex+1}.`};
 }
 
@@ -39,8 +39,8 @@ export class StealthRuntime{
   summary(){return {...this.sim.summary(),fallbackUsed:this.fallback,fallbackStep:this.fallbackStep,...(this.sim.state==='terminal'?{outcome:this.sim.outcome}:{}),status:this.sim.state==='terminal'?'terminal':this.started?'active':'not_started'};}
   save(){try{localStorage.setItem(this.key,JSON.stringify({summary:this.summary(),queue:this.queue,eliminated:this.eliminated}));}catch{this.connection.textContent='Device storage unavailable. Keep this page open until your result is saved.';}}
   mount(){
-    const equip=EQUIPMENT[this.ex.equipment];
-    this.root.innerHTML=`<section class="stealth-shell"><div class="stealth-brief"><p class="transmission">${this.ex.route==='shaft'?'VENTILATION SHAFT':'SECURITY CORRIDOR'} · ${this.ex.adverseCount?'ALERT '+this.ex.adverseCount:'QUIET FACILITY'}</p><h2>Your crew made its choice. Now get out.</h2><p>${this.team.finalAction==='release'?'Asterion is already beyond containment.':this.team.finalAction==='destroy'?'The core is collapsing behind you.':this.team.finalAction==='copy'?'The copied archive pulses inside your jacket.':'Containment doors seal behind you.'} The core has accepted your command. Alarms sound and containment shutters begin to close. Disable the security panel, cross the search sector, collect the access card, and reach the surface elevator.</p><p class="equipment-effect"><b>${equip?.name||'No extraction equipment'}</b> · ${equip?.effect||'Every route can be completed at standard speed.'}</p></div>
+    const equip={name:(this.ex.loadout||[this.ex.equipment]).map(id=>EQUIPMENT[id]?.name).filter(Boolean).join(' + '),effect:(this.ex.loadout||[this.ex.equipment]).map(id=>EQUIPMENT[id]?.effect).filter(Boolean).join(' ')};
+    this.root.innerHTML=`<section class="stealth-shell"><div class="mq-rotate" role="status">Rotate your phone to landscape to play. Your run is paused.</div><div class="stealth-brief"><p class="transmission">${this.ex.route==='shaft'?'VENTILATION SHAFT':'SECURITY CORRIDOR'} · ${this.ex.adverseCount?'ALERT '+this.ex.adverseCount:'QUIET FACILITY'}</p><h2>Your crew made its choice. Now get out.</h2><p>${this.team.finalAction==='release'?'Asterion is already beyond containment.':this.team.finalAction==='destroy'?'The core is collapsing behind you.':this.team.finalAction==='copy'?'The copied archive pulses inside your jacket.':'Containment doors seal behind you.'} The core has accepted your command. Alarms sound and containment shutters begin to close. Disable the security panel, cross the search sector, collect the access card, and reach the surface elevator.</p><p class="equipment-effect"><b>${equip?.name||'No extraction equipment'}</b> · ${equip?.effect||'Every route can be completed at standard speed.'}</p></div>
       <div class="stealth-hud" aria-label="Extraction status"><span>Integrity <b data-hud="integrity">● ● ●</b></span><span>Visibility <meter data-hud="visibility" min="0" max="100" value="0"></meter></span><span>Run <b data-hud="time">3:00</b></span><span>Checkpoint <b data-hud="checkpoint">—</b></span></div>
       <div class="stealth-stage"><canvas width="320" height="180" tabindex="0" aria-label="Side-view escape: avoid spotlights, jump sensors, reach the elevator. Accessible extraction is available below."></canvas><div class="stealth-overlay" hidden></div></div>
       <p class="mq-objective" role="status"></p><div class="stealth-touch">${controlMarkup(CONTROL_PROFILES.vault)}</div>
@@ -64,13 +64,13 @@ export class StealthRuntime{
       if(action==='pause'){this.help=false;this.localPaused=!this.localPaused;reset();this.showOverlay();if(this.fallback)this.showFallback();}
       if(action==='fallback')this.switchFallback();
       if(action==='confirm-choice')this.confirmFallback();
-      if(action==='cloak-scene'&&this.ex.equipment==='cloak'&&!this.sim.cloakUsed&&!this.blocked()){this.sim.cloakUsed=true;this.enqueue('heartbeat');this.choice=fallbackScene(this.ex.route,this.fallbackStep,this.ex.equipment,this.ex.adverseCount).correct;this.confirmFallback();}
+      if(action==='cloak-scene'&&(this.ex.loadout||[this.ex.equipment]).includes('cloak')&&!this.sim.cloakUsed&&!this.blocked()){this.sim.cloakUsed=true;this.enqueue('heartbeat');this.choice=fallbackScene(this.ex.route,this.fallbackStep,this.ex.loadout||this.ex.equipment,this.ex.adverseCount).correct;this.confirmFallback();}
       if(action==='next-scene'){this.choice=null;this.sceneFeedback='';this.showFallback();}
     },{signal});
     this.root.addEventListener('change',e=>{const key=e.target.dataset.option;if(!key)return;this[key]=e.target.checked;if(key==='sound'){if(this.sound)this.enableSound();else this.music.pause();}this.root.classList.toggle('high-contrast',this.contrast);},{signal});
   }
   start(){if(this.started||this.paused)return;this.started=true;this.enableSound();if(!this.fallback)this.root.classList.add('mq-focus');this.root.querySelector('[data-run="view"]').textContent='Window view';this.sim.start();this.localPaused=false;this.enqueue('start',{mapRevision:REVISION});if(this.fallback)this.enqueue('switchFallback');this.showOverlay();if(this.fallback)this.showFallback();else this.canvas.focus({preventScroll:true});}
-  blocked(){return this.paused||this.localPaused||this.networkPaused||document.hidden;}
+  blocked(){return this.paused||this.localPaused||this.networkPaused||document.hidden||!!globalThis.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches;}
   switchFallback(){
     if(this.sim.state==='terminal'||this.paused)return;
     if(!this.started)this.start();this.fallback=true;this.root.classList.remove('mq-focus');this.fallbackStep=Math.max(this.fallbackStep,Math.min(2,ranks.indexOf(this.sim.checkpoint)));this.resetInput();this.enqueue('switchFallback');this.showFallback();this.showOverlay();
@@ -78,7 +78,7 @@ export class StealthRuntime{
   update(team,paused){
     if(this.destroyed)return;this.lastContact=Date.now();this.connection.textContent=this.queue.length?`Saving ${this.queue.length} update${this.queue.length===1?'':'s'}…`:'Connected · progress saved';
     const previousMode=`${this.paused}-${this.networkPaused}-${this.localPaused}-${this.sim.state}`;
-    this.team=team;this.ex=team.extraction;const r=this.ex.result;
+    this.team=team;this.ex=team.extraction;this.sim.level.loadout=[...(this.ex.loadout||[this.ex.equipment].filter(Boolean))];const r=this.ex.result;
     if(this.paused!==paused){this.paused=paused;this.resetInput();this.lastFrame=0;}
     if(this.networkPaused){this.networkPaused=false;this.localPaused=true;}
     if(r?.status==='terminal'){
@@ -125,17 +125,17 @@ export class StealthRuntime{
     this.fallbackRoot.hidden=false;this.root.querySelector('.stealth-stage').hidden=true;this.root.querySelector('.stealth-touch').hidden=true;this.root.querySelector('.stealth-instructions').hidden=true;
     if(this.sim.state==='terminal'){this.fallbackRoot.innerHTML=`<h2>${this.sim.outcome==='captured'?'Captured · signal lost':'Extraction complete'}</h2><p>Your run has been recorded. Waiting for the crew’s epilogue.</p>`;return;}
     if(this.blocked()){this.fallbackRoot.innerHTML=`<h2>Extraction paused</h2><p>${this.paused?'Mission control has paused the session.':'Resume when you are ready.'}</p>${!this.paused&&!this.networkPaused?'<button data-run="resume">Resume run</button>':''}`;return;}
-    const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.equipment,this.ex.adverseCount),removed=this.eliminated[this.fallbackStep]||[];
+    const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.loadout||this.ex.equipment,this.ex.adverseCount),removed=this.eliminated[this.fallbackStep]||[];
     if(scene.toolkit&&!this.sceneFeedback&&!this.sim.jams.includes(this.sim.checkpoint||'start')){this.choice=scene.correct;this.sceneFeedback='Your Silent Toolkit disables this sensor. This sector is clear.';this.sim.jams=[...new Set([...this.sim.jams,this.sim.checkpoint||'start'])];this.fallbackStep++;this.sim.checkpoint='B';this.sim.panel=true;this.enqueue('checkpoint');}
     const displayed=scene;
-    this.fallbackRoot.innerHTML=`<p class="transmission">ACCESSIBLE EXTRACTION · ${Math.min(this.fallbackStep+1,3)} / 3</p><h2>${displayed.title}</h2><p>${displayed.text}</p>${this.ex.equipment==='cloak'&&!this.sim.cloakUsed&&(!this.sceneFeedback||this.sceneFeedback.startsWith('Detected'))?'<button data-run="cloak-scene">Use one-use Cloak · cross this sector safely</button>':''}<div class="fallback-choices">${scene.options.map((o,i)=>`<button data-fallback-choice="${i}" aria-pressed="${this.choice===i}" ${removed.includes(i)||this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'disabled':''}>${safe(o)}${removed.includes(i)?' · unsafe':''}${this.choice===i?' ✓':''}</button>`).join('')}</div>${this.sceneFeedback?`<p class="fallback-feedback" role="status">${safe(this.sceneFeedback)}</p>`:''}${this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'<button data-run="next-scene">Continue to next sector</button>':`<button class="fallback-confirm" data-run="${this.fallbackStep===2?'hold-final':'confirm-choice'}" ${this.choice==null?'disabled':''}>${this.fallbackStep===2?'Hold Confirm · 0.6 seconds':'Confirm choice'}</button>`}<p class="fine">Read at your own pace. The teacher controls the shared extraction window.</p>`;
+    this.fallbackRoot.innerHTML=`<p class="transmission">ACCESSIBLE EXTRACTION · ${Math.min(this.fallbackStep+1,3)} / 3</p><h2>${displayed.title}</h2><p>${displayed.text}</p>${(this.ex.loadout||[this.ex.equipment]).includes('cloak')&&!this.sim.cloakUsed&&(!this.sceneFeedback||this.sceneFeedback.startsWith('Detected'))?'<button data-run="cloak-scene">Use one-use Cloak · cross this sector safely</button>':''}<div class="fallback-choices">${scene.options.map((o,i)=>`<button data-fallback-choice="${i}" aria-pressed="${this.choice===i}" ${removed.includes(i)||this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'disabled':''}>${safe(o)}${removed.includes(i)?' · unsafe':''}${this.choice===i?' ✓':''}</button>`).join('')}</div>${this.sceneFeedback?`<p class="fallback-feedback" role="status">${safe(this.sceneFeedback)}</p>`:''}${this.sceneFeedback&&!this.sceneFeedback.startsWith('Detected')?'<button data-run="next-scene">Continue to next sector</button>':`<button class="fallback-confirm" data-run="${this.fallbackStep===2?'hold-final':'confirm-choice'}" ${this.choice==null?'disabled':''}>${this.fallbackStep===2?'Hold Confirm · 0.6 seconds':'Confirm choice'}</button>`}<p class="fine">Read at your own pace. The teacher controls the shared extraction window.</p>`;
     for(const b of this.fallbackRoot.querySelectorAll('[data-fallback-choice]'))b.onclick=()=>{this.choice=Number(b.dataset.fallbackChoice);this.showFallback();};
     const hold=this.fallbackRoot.querySelector('[data-run="hold-final"]');
     if(hold){let timer;const start=e=>{if(this.blocked())return;if(e.type==='keydown'&&![' ','Enter'].includes(e.key))return;e.preventDefault();if(timer)return;hold.classList.add('holding');timer=setTimeout(()=>{timer=null;this.confirmFallback();},600);};const stop=()=>{clearTimeout(timer);timer=null;hold.classList.remove('holding');};hold.onpointerdown=start;hold.onpointerup=stop;hold.onpointercancel=stop;hold.onpointerleave=stop;hold.onkeydown=start;hold.onkeyup=stop;hold.onblur=stop;}
   }
   confirmFallback(){
     if(this.blocked()||this.choice==null||this.sim.state==='terminal')return;
-    const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.equipment,this.ex.adverseCount);
+    const scene=fallbackScene(this.ex.route,this.fallbackStep,this.ex.loadout||this.ex.equipment,this.ex.adverseCount);
     if(this.choice!==scene.correct){this.sim.detections++;this.sim.integrity--;this.eliminated[this.fallbackStep]||=[];this.eliminated[this.fallbackStep].push(this.choice);this.choice=null;this.sceneFeedback=`Detected. ${scene.explanation} ${this.sim.integrity} integrity remains.`;this.enqueue('detected');if(!this.sim.integrity){this.sim.complete('captured');this.sim.events=[];this.enqueue('complete',{outcome:'captured'});}}
     else{this.sceneFeedback=scene.explanation;this.fallbackStep++;this.sim.checkpoint=['A','B','C'][this.fallbackStep-1];this.sim.panel=true;this.sim.card=this.fallbackStep===3;this.enqueue('checkpoint');if(this.fallbackStep===3){this.sim.complete('fallback_extracted');this.sim.events=[];this.enqueue('complete',{outcome:'fallback_extracted'});}}
     this.updateHUD();this.showFallback();this.save();
@@ -144,10 +144,10 @@ export class StealthRuntime{
     this.hud.integrity.textContent='● '.repeat(this.sim.integrity)+'○ '.repeat(3-this.sim.integrity);this.hud.visibility.value=this.sim.visibility;
     const left=Math.max(0,Math.ceil(180-this.sim.elapsed));this.hud.time.textContent=this.fallback?'No speed timer':Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
     this.hud.checkpoint.textContent=this.sim.checkpoint||'Start';
-    const id=this.ex.equipment,s=this.sim,remaining=Math.max(0,s.cloakUntil-s.elapsed),jam=Math.max(0,s.jamUntil-s.elapsed);
-    const loadout=id==='cloak'?'CLOAK: '+(remaining>0?remaining.toFixed(1)+'s active':s.cloakUsed?'USED':'READY · R'):id==='toolkit'?'SILENT TOOLKIT: '+(jam>0?jam.toFixed(1)+'s JAM':s.jams.includes(s.checkpoint||'start')?'used here':'JAM READY · Q'):id==='scanner'?'CODE SCANNER: cipher insurance only':'NO EQUIPMENT';
+    const ids=this.ex.loadout||[this.ex.equipment],s=this.sim,remaining=Math.max(0,s.cloakUntil-s.elapsed),jam=Math.max(0,s.jamUntil-s.elapsed);
+    const loadout=ids.map(id=>id==='cloak'?'CLOAK: '+(remaining>0?remaining.toFixed(1)+'s ACTIVE':s.cloakUsed?'USED':'READY · R'):id==='toolkit'?'SILENT TOOLKIT: '+(jam>0?jam.toFixed(1)+'s ACTIVE':s.jams.includes(s.checkpoint||'start')?'USED here':'READY · Q'):id==='scanner'?'CODE SCANNER: cipher insurance':'').filter(Boolean).join(' · ')||'NO EQUIPMENT';
     this.root.querySelector('.mq-objective').textContent=loadout+' · '+s.objective()+' · '+s.alert;
-    for(const key of ['jam','cloak']){const button=this.root.querySelector('[data-game-key="'+key+'"]');button.hidden=id!==(key==='jam'?'toolkit':'cloak');button.disabled=key==='cloak'?s.cloakUsed:s.jams.includes(s.checkpoint||'start');}
+    for(const key of ['jam','cloak']){const button=this.root.querySelector('[data-game-key="'+key+'"]');button.hidden=!ids.includes(key==='jam'?'toolkit':'cloak');button.disabled=key==='cloak'?s.cloakUsed:s.jams.includes(s.checkpoint||'start');}
   }
   async enableSound(){try{this.audioContext||=new (window.AudioContext||window.webkitAudioContext)();await this.audioContext.resume();if(this.started&&!this.blocked())await this.music.play();this.beep('preview');}catch{this.connection.textContent='Sound could not start. Tap Music + effects again to retry.';}}
   beep(kind){if(!this.sound)return;try{this.audioContext||=new (window.AudioContext||window.webkitAudioContext)();if(this.audioContext.state!=='running')return;const a=this.audioContext,o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=kind==='detected'?130:kind==='complete'?520:380;g.gain.setValueAtTime(.06,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.15);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.16);}catch{}}

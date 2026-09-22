@@ -84,3 +84,17 @@ Before substantive implementation, read this brief, the migration baseline, the 
 ## 9. Ecosystem boundary
 
 Shared principles do not establish shared code, accounts or interfaces. MathQuest is engagement, TestForge assessment design, GradePal learner-level evidence, and DataDiver institutional analytics. Integration remains separately specified unless confirmed in source. Other projects remain independent unless their brief explicitly says otherwise.
+
+## 10. v0.9.2 implementation intake — 22 September 2026
+
+Owner authorized implementation of [Consolidated Draft 5](change-specs/v0.9.2.md). This supersedes the earlier Nightfall key ambush, optional clinic encounter, market acquisition and device scope as detailed in §3 of that specification. Its historical no-write statements describe preparation of the supplied draft, not this implementation authorization. Proposals and the future Vault redesign backlog remain distinct from approved requirements.
+
+Source starts at `d081997e363255389dff8ca0e891c975ca2c2a1b`. Handbook re-read at `6de4cbf33c3b9860125c412359fb64ef3d0b20d1`: AI-START-HERE.md, UNIVERSAL-RULES.md, CONDITIONAL-STANDARDS.md S-02–S-04, RELEASE-CHECKLIST.md. No handbook amendment.
+
+The GitHub history omitted the backend, tests and build tools. Recovered these from MathQuest_v0.9.1_GitHub.zip (SHA-256 `3b5aa3c1b3e7f1d7c8222424b635af9ae63bc7130fb8f99f251b777d7f5afa48`). Its public files are byte-identical to GitHub public/ except the missing zero-byte public/.nojekyll marker. Recovered server identity is source provenance, not proof of the exact currently deployed Worker bytes. Preserve the existing Worker and Netlify relay architecture.
+
+Owner evidence: 22 connected iPads with working mathematics/synchronization; seven intentionally sampled action starts, not 15 failed launches. Extend activity received a positive owner smoke test. These are v0.9.1 observations, not candidate verification. Purchased Cloak and Silent Toolkit missing-item reports remain release blockers pending end-to-end audit of all six equipment resources.
+
+Required v0.9.2 changes: one base equipment slot plus one per completed optional block, up to three distinct team items; raw-form simplest-fraction validation (MATH-FRAC-01) with explicit representation exceptions; Nightfall encounters/audio/presentation; iPhone Safari owner-review support for both cartridges. Retain Vault Seven 180-second active maximum and 300-second authoritative team window; unattended clients cannot stall the team.
+
+Windows and landscape classroom iPads remain targets. iPhone Safari action layout targets landscape with portrait setup/help and a rotate prompt. Real iPhone model/iOS/Safari version and smallest supported physical device are pending real-device verification. A candidate is not verified iPhone or classroom support. Hosted practice, complete touch inputs, sound, interruption, recovery, Wi-Fi/mobile-network checks and exact source identity are required per cartridge and for future cartridges.

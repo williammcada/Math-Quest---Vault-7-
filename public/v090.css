@@ -37,3 +37,26 @@
 .nf-equipment{font:600 16px/1.5 system-ui}.nf-practice .setup{display:flex;flex-wrap:wrap;gap:12px}.nf-practice label{display:block}
 @media (orientation:landscape) and (max-height:900px){.nf-screen,.stealth-stage{max-width:900px;margin:auto}.mq-thumb-controls{position:sticky;bottom:0;z-index:5}.nf-screen canvas,.stealth-stage canvas{max-height:52vh;object-fit:contain}.nf-hud,.mq-objective{padding:6px 12px}}
 @media(max-width:620px){.mq-thumb-controls{gap:12px}.mq-thumb-left,.mq-thumb-right{grid-template-columns:repeat(2,minmax(56px,1fr));gap:5px}.mq-thumb-controls button{font-size:14px}.nf-overlay,.stealth-overlay{padding:14px!important}.nf-screen,.stealth-stage{min-height:260px}}
+/* v0.9.2: phone play is landscape; setup and narrative remain scrollable. */
+.mq-rotate{display:none}.mq-focus{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.mq-thumb-controls{touch-action:none;user-select:none;-webkit-user-select:none}.mq-thumb-controls button{touch-action:none;min-width:44px;min-height:44px}
+.nf-overlay,.stealth-overlay{overflow:auto;max-height:100%;box-sizing:border-box}
+@media(orientation:portrait) and (max-width:700px){.mq-focus .mq-rotate{display:block;position:absolute;inset:0;z-index:20;background:#10202ff2;color:white;padding:30vh 24px;font:700 20px system-ui;text-align:center}}
+@media(orientation:landscape) and (max-height:500px){
+ .mq-focus .nf-game{padding:2px;grid-template-rows:44px 0 minmax(80px,1fr) 24px 28px 0 18px}
+ .mq-focus .nf-equipment{display:none}.mq-focus .nf-toolbar{gap:3px;overflow-x:auto;flex-wrap:nowrap;margin:0;padding:0}.mq-focus .nf-toolbar b{display:none}.mq-focus .nf-toolbar button{font-size:12px;min-height:44px;padding:3px 8px;white-space:nowrap}
+ .mq-focus .mq-thumb-controls{position:absolute;left:4px;right:4px;bottom:72px;z-index:8;pointer-events:none;justify-content:space-between;padding:0}.mq-focus .mq-thumb-controls button{pointer-events:auto;background:#172a3bdd;color:#fff;font-size:12px;padding:4px;border:1px solid #91a9b7;min-width:52px;min-height:44px}
+ .mq-focus .mq-thumb-left,.mq-focus .mq-thumb-right{gap:3px;max-width:190px}.mq-focus .mq-thumb-right{grid-template-columns:repeat(2,78px)}
+ .mq-focus .mq-tank{grid-template-columns:repeat(3,52px)}.mq-focus .mq-tank [data-game-key=up]{grid-column:2;grid-row:1}.mq-focus .mq-tank [data-game-key=left]{grid-column:1;grid-row:2}.mq-focus .mq-tank [data-game-key=right]{grid-column:3;grid-row:2}.mq-focus .mq-tank [data-game-key=down]{grid-column:2;grid-row:3}
+ .mq-focus .nf-hud{font-size:12px;padding:2px 6px}.mq-focus .mq-objective{font-size:12px;padding:2px 6px;max-height:28px;line-height:1.2}.mq-focus .nf-status{font-size:11px!important;padding:0 6px}
+ .mq-focus .stealth-shell{grid-template-rows:24px minmax(80px,1fr) 0 24px 44px 18px}.mq-focus .stealth-options{display:flex;gap:2px;overflow:auto;margin:0}.mq-focus .stealth-options button{font-size:12px;padding:3px;white-space:nowrap}.mq-focus .stealth-hud{font-size:12px;padding:2px}
+ .mq-focus .nf-overlay,.mq-focus .stealth-overlay{z-index:10;font-size:14px;padding:12px!important}.mq-focus .nf-overlay h2{font-size:18px}
+}
+
+/* Explicit phone rows keep hidden equipment and overlay controls out of auto-placement. */
+@media(orientation:landscape) and (max-height:500px){
+ .mq-focus .nf-game{grid-template-rows:44px minmax(80px,1fr) 24px 28px 18px}
+ .mq-focus .nf-toolbar{grid-row:1}.mq-focus .nf-screen{grid-row:2}.mq-focus .nf-hud{grid-row:3;font-size:12px!important;line-height:1.2!important}.mq-focus .mq-objective{font-size:12px!important;line-height:1.2!important}.mq-focus .nf-game>.mq-objective{grid-row:4}.mq-focus .nf-status{grid-row:5}
+ .mq-focus .stealth-shell{grid-template-rows:44px 24px minmax(80px,1fr) 28px 18px}
+ .mq-focus .stealth-options{grid-row:1;flex-wrap:nowrap}.mq-focus .stealth-hud{grid-row:2;font-size:12px!important;line-height:1.2!important}.mq-focus .stealth-stage{grid-row:3}.mq-focus .stealth-shell>.mq-objective{grid-row:4}.mq-focus .stealth-touch{position:absolute;inset:0;pointer-events:none}.mq-focus .stealth-connection{grid-row:5}
+}

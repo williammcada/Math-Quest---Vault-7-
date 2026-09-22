@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mathquest-prototype",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-04-01",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SESSIONS",
+        "class_name": "QuestSession"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "QuestSession"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": false
+  },
+  "vars": {
+    "CORS_ALLOWED_ORIGINS": "https://williammcada.github.io,https://vault7mathquest.netlify.app"
+  }
+}

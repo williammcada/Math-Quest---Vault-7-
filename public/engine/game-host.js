@@ -1,6 +1,6 @@
-import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.1';
-import {registerRecord} from '../privacy.js?v=0.9.1';
-import {GameAudio} from './game-audio.js?v=0.9.1';
+import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.2';
+import {registerRecord} from '../privacy.js?v=0.9.2';
+import {GameAudio} from './game-audio.js?v=0.9.2';
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class GameHost {
@@ -10,10 +10,10 @@ export class GameHost {
     let saved;try{saved=JSON.parse(localStorage.getItem(`mq-v09-finale-${run.runId}`));}catch{}
     if(saved?.seq>this.seq){this.seq=saved.seq;this.mode=saved.mode||this.mode;}
     this.s=this.adapter.create({...run,route,snapshot:saved?.seq>=run.seq?saved.snapshot:run.snapshot});
-    this.render();this.adapter.loadArt().then(art=>{if(!this.dead){this.art=art;this.showOverlay();}}).catch(e=>{if(!this.dead){this.status.textContent='Artwork unavailable. Use the assisted route.';this.artError=e.message;this.showOverlay();}});this.last=performance.now();this.accumulator=0;this.frame=requestAnimationFrame(t=>this.tick(t));
+    this.render();this.adapter.loadArt().then(art=>{if(!this.dead){this.art=art;this.showOverlay();}}).catch(e=>{if(!this.dead){this.status.textContent='Artwork unavailable. Check the connection and restart practice, or choose the assisted route.';this.artError=e.message;this.showOverlay();}});this.last=performance.now();this.accumulator=0;this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   render(){
-    this.root.innerHTML=`<section class="nf-game"><div class="nf-toolbar"><b>${esc(this.adapter.title)}</b><button data-view>Expand game</button><button data-pause>Pause</button><button data-help>Controls</button><button data-map>Map</button><button data-sound>Sound off</button><button data-assist>Assisted route</button><button data-reset>Reset controls</button></div><p class="nf-equipment">${this.run.loadout.length?this.run.loadout.map(id=>esc(this.items.find(i=>i.id===id)?.title||id)).join(' + '):'Standard kit: 12 rounds, 3 health'}</p><div class="nf-screen"><canvas width="640" height="360" aria-label="${esc(this.adapter.canvasLabel)}"></canvas><div class="nf-overlay"></div></div><div class="nf-hud" aria-live="off"></div><p class="mq-objective"></p>${controlMarkup(this.adapter.controlProfile)}<p class="nf-status" role="status"></p></section>`;
+    this.root.innerHTML=`<section class="nf-game"><div class="mq-rotate" role="status">Rotate your phone to landscape to play. Your run is paused.</div><div class="nf-toolbar"><b>${esc(this.adapter.title)}</b><button data-view>Expand game</button><button data-pause>Pause</button><button data-help>Controls</button><button data-map>Map</button><button data-sound>Sound off</button><button data-assist>Assisted route</button><button data-reset>Reset controls</button>${this.practice?'<button data-restart>Restart practice</button>':''}</div><p class="nf-equipment">${this.run.loadout.length?this.run.loadout.map(id=>esc(this.items.find(i=>i.id===id)?.title||id)).join(' + '):'Standard kit: 12 rounds, 3 health'}</p><div class="nf-screen"><canvas width="640" height="360" aria-label="${esc(this.adapter.canvasLabel)}"></canvas><div class="nf-overlay"></div></div><div class="nf-hud" aria-live="off"></div><p class="mq-objective"></p>${controlMarkup(this.adapter.controlProfile)}<p class="nf-status" role="status"></p></section>`;
     this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d');if(!this.ctx)this.mode='assisted';this.overlay=this.root.querySelector('.nf-overlay');this.hud=this.root.querySelector('.nf-hud');this.status=this.root.querySelector('.nf-status');
     const on=(el,event,fn)=>el.addEventListener(event,fn,{signal:this.ac.signal});
     this.inputBinding=bindGameInput(this.root,this.adapter.controlProfile,{signal:this.ac.signal,onChange:value=>this.input=value,blocked:()=>!this.started||this.localPaused||this.paused||!!this.s.outcome,onPause:()=>{this.localPaused=true;this.gameAudio.pause(true);this.persist();this.showOverlay();},onMap:()=>this.s.map=!this.s.map});
@@ -24,6 +24,7 @@ export class GameHost {
     on(this.root.querySelector('[data-pause]'),'click',()=>{this.help=false;this.localPaused=!this.localPaused;this.gameAudio.pause(this.localPaused||this.paused);this.clear();this.showOverlay();});
     on(this.root.querySelector('[data-sound]'),'click',async e=>{try{await this.gameAudio.toggle();this.sound=this.gameAudio.enabled;e.target.textContent=this.sound?'Sound on':'Sound off';if(this.sound)this.beep('key');}catch{this.status.textContent='Sound unavailable; the mission can continue.';}});
     on(this.root.querySelector('[data-assist]'),'click',async()=>{if(this.s.outcome)return;this.clear();if(this.started&&!this.practice){const result=await this.transmit('minigame.assist');if(!result)return;}this.mode='assisted';this.root.classList.remove('mq-focus');this.persist();this.showOverlay();});
+    this.root.querySelector('[data-restart]')?.addEventListener('click',()=>document.querySelector('#restart')?.click(),{signal:this.ac.signal});
     this.showOverlay();
   }
   clear(){this.inputBinding?.clear();this.input={};}
@@ -63,10 +64,10 @@ export class GameHost {
     this.sending=true;const p=this.pending;const {type,...body}=p;const ok=await this.transmit(type,body);this.sending=false;
     if(ok&&this.pending===p){this.pending=null;if(!this.dead)this.status.textContent=p.outcome?'Result recorded. Waiting for the rest of your crew.':'Progress saved.';}
   }
-  finish(){if(this.finished)return;this.finished=true;this.clear();this.queue(true);this.showOverlay();}
+  finish(){if(this.finished)return;this.finished=true;this.gameAudio.alarm(false);this.clear();this.queue(true);this.showOverlay();}
   tick(now){
     if(this.dead)return;const dt=Math.min(.1,(now-this.last)/1000);this.last=now;
-    if(this.started&&!this.paused&&!this.localPaused&&!document.hidden&&!this.s.outcome){
+    if(this.started&&!this.paused&&!this.localPaused&&!document.hidden&&!globalThis.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches&&!this.s.outcome){
       if(this.mode==='action'&&this.art){this.accumulator+=dt;while(this.accumulator>=1/60){this.adapter.step(this.s,{...this.input,tank:true},1/60);for(const event of this.s.events)this.beep(event);this.accumulator-=1/60;}}
       else if(this.mode==='assisted')this.s.time+=dt;
       this.gameAudio.music(this.adapter.music?.(this.s)||'ambient');
@@ -74,6 +75,7 @@ export class GameHost {
       if(this.s.outcome)this.finish();
     }
     if(this.started&&!this.practice&&!this.paused&&!this.localPaused&&now-this.lastSent>5000){this.lastSent=now;if(!this.s.outcome)this.queue();else{if(!this.finished)this.finish();this.flush();}}
+    this.gameAudio.alarm(this.started&&!this.s.outcome&&!!this.adapter.alarm?.(this.s));
     this.draw();this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   beep(event){this.gameAudio.effect(event.type||event);}

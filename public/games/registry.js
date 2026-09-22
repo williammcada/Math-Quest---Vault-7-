@@ -1,4 +1,4 @@
-import {nightfallAdapter} from './nightfall/adapter.js?v=0.9.1';
+import {nightfallAdapter} from './nightfall/adapter.js?v=0.9.2';
 // Vault 7 retains its verified runtime. Both games have explicit practice entries.
 export const GAME_REGISTRY=Object.freeze({
  'topdown-combat':{adapter:nightfallAdapter,practice:'./practice-nightfall.html'},
