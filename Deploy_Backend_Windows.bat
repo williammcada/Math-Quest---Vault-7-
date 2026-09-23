@@ -1,5 +1,5 @@
 @echo off
-title MathQuest v0.9.1 - Gameplay and pilot privacy update
+title MathQuest v0.9.3 package - compatible v0.9.2 session engine
 cd /d "%~dp0"
 where node >nul 2>nul
 if errorlevel 1 (
@@ -20,10 +20,11 @@ call npx wrangler deploy
 if errorlevel 1 goto :failed
 echo.
 echo BACKEND DEPLOYMENT SUCCEEDED.
-echo Upload the CONTENTS INSIDE public to your existing GitHub repository.
+echo Frontend source belongs in public in the GitHub repository. Do not copy it over the repository root.
+echo Publish the matching GitHub candidate when you are ready for hosted review.
 echo Keep GitHub Pages set to main and / (root).
 echo The Netlify relay needs to remain active. No Netlify upload is normally required.
-echo Read README_FIRST.txt for the connection test and classroom pilot.
+echo Read docs/releases/v0.9.3-candidate.md for deployment and test instructions.
 pause
 exit /b 0
 :failed

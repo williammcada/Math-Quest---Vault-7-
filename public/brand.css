@@ -1,0 +1,10 @@
+.brand{text-transform:uppercase}
+.platform-hero{background:linear-gradient(125deg,#15273f,#1c4565 65%,#17696c)}
+.mq-mark{display:grid;place-items:center;flex:0 0 116px;width:116px;height:100px;border:2px solid #a0e0e4;border-radius:20px;font:850 38px/1 system-ui;letter-spacing:-.06em;color:#fff;background:#15273f66}
+.mq-mark.small{flex-basis:76px;width:76px;height:68px;font-size:28px}
+.cartridge-context{font:600 14px/1.4 system-ui;color:#53657c;margin-top:6px}
+.cartridge-placeholder{padding:24px;border:2px dashed #b6c6d6;border-radius:16px;background:#f4f7fb;margin:14px 0}
+.cartridge-placeholder h3{margin:0 0 8px}.cartridge-placeholder p{margin:0;color:#53657c}
+article.game-card{box-sizing:border-box;width:100%;text-align:left}
+@media(max-width:600px){.mq-mark{flex-basis:70px;width:70px;height:66px;font-size:26px}.hero.platform-hero{gap:12px}.cartridge-context{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.spinner{animation:none}}

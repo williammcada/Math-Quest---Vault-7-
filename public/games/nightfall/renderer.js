@@ -1,9 +1,10 @@
-import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective} from './world.js?v=0.9.2';
-import {drawCar,drawFixtures} from './hardware.js?v=0.9.2';
+import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective} from './world.js?v=0.9.3';
+import {drawCar,drawFixtures} from './hardware.js?v=0.9.3';
+const motionPreference=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
 export const MEDIA={actors:'./assets/nightfall/city/actors.png',tiles:'./assets/nightfall/city/tiles.png',props:'./assets/nightfall/city/props.png',ambient:'./assets/nightfall/city/ambient.mp3',danger:'./assets/nightfall/city/danger.mp3',ending:'./assets/nightfall/city/ending.mp3',effects:'./assets/nightfall/city/effects.wav',sfx:Object.fromEntries(['step','shot','shotgun','glass','alarm','moan','enemy-death','breach'].map(k=>[k,'./assets/nightfall/city/v092/'+k+'.wav']))};
 export async function loadArt(){const art={};await Promise.all(['actors','tiles','props'].map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{art[key]=im;resolve();};im.onerror=()=>reject(new Error(`Missing or invalid image: ${MEDIA[key]}`));im.src=MEDIA[key];})));return art;}
 function cell(c,im,n,cols,rows,x,y,w,h){if(!im)return;const sw=im.width/cols,sh=im.height/rows;c.drawImage(im,(n%cols)*sw,Math.floor(n/cols)*sh,sw,sh,x,y,w,h);}
-export function render(c,s,art,{map=s.map}={}){
+export function render(c,s,art,{map=s.map,reducedMotion=motionPreference?.matches||false}={}){
  const ox=Math.max(0,Math.min(WORLD.width-640,s.x-320)),oy=Math.max(0,Math.min(WORLD.height-360,s.y-190));
  c.imageSmoothingEnabled=false;c.fillStyle='#172027';c.fillRect(0,0,640,360);c.save();c.translate(-ox,-oy);
  for(let y=Math.floor(oy/32)*32;y<oy+392;y+=32)for(let x=Math.floor(ox/32)*32;x<ox+672;x+=32){
@@ -12,7 +13,7 @@ export function render(c,s,art,{map=s.map}={}){
    cell(c,art.tiles,tile,4,4,x,y,32,32);
  }
  for(const b of BUILDINGS){c.fillStyle='#101a1c99';c.fillRect(b.x+8,b.y+8,b.w,b.h);}
- for(const p of PROPS){if(p.wire&&s.tasks.power)c.globalAlpha=.5;if(p.art<=3)drawCar(c,p,s,art.props);else cell(c,art.props,p.art,4,4,p.x,p.y,p.w,p.h);c.globalAlpha=1;if(p.burning){const glow=c.createRadialGradient(p.x+p.w/2,p.y+p.h/2,4,p.x+p.w/2,p.y+p.h/2,100);glow.addColorStop(0,'rgba(255,126,36,.28)');glow.addColorStop(1,'rgba(255,126,36,0)');c.fillStyle=glow;c.fillRect(p.x-100,p.y-100,p.w+200,p.h+200);}}
+ for(const p of PROPS){if(p.wire&&s.tasks.power)c.globalAlpha=.5;if(p.art<=3)drawCar(c,p,s,art.props,reducedMotion);else cell(c,art.props,p.art,4,4,p.x,p.y,p.w,p.h);c.globalAlpha=1;if(p.burning){const glow=c.createRadialGradient(p.x+p.w/2,p.y+p.h/2,4,p.x+p.w/2,p.y+p.h/2,100);glow.addColorStop(0,'rgba(255,126,36,.28)');glow.addColorStop(1,'rgba(255,126,36,0)');c.fillStyle=glow;c.fillRect(p.x-100,p.y-100,p.w+200,p.h+200);}}
  drawInteriors(c,s,art);
  for(const t of TASKS){if(t.id==='escape'||t.id==='installed')continue;if(t.id==='survivor'&&s.tasks.survivor)continue;cell(c,art.props,t.prop,4,4,t.x-28,t.y-28,56,56);if(!s.tasks[t.id]){c.strokeStyle=t.optional?'#87d7b5':'#f7c975';c.strokeRect(t.x-26,t.y-26,52,52);}}
  cell(c,art.props,0,4,4,1120,1056,96,152);

@@ -1,5 +1,5 @@
-import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies} from './world.js?v=0.9.2';
-import {threatFor} from './config.js?v=0.9.2';
+import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies} from './world.js?v=0.9.3';
+import {threatFor} from './config.js?v=0.9.3';
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const emit=(s,type,text)=>{s.events.push({type,text});if(text){s.message=text;s.messageAt=s.time;}};
 export function createState(loadout=[],route='clinic',threat=1){
