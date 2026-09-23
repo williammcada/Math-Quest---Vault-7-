@@ -1,6 +1,7 @@
-import {DISTRACTIONS,propBounds,WINDOWS} from './world.js?v=0.9.3';
+import {DISTRACTIONS,propBounds,WINDOWS,worldFor} from './world.js?v=0.9.4';
 // Authored vehicles from the same prop atlas as the bus; collision stays unchanged.
 export function alarmLight(p,s,reducedMotion=false){
+ const {DISTRACTIONS}=worldFor(s);
  const alarm=DISTRACTIONS.find(d=>d.kind==='alarm'&&d.propId===p.id);
  if(!alarm)return null;
  const live=s.distractions[alarm.id],state=!live?'ready':live.until>s.time?'active':'spent';
@@ -21,6 +22,7 @@ export function drawCar(c,p,s,art,reducedMotion=false){
  }
 }
 export function drawFixtures(c,s){
+ const {DISTRACTIONS,WINDOWS}=worldFor(s);
  for(const d of DISTRACTIONS){if(d.kind!=='barrel')continue;
    const live=s.distractions[d.id],warning=live&&s.time<live.ignitesAt,fire=live&&s.time>=live.ignitesAt&&s.time<live.until;
    c.save();c.translate(d.x,d.y);const metal=c.createLinearGradient(-12,0,12,0);metal.addColorStop(0,'#322b28');metal.addColorStop(.5,'#9a7651');metal.addColorStop(1,'#42352d');c.fillStyle=metal;c.beginPath();c.roundRect(-12,-15,24,30,4);c.fill();c.strokeStyle='#c4b298';c.lineWidth=2;c.beginPath();c.moveTo(-12,-8);c.lineTo(12,-8);c.moveTo(-12,8);c.lineTo(12,8);c.stroke();c.fillStyle='#efe3ca';c.fillRect(-10,-5,20,11);c.font='bold 8px system-ui';c.fillStyle='#362520';c.fillText('GAS',-9,3);

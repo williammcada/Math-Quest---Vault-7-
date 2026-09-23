@@ -1,4 +1,5 @@
-import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.3';
+import {rescueWorld} from './rescue-world.js?v=0.9.4';
+import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.4';
 export const REVISION=CONFIG_REVISION;
 export const WORLD={width:2560,height:1280,tile:32,bus:{x:1168,y:1120}};
 export const BUILDINGS=[
@@ -49,11 +50,13 @@ export const WINDOWS=BUILDINGS.flatMap(b=>[
  {id:b.id+'-west',room:b.id,x:b.x,y:b.y+96,w:16,h:80},
  {id:b.id+'-east',room:b.id,x:b.x+b.w-16,y:b.y+96,w:16,h:80}
 ]);
-export const doorRects=()=>BUILDINGS.map(b=>({id:b.id,x:b.door,y:b.y+b.h-16,w:80,h:16,door:true}));
+export const worldFor=s=>s?.scenario==='rescue'?rescueWorld(s.route):{WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,BARRIERS:[]};
+export const doorRects=(s)=>worldFor(s).BUILDINGS.map(b=>({id:b.id,x:b.door,y:b.y+b.h-16,w:80,h:16,door:true}));
 // Circular actors slide around real art footprints instead of oversized square corners.
 const overlap=(x,y,r,b)=>{const nx=Math.max(b.x,Math.min(x,b.x+b.w)),ny=Math.max(b.y,Math.min(y,b.y+b.h));return (x-nx)**2+(y-ny)**2<r*r;};
 export function walls(s,{ignoreDoors=false}={}){
- const list=[];
+ const {BUILDINGS,WINDOWS,BARRIERS}=worldFor(s);
+ const list=[...BARRIERS];
  for(const b of BUILDINGS){
    list.push({x:b.x,y:b.y,w:b.w,h:16});
    for(const pane of WINDOWS.filter(w=>w.room===b.id)){
@@ -63,16 +66,17 @@ export function walls(s,{ignoreDoors=false}={}){
    list.push({x:b.x,y:b.y+b.h-16,w:b.door-b.x,h:16},{x:b.door+80,y:b.y+b.h-16,w:b.x+b.w-b.door-80,h:16});
    if(b.id==='store'||b.id==='garage'&&!s.tasks.power&&!s.garageHordeTriggered)list.push({x:b.door,y:b.y+b.h-16,w:80,h:16,gate:true});
  }
- if(!ignoreDoors)for(const d of doorRects())if(s.doors?.[d.id]?.closed&&s.doors[d.id].hp>0)list.push(d);
+ if(!ignoreDoors)for(const d of doorRects(s))if(s.doors?.[d.id]?.closed&&s.doors[d.id].hp>0)list.push(d);
  return list;
 }
 export const propBounds=b=>({...b,x:b.x+(b.art<=3?10:3),y:b.y+(b.art<=3?10:3),w:b.w-(b.art<=3?20:6),h:b.h-(b.art<=3?20:6)});
 export function solid(s,x,y,r=10,ignoreDoors=false){
+ const {WORLD,PROPS}=worldFor(s);
  if(x<r||y<r||x>WORLD.width-r||y>WORLD.height-r)return true;
  return walls(s,{ignoreDoors}).some(b=>overlap(x,y,r,b))||PROPS.some(b=>(!b.wire||!s.tasks.power)&&overlap(x,y,r,propBounds(b)));
 }
 export function lineClear(s,a,b){const count=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/8);for(let i=1;i<=count;i++)if(solid(s,a.x+(b.x-a.x)*i/count,a.y+(b.y-a.y)*i/count,2))return false;return true;}
-export function nextObjective(s){return TASKS.find(t=>!t.optional&&!s.tasks[t.id]&&(t.requires||[]).every(id=>s.tasks[id]));}
+export function nextObjective(s){return worldFor(s).TASKS.find(t=>!t.optional&&!s.tasks[t.id]&&(t.requires||[]).every(id=>s.tasks[id]));}
 export function seededEnemies(threat=1){
  const enemies=[];let seed=1733;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
  const state={tasks:{}};

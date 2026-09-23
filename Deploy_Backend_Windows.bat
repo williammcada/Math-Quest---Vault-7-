@@ -1,5 +1,5 @@
 @echo off
-title MathQuest v0.9.3 package - compatible v0.9.2 session engine
+title MathQuest v0.9.4 - frontend and session engine
 cd /d "%~dp0"
 where node >nul 2>nul
 if errorlevel 1 (
@@ -24,7 +24,7 @@ echo Frontend source belongs in public in the GitHub repository. Do not copy it 
 echo Publish the matching GitHub candidate when you are ready for hosted review.
 echo Keep GitHub Pages set to main and / (root).
 echo The Netlify relay needs to remain active. No Netlify upload is normally required.
-echo Read docs/releases/v0.9.3-candidate.md for deployment and test instructions.
+echo Read docs/releases/v0.9.4-candidate.md for deployment and test instructions.
 pause
 exit /b 0
 :failed

@@ -1,12 +1,12 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.4 — v0.9.3 implementation and address-migration preparation
+**Brief version:** 0.5 — v0.9.4 First Response implementation
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** v0.9.3 frontend candidate; compatible with session engine v0.9.2. Hosted/device verification and address cutover pending.
+**Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
-**Current source baseline:** merged v0.9.2 at `e7da71ba349cada401f0ec2f22deb4223d50d41d`; canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this revision. The v0.9.1 observation below is historical.
+**Current source baseline:** merged v0.9.3 at `c7ea42d7e54402357b5c56c52c44856666e4c2b9`; canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this revision. The v0.9.1 observation below is historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Review v0.9.3 at existing addresses, complete browser/device checks, then resolve the account inventory and no-active-classroom cutover window in `docs/migrations/v0.9.3-addresses.md`.
+**Next work:** Verify the new early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari. Complete school-network and classroom concurrency checks before claiming readiness.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -22,7 +22,11 @@
 
 ## 2. This task and boundaries
 
-Current revision follows [v0.9.3](change-specs/v0.9.3.md): neutral platform identity and metadata-driven cartridge presentation, ready/active/spent alarm lights, and separately staged address migration. No action balance, mathematics, evidence, equipment, session database or privacy policy changes. Proposed address renaming is a scoped exception to the stabilization prohibition, executable only after the plan's preflight and agreed cutover window. Historical reconciliation and v0.9.2 evidence below remain historical.
+Current revision follows [v0.9.4](change-specs/v0.9.4.md). New v0.9.4 Nightfall rooms insert First Response after the first vote and before Gate 2. The one-live-action-run wording is superseded only for this chapter: unlimited validated downed retries share one authoritative five-minute window. Teacher whole-session pause freezes it once; local pause, delayed Start, disconnect and retry do not extend it. All personal records resolved or expiry/teacher closure opens shared Gate 2 without completing any mathematics.
+
+Route chooses Imani’s clinic or Tomas’s Depot Garage. Twenty authored zombies (5/10/5), one gas hazard, one alarm, pistol with 15 rounds, no earned gear, one +1-health and one +10-round pickup. Initial 3-health baseline, two coherent retry checkpoints, broader noncombatant immunity, locked door/two windows and fixed narrative closure bridge are selected candidate tuning from the draft. Actual escort success and unstarted/time/teacher closure remain separate engagement evidence. No early inventory, retry or outcome leaks into the later city run.
+
+Retain U-04 fraction validation, academic evidence, equipment slots, Vault 7, v0.9.3 neutral branding/alarm indicators and existing hosting/storage/privacy. Old v0.9.2 saved rooms retain their original sequence and credentials. New feature tests require fresh v0.9.4 rooms. Backend deployment is required; no live deployment or address rename is implied by a source candidate. Teacher extensions skip live rescue teams and resume at academic stages.
 
 ## 3. Standards and adoption
 

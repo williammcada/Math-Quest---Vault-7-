@@ -1,6 +1,6 @@
-import { CARTRIDGES } from './cartridges.js?v=0.9.3';
+import { CARTRIDGES } from './cartridges.js?v=0.9.4';
 
-export const BRAND = Object.freeze({name:'MathQuest',mark:'MQ',credit:'A WILLIAM MCADA PRODUCT',version:'0.9.3',engineVersion:'0.9.2'});
+export const BRAND = Object.freeze({name:'MathQuest',mark:'MQ',credit:'A WILLIAM MCADA PRODUCT',version:'0.9.4',engineVersion:'0.9.4'});
 export const escapeBrand = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Resolve only registered metadata; missing/unknown IDs never inherit a cartridge.
