@@ -1,6 +1,6 @@
-import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.3';
-import {registerRecord} from '../privacy.js?v=0.9.3';
-import {GameAudio} from './game-audio.js?v=0.9.3';
+import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.4';
+import {registerRecord} from '../privacy.js?v=0.9.4';
+import {GameAudio} from './game-audio.js?v=0.9.4';
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class GameHost {
@@ -8,15 +8,16 @@ export class GameHost {
     this.adapter=adapter;this.items=items;this.art=null;this.gameAudio=new GameAudio(this.adapter.media);this.root=root;this.run=run;this.send=send;this.practice=practice;this.deadline=deadline;this.paused=paused;this.input={tank:true};this.localPaused=false;this.mode=run.mode||'action';this.started=run.status==='active';this.seq=run.seq||0;this.pending=null;this.sending=false;this.lastSent=0;this.dead=false;this.ac=new AbortController();
     registerRecord(new URLSearchParams(globalThis.location?.search||'').get('session'),`mq-v09-finale-${run.runId}`);
     let saved;try{saved=JSON.parse(localStorage.getItem(`mq-v09-finale-${run.runId}`));}catch{}
+    if(this.adapter.commandPrefix==='rescue'&&saved?.attemptId!==run.attemptId)saved=null;
     if(saved?.seq>this.seq){this.seq=saved.seq;this.mode=saved.mode||this.mode;}
     this.s=this.adapter.create({...run,route,snapshot:saved?.seq>=run.seq?saved.snapshot:run.snapshot});
     this.render();this.adapter.loadArt().then(art=>{if(!this.dead){this.art=art;this.showOverlay();}}).catch(e=>{if(!this.dead){this.status.textContent='Artwork unavailable. Check the connection and restart practice, or choose the assisted route.';this.artError=e.message;this.showOverlay();}});this.last=performance.now();this.accumulator=0;this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   render(){
-    this.root.innerHTML=`<section class="nf-game"><div class="mq-rotate" role="status">Rotate your phone to landscape to play. Your run is paused.</div><div class="nf-toolbar"><b>${esc(this.adapter.title)}</b><button data-view>Expand game</button><button data-pause>Pause</button><button data-help>Controls</button><button data-map>Map</button><button data-sound>Sound off</button><button data-assist>Assisted route</button><button data-reset>Reset controls</button>${this.practice?'<button data-restart>Restart practice</button>':''}</div><p class="nf-equipment">${this.run.loadout.length?this.run.loadout.map(id=>esc(this.items.find(i=>i.id===id)?.title||id)).join(' + '):'Standard kit: 12 rounds, 3 health'}</p><div class="nf-screen"><canvas width="640" height="360" aria-label="${esc(this.adapter.canvasLabel)}"></canvas><div class="nf-overlay"></div></div><div class="nf-hud" aria-live="off"></div><p class="mq-objective"></p>${controlMarkup(this.adapter.controlProfile)}<p class="nf-status" role="status"></p></section>`;
+    this.root.innerHTML=`<section class="nf-game"><div class="mq-rotate" role="status">Rotate your phone to landscape to play. Your run is paused.</div><div class="nf-toolbar"><b>${esc(this.adapter.title)}</b><button data-view>Expand game</button><button data-pause>Pause</button><button data-help>Controls</button><button data-map>Map</button><button data-sound>Sound off</button><button data-assist>Assisted route</button><button data-reset>Reset controls</button>${this.practice?'<button data-restart>Restart practice</button>':''}</div><p class="nf-equipment">${this.run.loadout.length?this.run.loadout.map(id=>esc(this.items.find(i=>i.id===id)?.title||id)).join(' + '):esc(this.adapter.kitText||'Standard kit: 12 rounds, 3 health')}</p><div class="nf-screen"><canvas width="640" height="360" aria-label="${esc(this.adapter.canvasLabel)}"></canvas><div class="nf-overlay"></div></div><div class="nf-hud" aria-live="off"></div><p class="mq-objective"></p>${controlMarkup(this.adapter.controlProfile)}<p class="nf-status" role="status"></p></section>`;
     this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d');if(!this.ctx)this.mode='assisted';this.overlay=this.root.querySelector('.nf-overlay');this.hud=this.root.querySelector('.nf-hud');this.status=this.root.querySelector('.nf-status');
     const on=(el,event,fn)=>el.addEventListener(event,fn,{signal:this.ac.signal});
-    this.inputBinding=bindGameInput(this.root,this.adapter.controlProfile,{signal:this.ac.signal,onChange:value=>this.input=value,blocked:()=>!this.started||this.localPaused||this.paused||!!this.s.outcome,onPause:()=>{this.localPaused=true;this.gameAudio.pause(true);this.persist();this.showOverlay();},onMap:()=>this.s.map=!this.s.map});
+    this.inputBinding=bindGameInput(this.root,this.adapter.controlProfile,{signal:this.ac.signal,onChange:value=>this.input=value,blocked:()=>!this.started||this.localPaused||this.paused||!!this.s.outcome||!!this.s.dialogue,onPause:()=>{this.localPaused=true;this.gameAudio.pause(true);this.persist();this.showOverlay();},onMap:()=>this.s.map=!this.s.map});
     on(this.root.querySelector('[data-help]'),'click',()=>{this.help=true;this.localPaused=true;this.clear();this.gameAudio.pause(true);this.showOverlay();});
     on(this.root.querySelector('[data-view]'),'click',e=>{this.root.classList.toggle('mq-focus');e.target.textContent=this.root.classList.contains('mq-focus')?'Window view':'Expand game';this.clear();});
     on(this.root.querySelector('[data-map]'),'click',()=>this.s.map=!this.s.map);
@@ -55,7 +56,7 @@ export class GameHost {
   assisted(){this.adapter.assisted(this.s,this.overlay,()=>{this.persist();if(this.s.outcome)this.finish();else this.assisted();});}
   update(run,paused,deadline){if(paused!==this.paused){this.clear();this.gameAudio.pause(paused||this.localPaused);}this.paused=paused;this.deadline=deadline;if(run?.threat!==undefined&&run.threat!==this.run.threat&&!this.started){this.run=run;this.s=this.adapter.create({...run,route:this.s.route});}
     if(run?.status==='terminal'){this.s.outcome=run.outcome;this.pending=null;this.finished=true;}if(run?.seq>this.seq)this.seq=run.seq;this.showOverlay();}
-  persist(){if(this.practice)return;try{localStorage.setItem(`mq-v09-finale-${this.run.runId}`,JSON.stringify({seq:this.seq,mode:this.mode,snapshot:this.s}));}catch{if(this.status)this.status.textContent='Local recovery storage unavailable. Keep this tab open.';}}
+  persist(){if(this.practice)return;try{localStorage.setItem(`mq-v09-finale-${this.run.runId}`,JSON.stringify({attemptId:this.run.attemptId,seq:this.seq,mode:this.mode,snapshot:this.s}));}catch{if(this.status)this.status.textContent='Local recovery storage unavailable. Keep this tab open.';}}
   queue(terminal=false){
     this.seq++;this.pending={type:terminal?'minigame.complete':'minigame.progress',commandId:crypto.randomUUID(),seq:this.seq,activeElapsedMs:Math.round(this.s.time*1000),snapshot:structuredClone(this.s),...(terminal?{outcome:this.s.outcome}:{})};this.persist();this.flush();
   }

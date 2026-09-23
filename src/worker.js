@@ -1,3 +1,4 @@
+import {settleRescues} from './cartridges/nightfall/rescue-server.js';
 import {equipmentCommand,equipmentSlots,completeEquipmentBlock} from './engine/equipment.js';
 import {serverFor} from './cartridges/registry.js';
 import { withCors } from './cors.js';
@@ -12,7 +13,8 @@ import {configureSupply,awardSupply} from './engine/supply.js';
 
 const ACTIVE_MS = 20_000;
 export const RETENTION_MS=48*60*60*1000;
-const VERSION = "0.9.2";
+const VERSION = "0.9.4";
+const supportedEngine=version=>["0.9.2","0.9.4"].includes(version);
 const DIFFICULTY_POLICIES = ["session", "foundation", "standard", "challenge"];
 const GATE_PATHS = {
   3: ["Perimeter Power", "Containment Laboratory", "Isolation Core"],
@@ -176,7 +178,7 @@ export class QuestSession {
         this.state=JSON.parse(parts.join(''));
       }else this.state=saved||this.freshState();
       if(this.state.code&&!this.state.expiresAt){this.state.expiresAt=Date.parse(this.state.createdAt)+RETENTION_MS;await this.save();}
-      if(this.state.code)await ctx.storage.setAlarm?.(Math.max(Date.now(),this.state.expiresAt));
+      if(this.state.code)await this.scheduleAlarm();
     });
   }
 
@@ -210,7 +212,7 @@ export class QuestSession {
     this.state={deleted:true};await this.ctx.storage.put('state',this.state);
   }
   async alarm(){
-    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code)await this.ctx.storage.setAlarm?.(this.state.expiresAt);});
+    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code){if(settleRescues(this))await this.save();else await this.scheduleAlarm();}});
     this.serial=work.catch(()=>{});return work;
   }
   async handle(request) {
@@ -219,7 +221,7 @@ export class QuestSession {
     if(this.state.deleted)return json({error:'This session was deleted. Local exports are unaffected.'},{status:410});
     if(this.state.code&&Date.now()>=this.state.expiresAt){await this.purge();return json({error:'This session expired after 48 hours and was deleted.'},{status:410});}
     const bearer=request.headers.get('authorization')?.replace(/^Bearer /i,'')||'';
-    const legacy=this.state.config?.engineVersion!==VERSION;
+    const legacy=!supportedEngine(this.state.config?.engineVersion);
     const teacherKey=bearer||(legacy?url.searchParams.get('teacherKey'):null);
     if (url.pathname === "/init" && request.method === "POST") return this.init(request);
     if (!this.state.code) return json({ error: "Session not found" }, { status: 404 });
@@ -227,8 +229,9 @@ export class QuestSession {
       if(!this.isTeacher(teacherKey))return json({error:'Teacher access required'},{status:403});
       await this.purge();return json({deleted:true,message:'Hosted session deleted. Exported files remain on your device.'});
     }
-    if(this.state.config.engineVersion===VERSION&&settleExtractions(this))await this.save();
-    if(this.state.config.engineVersion===VERSION&&expansionFor(this)&&settleRuns(this))await this.save();
+    if(supportedEngine(this.state.config.engineVersion)&&settleExtractions(this))await this.save();
+    if(supportedEngine(this.state.config.engineVersion)&&expansionFor(this)&&settleRuns(this))await this.save();
+    if(settleRescues(this))await this.save();
     if (url.pathname === "/state" && request.method === "GET") {
       const deviceId = cleanText(url.searchParams.get("deviceId"), 80);
       if(deviceId&&!this.isTeacher(teacherKey)&&this.state.students[deviceId]?.credential!==bearer)return json({error:'Student credential required'},{status:403});
@@ -325,7 +328,7 @@ export class QuestSession {
 
   async command(input) {
     const type = String(input.type || "");
-    if(this.state.config.engineVersion!==VERSION&&type!=='teacher.end')return {error:'This room belongs to an older release. Export and end it, then create a fresh v0.9 session.',status:409};
+    if(!supportedEngine(this.state.config.engineVersion)&&type!=='teacher.end')return {error:'This room belongs to an older release. Export and end it, then create a fresh v0.9 session.',status:409};
     if (type.startsWith("teacher.")) return this.teacherCommand(input);
     if (type === "student.join") return this.join(input);
     const student = this.studentFor(input.deviceId);
@@ -403,8 +406,10 @@ export class QuestSession {
       if(this.state.paused&&expansionFor(this)){const duration=Date.now()-(this.state.pausedAt||Date.now());for(const t of Object.values(this.state.teams))if(t.stage==='minigame'&&t.finaleDeadline)t.finaleDeadline+=duration;}
       this.state.paused = !this.state.paused;
       if(this.state.paused)this.state.pausedAt=Date.now();
-      else{const duration=Date.now()-(this.state.pausedAt||Date.now());for(const t of Object.values(this.state.teams))if(t.stage==='extraction')t.extraction.deadlineAt+=duration;this.state.pausedAt=null;}
+      else{const duration=Date.now()-(this.state.pausedAt||Date.now());for(const t of Object.values(this.state.teams)){if(t.stage==='extraction')t.extraction.deadlineAt+=duration;if(t.stage==='rescue'&&t.rescue){t.rescue.deadline+=duration;t.rescue.pausedMs+=duration;}}this.state.pausedAt=null;}
       this.addEvent(this.state.paused ? "session-paused" : "session-resumed", `Teacher ${this.state.paused ? "paused" : "resumed"} the session`);
+    } else if(type==='teacher.closeRescue'){
+      settleRescues(this,input.teamId||'*');
     } else if(type==='teacher.advanceFinale'&&expansionFor(this)){
       settleRuns(this,input.teamId||'*');
     } else if(type==='teacher.finishExtraction'){
@@ -413,6 +418,7 @@ export class QuestSession {
       const target=this.studentFor(input.studentId);if(!target)return{error:'Student not found.',status:404};
       const result=extractionCommand(this,target,{type:'extraction.switchFallback'});if(result.error)return result;
     } else if (type === "teacher.end") {
+      settleRescues(this,'*');
       if(expansionFor(this))settleRuns(this,'*');
       finishExtractions(this);
       this.state.status = "ended";
@@ -771,7 +777,7 @@ export class QuestSession {
     });
     return {
       branding: "A WILLIAM MCADA PRODUCT",
-      schemaVersion:'0.9.2',
+      schemaVersion:'0.9.4',
       attribution: "Designed and built by William McAda · © 2026 William McAda",
       generatedAt: new Date().toISOString(),
       session: { code: this.state.code, status: this.state.status, config: { ...this.state.config, modules: this.state.config.modules.map(({ items, ...module }) => module) }, cartridge: this.state.config.cartridgeTitle||'Vault 7' },
@@ -793,6 +799,7 @@ export class QuestSession {
       })),
       attempts: this.state.attempts,
       gameplayEvidence:Object.values(this.state.teams).flatMap(t=>Object.entries(t.runs||t.extraction?.resultsByStudentId||{}).map(([studentId,result])=>({evidenceType:'engagement.gameplay',studentId,teamId:t.id,alias:this.state.students[studentId]?.alias,cartridgeId:this.state.config.cartridgeId,route:t.route,equipment:t.inventory.join('|')||null,adverseCount:t.extraction?.adverseCount||0,finalChoice:t.finalAction,...result}))),
+      rescueEvidence:Object.values(this.state.teams).flatMap(t=>Object.entries(t.rescue?.runs||{}).map(([studentId,r])=>({evidenceType:'engagement.gameplay',phase:'early-rescue',studentId,alias:this.state.students[studentId]?.alias,teamId:t.id,route:t.rescue.route,phaseId:t.rescue.phaseId,deadline:t.rescue.deadline,closedAt:t.rescue.closedAt,closureReason:r.closureReason||t.rescue.closeReason,runId:r.runId,mode:r.mode,usedAssisted:!!r.usedAssisted,outcome:r.outcome||r.status,attempts:r.startedAt?r.attempt:0,retries:r.retries,engineVersion:r.engineVersion,configRevision:r.configRevision,validation:r.validation||'not completed',completedAt:r.completedAt}))),
       audit: this.state.events
       ,extensions:this.state.extensions||[]
     };
@@ -819,6 +826,7 @@ export class QuestSession {
       [],['TEAM OUTCOMES'],['Team','Final action','Ending','Credits','Route','Equipment','Completion reason'],...report.teams.map(t=>[t.name,t.finalAction,t.endingId,t.currency,t.route,t.inventory.join('|'),t.extraction?.completionReason])
     ];
     if(expansionFor(this))rows.push([],['NIGHTFALL · ENGAGEMENT ONLY'],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
+    rows.push([],['FIRST RESPONSE · ENGAGEMENT ONLY'],['Student ID','Alias','Team','Phase','Route','Mode','Outcome','Closure reason','Attempts','Retries'],...report.rescueEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.phase,r.route,r.mode,r.outcome,r.closureReason,r.attempts,r.retries]));
     rows.push([],['LIVE EXTENSIONS'],['Batch ID','Time','Student ID','Alias','Added','Total assigned','Gate index','Difficulty'],...(report.extensions||[]).flatMap(batch=>batch.targets.map(t=>[batch.id,batch.at,t.studentId,t.alias,t.count,t.total,t.gateIndex===null?'Last Checkpoint':t.gateIndex+1,batch.policy])),[],['ATTEMPT EXTENSION CONTEXT'],['Item ID','Student ID','Batch ID'],...report.attempts.map(a=>[a.itemId,a.studentId,a.extensionBatchId||'initial']));
     rows.push([],['V0.9 GAMEPLAY DETAILS'],['Student ID','Threat','Objectives','Door uses','Doors broken','Distractions','Toolkit checkpoints','Mode','Engine revision','Cloak used','Broken windows','Dispatch horde'],...report.gameplayEvidence.map(r=>[r.studentId,r.threat,Object.keys(r.snapshot?.tasks||r.objectives||{}).filter(k=>(r.snapshot?.tasks||r.objectives)[k]).join('|'),r.snapshot?.doorUses,r.snapshot?.doorsBroken,r.snapshot?.distractionsUsed,(r.jams||[]).join('|'),r.mode|| (r.fallbackUsed?'assisted':'action'),r.engineVersion||r.clientBuild,!!r.cloakUsed,Object.keys(r.snapshot?.windows||{}).join('|'),!!r.snapshot?.hordeTriggered]));
     return "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
@@ -852,7 +860,13 @@ export class QuestSession {
     this.state.events.push({ at: new Date().toISOString(), type, message, teamId, studentId, revision: this.state.revision + 1 });
   }
 
+  async scheduleAlarm(){
+    if(!this.state.code||this.state.deleted)return;
+    const deadlines=this.state.paused?[]:Object.values(this.state.teams).filter(t=>t.stage==='rescue'&&!t.rescue?.closedAt).map(t=>t.rescue.deadline);
+    await this.ctx.storage.setAlarm?.(Math.max(Date.now(),Math.min(this.state.expiresAt,...deadlines)));
+  }
   async save() {
+    await this.scheduleAlarm();
     // Intensive review can exceed one SQLite KV value. Keep each piece bounded;
     // the storage transaction commits all pieces and their pointer together.
     const serialized=JSON.stringify(this.state),chunkSize=200000;

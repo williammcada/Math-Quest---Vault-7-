@@ -11,23 +11,22 @@ The current cartridges are:
 
 ## Canonical project status
 
-**Candidate:** MathQuest v0.9.3, branch `release/v0.9.3`. Neutral platform branding and readable alarm-car indicators; address migration prepared but inactive.
+**Candidate:** MathQuest v0.9.4, branch `release/v0.9.4`. Nightfall First Response inserts a personal rescue/escort between the first team vote and Gate 2. Unlimited retries share one server-controlled five-minute team window.
 
-**Starting main source:** merged v0.9.2, `e7da71ba349cada401f0ec2f22deb4223d50d41d`. Source merge is not proof of hosted verification.
+**Starting main source:** merged v0.9.3, `c7ea42d7e54402357b5c56c52c44856666e4c2b9`. Canonical frontend `public/`; session engine `src/`. Both components identify v0.9.4. This feature requires the updated Worker.
 
-**Canonical source:** front end `public/`; compatible session engine v0.9.2 in `src/`. This frontend revision preserves the session protocol and saved-room identity. A v0.9.2 Worker does not need redeploying for the UI/light changes.
+**Existing addresses:** repository `williammcada/Math-Quest---Vault-7-`; Pages `https://williammcada.github.io/Math-Quest---Vault-7-/`; Netlify relay `https://vault7mathquest.netlify.app/api/`. The separate address migration remains inactive.
 
-**Current repository/address configuration:** `williammcada/Math-Quest---Vault-7-`, GitHub Pages at `https://williammcada.github.io/Math-Quest---Vault-7-/`, relay at `https://vault7mathquest.netlify.app/api/`. The proposed `mathquest` repository and `mcada-mathquest.netlify.app` addresses are not live migration claims.
-
-See the [v0.9.3 candidate report](docs/releases/v0.9.3-candidate.md), [address migration handoff](docs/migrations/v0.9.3-addresses.md), and [approved change specification](docs/change-specs/v0.9.3.md). Historical v0.9.1 deployment observations remain in [Migration Baseline](docs/MIGRATION-BASELINE.md); v0.9.2 evidence remains in its [candidate report](docs/releases/v0.9.2-candidate.md).
+See the [v0.9.4 candidate report](docs/releases/v0.9.4-candidate.md), [change specification](docs/change-specs/v0.9.4.md), and [address migration handoff](docs/migrations/v0.9.3-addresses.md). Earlier candidate reports and specifications remain historical evidence.
 
 ## Test/deploy this candidate at the existing addresses
 
-1. Download the `release/v0.9.3` branch from its repository Code page using **Code → Download ZIP**, then extract it. Keep the full repository layout.
-2. If the existing Worker already reports session engine v0.9.2, no backend update is needed for this revision. Otherwise `Deploy_Backend_Windows.bat` checks and deploys the compatible v0.9.2 engine to the existing Worker. It is a production backend update; finish active rooms first.
-3. Publish the candidate frontend through the repository's Pages process when ready for hosted review. Keep Pages at `main` and `/ (root)` in the established arrangement. The root entry points forward to `public/`. Do not copy `public/` files over the repository root.
-4. Open `public/connection-test.html`, then test fresh teacher/student sessions and both practice pages. Expect front end v0.9.3 and session server v0.9.2. That pairing is intentional.
-5. The existing Netlify proxy requires no upload for these frontend changes. Do not rename the repository or Netlify project until the migration handoff's account checks and timing are resolved.
+1. Download `release/v0.9.4` from its repository Code page using **Code → Download ZIP**, then extract the full directory.
+2. Finish active classroom sessions. Run `Deploy_Backend_Windows.bat` to check and update the **existing** Cloudflare Worker to v0.9.4. Keep its Worker name, storage binding and migration unchanged. Publishing only the frontend cannot enable First Response.
+3. Publish the frontend through the established Pages process when ready for hosted review. Pages remains `main` and `/ (root)`; root entry points forward into `public/`. Do not copy `public/` over the repository root.
+4. Run `public/connection-test.html`; expect frontend and server v0.9.4. Create fresh teacher/student rooms for the new sequence. Existing v0.9.2 rooms remain compatible and retain their original sequence, without a retroactive rescue insertion.
+5. Open Nightfall practice and select **First Response · five-minute rescue window**, then Clinic or Depot Garage. The practice timer includes delayed Start and local pauses; Restart practice is outside classroom evidence. Later-city equipment/threat/checkpoint controls are disabled for this chapter.
+6. Verify live rescue → Gate 2, pause/reconnect/expiry, later city independence, and both cartridges on target devices. The unchanged Netlify relay needs no upload. No repository/address rename is part of this feature.
 
 ## Architecture
 

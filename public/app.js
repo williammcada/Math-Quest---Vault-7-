@@ -1,18 +1,19 @@
-import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.3';
-import { hostingFor, fetchApi } from './hosting.js?v=0.9.3';
-import { CATALOG } from './catalog.js?v=0.9.3';
-import { StealthRuntime } from './stealth.js?v=0.9.3';
-import { SceneAssets } from './vault7-assets.js?v=0.9.3';
-import { TeacherAudio } from './teacher-audio.js?v=0.9.3';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.3';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.3';
-import { FinaleHost } from './finale-host.js?v=0.9.3';
-import { CartridgeAudio } from './cartridge-audio.js?v=0.9.3';
-import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.3';
-import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.3';
-import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.3';
+import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4';
+import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
+import { hostingFor, fetchApi } from './hosting.js?v=0.9.4';
+import { CATALOG } from './catalog.js?v=0.9.4';
+import { StealthRuntime } from './stealth.js?v=0.9.4';
+import { SceneAssets } from './vault7-assets.js?v=0.9.4';
+import { TeacherAudio } from './teacher-audio.js?v=0.9.4';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4';
+import { FinaleHost } from './finale-host.js?v=0.9.4';
+import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4';
+import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.4';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.4';
+import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.4';
 forgetExpiredRooms();
-import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.3';
+import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.4';
 let setupCartridge='';
 let finaleHost=null;
 const app = document.querySelector("#app");
@@ -375,7 +376,7 @@ function renderTeacher() {
   cartridgeAudio.bind();
   if(state.cartridge.id!=='vault-7'){
     document.querySelector('.hero h1').textContent='MathQuest Dashboard';
-    document.querySelectorAll('.team-card').forEach((card,i)=>{const t=state.teams[i];if(t.stage==='minigame'){const button=document.createElement('button');button.textContent='Finish remaining crossings';button.onclick=()=>command('teacher.advanceFinale',{teamId:t.id});card.append(button);const p=document.createElement('p');p.textContent=(t.finale?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status}`).join(' | ');card.append(p);}});
+    document.querySelectorAll('.team-card').forEach((card,i)=>{const t=state.teams[i];if(t.stage==='rescue'){const close=document.createElement('button');close.textContent='Close rescue and open Gate 2';close.onclick=()=>command('teacher.closeRescue',{teamId:t.id});card.append(close);const note=document.createElement('p');note.textContent='First Response · '+(t.rescue?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status} · ${r.retries} retries`).join(' | ');card.append(note);}if(t.stage==='minigame'){const button=document.createElement('button');button.textContent='Finish remaining crossings';button.onclick=()=>command('teacher.advanceFinale',{teamId:t.id});card.append(button);const p=document.createElement('p');p.textContent=(t.finale?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status}`).join(' | ');card.append(p);}});
   }
 }
 
@@ -491,15 +492,16 @@ function memberStatus(item, member) {
 function renderStudent() {
   if (!state) return renderLoading();
   const item = currentTeam(), student = state.student;
-  if(finaleHost&&(item.stage!=='minigame'||state.status==='ended')){finaleHost.destroy();finaleHost=null;}
-  if(item.stage==='minigame'&&state.status!=='ended'){
+  if(finaleHost&&(!['rescue','minigame'].includes(item.stage)||finaleHost.run.phase==='early-rescue'&&item.stage!=='rescue'||state.status==='ended')){finaleHost.destroy();finaleHost=null;}
+  if(['rescue','minigame'].includes(item.stage)&&state.status!=='ended'){
+    const action=item.stage==='rescue'?item.rescue:item.finale;
     if(!finaleHost){
       app.innerHTML=shell(`<section class="mission-head"><h1>${escapeHtml(presentationFor(state.cartridge.id)?.title||BRAND.name)}</h1></section><div id="finale-root"></div>`,true);
-      finaleHost=new FinaleHost(document.querySelector('#finale-root'),{run:item.finale.run,route:item.route,deadline:item.finale.deadline,paused:state.paused,send:async(type,extra)=>{
+      finaleHost=new (item.stage==='rescue'?RescueHost:FinaleHost)(document.querySelector('#finale-root'),{run:action.run,route:item.route,deadline:action.deadline,serverNow:action.serverNow,pausedAt:action.pausedAt,paused:state.paused,send:async(type,extra)=>{
         const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
-        const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(currentTeam()?.stage!=='minigame')render();}return incoming;
+        const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(!['rescue','minigame'].includes(currentTeam()?.stage))render();}return incoming;
       }});
-    }else finaleHost.update(item.finale.run,state.paused,item.finale.deadline);
+    }else finaleHost.update(action.run,state.paused,action.deadline,action);
     return;
   }
   if (state.status === "setup" || item.stage === "lobby") return renderWaiting(item, student);

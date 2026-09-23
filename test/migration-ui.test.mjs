@@ -169,7 +169,10 @@ test('Nightfall rendered student flow reaches a personalized ending with no lega
  try{
   await click('[data-action="briefing.ready"]',has('[data-answer-key="1"]'));
   const solve=async()=>{const before=room.state.students[deviceId].itemsCompleted;ui.win.document.querySelector('[data-answer-key="1"]').click();await click('[data-action="math.submit"]',()=>room.state.students[deviceId].itemsCompleted>before);await new Promise(r=>setTimeout(r,10));};
-  await solve();await click('[data-exp-vote="clinic"]',()=>room.state.teams['team-1'].votes[deviceId]==='clinic');await drain(()=>!ui.win.document.querySelector('[data-action="choice.resolve"]').disabled);await click('[data-action="choice.resolve"]',has('[data-answer-key="1"]'));
+  await solve();await click('[data-exp-vote="clinic"]',()=>room.state.teams['team-1'].votes[deviceId]==='clinic');await drain(()=>!ui.win.document.querySelector('[data-action="choice.resolve"]').disabled);await click('[data-action="choice.resolve"]',has('[data-assist]'));
+  ui.win.document.querySelector('[data-assist]').click();await click('[data-start]',has('[data-next]'));
+  for(let i=0;i<4;i++)await click('[data-next]',()=>room.state.teams['team-1'].rescue.runs[deviceId].snapshot.assistedStep===i+1);
+  await click('[data-continue]',has('[data-next]'));await click('[data-next]',has('[data-answer-key="1"]'));
   await solve();await drain(has('[data-answer-key="1"]'));await solve();await drain(has('[data-equipment]'));
   await click('[data-equipment=vest]',()=>Object.hasOwn(room.state.teams['team-1'].marketSelections,deviceId));await drain(()=>!ui.win.document.querySelector('[data-action="market.ready"]').disabled);await click('[data-action="market.ready"]',()=>room.state.teams['team-1'].marketReady[deviceId]);await drain(()=>!ui.win.document.querySelector('[data-action="market.commit"]').disabled);await click('[data-action="market.commit"]',()=>room.state.teams['team-1'].inventory.length===1);await click('[data-action="market.continue"]',has('[data-assist]'));
 

@@ -1,5 +1,5 @@
-import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies} from './world.js?v=0.9.3';
-import {threatFor} from './config.js?v=0.9.3';
+import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies,worldFor} from './world.js?v=0.9.4';
+import {threatFor} from './config.js?v=0.9.4';
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const emit=(s,type,text)=>{s.events.push({type,text});if(text){s.message=text;s.messageAt=s.time;}};
 export function createState(loadout=[],route='clinic',threat=1){
@@ -33,7 +33,7 @@ export function navigationField(s,target,{sound=false}={}){
  if(entries.has(key))return entries.get(key);
  const cells=new Float32Array(3200).fill(Infinity),queue=[],start=ty*80+tx;
  if(start<0||start>=3200)return cells;cells[start]=0;queue.push(start);
- const doors=doorRects().filter(d=>s.doors[d.id]?.closed&&s.doors[d.id].hp>0);
+ const doors=doorRects(s).filter(d=>s.doors[d.id]?.closed&&s.doors[d.id].hp>0);
  for(let i=0;i<queue.length;i++){
   const n=queue[i],x=n%80,y=Math.floor(n/80);
   for(const [a,b]of[[x-1,y],[x+1,y],[x,y-1],[x,y+1]]){
@@ -48,33 +48,34 @@ export function soundDistance(s,source,target){return navigationField(s,source,{
 export function makeNoise(s,x,y,radius,duration,kind='shot'){Object.assign(s,{noise:duration,noiseX:x,noiseY:y,noiseRadius:radius,noiseKind:kind,noiseId:s.noiseId+1});}
 export function move(s,obj,dx,dy){const count=Math.max(1,Math.ceil(Math.hypot(dx,dy)/5));for(let i=0;i<count;i++){if(!solid(s,obj.x+dx/count,obj.y))obj.x+=dx/count;if(!solid(s,obj.x,obj.y+dy/count))obj.y+=dy/count;}}
 export function toggleDoor(s,id){
- const d=doorRects().find(d=>d.id===id),state=s.doors[id];if(!d||!state||state.hp<=0||id==='store')return false;
+ const d=doorRects(s).find(d=>d.id===id),state=s.doors[id];if(!d||!state||state.hp<=0||id==='store')return false;
  if(!state.closed&&[s,...s.enemies.filter(e=>e.hp>0)].some(a=>a.x>d.x-12&&a.x<d.x+d.w+12&&Math.abs(a.y-(d.y+8))<20)){emit(s,'locked','The doorway is occupied. Step clear before closing it.');return false;}
  state.closed=!state.closed;s.doorRevision++;s.doorUses++;emit(s,'power',`${id} door ${state.closed?'closed · buys time, not permanent safety':'open'}.`);return true;
 }
-export function triggerDistraction(s,id){
+export function triggerDistraction(s,id){const {DISTRACTIONS}=worldFor(s);
  const d=DISTRACTIONS.find(d=>d.id===id);if(!d||s.distractions[id])return false;
  s.distractions[id]={started:s.time,ignitesAt:s.time+(d.kind==='barrel'?1.2:0),until:s.time+d.duration+(d.kind==='barrel'?1.2:0)};s.distractionsUsed++;makeNoise(s,d.x,d.y,d.radius,d.duration,'lure');emit(s,'power',d.kind==='barrel'?'FUEL LEAK — ignition in 1.2 seconds! Leave the marked area.':'Car alarm active. All infected are diverted for 12 seconds. Move away quietly.');return true;
 }
-export function breakWindow(s,id){
+export function breakWindow(s,id){const {WINDOWS}=worldFor(s);
  const pane=WINDOWS.find(w=>w.id===id);s.windows||={};if(!pane||s.windows[id])return false;
  s.windows[id]=true;s.doorRevision++;makeNoise(s,pane.x+8,pane.y+40,155,.8,'window');if(pane.room==='store'){for(const e of s.enemies)if(e.storeGuard)e.storeGuardArrived=false;}if(pane.room==='store')s.storeDiversion={x:pane.x+(pane.id.endsWith('west')?-24:40),y:pane.y+40};emit(s,'glass','Window broken. Walk through the opening.'+(pane.room==='store'?' The storefront group is moving to this side.':''));return true;
 }
 export function garageHorde(){return Array.from({length:8},(_,i)=>({id:`garage-h${i}`,x:2132+(i%2)*36,y:1080+Math.floor(i/2)*25,homeX:2152,homeY:1080,kind:'shambler',hp:2,phase:'garage-ingress',timer:0,angle:-Math.PI/2,target:{x:2152,y:980},memory:30,horde:true,ingressed:false,deathTime:0}));}
 export const dispatchHorde=garageHorde; // Legacy import name only; no Dispatch trigger.
 function summonHorde(s){if(s.garageHordeTriggered)return;s.hordeTriggered=true;s.garageHordeTriggered=true;s.enemies.push(...garageHorde());const d=s.doors.garage;if(d?.closed){d.hp=0;d.closed=false;s.doorsBroken++;s.doorRevision++;}s.breachAt=s.time;emit(s,'breach','BATTERY COLLECTED — infected are rushing through the garage doorway! Escape through a window or fight.');}
-export function activeAlarm(s){return DISTRACTIONS.filter(d=>d.kind==='alarm'&&s.distractions[d.id]?.until>s.time).sort((a,b)=>s.distractions[b.id].started-s.distractions[a.id].started)[0]||null;}
-function alarmTarget(s,d){const p=propBounds(PROPS.find(p=>p.id===d.propId));return {x:p.x+p.w/2,y:p.y+p.h+24};}
+export function activeAlarm(s){const {DISTRACTIONS}=worldFor(s);return DISTRACTIONS.filter(d=>d.kind==='alarm'&&s.distractions[d.id]?.until>s.time).sort((a,b)=>s.distractions[b.id].started-s.distractions[a.id].started)[0]||null;}
+function alarmTarget(s,d){const {PROPS}=worldFor(s);const p=propBounds(PROPS.find(p=>p.id===d.propId));return {x:p.x+p.w/2,y:p.y+p.h+24};}
 export function collectShotgun(s){if(s.shotgun)return false;s.shotgun=true;s.shells=8;s.weapon='shotgun';if(!s.picked.includes('shotgun'))s.picked.push('shotgun');emit(s,'pickup','Shotgun collected: eight shells. Change weapon with F or the Weapon button.');return true;}
 // Seven pellets, 30 degrees total, 312 px range, 1 damage/pellet, 0.9 s cadence.
 export const SHOTGUN={pellets:7,spread:Math.PI/6,range:312,damage:1,cadence:.9};
-function follow(s,e,target,dt,speed){
+export function follow(s,e,target,dt,speed){
  if(!lineClear(s,e,target)){const grid=navigationField(s,target),x=Math.floor(e.x/32),y=Math.floor(e.y/32),options=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]].filter(([a,b])=>a>=0&&a<80&&b>=0&&b<40&&Number.isFinite(grid[b*80+a])).sort((a,b)=>grid[a[1]*80+a[0]]-grid[b[1]*80+b[0]]);if(options.length)target={x:options[0][0]*32+16,y:options[0][1]*32+16};}
  e.angle=Math.atan2(target.y-e.y,target.x-e.x);if(dist(e,target)>8)move(s,e,Math.cos(e.angle)*speed*dt,Math.sin(e.angle)*speed*dt);
 }
-export function completeTask(s,id){
+export function completeTask(s,id){const {TASKS}=worldFor(s);
  const t=TASKS.find(t=>t.id===id);if(!t||s.tasks[id]||!(t.requires||[]).every(r=>s.tasks[r]))return false;
  s.tasks[id]=true;s.checkpoint={x:s.x,y:s.y};makeNoise(s,s.x,s.y,180,1,'repair');
+ if(s.scenario==='rescue')return true;
  if(id==='battery')summonHorde(s);
  if(id==='survivor'){s.health=Math.min(3,s.health+1);emit(s,'heal','Survivor rescued: one health restored; terminal ambush reduced.');}
  else if(id==='escape'){s.outcome='success';emit(s,'engine','Bus running. Field record complete. Next: the crew’s final decision.');}
@@ -109,7 +110,7 @@ function advanceEnemy(s,e,active,dt){
   const grid=navigationField(s,target),x=Math.floor(e.x/32),y=Math.floor(e.y/32),options=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]].filter(([a,b])=>a>=0&&a<80&&b>=0&&b<40&&Number.isFinite(grid[b*80+a])).sort((a,b)=>grid[a[1]*80+a[0]]-grid[b[1]*80+b[0]]);
   if(options.length)target={x:options[0][0]*32+16,y:options[0][1]*32+16};
  }
- const door=doorRects().find(d=>d.id!=='store'&&s.doors[d.id]?.closed&&s.doors[d.id].hp>0&&e.target&&(e.y-(d.y+8))*(e.target.y-(d.y+8))<0&&dist(e,{x:Math.max(d.x,Math.min(d.x+d.w,e.x)),y:d.y+8})<30);
+ const door=doorRects(s).find(d=>d.id!=='store'&&s.doors[d.id]?.closed&&s.doors[d.id].hp>0&&e.target&&(e.y-(d.y+8))*(e.target.y-(d.y+8))<0&&dist(e,{x:Math.max(d.x,Math.min(d.x+d.w,e.x)),y:d.y+8})<30);
  if(door&&['chase','investigate'].includes(e.phase)&&e.memory>0){if(e.breachId!==door.id){e.breachId=door.id;e.breachUntil=s.time+tune.doorSeconds+1;}s.doors[door.id].hp=Math.max(0,s.doors[door.id].hp-100/tune.doorSeconds*dt);if(!s.doors[door.id].hp){s.doors[door.id].closed=false;s.doorRevision++;s.doorsBroken++;e.breachId=null;emit(s,'impact','A barricaded door broke. Move!');}return;}
  e.angle=Math.atan2(target.y-e.y,target.x-e.x);const speed=({runner:78,shambler:38,brute:27,crawler:42})[e.kind]*(e.phase==='return'?.6:1);
  let dx=Math.cos(e.angle)*speed*dt,dy=Math.sin(e.angle)*speed*dt;
@@ -117,7 +118,7 @@ function advanceEnemy(s,e,active,dt){
  const before={x:e.x,y:e.y};move(s,e,dx,dy);e.stuck=dist(e,before)<.02?(e.stuck||0)+dt:0;
  if(e.stuck>.5){move(s,e,-Math.sin(e.angle)*24*dt,Math.cos(e.angle)*24*dt);if(e.stuck>2){e.phase='search';e.memory=tune.search;e.stuck=0;}}
 }
-export function step(s,input,dt=1/60){
+export function step(s,input,dt=1/60){const {TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS}=worldFor(s);
  s.events=[];if(s.outcome)return s;dt=Math.max(0,Math.min(dt,1/30));s.time+=dt;s.immune=Math.max(0,s.immune-dt);s.cooldown=Math.max(0,s.cooldown-dt);s.noise=Math.max(0,s.noise-dt);s.animTime=Math.max(0,s.animTime-dt);
  s.angle+=((input.right?1:0)-(input.left?1:0))*2.8*dt;const m=(input.up?1:0)-(input.down?1:0),running=!!input.run&&m&&!input.fire,speed=(running?155:100)*(s.tasks.battery&&!s.tasks.installed?.85:1);
  move(s,s,Math.cos(s.angle)*m*speed*dt,Math.sin(s.angle)*m*speed*dt);if(s.animTime<=0)s.anim=running?'run':m?'walk':'idle';
@@ -140,10 +141,10 @@ export function step(s,input,dt=1/60){
  const e=s.enemies.find(e=>e.hp>0&&dist(e,b)<(e.kind==='brute'?20:14));if(e){e.hp=Math.max(0,e.hp-(b.damage||s.damage));e.phase=e.hp?(activeAlarm(s)?'alarm':'stagger'):'dead';e.timer=e.kind==='brute'?.08:.3;e.deathTime=s.time;b.life=0;emit(s,e.hp?'impact':'enemy-death','');break;}
  }}
  s.bullets=s.bullets.filter(b=>b.life>0).slice(-40);
- for(const p of PICKUPS)if(!s.picked.includes(p.id)&&dist(s,p)<25&&lineClear(s,s,p)&&(p.kind!=='health'||s.health<3)){if(p.kind==='shotgun'){collectShotgun(s);continue;}s.picked.push(p.id);if(p.kind==='ammo'){const n=p.amount+threatFor(s.threat).pickupBonus;s.ammo=Math.min(s.loadout.includes('ammo-pouch')?84:60,s.ammo+n);emit(s,'pickup',`Found ${n} rounds.`);}else{s.health=Math.min(3,s.health+p.amount);s.heals++;emit(s,'heal','First aid restored one health.');}}
+ for(const p of PICKUPS)if(!s.picked.includes(p.id)&&dist(s,p)<25&&lineClear(s,s,p)&&(p.kind!=='health'||s.health<3)){if(p.kind==='shotgun'){collectShotgun(s);continue;}s.picked.push(p.id);if(p.kind==='ammo'){const n=p.amount+(s.scenario==='rescue'?0:threatFor(s.threat).pickupBonus);s.ammo=Math.min(s.loadout.includes('ammo-pouch')?84:60,s.ammo+n);emit(s,'pickup',`Found ${n} rounds.`);}else{s.health=Math.min(3,s.health+p.amount);s.heals++;emit(s,'heal','First aid restored one health.');}}
  if(s.time>(s.nextMoan||0)&&s.enemies.some(e=>e.hp>0&&dist(s,e)<260)){emit(s,'moan','');s.nextMoan=s.time+4+(s.shots%3);}
  for(const p of PROPS)if(p.burning&&s.x>p.x-5&&s.x<p.x+p.w+5&&s.y>p.y-5&&s.y<p.y+p.h+5)damage(s);
- const task=TASKS.filter(t=>!s.tasks[t.id]&&dist(t,s)<68&&lineClear(s,s,t)).sort((a,b)=>dist(a,s)-dist(b,s))[0],door=doorRects().find(d=>d.id!=='store'&&s.doors[d.id].hp>0&&dist(s,{x:Math.max(d.x,Math.min(d.x+d.w,s.x)),y:d.y+8})<48),lure=DISTRACTIONS.find(d=>d.kind==='alarm'&&!s.distractions[d.id]&&dist(d,s)<78),pane=WINDOWS.find(w=>!s.windows?.[w.id]&&dist(s,{x:w.x+8,y:w.y+40})<58);
+ const task=TASKS.filter(t=>!s.tasks[t.id]&&dist(t,s)<68&&lineClear(s,s,t)).sort((a,b)=>dist(a,s)-dist(b,s))[0],door=doorRects(s).find(d=>d.id!=='store'&&s.doors[d.id].hp>0&&dist(s,{x:Math.max(d.x,Math.min(d.x+d.w,s.x)),y:d.y+8})<48),lure=DISTRACTIONS.find(d=>d.kind==='alarm'&&!s.distractions[d.id]&&dist(d,s)<78),pane=WINDOWS.find(w=>!s.windows?.[w.id]&&dist(s,{x:w.x+8,y:w.y+40})<58);
  s.nearby=task?.id||null;s.prompt=task?`Hold Search / Use: ${task.label} · ${Math.min(100,Math.floor(s.interact/task.duration*100))}%`:pane?`Hold Search / Use: break window · ${Math.min(100,Math.floor(s.interact/1.2*100))}%`:door?`Tap Search / Use: ${s.doors[door.id].closed?'open':'close'} ${door.id} door (${Math.ceil(s.doors[door.id].hp)}%)`:lure?`Tap Search / Use: ${lure.label}`:'';
  if(task&&(task.requires||[]).some(id=>!s.tasks[id]))s.prompt='This station is locked until the earlier objectives are complete.';
  if(input.interact&&task){if(!(task.requires||[]).every(id=>s.tasks[id])){if(!s.prevInteract)emit(s,'locked',`Required first: ${task.requires.filter(id=>!s.tasks[id]).join(', ')}.`);s.interact=0;}else{if(s.interactId!==task.id)s.interact=0;s.interactId=task.id;s.interact+=dt;if(s.interact>=task.duration){completeTask(s,task.id);s.interact=0;}}}

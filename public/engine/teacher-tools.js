@@ -1,4 +1,4 @@
-import {CARTRIDGES} from '../cartridges.js?v=0.9.3';
+import {CARTRIDGES} from '../cartridges.js?v=0.9.4';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const practiceTools=CARTRIDGES.flatMap(c=>c.presentation?.practice?[c.presentation.practice]:[]);
 export function developerTools(){return `<details class="panel"><summary>Developer tools · practice only</summary><p>Open a minigame without questions or a live classroom session.</p>${practiceTools.map(t=>`<p><a target="_blank" rel="noopener" href="${t.href}">${t.title}</a></p>`).join('')}</details>`;}

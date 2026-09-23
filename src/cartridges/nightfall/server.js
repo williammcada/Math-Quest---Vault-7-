@@ -1,3 +1,4 @@
+import {openRescue,rescueCommand,rescueProjection} from './rescue-server.js';
 import {readyToLeave} from '../../engine/equipment.js';
 import { cartridgeFor, sceneFor } from '../../../public/cartridges.js';
 import {threatFor} from '../../../public/games/nightfall/config.js';
@@ -41,6 +42,7 @@ export function settleRuns(room, forceTeam, outcome='teacher_advanced') {
 export function expansionCommand(room, student, input) {
   const c=expansionFor(room),t=room.teamFor(student),members=room.members(t.id),type=input.type;
   const respond=()=>{room.bump();return room.snapshot({deviceId:student.id});};
+  if(type.startsWith('rescue.'))return rescueCommand(room,student,input);
   if(type==='supply.start')return startSupply(room,student);
   if(type==='choice.vote'){
     if(!['decision','finale'].includes(t.stage))return fail('Voting is not open.');
@@ -51,7 +53,7 @@ export function expansionCommand(room, student, input) {
     if(!['decision','finale'].includes(t.stage)||!room.isLead(student,t))return fail('Only the current Event Lead can resolve an open choice.');
     const selected=winner(t.stage==='decision'?t.votes:t.finalVotes,members,student.id);
     if(selected===null)return fail('Every crew member must vote first.');
-    if(t.stage==='decision'){t.route=selected;room.openGate(t,1);}
+    if(t.stage==='decision'){t.route=selected;if(room.state.config.engineVersion==='0.9.4')openRescue(room,t);else room.openGate(t,1);}
     else{
       t.finalAction=selected;t.stage='victory';t.completedAt=new Date().toISOString();
     }
@@ -70,7 +72,7 @@ export function expansionCommand(room, student, input) {
     if(t.stage!=='market'||!room.isLead(student,t)||!readyToLeave(room,t))return fail('The Event Lead must confirm all earned equipment before starting.');
     t.stage='minigame';t.leadIndex=(t.leadIndex+1)%members.length;
     t.finaleDeadline=null;t.runs={};t.threat??=1;
-    for(const m of members)t.runs[m.id]={runId:crypto.randomUUID(),configRevision:c.revision,engineVersion:'0.9.2',mapRevision:c.revision,assetRevision:'nightfall-art-2',threat:t.threat,status:'not_started',mode:'action',seq:0,activeElapsedMs:0,loadout:[...t.inventory],route:t.route,createdAt:Date.now()};
+    for(const m of members)t.runs[m.id]={runId:crypto.randomUUID(),configRevision:c.revision,engineVersion:room.state.config.engineVersion,mapRevision:c.revision,assetRevision:'nightfall-art-2',threat:t.threat,status:'not_started',mode:'action',seq:0,activeElapsedMs:0,loadout:[...t.inventory],route:t.route,createdAt:Date.now()};
     room.addEvent('market-committed',`${t.name} equipped ${t.inventory.join('|')}`,t.id,student.id);
   }else if(type.startsWith('minigame.')){
     const r=t.runs?.[student.id];
@@ -135,7 +137,7 @@ export function expansionProjection(room, team, teacher, viewer, base) {
   const c=expansionFor(room),members=room.members(team.id),mine=viewer?.teamId===team.id;
   const tally=values=>Object.values(values).reduce((r,v)=>(r[v]=(r[v]||0)+1,r),{});
   const runs=team.runs||{};
-  return {...base,scene:sceneFor(c,team,room.state.config.gateNames,members),
+  return {...base,rescue:rescueProjection(room,team,teacher,viewer),scene:sceneFor(c,team,room.state.config.gateNames,members),
     ...(teacher?{threat:team.threat??1,threatLocked:!!team.threatLocked}:{}),
     supply:teacher||mine?team.supply||null:null,
     voteTotals:tally(team.votes),finalVoteTotals:tally(team.finalVotes),marketSelectionTotals:tally(team.marketSelections),
