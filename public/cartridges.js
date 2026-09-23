@@ -1,6 +1,7 @@
 // Trusted content registry. Academic selection belongs to question-provider.js.
 export const NIGHTFALL = {
   id: 'nightfall', title: 'Nightfall: Last Bus Out', revision: 'nightfall-city-5',
+  presentation:{emblem:'NF',theme:'nightfall',cover:'./assets/nightfall/cover.png',coverAlt:'The last evacuation bus waits at the terminal',summary:'Answer the calls. Equip the crew. Reach the bus.',stageLabels:{finale:'The Last Call',minigame:'Last Bus Out'},practice:{title:'Nightfall city mission',href:'./practice-nightfall.html'}},
   contract: 'mq.cartridge/1.0', gameId: 'topdown-combat', activeLimitMs: 7200000,
   teamWindowMs: null, budget: 40, resolution:{type:'final_decision',minigamePlacement:'pre_final_decision'},
   gates: ['Dead Frequency', 'A Door Still Open', 'Last Ignition'],
@@ -26,7 +27,7 @@ export const NIGHTFALL = {
   },
   assets: { cover:'./assets/nightfall/cover.png', radio:'./assets/nightfall/radio.png', market:'./assets/nightfall/market.png', ending:'./assets/nightfall/ending.png', ambient:'./assets/nightfall/ambient.mp3', finale:'./assets/nightfall/finale.mp3' }
 };
-export const CARTRIDGES = [{id:'vault-7',title:'Vault 7',revision:'vault7-0.9',gameId:'stealth',resolution:{type:'cipher',minigamePlacement:'post_final_decision'}}, NIGHTFALL];
+export const CARTRIDGES = [{id:'vault-7',title:'Vault 7',revision:'vault7-0.9',gameId:'stealth',resolution:{type:'cipher',minigamePlacement:'post_final_decision'},presentation:{emblem:'VII',theme:'vault',cover:'./assets/vault7/scenes/cover.webp',coverAlt:'Vault 7 under a storm-lit mountain',summary:'Science-fiction infiltration · 3–5 gates · cipher finale',stageLabels:{finale:"Asterion's Fate",extraction:'Solo Extraction'},practice:{title:'Vault 7 extraction',href:'./dev-extraction.html'}}}, NIGHTFALL];
 export const cartridgeFor = id => CARTRIDGES.find(c=>c.id===id);
 export function gateNames(c, count) { return [...c.gates.slice(0,2),...c.inserts.slice(0,count-3),c.gates[2]]; }
 export function sceneFor(c, team, names, crew) {

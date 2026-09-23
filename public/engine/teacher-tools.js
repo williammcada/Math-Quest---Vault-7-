@@ -1,5 +1,6 @@
+import {CARTRIDGES} from '../cartridges.js?v=0.9.3';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const practiceTools=[{title:'Vault 7 extraction',href:'./dev-extraction.html'},{title:'Nightfall city mission',href:'./practice-nightfall.html'}];
+export const practiceTools=CARTRIDGES.flatMap(c=>c.presentation?.practice?[c.presentation.practice]:[]);
 export function developerTools(){return `<details class="panel"><summary>Developer tools · practice only</summary><p>Open a minigame without questions or a live classroom session.</p>${practiceTools.map(t=>`<p><a target="_blank" rel="noopener" href="${t.href}">${t.title}</a></p>`).join('')}</details>`;}
 export function extensionDialog(state,send,onDone){
   const dialog=document.createElement('dialog');dialog.style.cssText='max-width:650px;width:90%;border:1px solid #ccd4df;border-radius:16px;padding:24px;max-height:85vh;overflow:auto';

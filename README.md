@@ -11,22 +11,23 @@ The current cartridges are:
 
 ## Canonical project status
 
-**Current local implementation candidate:** MathQuest v0.9.2 (publication and hosted/device verification pending)
+**Candidate:** MathQuest v0.9.3, branch `release/v0.9.3`. Neutral platform branding and readable alarm-car indicators; address migration prepared but inactive.
 
-**Last canonical release:** MathQuest v0.9.0
+**Starting main source:** merged v0.9.2, `e7da71ba349cada401f0ec2f22deb4223d50d41d`. Source merge is not proof of hosted verification.
 
-**Current hosted release candidate:** MathQuest v0.9.1  
-**v0.9.0 baseline commit:** `601184761b8247999b731a9720261788c79f3c66`  
-**Recovered v0.9.1 implementation checkpoint:** `576b711c10b28b6d8491495c90f37c42bb57c8d9`  
-**Deployment repair commit:** `66a0f59c17309398084bdfb831cc02a9eebeb75d`  
-**Canonical v0.9.1 source directory:** `public/`  
-**Repository:** `williammcada/Math-Quest---Vault-7-`
+**Canonical source:** front end `public/`; compatible session engine v0.9.2 in `src/`. This frontend revision preserves the session protocol and saved-room identity. A v0.9.2 Worker does not need redeploying for the UI/light changes.
 
-The repository retains its historical name for the present deployment. The product is **MathQuest**; Vault Seven is one cartridge within MathQuest.
+**Current repository/address configuration:** `williammcada/Math-Quest---Vault-7-`, GitHub Pages at `https://williammcada.github.io/Math-Quest---Vault-7-/`, relay at `https://vault7mathquest.netlify.app/api/`. The proposed `mathquest` repository and `mcada-mathquest.netlify.app` addresses are not live migration claims.
 
-The standard GitHub Pages URL now redirects to the already-committed `public/` v0.9.1 candidate while preserving room/query parameters and URL fragments. On 18 September 2026, the hosted page identified itself as v0.9.1 and its connection diagnostic passed. The full teacher/student workflow, real-iPad checks, and classroom concurrency gate have not yet been completed, so v0.9.1 remains a hosted release candidate rather than a verified classroom release.
+See the [v0.9.3 candidate report](docs/releases/v0.9.3-candidate.md), [address migration handoff](docs/migrations/v0.9.3-addresses.md), and [approved change specification](docs/change-specs/v0.9.3.md). Historical v0.9.1 deployment observations remain in [Migration Baseline](docs/MIGRATION-BASELINE.md); v0.9.2 evidence remains in its [candidate report](docs/releases/v0.9.2-candidate.md).
 
-The v0.9.2 source includes `public/`, the recovered Worker in `src/`, and matching test/build tooling. See [v0.9.2 candidate report](docs/releases/v0.9.2-candidate.md) for changes, evidence, and outstanding release gates.
+## Test/deploy this candidate at the existing addresses
+
+1. Download the `release/v0.9.3` branch from its repository Code page using **Code → Download ZIP**, then extract it. Keep the full repository layout.
+2. If the existing Worker already reports session engine v0.9.2, no backend update is needed for this revision. Otherwise `Deploy_Backend_Windows.bat` checks and deploys the compatible v0.9.2 engine to the existing Worker. It is a production backend update; finish active rooms first.
+3. Publish the candidate frontend through the repository's Pages process when ready for hosted review. Keep Pages at `main` and `/ (root)` in the established arrangement. The root entry points forward to `public/`. Do not copy `public/` files over the repository root.
+4. Open `public/connection-test.html`, then test fresh teacher/student sessions and both practice pages. Expect front end v0.9.3 and session server v0.9.2. That pairing is intentional.
+5. The existing Netlify proxy requires no upload for these frontend changes. Do not rename the repository or Netlify project until the migration handoff's account checks and timing are resolved.
 
 ## Architecture
 

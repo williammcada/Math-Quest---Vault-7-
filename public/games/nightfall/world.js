@@ -1,4 +1,4 @@
-import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.2';
+import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.3';
 export const REVISION=CONFIG_REVISION;
 export const WORLD={width:2560,height:1280,tile:32,bus:{x:1168,y:1120}};
 export const BUILDINGS=[

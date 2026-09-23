@@ -1,10 +1,24 @@
-import {DISTRACTIONS,propBounds,WINDOWS} from './world.js?v=0.9.2';
+import {DISTRACTIONS,propBounds,WINDOWS} from './world.js?v=0.9.3';
 // Authored vehicles from the same prop atlas as the bus; collision stays unchanged.
-export function drawCar(c,p,s,art){
- const b=propBounds(p),alarm=DISTRACTIONS.find(d=>d.propId===p.id),live=alarm&&s.distractions[alarm.id],active=live&&live.until>s.time;
+export function alarmLight(p,s,reducedMotion=false){
+ const alarm=DISTRACTIONS.find(d=>d.kind==='alarm'&&d.propId===p.id);
+ if(!alarm)return null;
+ const live=s.distractions[alarm.id],state=!live?'ready':live.until>s.time?'active':'spent';
+ const bright=state!=='spent'&&(reducedMotion||(state==='active'?(s.time-live.started)%0.8<0.4:s.time%2<0.75));
+ return {state,bright};
+}
+export function drawCar(c,p,s,art,reducedMotion=false){
+ const b=propBounds(p),light=alarmLight(p,s,reducedMotion);
  c.save();c.translate(b.x+b.w/2,b.y+b.h/2);c.rotate(Math.PI/2);
  const sw=art.width/4,sh=art.height/4;c.drawImage(art,p.art*sw,0,sw,sh,-b.h*.64,-b.w*.58,b.h*1.28,b.w*1.16);c.restore();
- if(alarm){const flash=active&&Math.floor((s.time-live.started)*6)%2===0;c.fillStyle=flash?'#ff6b65':'#591e25';for(const y of [b.y+4,b.y+b.h-7])c.fillRect(b.x+3,y,5,3);if(flash){c.fillStyle='#ff343426';c.beginPath();c.ellipse(b.x+3,b.y+b.h/2,22,b.h*.8,0,0,Math.PI*2);c.fill();}}
+ // Roof beacon sits inside the rotated vehicle silhouette, away from bumper edges.
+ if(light){const x=b.x+b.w*.52,y=b.y+b.h*.5,active=light.state==='active';
+   c.save();
+   if(light.bright){c.fillStyle=active?'#ff343455':'#ff34342b';c.beginPath();c.ellipse(x,y,active?12:8,active?9:6,0,0,Math.PI*2);c.fill();}
+   c.fillStyle='#101722';c.fillRect(x-5,y-4,10,8);
+   c.fillStyle=light.bright?(active?'#ffb0a0':'#ff4f54'):light.state==='spent'?'#422329':'#8c2838';c.fillRect(x-3,y-2,6,4);
+   if(light.bright){c.fillStyle='#ffe4d6';c.fillRect(x-2,y-1,2,1);}c.restore();
+ }
 }
 export function drawFixtures(c,s){
  for(const d of DISTRACTIONS){if(d.kind!=='barrel')continue;

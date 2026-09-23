@@ -1,18 +1,19 @@
-import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.2';
-import { hostingFor, fetchApi } from './hosting.js?v=0.9.2';
-import { CATALOG } from './catalog.js?v=0.9.2';
-import { StealthRuntime } from './stealth.js?v=0.9.2';
-import { SceneAssets } from './vault7-assets.js?v=0.9.2';
-import { TeacherAudio } from './teacher-audio.js?v=0.9.2';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.2';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.2';
-import { FinaleHost } from './finale-host.js?v=0.9.2';
-import { CartridgeAudio } from './cartridge-audio.js?v=0.9.2';
-import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.2';
-import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.2';
-import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.2';
+import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.3';
+import { hostingFor, fetchApi } from './hosting.js?v=0.9.3';
+import { CATALOG } from './catalog.js?v=0.9.3';
+import { StealthRuntime } from './stealth.js?v=0.9.3';
+import { SceneAssets } from './vault7-assets.js?v=0.9.3';
+import { TeacherAudio } from './teacher-audio.js?v=0.9.3';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.3';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.3';
+import { FinaleHost } from './finale-host.js?v=0.9.3';
+import { CartridgeAudio } from './cartridge-audio.js?v=0.9.3';
+import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.3';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.3';
+import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.3';
 forgetExpiredRooms();
-let setupCartridge='vault-7';
+import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.3';
+let setupCartridge='';
 let finaleHost=null;
 const app = document.querySelector("#app");
 const hosting = hostingFor(location.href);
@@ -49,7 +50,7 @@ const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character =>
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
 const endpoint = suffix => hosting.api(`sessions/${encodeURIComponent(session)}/${suffix}`);
 const currentTeam = () => state?.teams?.[0];
-const gateLabel = item => item.stage === "gate" ? `Gate ${item.gateIndex + 1} of ${state.config.gateCount} · ${item.gateName}` : ({ lobby:"Waiting in lobby", briefing:"Mission Briefing", decision:"Route Decision", market:"Resource Market", code:"Secret Message", finale:state.config.cartridgeId==='nightfall'?"The Last Call":"Asterion's Fate", minigame:"Last Bus Out", extraction:"Solo Extraction", victory:"Mission Complete" })[item.stage] || item.stage;
+const gateLabel = item => item.stage === "gate" ? `Gate ${item.gateIndex + 1} of ${state.config.gateCount} · ${item.gateName}` : presentationFor(state?.cartridge?.id)?.stageLabels?.[item.stage] || ({ lobby:"Waiting in lobby", briefing:"Mission Briefing", decision:"Route Decision", market:"Resource Market", code:"Secret Message", finale:"Final Decision", minigame:"Field Mission", extraction:"Extraction", victory:"Mission Complete" })[item.stage] || item.stage;
 
 async function parseResponse(response) {
   const text = await response.text();
@@ -102,7 +103,7 @@ function resetDraft() {
 
 function shell(content, compact = false) {
   return `<div class="wrap ${compact ? "student" : ""}">
-    <header class="top"><div><div class="product">A WILLIAM MCADA PRODUCT</div><div class="brand">MATH<span>QUEST</span></div></div><span class="version">Prototype v0.9.2</span></header>
+    <header class="top"><div><div class="product">${BRAND.credit}</div><div class="brand">${BRAND.name}</div>${session&&!sessionGone&&presentationFor(state?.cartridge?.id)?`<div class="cartridge-context">${escapeHtml(presentationFor(state.cartridge.id).title)}</div>`:''}</div><span class="version">Candidate v${BRAND.version}</span></header>
     ${content}
     <footer>Designed and built by William McAda · © 2026 William McAda</footer>
   </div>`;
@@ -141,12 +142,12 @@ function renderLanding() {
   </article>`).join("");
   const customCards = customModules.map((module, index) => `<article class="module-card selected custom"><div><b>${escapeHtml(module.title)}</b><small>Teacher module · ${module.items.length} questions</small></div><button class="remove-module" data-remove-custom="${index}" aria-label="Remove ${escapeHtml(module.title)}">Remove</button></article>`).join("");
   app.innerHTML = shell(`
-    <section class="hero vault"><div><p class="eyebrow">TEACHER SESSION BUILDER</p><h1>MathQuest</h1><p>Choose the story. Control every question.</p></div><div class="vault-mark">VII</div></section>
+    <section class="hero platform-hero"><div><p class="eyebrow">TEACHER SESSION BUILDER</p><h1>${BRAND.name}</h1><p>Choose the story. Control every question.</p></div>${markMarkup()}</section>
     <section class="panel setup-builder">
       <h2>1 · Game Select</h2>
-      <label>Cartridge<select id="cartridge-select">${CARTRIDGES.map(c=>`<option value="${c.id}" ${setupCartridge===c.id?'selected':''}>${escapeHtml(c.title)}</option>`).join('')}</select></label>
+      <label>Cartridge<select id="cartridge-select"><option value="" ${!setupCartridge?'selected':''}>Choose a cartridge…</option>${CARTRIDGES.map(c=>`<option value="${c.id}" ${setupCartridge===c.id?'selected':''}>${escapeHtml(c.title)}</option>`).join('')}</select></label>
       ${developerTools()}
-      <button class="game-card selected" aria-pressed="true"><span class="game-cover"><img src="./assets/vault7/scenes/cover.webp" width="960" height="540" alt="Vault 7 under a storm-lit mountain"></span><span><b>Vault 7</b><small>Science-fiction infiltration · 3–5 gates · cipher finale</small></span><span class="selected-pill">Selected</span></button>
+      ${cartridgeCard(setupCartridge)}
       <div class="form-row"><label>Team names <small>Separate with commas; 1–6 teams. Empty teams are removed at launch.</small><input id="teams" value="${escapeHtml(setupTeams)}"></label><label>Mission gates<select id="gate-count"><option value="3" ${gateCount === 3 ? "selected" : ""}>3 · Condensed mission</option><option value="4" ${gateCount === 4 ? "selected" : ""}>4 · Standard mission</option><option value="5" ${gateCount === 5 ? "selected" : ""}>5 · Full mission</option></select></label></div>
     </section>
     <section class="panel setup-builder">
@@ -165,11 +166,10 @@ function renderLanding() {
       <div><h2>3 · Automatic Allocation</h2><p><b>${questionTotal} questions per student</b> will be shuffled across ${gateCount} gates. No gate belongs to one skill.</p></div>
       <div class="gate-allocation">${distribution.map((count, index) => `<span><b>Gate ${index + 1}</b>${count} questions</span>`).join("")}</div>
       ${questionTotal > 200 ? `<p class="notice bad">Reduce the session to 200 questions or fewer.</p>` : questionTotal < gateCount ? `<p class="notice bad">Select at least ${gateCount} questions so every gate contains mathematics.</p>` : ""}
-      <button class="primary wide" id="create" ${questionTotal < gateCount || questionTotal > 200 || moduleCount() > 20 ? "disabled" : ""}>Create ${escapeHtml(cartridgeFor(setupCartridge).title)} session</button>
+      <button class="primary wide" id="create" ${!presentationFor(setupCartridge)||questionTotal < gateCount || questionTotal > 200 || moduleCount() > 20 ? "disabled" : ""}>${presentationFor(setupCartridge)?`Create ${escapeHtml(presentationFor(setupCartridge).title)} session`:'Choose a cartridge to continue'}</button>
       <p class="fine">Difficulty labels are provisional until their exact module definitions are finalized. Imported questions use the answer type supplied by the teacher.</p>
     </section>`);
   bindSetup();
-  if(setupCartridge==='nightfall'){const card=document.querySelector('.game-card');card.innerHTML=`<span class="game-cover"><img src="${cartridgeFor('nightfall').assets.cover}" width="960" height="540" alt="The last evacuation bus waits at the terminal"></span><span><b>Nightfall: Last Bus Out</b><small>Answer the calls. Equip the crew. Reach the bus.</small></span><span class="selected-pill">Selected</span>`;}
 }
 
 function bindSetup() {
@@ -292,12 +292,13 @@ async function importModuleFile(event) {
 }
 
 async function createSession() {
+  if(!presentationFor(setupCartridge))return alert('Choose a cartridge before creating a session.');
   captureSetup();
   const button = document.querySelector("#create");
   button.disabled = true;
   try {
     const catalog=await parseResponse(await fetchApi(hosting.api('catalog'),{cache:'no-store'}));
-    if(catalog.version!=='0.9.2'||!catalog.cartridges?.some(c=>c.id===setupCartridge&&c.revision===cartridgeFor(setupCartridge).revision))throw new Error('Update the backend with the v0.9.2 deployment batch, then reload this page. Frontend and backend must match.');
+    if(catalog.version!==BRAND.engineVersion||!catalog.cartridges?.some(c=>c.id===setupCartridge&&c.revision===cartridgeFor(setupCartridge).revision))throw new Error(`This front end requires session engine v${BRAND.engineVersion}. Update the backend with the deployment batch, then reload this page.`);
     const teamNames = setupTeams.split(",").map(value => value.trim()).filter(Boolean);
     const modules = [
       ...PRESETS.filter(record => record.selected).map(record => ({ id: record.id, source: "preset", band: record.band, itemCount: Number(record.itemCount) })),
@@ -442,10 +443,10 @@ function handleTeacherDifficulty(event) {
 }
 
 function renderJoin() {
+  const p=presentationFor(state?.cartridge?.id);
   app.innerHTML = shell(`
-    <section class="hero compact"><div><p class="eyebrow">VAULT 7</p><h1>Join the mission</h1><p>Session ${escapeHtml(session)}</p></div><div class="vault-mark small">VII</div></section>
-    <section class="panel setup"><p>Pilot privacy mode: the server assigns an Agent alias. Do not enter your name. Hosted records and access expire 48 hours after room creation.</p><label>Four-character team code<input id="pin" maxlength="4" inputmode="text" autocapitalize="characters" placeholder="ABCD"></label><button class="primary wide" id="join">Enter Vault 7</button><p class="fine">This device remains locked to its assigned team for this session. Difficulty assignments are private.</p></section>`, true);
-  if(state?.cartridge?.id!=='vault-7'&&state?.cartridge?.title){document.querySelector('.hero .eyebrow').textContent=state.cartridge.title;document.querySelector('#join').textContent='Join the crew';document.querySelector('.vault-mark').textContent='NF';}
+    <section class="hero compact"><div><p class="eyebrow" data-join-title>${escapeHtml(p?.title||BRAND.name)}</p><h1>Join session</h1><p>Session ${escapeHtml(session)}</p></div><span data-join-mark>${markMarkup(p,true)}</span></section>
+    ${noticeHtml()}<section class="panel setup"><p>Pilot privacy mode: the server assigns an Agent alias. Do not enter your name. Hosted records and access expire 48 hours after room creation.</p><label>Four-character team code<input id="pin" maxlength="4" inputmode="text" autocapitalize="characters" placeholder="ABCD"></label><button class="primary wide" id="join" ${!p?'disabled':''}>${p?'Join session':'Connecting to MathQuest…'}</button><p class="fine">This device remains locked to its assigned team for this session. Difficulty assignments are private.</p></section>`, true);
   document.querySelector("#join").onclick = async () => {
     const teamPin = document.querySelector("#pin").value.trim();
     if (!teamPin) return alert("Enter the team code.");
@@ -493,7 +494,7 @@ function renderStudent() {
   if(finaleHost&&(item.stage!=='minigame'||state.status==='ended')){finaleHost.destroy();finaleHost=null;}
   if(item.stage==='minigame'&&state.status!=='ended'){
     if(!finaleHost){
-      app.innerHTML=shell(`<section class="mission-head"><h1>Nightfall: Last Bus Out</h1></section><div id="finale-root"></div>`,true);
+      app.innerHTML=shell(`<section class="mission-head"><h1>${escapeHtml(presentationFor(state.cartridge.id)?.title||BRAND.name)}</h1></section><div id="finale-root"></div>`,true);
       finaleHost=new FinaleHost(document.querySelector('#finale-root'),{run:item.finale.run,route:item.route,deadline:item.finale.deadline,paused:state.paused,send:async(type,extra)=>{
         const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
         const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(currentTeam()?.stage!=='minigame')render();}return incoming;
@@ -522,7 +523,7 @@ function renderStudent() {
 
 function renderWaiting(item, student) {
   app.innerHTML = shell(`
-    <section class="hero compact"><div><p class="eyebrow">TEAM ${escapeHtml(item.name).toUpperCase()}</p><h1>Agent ${escapeHtml(student.alias)}</h1><p>Your device is locked to this crew.</p></div><div class="vault-mark small">VII</div></section>
+    <section class="hero compact"><div><p class="eyebrow">TEAM ${escapeHtml(item.name).toUpperCase()}</p><h1>Agent ${escapeHtml(student.alias)}</h1><p>Your device is locked to this crew.</p></div>${markMarkup(presentationFor(state.cartridge?.id),true)}</section>
     <section class="panel centered"><div class="spinner"></div><h2>Awaiting mission launch</h2><p>The teacher will open the briefing after every agent has joined.</p></section>
     ${memberProgress(item)}${statusBar(item, student)}`, true);
 }
@@ -539,8 +540,9 @@ function renderEnded(item) {
 function sceneBlock(item, compact = false) {
   const scene=item.scene;
   if (!scene) return '';
-  if(scene.image)return `<section class="panel scene-card"><figure class="scene-image"><img src="${escapeHtml(scene.image)}" width="960" height="540" alt="Nightfall evacuation terminal" loading="lazy"></figure><div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${scene.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
-  const asset=SceneAssets[scene.artId] || SceneAssets['scene.cover'];
+  if(scene.image)return `<section class="panel scene-card"><figure class="scene-image"><img src="${escapeHtml(scene.image)}" width="960" height="540" alt="${escapeHtml(scene.imageAlt||scene.title)}" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure><div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${scene.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
+  const asset=state.cartridge?.id==='vault-7'?(SceneAssets[scene.artId] || SceneAssets['scene.cover']):null;
+  if(!asset)return `<section class="panel scene-card"><h2>${escapeHtml(scene.title)}</h2>${(scene.paragraphs||[]).map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</section>`;
   return `<section class="panel scene-card ${compact?'compact-scene':''}">
     <figure class="scene-image" data-art-slot="${escapeHtml(scene.artId)}"><img src="${asset.src}" srcset="${asset.srcset}" sizes="(max-width:600px) calc(100vw - 28px), 672px" alt="${escapeHtml(asset.alt)}" width="960" height="540" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure>
     <div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${(scene.paragraphs||[]).map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
@@ -775,7 +777,9 @@ function drawQr(canvas, textValue) {
 }
 
 function render() {
-  if(sessionGone){app.innerHTML='<section class="panel"><h1>Session closed</h1><p>This hosted session has expired or been deleted. Its access credentials no longer work. Downloaded teacher exports are unaffected.</p><a href="./">Return to MathQuest</a></section>';return;}
+  setBrandContext(document,session&&!sessionGone?state?.cartridge?.id:null);
+  if(sessionGone){app.innerHTML=shell('<section class="panel"><h1>Session closed</h1><p>This hosted session has expired or been deleted. Its access credentials no longer work. Downloaded teacher exports are unaffected.</p><a href="./">Return to MathQuest</a></section>');return;}
+  if(state&&!presentationFor(state.cartridge?.id)){app.innerHTML=shell('<section class="panel"><h1>Cartridge unavailable</h1><p>This session uses an unknown cartridge. Ask your teacher for a current session link.</p><a href="./">Return to MathQuest</a></section>');return;}
   if (!session) return renderLanding();
   if (teacherKey) return renderTeacher();
   if (!state || state.role === "guest") return renderJoin();
@@ -793,8 +797,12 @@ async function poll() {
     const focusedJoinField = document.activeElement?.matches?.("#alias, #pin, [data-student-difficulty], #audio-volume, [data-threat], [data-supply-count], [data-supply-reuse]")||document.querySelector('dialog[open]');
     const changed = !state || incoming.revision !== state.revision || incoming.status !== state.status || incoming.paused !== state.paused;
     state = incoming;
+    // Resolve branding even when the player is typing and the form stays mounted.
+    const context=setBrandContext(document,state.cartridge?.id),joinButton=document.querySelector('#join');
+    if(joinButton){joinButton.disabled=!context;joinButton.textContent=context?'Join session':'Cartridge unavailable';document.querySelector('[data-join-title]').textContent=context?.title||BRAND.name;document.querySelector('[data-join-mark]').innerHTML=markMarkup(context,true);}
     if (extractionRuntime && incoming.teams?.[0]?.stage === "extraction") extractionRuntime.update(incoming.teams[0], incoming.paused);
     if (changed && !focusedJoinField) render();
+    else if(changed&&!context)render();
   } catch (error) {
     extractionRuntime?.connectionLost();
     if (!state) { notice = { correct: false, message: error.message }; render(); }

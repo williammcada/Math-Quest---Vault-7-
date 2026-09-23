@@ -1,0 +1,11 @@
+{
+  "status": "proposed-not-active",
+  "repository": "williammcada/mathquest",
+  "hosting": {
+    "githubPagesUrl": "https://williammcada.github.io/mathquest/",
+    "relayApiBase": "https://mcada-mathquest.netlify.app/api/"
+  },
+  "workerName": "mathquest-prototype",
+  "proxyRule": "/api/*  https://mathquest-prototype.willmcada-apps.workers.dev/api/:splat  200",
+  "allowedOrigins": ["https://williammcada.github.io", "https://vault7mathquest.netlify.app", "https://mcada-mathquest.netlify.app"]
+}

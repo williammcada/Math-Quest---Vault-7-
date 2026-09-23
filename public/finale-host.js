@@ -1,5 +1,5 @@
 // Backward-compatible import; new callers should use the game registry.
-import {GameHost} from './engine/game-host.js?v=0.9.2';
-import {gameFor} from './games/registry.js?v=0.9.2';
-import {NIGHTFALL} from './cartridges.js?v=0.9.2';
+import {GameHost} from './engine/game-host.js?v=0.9.3';
+import {gameFor} from './games/registry.js?v=0.9.3';
+import {NIGHTFALL} from './cartridges.js?v=0.9.3';
 export class FinaleHost extends GameHost{constructor(root,options){super(root,{...options,adapter:gameFor(NIGHTFALL.gameId),items:NIGHTFALL.items});}}

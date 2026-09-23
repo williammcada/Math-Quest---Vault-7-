@@ -1,6 +1,6 @@
-import {createState,completeTask} from './games/nightfall/simulation.js?v=0.9.2';
-import {FinaleHost} from './finale-host.js?v=0.9.2';
-import {NIGHTFALL} from './cartridges.js?v=0.9.2';
+import {createState,completeTask} from './games/nightfall/simulation.js?v=0.9.3';
+import {FinaleHost} from './finale-host.js?v=0.9.3';
+import {NIGHTFALL} from './cartridges.js?v=0.9.3';
 document.querySelector('#items').innerHTML=NIGHTFALL.items.map(i=>`<label><input type="checkbox" value="${i.id}">${i.title}</label>`).join('');
 let runtime;
 document.querySelector('#restart').onclick=()=>{runtime?.destroy();const loadout=[...document.querySelectorAll('#items input:checked')].map(i=>i.value),threat=Number(document.querySelector('#threat').value),snapshot=createState(loadout,document.querySelector('#route').value,threat);const checkpoint=document.querySelector('#checkpoint').value;if(checkpoint)for(const id of checkpoint==='power'?['fuse','power']:['fuse','power','keys','battery','installed'])completeTask(snapshot,id);if(document.querySelector('#survivor').checked)completeTask(snapshot,'survivor');runtime=new FinaleHost(document.querySelector('#game'),{practice:true,run:{runId:`practice-${crypto.randomUUID()}`,configRevision:NIGHTFALL.revision,status:'not_started',loadout,threat,snapshot,seq:0},route:document.querySelector('#route').value});runtime.s.debug=document.querySelector('#debug').checked;};

@@ -1,12 +1,12 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.3 — source, specification and deployment reconciliation  
+**Brief version:** 0.4 — v0.9.3 implementation and address-migration preparation
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** Canonical source and deployment record updated. v0.9.1 is a hosted release candidate, not yet a verified classroom release.  
+**Status:** v0.9.3 frontend candidate; compatible with session engine v0.9.2. Hosted/device verification and address cutover pending.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
-**Current running version:** v0.9.1 at the standard GitHub Pages URL. The root entry point redirects to `public/` while preserving query parameters and URL fragments; checked 18 September 2026.  
+**Current source baseline:** merged v0.9.2 at `e7da71ba349cada401f0ec2f22deb4223d50d41d`; canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this revision. The v0.9.1 observation below is historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Run a two-iPad teacher/student session, exercise the complete hosted workflow including reconnect/privacy/reporting, preserve the evidence, and then run the approximately 23-iPad school gate.
+**Next work:** Review v0.9.3 at existing addresses, complete browser/device checks, then resolve the account inventory and no-active-classroom cutover window in `docs/migrations/v0.9.3-addresses.md`.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -22,7 +22,7 @@
 
 ## 2. This task and boundaries
 
-This reconciliation preserves and exposes the already-committed v0.9.1 candidate, migrates the indispensable v0.9 and v0.9.1 technical specifications into the repository, establishes an exact migration baseline, and repairs the standard Pages entry point. No gameplay feature was rebuilt. The work does not authorize new features or claim that any unrun test passed. Historical reported functionality remains a preservation checklist to reconcile against the exact source, not permission to recreate the program from prose.
+Current revision follows [v0.9.3](change-specs/v0.9.3.md): neutral platform identity and metadata-driven cartridge presentation, ready/active/spent alarm lights, and separately staged address migration. No action balance, mathematics, evidence, equipment, session database or privacy policy changes. Proposed address renaming is a scoped exception to the stabilization prohibition, executable only after the plan's preflight and agreed cutover window. Historical reconciliation and v0.9.2 evidence below remain historical.
 
 ## 3. Standards and adoption
 
