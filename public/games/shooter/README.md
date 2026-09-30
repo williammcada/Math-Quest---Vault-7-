@@ -34,3 +34,7 @@ Player collider: 20×28 standing, 20×16 crouched, 20×10 prone. Separate drawn 
 `SOUND_MANIFEST` in audio.js is the exact event-to-synth mapping, including separate base/spread shots, robot launch/hit/destruction, jump/double-jump/landing/splash, hurt/downed, repair/checkpoint/respawn, hazard warnings/impacts, three boss cues, boss fire/destruction and timeout. `level` and `boss` use separate original sequences and tempos. These synthesized assets need listening/mix review on actual Apple devices.
 
 See `docs/checkpoints/shooter-0.1.0-alpha.1.md` for actual checks and limitations. This candidate is not a classroom-ready or verified release.
+
+## Current check summary
+
+Twenty-five simulation/interface tests passed, followed by actual headless Chromium desktop/phone/tablet emulation and standalone-entry checks. The browser checks cover simultaneous pointer input, rotation, pause/resume, timeout and one resumed audio context. Real Safari/audio listening remain untested. A baseline scripted boss run completed in about 13.72 seconds, shorter than the planned 30–45 seconds; pacing needs a tuning revision before calling this a satisfactory finished level. Full active-threat route completion and a 60-second performance run remain pending.

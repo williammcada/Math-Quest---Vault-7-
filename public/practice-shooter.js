@@ -40,7 +40,7 @@ function help(fromSetup=false){
 }
 function confirmRestart(){
   if(!game){setup();return;}paused=true;resetInput();audio.pause(true);setModal('restart',`<h2 id="overlay-title">Restart practice?</h2><p>This discards the one practice run in this tab, including its position, health, and result. It cannot be recovered. No classroom records are affected.</p><div class="actions"><button id="cancel-restart">Cancel</button><button id="confirm-restart">Discard run and return to setup</button></div>`);
-  $('#cancel-restart').onclick=()=>{if(game.status==='active')pause();else terminal();};$('#confirm-restart').onclick=()=>{game=null;setup();};
+  $('#cancel-restart').onclick=()=>{modal='';if(game.status==='active')pause();else terminal();};$('#confirm-restart').onclick=()=>{game=null;setup();};
 }
 function terminal(){
   paused=true;resetInput();audio.music('silent');const dead=game.status==='downed',success=game.outcome==='success';

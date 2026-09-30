@@ -1,0 +1,53 @@
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+✔ standalone setup, start, pause, restart cancellation and confirmed reset (46.801617ms)
+✔ keyboard input, help/resume, fire toggle, and blur pause work in the packaged HTML (16.073795ms)
+✔ authored inventory and all eight distinct upgrade combinations (53.683258ms)
+✔ fixed-step run speed, agility rate and platform seam crossing (4.096518ms)
+✔ baseline full jump crosses a required 80px gap and lands (1.246233ms)
+✔ early jump release reduces height; hold does not auto-repeat (1.88652ms)
+✔ drop-through affects a thin deck, but never a solid floor (2.771176ms)
+✔ one jump normally, two distinct presses with agility, no third jump (0.60908ms)
+✔ double Down enters stationary prone; cancellation clears gesture history (0.424612ms)
+✔ ladder ascends, descends adjacent connector, and jump disengages (2.157179ms)
+✔ surface swimming has no dive, permits fire, and jumps onto bank (4.732649ms)
+✔ all four repair cache positions collect at low health; full health leaves them (8.725691ms)
+✔ guard gate blocks all three heights until H01 is defeated (1.926811ms)
+✔ checkpoints do not refill on first arrival; jumping cannot skip them (0.257609ms)
+✔ three deaths consume exactly three lives, protection prevents stacked hits (1.621469ms)
+✔ checkpoint retry resets current/later sections and retains earlier state (0.325872ms)
+✔ deadline wins over a downed retry and never overwrites resolved success (0.396399ms)
+✔ fast bullet segment intersects cover before a target behind it (0.374005ms)
+✔ spread hits boss once per volley; single victory remains terminal (0.564403ms)
+✔ boss trigger cannot be skipped with a jump; retry restores boss HP only on new attempt (0.299743ms)
+✔ boss high volley is duckable; low sweep is jumpable without agility (6.987746ms)
+✔ offscreen enemies cannot launch unseen projectiles (13.460122ms)
+✔ eight directional sectors and center dead zone (0.540606ms)
+✔ all emitted effect names have a declared original sound (0.239712ms)
+✔ baseline boss encounter can reach success through ordinary controls and damage rules (34.233512ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 407.754286

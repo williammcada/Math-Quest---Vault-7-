@@ -15,7 +15,7 @@ export function rayRect(x,y,nx,ny,r,pad=0){
   }
   return lo;
 }
-function enemyState(e){return {...copy(e),hp:e.hp,maxHP:e.hp,homeX:e.x,homeY:e.y,state:'idle',clock:.4+(Number(e.id.slice(1))||0)*.11,phase:0,hit:0,volleyHits:[],burst:0,burstClock:0};}
+function enemyState(e){const hp=e.type==='boss'?C.bossHP:e.hp;return {...copy(e),hp,maxHP:hp,homeX:e.x,homeY:e.y,state:'idle',clock:.4+(Number(e.id.slice(1))||0)*.11,phase:0,hit:0,volleyHits:[],burst:0,burstClock:0};}
 export function createGame({upgrades=[],checkpoint='START',timed=true,now=Date.now()}={}){
   if(!Array.isArray(upgrades)||new Set(upgrades).size!==upgrades.length||upgrades.some(x=>!UPGRADES.includes(x)))throw Error('Choose distinct supported upgrades.');
   if(!sectionRank.hasOwnProperty(checkpoint))throw Error('Choose a supported checkpoint.');
@@ -126,7 +126,7 @@ function shoot(g,dt,fire){
   for(const delta of spread?[-C.spreadAngle,0,C.spreadAngle]:[0])bullet(g,{...muzzle,vx:Math.cos(angle+delta)*C.shotSpeed,vy:Math.sin(angle+delta)*C.shotSpeed,side:'player',volley,life:C.shotLife,r:2});
   event(g,spread?'spread-shot':'shot',muzzle.x,muzzle.y);
 }
-function visible(g,e){return e.x>=g.camera.x+4&&e.x+e.w<=g.camera.x+C.width-4&&e.y+e.h>=g.camera.y+4&&e.y<=g.camera.y+C.height-4;}
+function visible(g,e){return e.x>=g.camera.x+4&&e.x+e.w<=g.camera.x+C.width-4&&e.y>=g.camera.y+8&&e.y+e.h<=g.camera.y+C.height-4;}
 function lineClear(g,x,y,tx,ty){return ![...colliders(g),...WORLD.layers.OneWay].some(r=>rayRect(x,y,tx,ty,r)!==null);}
 function robotShot(g,e){
   const cfg=ENEMY[e.type],dir=e.dir||-1,origin={x:e.x+e.w/2+dir*(e.w/2+2),y:e.y+e.h-22};

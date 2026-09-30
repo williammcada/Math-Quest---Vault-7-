@@ -1,0 +1,15 @@
+{
+  "build": "shooter-0.1.0-alpha.1",
+  "sha256": {
+    "public/games/shooter/audio.js": "5a113fb3bb80d97116644989e7c40d78143b83fa65a80495fecb9449a12319ac",
+    "public/games/shooter/config.js": "ba08ca7dffdf65ddcda9ac79b4f4ba212bce7e6a49f02181e0409ac5b8fb23b6",
+    "public/games/shooter/input.js": "aca2197b6ee69a50c296d223296a72e1e1f2c03331657dffcd633fb881913226",
+    "public/games/shooter/renderer.js": "e4f35b33d9dedefe6a60123f47a1a12b6fc2275b032679edf1dd97ed91aeac42",
+    "public/games/shooter/simulation.js": "bd3c761721d429f53f296fcfb7233d278f7a64f03a8e77ac15e5cba0647a2660",
+    "public/games/shooter/world.js": "401e689af0d0070977f9548bd42a0edacfa55103197c813df15dc42b08e17d02",
+    "public/practice-shooter-standalone.html": "a339377fb7b954be71f7b1cf055e5e46c3cc2e73c6caee6f0f01ba7fbdd29fbf",
+    "public/practice-shooter.css": "807e45e3e4e615f3b11f13cad81bf8ffb4f10fe5cb78c96cae322c9705aeae97",
+    "public/practice-shooter.html": "5117ae8097ec010185ee78a5c50befdb7e6ba449134b681031d6e9529ae11b1d",
+    "public/practice-shooter.js": "0dbe76a2e002cb8b58b15ae1804ff10d26e687d3ea748296a3e7e0d39fcc6e9a"
+  }
+}

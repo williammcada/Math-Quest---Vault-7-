@@ -3,7 +3,7 @@
 **Design and technical specification v0.1 · 30 September 2026 (Asia/Shanghai)**  
 **A WILLIAM MCADA PRODUCT**  
 **Working identifier:** `industrial-shooter`; no narrative title selected.  
-**Stage:** DESIGN → CHANGE SPEC. No game implementation, runtime verification, release or deployment is represented by this document.  
+**Stage:** Standalone practice IMPLEMENT → CHECKPOINT → VERIFY. Sections 1–16 preserve the design/blockout record; §17 and the linked check record describe the current practice candidate. No verified release or deployment is claimed.  
 **Scope:** One complete, polished individual-player level for later MathQuest cartridge integration. This is not the aerial shooter or the multiplayer brawler being discussed separately.
 
 ## 1. Source, authority and decision status
