@@ -1,0 +1,60 @@
+{
+  "status": "static authoring checks only",
+  "checks": {
+    "unique_object_ids": true,
+    "ordinary_roster_24": true,
+    "four_caches": true,
+    "three_checkpoint_spawns": true,
+    "guard_gate_blocks_all_routes": true,
+    "spawns_clear_and_supported": true,
+    "grounded_enemy_support": true,
+    "all_objects_in_bounds": true,
+    "tile_payloads_decode": true,
+    "upper_baseline_reachable": true,
+    "middle_baseline_reachable": true,
+    "water_baseline_reachable": true,
+    "cache_R01_reachable": true,
+    "cache_R02_reachable": true,
+    "cache_R03_reachable": true,
+    "cache_R04_reachable": true
+  },
+  "route_results": {
+    "upper": {
+      "passed": true,
+      "failed_segments": []
+    },
+    "middle": {
+      "passed": true,
+      "failed_segments": []
+    },
+    "water": {
+      "passed": true,
+      "failed_segments": []
+    }
+  },
+  "navigation_nodes": 892,
+  "navigation_edges": 4799,
+  "enemy_counts": {
+    "patrol": 8,
+    "turret": 5,
+    "drone": 4,
+    "skimmer": 2,
+    "lobber": 2,
+    "heavy": 3,
+    "boss": 1
+  },
+  "not_run": [
+    "Tiled application import (not installed)",
+    "production physics",
+    "combat and dynamic hazard avoidance",
+    "2\u20133-minute playthrough",
+    "real iPhone/iPad controls and audio"
+  ],
+  "assumptions": [
+    "guard gate opened after defeating H01",
+    "hazards inactive for geometry checks",
+    "one-way platforms traversable on engaged ladder",
+    "pending crawl roof and backtracking door disabled",
+    "baseline 180 px/s, 380 px/s jump, gravity 1000; sampled 10 ms arcs"
+  ]
+}

@@ -290,9 +290,9 @@ Follow DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFI
 
 ## 14. Remaining review and next work
 
-1. Review this proposed level blueprint, inventory and control precedence; resolve prone traversal versus stationary prone before authoring the collision map.
+1. Review the authored [level blockout](../level-design/shooter-v0.1/README.md), inventory and control precedence. The optional crawl roof is disabled until prone traversal is decided; all required routes are independent of it.
 2. Confirm the proposed no-heal-on-first-checkpoint rule, checkpoint backtracking boundary, all-resolved early closure and predictable second boss phase. They are explicit proposals, not hidden requirements.
-3. Review a dimensioned level map and iPhone control layout against this specification. Art approval alone does not approve geometry or button placement.
+3. Review the authored dimensioned level map and then the iPhone control layout against this specification. Art approval alone does not approve geometry or button placement.
 4. Finalize production sprite/audio manifest, readable animations, numerical balance and performance budgets. Tune values through a versioned specification amendment, not scattered chat assumptions.
 5. Implement only after the remaining design review; checkpoint, verify and publish a standalone practice candidate for owner device review. No extra levels are needed.
 6. Later select narrative/title, route-choice consequences, exact academic gate placement and assisted route. Approve live integration separately, retaining existing services and reports.
@@ -302,3 +302,11 @@ The accepted scope is a single satisfactory level. No campaign, multiplayer comb
 ## 15. Revision record
 
 v0.1 records the owner's accepted design, revised boss artwork, extra-question upgrade rule and music/effects approval, then supplies a concrete proposed level and technical contract for review. The planning branch preserves this specification, visual reference and project-brief addendum. No application code is changed and no game tests are claimed.
+
+## 16. Level authoring checkpoint — 30 September 2026
+
+The owner requested building the level in advance using the relevant technique. A deterministic layered tilemap blockout is now preserved under `docs/level-design/shooter-v0.1/`, with a standard Tiled TMJ, adjacent editor tiles, semantic geometry export, review PNG, baseline route traces and static-check report. `tools/author_shooter_level.py` is the current authoring source. No application engine or live integration has been added.
+
+Exact tile-aligned sector boundaries refine the draft to 0/800/2208/2704/4208/5408/6400; inventory remains 24 ordinary robots plus boss, four repairs and two earned checkpoints plus START. The map defines platforms, ladders, water, six hazard zones, the mandatory guard gate and a full-height boss trigger. R02 uses an open alcove while the crawl roof is disabled; the proposed backtracking door is also disabled pending review. These choices preserve all required routes while avoiding an unapproved crawling requirement.
+
+Sixteen static data/geometry checks passed, including baseline upper/middle/water route chains, all four pickups, valid checkpoint spawns, exact inventory and a closed guard gate blocking all routes. These checks assume inactive hazards and the specified baseline movement. They do not establish combat fairness, production physics, completion time, mobile support or a verified release. Actual import in the Tiled application was not run because Tiled is not installed. The delivered JSON uses the documented map format.

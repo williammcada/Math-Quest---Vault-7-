@@ -1,0 +1,3162 @@
+{
+  "revision": "industrial-level-blockout-0.1",
+  "world": {
+    "width": 6400,
+    "height": 640,
+    "tile": 16
+  },
+  "status": "authored blockout; not integrated gameplay",
+  "sectors": [
+    {
+      "id": "A",
+      "title": "Loading apron",
+      "x0": 0,
+      "x1": 800
+    },
+    {
+      "id": "B",
+      "title": "Coolant works",
+      "x0": 800,
+      "x1": 2208
+    },
+    {
+      "id": "C",
+      "title": "Transfer lock",
+      "x0": 2208,
+      "x1": 2704
+    },
+    {
+      "id": "D",
+      "title": "Foundry crossing",
+      "x0": 2704,
+      "x1": 4208
+    },
+    {
+      "id": "E",
+      "title": "Security approach",
+      "x0": 4208,
+      "x1": 5408
+    },
+    {
+      "id": "F",
+      "title": "Security chamber",
+      "x0": 5408,
+      "x1": 6400
+    }
+  ],
+  "layers": {
+    "Solids": [
+      {
+        "id": 1,
+        "name": "A-start",
+        "type": "solid",
+        "x": 0,
+        "y": 336,
+        "width": 256,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "name": "C-floor",
+        "type": "solid",
+        "x": 2208,
+        "y": 336,
+        "width": 496,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "name": "BOSS-floor",
+        "type": "solid",
+        "x": 5376,
+        "y": 336,
+        "width": 1024,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "name": "MID-entry-lintel",
+        "type": "solid",
+        "x": 2208,
+        "y": 0,
+        "width": 16,
+        "height": 272,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "name": "MID-entry-base",
+        "type": "solid",
+        "x": 2208,
+        "y": 352,
+        "width": 16,
+        "height": 288,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "name": "BOSS-entry-lintel",
+        "type": "solid",
+        "x": 5376,
+        "y": 0,
+        "width": 16,
+        "height": 272,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "name": "BOSS-entry-base",
+        "type": "solid",
+        "x": 5376,
+        "y": 352,
+        "width": 16,
+        "height": 288,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "name": "C-cover",
+        "type": "solid",
+        "x": 2304,
+        "y": 304,
+        "width": 32,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "OneWay": [
+      {
+        "id": 2,
+        "name": "A-middle",
+        "type": "one_way",
+        "x": 256,
+        "y": 336,
+        "width": 544,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "A-upper-1",
+        "type": "one_way",
+        "x": 256,
+        "y": 192,
+        "width": 320,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "A-upper-2",
+        "type": "one_way",
+        "x": 640,
+        "y": 192,
+        "width": 160,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "name": "B-upper-1",
+        "type": "one_way",
+        "x": 800,
+        "y": 192,
+        "width": 256,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "B-upper-2",
+        "type": "one_way",
+        "x": 1120,
+        "y": 192,
+        "width": 336,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "name": "B-upper-3",
+        "type": "one_way",
+        "x": 1536,
+        "y": 192,
+        "width": 304,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "B-upper-4",
+        "type": "one_way",
+        "x": 1904,
+        "y": 192,
+        "width": 304,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "name": "B-middle-1",
+        "type": "one_way",
+        "x": 800,
+        "y": 336,
+        "width": 352,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "name": "B-middle-2",
+        "type": "one_way",
+        "x": 1216,
+        "y": 336,
+        "width": 384,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "name": "B-middle-3",
+        "type": "one_way",
+        "x": 1680,
+        "y": 336,
+        "width": 528,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "name": "B-bank-west",
+        "type": "one_way",
+        "x": 576,
+        "y": 496,
+        "width": 224,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "name": "B-bank-east",
+        "type": "one_way",
+        "x": 2176,
+        "y": 496,
+        "width": 32,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "name": "B-cache-alcove",
+        "type": "one_way",
+        "x": 1760,
+        "y": 448,
+        "width": 144,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "name": "D-upper-1",
+        "type": "one_way",
+        "x": 2704,
+        "y": 192,
+        "width": 336,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "name": "D-upper-2",
+        "type": "one_way",
+        "x": 3104,
+        "y": 192,
+        "width": 304,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "name": "D-upper-3",
+        "type": "one_way",
+        "x": 3488,
+        "y": 192,
+        "width": 320,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "name": "D-upper-4",
+        "type": "one_way",
+        "x": 3872,
+        "y": 192,
+        "width": 336,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "name": "D-middle-1",
+        "type": "one_way",
+        "x": 2704,
+        "y": 336,
+        "width": 208,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "name": "D-middle-2",
+        "type": "one_way",
+        "x": 2976,
+        "y": 336,
+        "width": 352,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "name": "D-middle-3",
+        "type": "one_way",
+        "x": 3392,
+        "y": 336,
+        "width": 320,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "name": "D-middle-4",
+        "type": "one_way",
+        "x": 3792,
+        "y": 336,
+        "width": 416,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "name": "D-bank-west",
+        "type": "one_way",
+        "x": 2704,
+        "y": 496,
+        "width": 32,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "name": "D-bank-east",
+        "type": "one_way",
+        "x": 4176,
+        "y": 496,
+        "width": 64,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "name": "D-cache-island",
+        "type": "one_way",
+        "x": 3664,
+        "y": 448,
+        "width": 128,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "name": "E-upper-1",
+        "type": "one_way",
+        "x": 4208,
+        "y": 192,
+        "width": 256,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "name": "E-upper-2",
+        "type": "one_way",
+        "x": 4528,
+        "y": 224,
+        "width": 224,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "name": "E-upper-3",
+        "type": "one_way",
+        "x": 4816,
+        "y": 176,
+        "width": 272,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "name": "E-upper-4",
+        "type": "one_way",
+        "x": 5152,
+        "y": 224,
+        "width": 224,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "name": "E-middle",
+        "type": "one_way",
+        "x": 4208,
+        "y": 336,
+        "width": 1168,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "name": "E-bank-east",
+        "type": "one_way",
+        "x": 5312,
+        "y": 496,
+        "width": 64,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "name": "BOSS-low-platform",
+        "type": "one_way",
+        "x": 5680,
+        "y": 288,
+        "width": 96,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "Ladders": [
+      {
+        "id": 40,
+        "name": "LA1",
+        "type": "ladder",
+        "x": 264,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "name": "LA2",
+        "type": "ladder",
+        "x": 744,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "name": "LA3",
+        "type": "ladder",
+        "x": 760,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "name": "LB1",
+        "type": "ladder",
+        "x": 1240,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "name": "LB2",
+        "type": "ladder",
+        "x": 1256,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "name": "LB3",
+        "type": "ladder",
+        "x": 1784,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "name": "LB4",
+        "type": "ladder",
+        "x": 1768,
+        "y": 448,
+        "width": 16,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "name": "LB5",
+        "type": "ladder",
+        "x": 2136,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "name": "LB6",
+        "type": "ladder",
+        "x": 2152,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "name": "LD1",
+        "type": "ladder",
+        "x": 2792,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "name": "LD2",
+        "type": "ladder",
+        "x": 2808,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "name": "LD3",
+        "type": "ladder",
+        "x": 3144,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "name": "LD4",
+        "type": "ladder",
+        "x": 3160,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "name": "LD5",
+        "type": "ladder",
+        "x": 3704,
+        "y": 448,
+        "width": 16,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "name": "LD6",
+        "type": "ladder",
+        "x": 3928,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "name": "LD7",
+        "type": "ladder",
+        "x": 3944,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "name": "LE1",
+        "type": "ladder",
+        "x": 4312,
+        "y": 192,
+        "width": 16,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "name": "LE2",
+        "type": "ladder",
+        "x": 4328,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 58,
+        "name": "LE3",
+        "type": "ladder",
+        "x": 4888,
+        "y": 176,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 59,
+        "name": "LE4",
+        "type": "ladder",
+        "x": 5320,
+        "y": 336,
+        "width": 16,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 60,
+        "name": "LE5",
+        "type": "ladder",
+        "x": 5336,
+        "y": 224,
+        "width": 16,
+        "height": 112,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "climb_ignores_one_way",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "Water": [
+      {
+        "id": 61,
+        "name": "WB",
+        "type": "surface_water",
+        "x": 800,
+        "y": 496,
+        "width": 1376,
+        "height": 112,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "surface_y",
+            "type": "int",
+            "value": 496
+          },
+          {
+            "name": "diving",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 62,
+        "name": "WD",
+        "type": "surface_water",
+        "x": 2736,
+        "y": 496,
+        "width": 1440,
+        "height": 112,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "surface_y",
+            "type": "int",
+            "value": 496
+          },
+          {
+            "name": "diving",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": 63,
+        "name": "WE",
+        "type": "surface_water",
+        "x": 4240,
+        "y": 496,
+        "width": 1072,
+        "height": 112,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "surface_y",
+            "type": "int",
+            "value": 496
+          },
+          {
+            "name": "diving",
+            "type": "bool",
+            "value": false
+          }
+        ]
+      }
+    ],
+    "Enemies": [
+      {
+        "id": 64,
+        "name": "P01",
+        "type": "patrol",
+        "x": 404.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "A"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 416
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 65,
+        "name": "P02",
+        "type": "patrol",
+        "x": 676.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "A"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 688
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 66,
+        "name": "T01",
+        "type": "turret",
+        "x": 644.0,
+        "y": 104,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 4
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "A"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 656
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 128
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 67,
+        "name": "D01",
+        "type": "drone",
+        "x": 676.0,
+        "y": 88,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "A"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 688
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 112
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 68,
+        "name": "P03",
+        "type": "patrol",
+        "x": 1396.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "B"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 1408
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 69,
+        "name": "T02",
+        "type": "turret",
+        "x": 1524.0,
+        "y": 248,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 4
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "B"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 1536
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 272
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 70,
+        "name": "D02",
+        "type": "drone",
+        "x": 1764.0,
+        "y": 88,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "B"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 1776
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 112
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 71,
+        "name": "S01",
+        "type": "skimmer",
+        "x": 1632.0,
+        "y": 476,
+        "width": 32,
+        "height": 20,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 3
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "B"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 1648
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 496
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 72,
+        "name": "L01",
+        "type": "lobber",
+        "x": 1972.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 3
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "B"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 1984
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 73,
+        "name": "H01",
+        "type": "heavy",
+        "x": 2412.0,
+        "y": 288,
+        "width": 40,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 8
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "C"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 2432
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": true
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 74,
+        "name": "P04",
+        "type": "patrol",
+        "x": 2852.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 2864
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 75,
+        "name": "P05",
+        "type": "patrol",
+        "x": 3220.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 3232
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 76,
+        "name": "P06",
+        "type": "patrol",
+        "x": 3988.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 4000
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 77,
+        "name": "T03",
+        "type": "turret",
+        "x": 3236.0,
+        "y": 104,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 4
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 3248
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 128
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 78,
+        "name": "T04",
+        "type": "turret",
+        "x": 3588.0,
+        "y": 248,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 4
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 3600
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 272
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 79,
+        "name": "D03",
+        "type": "drone",
+        "x": 3636.0,
+        "y": 88,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 3648
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 112
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 80,
+        "name": "L02",
+        "type": "lobber",
+        "x": 4100.0,
+        "y": 160,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 3
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 4112
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 192
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 81,
+        "name": "S02",
+        "type": "skimmer",
+        "x": 3744.0,
+        "y": 476,
+        "width": 32,
+        "height": 20,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 3
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "D"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 3760
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 496
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 82,
+        "name": "P07",
+        "type": "patrol",
+        "x": 4340.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 4352
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 83,
+        "name": "P08",
+        "type": "patrol",
+        "x": 5124.0,
+        "y": 304,
+        "width": 24,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 5136
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 84,
+        "name": "T05",
+        "type": "turret",
+        "x": 4996.0,
+        "y": 88,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 4
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 5008
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 112
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 85,
+        "name": "D04",
+        "type": "drone",
+        "x": 4596.0,
+        "y": 120,
+        "width": 24,
+        "height": 24,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 2
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 4608
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 144
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 0
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 86,
+        "name": "H02",
+        "type": "heavy",
+        "x": 4700.0,
+        "y": 288,
+        "width": 40,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 8
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 4720
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 87,
+        "name": "H03",
+        "type": "heavy",
+        "x": 4988.0,
+        "y": 288,
+        "width": 40,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 8
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "E"
+          },
+          {
+            "name": "feet_x",
+            "type": "int",
+            "value": 5008
+          },
+          {
+            "name": "feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "patrol_radius",
+            "type": "int",
+            "value": 32
+          },
+          {
+            "name": "requires_visible_warning",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 88,
+        "name": "BOSS01",
+        "type": "boss",
+        "x": 6112,
+        "y": 176,
+        "width": 128,
+        "height": 160,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "hp",
+            "type": "int",
+            "value": 80
+          },
+          {
+            "name": "sector",
+            "type": "string",
+            "value": "F"
+          },
+          {
+            "name": "mandatory",
+            "type": "bool",
+            "value": true
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "BOSS"
+          },
+          {
+            "name": "palette",
+            "type": "string",
+            "value": "violet-silver-lime"
+          },
+          {
+            "name": "attack_sequence",
+            "type": "string",
+            "value": "high_volley,floor_sweep,overhead_strike"
+          }
+        ]
+      }
+    ],
+    "Hazards": [
+      {
+        "id": 89,
+        "name": "HZ01",
+        "type": "water_pulse",
+        "x": 1376,
+        "y": 480,
+        "width": 64,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 1.0
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      },
+      {
+        "id": 90,
+        "name": "HZ02",
+        "type": "falling_load",
+        "x": 3072,
+        "y": 48,
+        "width": 64,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 0.9
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      },
+      {
+        "id": 91,
+        "name": "HZ03",
+        "type": "falling_load",
+        "x": 3728,
+        "y": 48,
+        "width": 64,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 0.9
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      },
+      {
+        "id": 92,
+        "name": "HZ04",
+        "type": "press",
+        "x": 3520,
+        "y": 240,
+        "width": 64,
+        "height": 96,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 0.9
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      },
+      {
+        "id": 93,
+        "name": "HZ05",
+        "type": "water_pulse",
+        "x": 3488,
+        "y": 480,
+        "width": 80,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 1.0
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      },
+      {
+        "id": 94,
+        "name": "HZ06",
+        "type": "falling_load",
+        "x": 4896,
+        "y": 32,
+        "width": 64,
+        "height": 144,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "warning_seconds",
+            "type": "float",
+            "value": 0.9
+          },
+          {
+            "name": "damage",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "period_seconds",
+            "type": "float",
+            "value": 5.0
+          },
+          {
+            "name": "active_seconds",
+            "type": "float",
+            "value": 0.65
+          }
+        ]
+      }
+    ],
+    "Pickups": [
+      {
+        "id": 95,
+        "name": "R01",
+        "type": "repair",
+        "x": 504,
+        "y": 176,
+        "width": 16,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "heal",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "upper ledge"
+          }
+        ]
+      },
+      {
+        "id": 96,
+        "name": "R02",
+        "type": "repair",
+        "x": 1864,
+        "y": 432,
+        "width": 16,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "heal",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "START"
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "open side alcove; crawl roof not active"
+          }
+        ]
+      },
+      {
+        "id": 97,
+        "name": "R03",
+        "type": "repair",
+        "x": 3752,
+        "y": 432,
+        "width": 16,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "heal",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "water island detour"
+          }
+        ]
+      },
+      {
+        "id": 98,
+        "name": "R04",
+        "type": "repair",
+        "x": 5032,
+        "y": 160,
+        "width": 16,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "heal",
+            "type": "int",
+            "value": 1
+          },
+          {
+            "name": "reset_section",
+            "type": "string",
+            "value": "MID"
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "upper ledge beyond falling-load zone"
+          }
+        ]
+      }
+    ],
+    "Checkpoints": [
+      {
+        "id": 99,
+        "name": "START",
+        "type": "checkpoint",
+        "x": 80,
+        "y": 296,
+        "width": 32,
+        "height": 40,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "spawn_x",
+            "type": "int",
+            "value": 96
+          },
+          {
+            "name": "spawn_feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "requires_enemy_defeated",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "activation",
+            "type": "string",
+            "value": "cross_x"
+          },
+          {
+            "name": "heal_on_first_entry",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "first_entry_heal_policy",
+            "type": "string",
+            "value": "proposed"
+          }
+        ]
+      },
+      {
+        "id": 100,
+        "name": "MID",
+        "type": "checkpoint",
+        "x": 2624,
+        "y": 296,
+        "width": 32,
+        "height": 40,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "spawn_x",
+            "type": "int",
+            "value": 2640
+          },
+          {
+            "name": "spawn_feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "requires_enemy_defeated",
+            "type": "string",
+            "value": "H01"
+          },
+          {
+            "name": "activation",
+            "type": "string",
+            "value": "cross_x"
+          },
+          {
+            "name": "heal_on_first_entry",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "first_entry_heal_policy",
+            "type": "string",
+            "value": "proposed"
+          }
+        ]
+      },
+      {
+        "id": 101,
+        "name": "BOSS",
+        "type": "checkpoint",
+        "x": 5440,
+        "y": 296,
+        "width": 32,
+        "height": 40,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "spawn_x",
+            "type": "int",
+            "value": 5456
+          },
+          {
+            "name": "spawn_feet_y",
+            "type": "int",
+            "value": 336
+          },
+          {
+            "name": "requires_enemy_defeated",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "activation",
+            "type": "string",
+            "value": "cross_x"
+          },
+          {
+            "name": "heal_on_first_entry",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "first_entry_heal_policy",
+            "type": "string",
+            "value": "proposed"
+          }
+        ]
+      }
+    ],
+    "Gates": [
+      {
+        "id": 102,
+        "name": "MID-GUARD-GATE",
+        "type": "enemy_gate",
+        "x": 2528,
+        "y": 0,
+        "width": 16,
+        "height": 640,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "opens_when",
+            "type": "string",
+            "value": "H01 defeated"
+          },
+          {
+            "name": "blocks_all_routes",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 103,
+        "name": "BOSS-ARENA-TRIGGER",
+        "type": "boss_trigger",
+        "x": 5552,
+        "y": 0,
+        "width": 32,
+        "height": 640,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "starts",
+            "type": "string",
+            "value": "BOSS01"
+          },
+          {
+            "name": "locks_entrance_after_crossing",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "Annotations": [
+      {
+        "id": 106,
+        "name": "PRONE-USE",
+        "type": "stance_encounter",
+        "x": 1952,
+        "y": 288,
+        "width": 80,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "note",
+            "type": "string",
+            "value": "L01 attack should allow a stationary prone response; does not require crawling."
+          }
+        ]
+      },
+      {
+        "id": 107,
+        "name": "HEAVY-BYPASS",
+        "type": "route_choice",
+        "x": 4624,
+        "y": 272,
+        "width": 432,
+        "height": 64,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "note",
+            "type": "string",
+            "value": "H02/H03 central pressure; upper platforms and water are safe bypass routes."
+          }
+        ]
+      },
+      {
+        "id": 108,
+        "name": "DROP-PRACTICE",
+        "type": "drop_through",
+        "x": 352,
+        "y": 160,
+        "width": 64,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "note",
+            "type": "string",
+            "value": "Drop from thin upper deck onto middle deck."
+          }
+        ]
+      }
+    ],
+    "PendingDesign": [
+      {
+        "id": 104,
+        "name": "CRAWL-ROOF",
+        "type": "disabled_proposal",
+        "x": 1808,
+        "y": 416,
+        "width": 96,
+        "height": 16,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "enabled",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "Would leave 16 px prone clearance. Owner has not approved crawling; open alcove works without it."
+          }
+        ]
+      },
+      {
+        "id": 105,
+        "name": "MID-BACKTRACK-DOOR",
+        "type": "disabled_proposal",
+        "x": 2592,
+        "y": 0,
+        "width": 16,
+        "height": 640,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "enabled",
+            "type": "bool",
+            "value": false
+          },
+          {
+            "name": "note",
+            "type": "string",
+            "value": "Proposed checkpoint anti-backtracking policy remains for review."
+          }
+        ]
+      }
+    ]
+  },
+  "physics": {
+    "body_width": 20,
+    "body_height": 28,
+    "run_speed": 180,
+    "jump_velocity": -380,
+    "gravity": 1000
+  },
+  "pending": [
+    "crawl roof disabled",
+    "checkpoint backtrack door disabled",
+    "dynamic hazard and combat fairness untested"
+  ]
+}

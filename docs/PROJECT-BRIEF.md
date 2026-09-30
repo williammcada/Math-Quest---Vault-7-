@@ -1,6 +1,6 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.6 — v0.9.4 baseline plus side-scrolling shooter design
+**Brief version:** 0.7 — v0.9.4 baseline plus authored shooter level blockout
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
@@ -116,3 +116,9 @@ Specification v0.1 supplies proposed detailed geometry, roster placement, boss c
 Handbook baseline rechecked: `00cbde605ab08203b6b5fd2374d225155608fc29`; AI-START-HERE, UNIVERSAL-RULES (including approved U-09), CONDITIONAL-STANDARDS S-02/S-03/S-04 and RELEASE-CHECKLIST consulted. No handbook modification. Existing GitHub Pages frontend, relay and Worker architecture remain. Standalone hosted practice on landscape iPad/iPhone Safari and Windows is required from the first playable candidate; actual supported device models, hosted runtime and gameplay checks remain unverified.
 
 Before implementation, re-read the then-current source and this design, complete the remaining review, preserve a source checkpoint, and verify the exact candidate. Live integration additionally requires agreed narrative stage/transition and assisted play. Do not overwrite v0.9.4 source or historical specifications, and do not infer classroom readiness from the visual concept.
+
+## 12. Shooter level authored ahead of engine — 30 September 2026
+
+Following the owner's request, the [industrial shooter level blockout](level-design/shooter-v0.1/README.md) now provides exact Tiled/semantic geometry and a review image. It is based on design checkpoint `67802fca05fac4457d818f9449496cf7236bde8a`. Platforms, routes, ladder/water connections, enemy/hazard/repair placements, mandatory midpoint gate and boss-entry trigger are authored. The optional crawl roof and checkpoint backtracking door remain disabled pending decisions. This completes the initial level-authoring step, not the game engine or artwork/animation integration.
+
+The authoring script and static-check evidence are preserved with the map. Baseline route and pickup reachability checks pass under documented assumptions; combat/difficulty, production physics, Tiled application import and real-device play remain untested. Existing application/deployment and cartridge behavior remain unchanged. Next review the concrete geometry and input layout, then connect the accepted map to the separately checkpointed game implementation.
