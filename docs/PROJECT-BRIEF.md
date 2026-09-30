@@ -1,10 +1,10 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.5 — v0.9.4 First Response implementation
+**Brief version:** 0.6 — v0.9.4 baseline plus side-scrolling shooter design
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
-**Current source baseline:** merged v0.9.3 at `c7ea42d7e54402357b5c56c52c44856666e4c2b9`; canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this revision. The v0.9.1 observation below is historical.
+**Current source baseline:** `main` rechecked on 30 September 2026 at merged v0.9.4 candidate `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28`; canonical frontend `public/`, session engine `src/`. v0.9.4 started from v0.9.3 at `c7ea42d7e54402357b5c56c52c44856666e4c2b9`. Actual running frontend/Worker bytes were not established during the shooter design review. The v0.9.1 observation below is historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
 **Next work:** Verify the new early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari. Complete school-network and classroom concurrency checks before claiming readiness.
 
@@ -102,3 +102,17 @@ Owner evidence: 22 connected iPads with working mathematics/synchronization; sev
 Required v0.9.2 changes: one base equipment slot plus one per completed optional block, up to three distinct team items; raw-form simplest-fraction validation (MATH-FRAC-01) with explicit representation exceptions; Nightfall encounters/audio/presentation; iPhone Safari owner-review support for both cartridges. Retain Vault Seven 180-second active maximum and 300-second authoritative team window; unattended clients cannot stall the team.
 
 Windows and landscape classroom iPads remain targets. iPhone Safari action layout targets landscape with portrait setup/help and a rotate prompt. Real iPhone model/iOS/Safari version and smallest supported physical device are pending real-device verification. A candidate is not verified iPhone or classroom support. Hosted practice, complete touch inputs, sound, interruption, recovery, Wi-Fi/mobile-network checks and exact source identity are required per cartridge and for future cartridges.
+
+## 11. Side-scrolling shooter design — 30 September 2026
+
+Planning record: [Side-scrolling Shooter v0.1](change-specs/side-scrolling-shooter-v0.1.md), with the approved [visual reference](design-assets/shooter-v0.1/approved-concept.webp). This is a separate one-level industrial science-fiction run-and-gun module, not the aerial-shooter or multiplayer-brawler concept. Existing application remains the v0.9.4 candidate; no shooter code, release number or deployment is created by this addendum.
+
+Owner-approved scope: 2–3-minute successful traversal target, individual action play, upper/middle/surface-water routes, robots, teal-visored armored player, violet/silver/lime boss, three lives, three health (four with armor), midpoint and boss checkpoints, continuous infinite-ammo fire and eight-direction aim. Include run/jump/crouch/prone/drop-through/climb/surface swim; exclude dash, diving and piercing weapon. Earn additional distinct upgrades by completing extra questions using Nightfall's preparation-slot model. Spread and armor are accepted; agility (+10% movement and double jump) is experimental and must not be needed for any required route. All earned upgrades persist through respawns. Sound includes level/boss music, distinct effects and mute.
+
+The shooter-specific retry contract is an explicit local exception to the generic one-attempt wording: three lives inside one authoritative per-team five-minute window; no extension for local pause, retry or late Start; teacher whole-session pause and closure remain authoritative. Other cartridge attempt/timer rules are unchanged. Academic evidence remains separate from action outcomes.
+
+Specification v0.1 supplies proposed detailed geometry, roster placement, boss choreography, tuning and input precedence for review. Accepted decisions and new proposals are distinguished. Required remaining design review includes prone traversal, checkpoint entry/backtracking details, early all-resolved closure, actual map/control layout, and later narrative/assisted-route integration. Do not silently treat the planning document as an approved implementation of every proposed value.
+
+Handbook baseline rechecked: `00cbde605ab08203b6b5fd2374d225155608fc29`; AI-START-HERE, UNIVERSAL-RULES (including approved U-09), CONDITIONAL-STANDARDS S-02/S-03/S-04 and RELEASE-CHECKLIST consulted. No handbook modification. Existing GitHub Pages frontend, relay and Worker architecture remain. Standalone hosted practice on landscape iPad/iPhone Safari and Windows is required from the first playable candidate; actual supported device models, hosted runtime and gameplay checks remain unverified.
+
+Before implementation, re-read the then-current source and this design, complete the remaining review, preserve a source checkpoint, and verify the exact candidate. Live integration additionally requires agreed narrative stage/transition and assisted play. Do not overwrite v0.9.4 source or historical specifications, and do not infer classroom readiness from the visual concept.
