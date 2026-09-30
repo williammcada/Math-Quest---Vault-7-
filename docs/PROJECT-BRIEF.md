@@ -102,3 +102,18 @@ Owner evidence: 22 connected iPads with working mathematics/synchronization; sev
 Required v0.9.2 changes: one base equipment slot plus one per completed optional block, up to three distinct team items; raw-form simplest-fraction validation (MATH-FRAC-01) with explicit representation exceptions; Nightfall encounters/audio/presentation; iPhone Safari owner-review support for both cartridges. Retain Vault Seven 180-second active maximum and 300-second authoritative team window; unattended clients cannot stall the team.
 
 Windows and landscape classroom iPads remain targets. iPhone Safari action layout targets landscape with portrait setup/help and a rotate prompt. Real iPhone model/iOS/Safari version and smallest supported physical device are pending real-device verification. A candidate is not verified iPhone or classroom support. Hosted practice, complete touch inputs, sound, interruption, recovery, Wi-Fi/mobile-network checks and exact source identity are required per cartridge and for future cartridges.
+
+
+## 11. Aerial shooter v0.1.0 preproduction — 30 September 2026
+
+**Stage:** CHANGE SPEC; approved gameplay/art consolidated, proposed technical defaults under owner review. **Design branch:** design/aerial-shooter-v0.1.0. **Code baseline:** 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate). **Pre-consolidation design checkpoint:** 4ac6d8a896361e3dd512cc1987c17bdcb9e3fc75. This section does not change the existing running-release status above.
+
+Active specification: [Aerial Shooter v0.1.0](change-specs/aerial-shooter-v0.1.0.md). Decision provenance: [design log](change-specs/aerial-shooter-v0.1.0-design-draft-1.md).
+
+Approved scope: one top-down WWII-style propeller-aircraft level, automatic forward fire, free movement, three-minute cumulative active play, three lives, midpoint/boss checkpoints, health 100 with normal/heavy damage 10/20, math-earned Agility/Armor/Weapons upgrades, authored supplies and a two-phase aircraft boss. Individual combat/escape outcomes preserve the team narrative choice and all academic evidence. The corrected arcade pixel-art concept, flight/boss music, one Standard difficulty, assisted tactical choices and five-minute shared classroom window are approved. Exact technical defaults and tuning are identified as proposals in the specification.
+
+Immediate target is a reusable shooter module and hosted owner practice, followed by session-adapter/harness verification. Narrative identity and placement will be added later under an explicit integration scope. Do not register a fabricated finished cartridge or change existing cartridges' attempt/equipment rules. No multiplayer synchronization or infrastructure migration is included. The module's v0.1.0 is independent of the platform release number.
+
+Consulted handbook baseline remains 00cbde605ab08203b6b5fd2374d225155608fc29: AI-START-HERE.md, UNIVERSAL-RULES.md, CONDITIONAL-STANDARDS.md S-02/S-03/S-04, RELEASE-CHECKLIST.md and PROJECT-MAP.md. Apply existing MathQuest adoption plus approved U-09 saved-work controls; no universal handbook rule changes. Read the specification's exact source findings before adapting the shared host. Recheck current canonical source before implementation and preserve concurrent work.
+
+No shooter implementation, runtime production assets, deployment or device/classroom verification has occurred at this documentation checkpoint. Required evidence and release stages are listed in the specification. Preserve implementation and verified checkpoints separately.

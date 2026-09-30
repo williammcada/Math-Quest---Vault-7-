@@ -45,6 +45,8 @@ Infrastructure replacement or renaming is a separate migration task and must not
 ## Project documentation
 
 * [Project Brief](docs/PROJECT-BRIEF.md)
+* [Aerial Shooter v0.1.0 implementation specification](docs/change-specs/aerial-shooter-v0.1.0.md) — preproduction; proposed technical defaults under review
+* [Aerial Shooter design decisions](docs/change-specs/aerial-shooter-v0.1.0-design-draft-1.md)
 * [Migration Baseline](docs/MIGRATION-BASELINE.md)
 * [Technical Specifications](docs/specifications/)
 * [MathQuest v0.9.1 Change Specification](docs/change-specs/v0.9.1.md)

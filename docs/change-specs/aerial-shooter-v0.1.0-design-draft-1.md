@@ -1,8 +1,8 @@
-# MathQuest aerial shooter — v0.1.0 design draft 1, revision 4
+# MathQuest aerial shooter — v0.1.0 design draft 1, revision 5
 
 **Date:** 30 September 2026 (Asia/Shanghai)  
-**Revision 4:** records the owner's 21:51 approval of the corrected visual concept board. Gameplay and visual direction are approved within the recorded scope; audio, assisted-play details and remaining technical choices are still being specified.  
-**Status:** DESIGN — accepted decisions and unresolved design questions; not an implementation-ready change specification.  
+**Revision 5:** records the owner's 21:57 approval of audio, Standard difficulty, assisted play and the shared classroom window. Consolidated requirements and proposed technical defaults now live in [the implementation specification](aerial-shooter-v0.1.0.md). Earlier proposal labels below are chronological history; the consolidated specification is the active review document.  
+**Status:** DESIGN HISTORY — preserved decision log. Use [v0.1.0 implementation specification](aerial-shooter-v0.1.0.md) for current consolidated scope. No game implementation or deployment is claimed.  
 **Working identifier:** aerial-shooter; final cartridge title and narrative remain open.  
 **Owner:** William McAda  
 **Canonical repository:** williammcada/Math-Quest---Vault-7-  
@@ -260,11 +260,18 @@ Approved reference: the corrected second concept board shown immediately before 
 
 The generated conversation reference was identified as `exec-a9904eb5-4acb-48b9-8c69-dc3701b4cbef.png`. That name is provenance, not a claim of a repository asset path or a runtime dependency. This revision saves the approved visual description; the image binary is not uploaded to GitHub by this change. Reuse the actual reference during production where available; if it cannot be retrieved, report that limitation rather than silently regenerating a supposed exact match.
 
-### Proposed next decisions — not yet approved
+### Decisions approved on 30 September 2026 at 21:57
 
 1. **Audio:** original energetic arcade flight music, a distinct boss theme, and separate readable effects for weapons, damage, explosions, pickups and warnings. Low initial volume, user-gesture activation and visible mute; sound is optional and visual cues remain sufficient.
 2. **Initial difficulty scope:** one carefully tuned Standard difficulty for v0.1.0, hard but fair, with baseline equipment capable of completing the route/boss. No hidden increase in enemy strength from selecting upgrades. Additional difficulty presets remain later scope unless requested. This concerns this new cartridge only.
 3. **Assisted play:** a guided sequence of three tactical choices with no reflex requirement, instead of the action simulation. Clearly record assisted completion separately; preserve all mathematics and the team's narrative choice. Detailed choices/feedback and any mode switch must preserve run identity and cannot create upgrade rewards.
-4. **Classroom window:** a proposed five-minute authoritative shared action window from the team's action stage opening, containing each student's already approved three-minute active-play allowance. Teacher pause freezes/extends the shared deadline according to the existing platform contract; an individual pause/disconnect does not extend it. Teacher/deadline closure is neutral and distinct from a player who actively reaches the three-minute lesser-escape result. This proposed five-minute value requires this cartridge's own approval; it is not imported automatically from Vault Seven.
+4. **Classroom window:** an approved five-minute authoritative shared action window from the team's action stage opening, containing each student's already approved three-minute active-play allowance. Teacher pause freezes/extends the shared deadline according to the existing platform contract; an individual pause/disconnect does not extend it. Teacher/deadline closure is neutral and distinct from a player who actively reaches the three-minute lesser-escape result. The owner explicitly approved this cartridge's five-minute value; it is not imported automatically from Vault Seven.
 
 These product decisions will feed the versioned implementation specification. Remaining numeric tuning, animation/asset contracts, adapter design, device layout and verification cases must be made concrete for review before substantial implementation.
+
+
+## 11. Consolidation checkpoint
+
+On 30 September 2026 at 21:57, the owner replied “Agree” to the four presented recommendations: sound/music, one Standard difficulty, three-choice assisted alternative, and a five-minute authoritative shared window enclosing the three-minute active allowance.
+
+The [implementation specification](aerial-shooter-v0.1.0.md) consolidates those decisions, earlier gameplay/art approvals, proposed engine and tuning values, the authored event schedule, production asset requirements, MathQuest integration contracts and actual verification gates. Its §3 makes unapproved technical defaults explicit. This log remains history; no gameplay implementation, production asset package or verified release is created by consolidation.
