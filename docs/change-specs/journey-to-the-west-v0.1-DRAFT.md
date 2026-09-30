@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:26 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:30 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -44,6 +44,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 22. Preparation upgrade package approved at 22:08: choose up to three distinct personal upgrades from Power, Vitality, Magic Reserve, and Focus; required mathematics earns the first choice and each of two optional math blocks earns another; keep upgrades through automatic respawns. Accepted initial balance targets: +20% ordinary/aerial attack damage, +25% maximum health, +1 starting magic charge and +1 capacity, or +20% special damage respectively. Values are starting points for later balancing, not verified balance.
 
 23. Encounter plan approved at 22:26: accept the five-part pacing targets below; Nezha fights alone using a spear combination, returning ring, and signaled fire-wheel rush, combining attacks more aggressively below half health. For a surviving team, begin the boss encounter by elapsed 2:00; if behind, ordinary enemies withdraw and surviving heroes transition to the courtyard with their state preserved. Faster clears can reach Nezha earlier. This is design approval, not implementation authorization or evidence of balance.
+
+24. Character scale revision requested at 22:30: relative to GAMEPLAY COMPOSITION 01, render each of the five player avatars at 90% of its original width and height and Nezha at 110%, maintaining proportions. Applies to in-arena characters, not HUD portraits. Record these as exact production scale targets; a generated preview is illustrative rather than a measured sprite transformation.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -237,6 +239,11 @@ Composition:
 - Character sizes, framing, HUD abbreviations, charge indicators, lane-warning geometry, and button dimensions are illustrative and do not settle the remaining mechanical or accessibility decisions.
 - The shown composition has not yet been approved. Final art must keep characters and attack cues readable during movement and overlapping effects.
 
-Next owner question: does this composition have the intended arcade feel and character scale, or should the characters be larger or smaller?
+Scale revision, 2026-09-30 at 22:30:
+- Owner requested: "Scale down player avatars by 10% and scale up boss by 10%".
+- Exact production targets relative to the first composition: player avatar width/height ×0.90; boss width/height ×1.10. Preserve character proportions and scale attached equipment consistently.
+- Revised concept generated and displayed in chat using the original gameplay composition as the edit reference. The preview shows smaller heroes and a larger Nezha; it is not pixel-measured proof of the requested percentages.
+- Keep scenery, camera, HUD portrait sizes, and controls at their existing scale. Character hitboxes and attack reach must be designed explicitly rather than silently inferred from this visual revision.
+- This request sets the scale direction; it does not constitute approval of every remaining UI or gameplay detail.
 
 
