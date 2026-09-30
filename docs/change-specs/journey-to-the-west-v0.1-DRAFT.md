@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:24 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:31 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -35,6 +35,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 14. Varied enemy entrances accepted: edges, caves, ledges, and breakable barriers. Use readable landing and attack warnings.
 15. First-level concept accepted: mountain path, cave ambushes, ruined shrine, open courtyard for Nezha. Brief introductory fights lead into mixed encounters, supply opportunities, and the boss.
 16. Meaningful normal and aerial combat; user explicitly wants enemy jumps, jump kicks, ranged attacks, and conventional arcade variety.
+17. The owner selected the offered three-lives-with-automatic-respawning option on 2026-09-30 at 21:31. Three lives means the initial life plus two returns. Respawn position, protection duration, exhaustion handling, and timer outcome remain proposals below.
+18. The owner approved the character appearances in CAST CONCEPT 01 (five heroes plus boss Nezha) on 2026-09-30 at 21:31.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -61,6 +63,7 @@ Unconfirmed earlier proposals:
 - Additional magic from selected enemies and before the boss.
 
 Further proposal for review:
+- Tuning target proposed in chat at 21:24: roughly 4–6 special activations per attentive player per run; this number is not yet accepted.
 - Design supply quantities around the number of participating players, so a five-player party is not given a solo player's supply.
 - Put visible pickups in several places across the play area.
 - At full capacity, leave magic for another player rather than consume it.
@@ -86,12 +89,12 @@ Nezha's detailed move set, health, phases, arena hazards, and vulnerability wind
 ## 6. Art and audio planning
 
 Accepted medium: detailed arcade pixel art.
-Next visual review: a labeled lineup of the five heroes and Nezha, with a horse-form inset associated with the dragon prince.
+CAST CONCEPT 01 was generated and displayed in this planning conversation, then approved by the owner. It shows five hero panels plus a separate Nezha boss panel, with a small horse-form inset in the dragon prince panel. The image has not been added to this repository; this record preserves its approval and appearance summary.
 Proposed visual principles: large readable silhouettes, distinct hero palettes, clear facing/attack silhouettes, subdued scenery behind active threats, restrained overlapping effects.
-All appearance, costume, palette, and proportions in a concept board are provisional until reviewed.
+Approved visual baseline: Wukong has a gold circlet, gold/red clothing, simian features, tail, and gold-banded staff; Bajie has a broad pig-faced silhouette, plum/brown clothing, and rake; Wujing is tall and broad in teal/indigo, with beads and crescent polearm; Tang wears ivory/saffron with a red outer drape and ceremonial headdress, carries a ringed staff, and uses golden lotus-like energy; the prince wears silver-white/pale cyan with small horns, dark hair, and sword, with a white/cyan horse form; Nezha is a youthful red/gold celestial warrior with twin hair buns, flowing sash, spear, ring, and flaming wheels. These appearances are approved as concept direction. Final sprite resolution, proportions at gameplay scale, attack animations, and readable effects remain to be reviewed.
 
 Proposed art sequence:
-1. Hero/boss concept lineup.
+1. Hero/boss concept lineup — concept direction approved.
 2. Gameplay composition at target device proportions.
 3. Ordinary enemy designs and entrances.
 4. Animation inventory and level/environment assets.
@@ -111,7 +114,7 @@ Still to define:
 - Minimum party size, solo practice, and missing characters.
 - Character selection, duplicate character policy, and late joining.
 - Shared stage/camera progression and split-player handling.
-- Lives, downed state, revives, loss of all lives, and team defeat.
+- Remaining automatic-respawn details, loss of all lives, and team defeat (three lives and automatic respawning are accepted).
 - Three-minute clock ownership, start point, pause rules, and expiry outcome.
 - Disconnect/reconnect behavior, absent-player handling, teacher control.
 - Academic gates, optional math, pre-run upgrades, and evidence contract.
@@ -141,4 +144,13 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Immediate next design topics: review first concept art, choose lives/revive rules, and decide timer-expiry outcome. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+Immediate next design topics: decide life-exhaustion and timer-expiry outcomes, then review a gameplay composition and detailed encounter plan. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+
+### End-of-run proposals awaiting owner response
+
+- On an ordinary lost life with lives remaining: automatically return near the team, restore health, and grant a short clearly signaled protection interval.
+- Preserve stage progress, enemy/boss health, and the shared remaining time when a player respawns.
+- After a player's third life is lost: that player spectates while teammates continue.
+- If everyone exhausts all lives: end the run with a team defeat result.
+- If the three-minute limit expires with surviving players: end with a retreat/partial-success gameplay outcome; record whether Nezha was defeated separately. Keep gameplay outcome separate from academic evidence.
+- Decide these outcome proposals with the owner before treating them as implementation requirements.
