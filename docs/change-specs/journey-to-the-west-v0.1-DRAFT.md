@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:51 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:57 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -35,10 +35,11 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 14. Varied enemy entrances accepted: edges, caves, ledges, and breakable barriers. Use readable landing and attack warnings.
 15. First-level concept accepted: mountain path, cave ambushes, ruined shrine, open courtyard for Nezha. Brief introductory fights lead into mixed encounters, supply opportunities, and the boss.
 16. Meaningful normal and aerial combat; user explicitly wants enemy jumps, jump kicks, ranged attacks, and conventional arcade variety.
-17. The owner selected the offered three-lives-with-automatic-respawning option on 2026-09-30 at 21:31. Three lives means the initial life plus two returns. Respawn position, protection duration, exhaustion handling, and timer outcome remain proposals below.
+17. The owner selected the offered three-lives-with-automatic-respawning option on 2026-09-30 at 21:31. Three lives means the initial life plus two returns. Near-team respawn, life-exhaustion handling, and timer outcomes were subsequently approved in decision 19; exact respawn positioning and protection duration remain open.
 18. The owner approved the character appearances in CAST CONCEPT 01 (five heroes plus boss Nezha) on 2026-09-30 at 21:31.
 19. End-of-run structure approved at 21:35: respawn near teammates with full health and brief protection; preserve stage/enemy health/time; spectate after all three lives; end on team elimination; surviving players retreat with a lesser gameplay result at three minutes; defeating Nezha earns full victory. Gameplay results remain separate from mathematics accuracy.
 20. Multiplayer setup approved at 21:51: one to five human players including solo practice; student choice of unclaimed unique heroes; no AI companions; separate level instance per team; shared enemies/progress/timer; enemy numbers, boss health, and magic supply scale to team size; no friendly fire or teammate blocking; shared play area and camera progression.
+21. Personal preparation upgrades approved at 21:57: in response to the shared-team versus individually earned/selected upgrade question, the owner chose "Individual choice." Each student earns and chooses upgrades for their own hero; choices do not grant the same bonuses to teammates. The menu, unlock counts, numerical effects, and persistence rules below remain proposals.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -69,13 +70,13 @@ Further proposal for review:
 - Design supply quantities around the number of participating players, so a five-player party is not given a solo player's supply.
 - Put visible pickups in several places across the play area.
 - At full capacity, leave magic for another player rather than consume it.
-- Keep the magic resource separate from any future math-earned pre-run upgrades; the latter have not yet been specified for this cartridge.
+- Keep collectible magic separate from math-earned pre-run upgrades. Individual ownership of preparation upgrades is approved; their exact effects and acquisition rules remain to be specified.
 
 Do not claim that generous shared-world drops guarantee equitable collection. Students can still take disproportionate amounts. If observation shows monopolization, propose a targeted design revision rather than silently switching to team-wide awards.
 
 ## 5. First level and combat proposal
 
-A belt-scrolling arena: travel sideways, move nearer/farther across the ground, jump, attack, and use a special. Camera, screen boundaries, exact touch controls, and friendly-fire policy remain open.
+A belt-scrolling arena: travel sideways, move nearer/farther across the ground, jump, attack, and use a special. A shared play area and camera progression, no friendly fire, and no teammate blocking are accepted. Exact camera movement, screen boundaries, and touch controls remain open.
 
 Accepted enemy types:
 - Basic fighters: approachable close combat.
@@ -169,17 +170,30 @@ Immediate next design topics: math-earned preparation bonuses, then review a gam
 
 The owner accepted this setup. Character availability and selection conflicts need authoritative resolution in the eventual multiplayer design. Party-size scaling must not make disconnecting or exhausting lives an advantage; exact roster changes and scaling policy remain to be designed.
 
-### Mathematics and preparation bonuses — proposal awaiting owner response
+### Mathematics and preparation bonuses — individual ownership approved 2026-09-30 at 21:57
 
-Existing MathQuest v0.9.2 specification sections 17–18 define a team preparation loop: required preparation grants one equipment slot; each of up to two completed optional math blocks adds another distinct slot; chosen team resources apply to all eligible student runs. Teacher extension controls include student/module selection, question count, placement, and difficulty. This is a retrieved existing contract, not yet an adopted requirement for Journey to the West.
+Existing MathQuest v0.9.2 specification sections 17–18 define a team preparation loop: required preparation grants one equipment slot; each of up to two completed optional math blocks adds another distinct slot; chosen team resources apply to all eligible student runs. Teacher extension controls include student/module selection, question count, placement, and difficulty. This is a retrieved existing contract, not a blanket adopted requirement for Journey to the West.
 
-Recommended proposal:
-- Follow that acquisition pattern with one initial team bonus and up to two additional distinct bonuses earned through teacher-configured optional math blocks.
-- Team-selected bonuses apply to each participating hero for the run.
-- Candidate choices: stronger ordinary attacks, higher maximum health, or greater magic reserves. Exact names, strengths, duration, and visual changes remain provisional.
-- Collectible magic during combat continues to replenish only the individual collector.
+The owner chose "Individual choice" when asked to choose shared-team upgrades or individually earned and selected personal upgrades. For this cartridge, each student's preparation upgrades belong to their own hero. Team-wide preparation bonuses are not the chosen approach. This decision does not change the other cartridges.
+
+Proposed acquisition and persistence rules, awaiting review:
+- Completing required mathematics earns one personal upgrade choice.
+- Each of up to two teacher-configured optional math blocks earns that student another choice, for a maximum of three distinct upgrades.
+- Offer four upgrade options so completing all three choices still permits different loadouts. No duplicates or stacking the same option.
+- Choose before combat; upgrades last for the run and persist through that player's automatic respawns.
 - Complete academic preparation before the shared three-minute action run. Rewards must not change recorded mathematical accuracy.
-- Academic block completion must retain the host's individual participation/evidence rules; a single teammate must not silently fulfill another student's required mathematics.
+- Retain each student's individual participation and evidence. A teammate cannot fulfill another student's required mathematics.
+- Collectible magic during combat continues to replenish only the individual collector.
 
-Alternative requiring owner choice: individual students earn and select personal hero bonuses instead of a shared team loadout.
-Ask the owner to select shared-team or individual-hero upgrades before refining values or implementation.
+Proposed four-option menu (names and values are provisional balance starting points):
+
+| Option | Proposed effect |
+| --- | --- |
+| Power | +20% ordinary attack damage, including ordinary aerial attacks |
+| Vitality | +25% maximum health; apply the increased maximum on initial spawn and automatic respawns |
+| Magic Reserve | +1 starting magic charge and +1 charge capacity; actual baseline capacity/start and magic retained on respawn remain open |
+| Focus | +20% special-attack damage; does not increase protection duration or utility effects |
+
+These are simple numerical bonuses for the proof of concept; new move unlocks are not part of this proposal. Each option is intended to work for all five heroes. Percentages do not establish equal practical value; balance must be checked across hero kits and party sizes. Magic Reserve's extra starting charge is granted once per run, not replenished automatically by respawning.
+
+Next owner question: does this four-option menu, with up to three personal selections earned through mathematics, work for the proof of concept?
