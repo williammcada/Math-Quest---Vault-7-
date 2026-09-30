@@ -1,7 +1,7 @@
-# MathQuest aerial shooter — v0.1.0 design draft 1, revision 3
+# MathQuest aerial shooter — v0.1.0 design draft 1, revision 4
 
 **Date:** 30 September 2026 (Asia/Shanghai)  
-**Revision 3:** records the owner's 21:33 approval of the presented encounter sequence, boss/reset design, enemy behaviors and pickup package. Art/audio and unpresented technical details remain proposals.  
+**Revision 4:** records the owner's 21:51 approval of the corrected visual concept board. Gameplay and visual direction are approved within the recorded scope; audio, assisted-play details and remaining technical choices are still being specified.  
 **Status:** DESIGN — accepted decisions and unresolved design questions; not an implementation-ready change specification.  
 **Working identifier:** aerial-shooter; final cartridge title and narrative remain open.  
 **Owner:** William McAda  
@@ -157,7 +157,7 @@ Resolve in discussion before declaring the implementation specification complete
 5. Enemy statistics, silhouettes, entry/exit paths, fire cadence, targeting rules, warning cues, simultaneous limits and fair escape routes.
 6. Boss identity, phases, attacks, escorts, health, weak points and cleanup on success.
 7. Authored three-minute timeline: scenery transitions, checkpoint placements, supply carriers, healing drops, temporary-bonus durations and boss allocation.
-8. Detailed art board: player/enemy contrast, palettes, sprite sizes, animation frames, bullets, smoke/explosions, background layers, UI icons and asset manifests.
+8. Visual concept board, aircraft identities and palettes are approved in section 10. Finalize production sprite sizes, animation frames, bullets, smoke/explosions, background layers, UI icons and asset manifests.
 9. Main/boss music, sound-effect inventory, mixing, warning redundancy and mobile audio lifecycle.
 10. Playfield shape within landscape screens, control/HUD placement, smallest supported devices and performance stress scene.
 11. Assisted route and actual outcome/report fields, reconnect and save lifecycle, teacher controls and shared-window closure.
@@ -226,7 +226,7 @@ Approved checkpoint recovery resets the boss and its guns. Resetting escorts and
 
 Timers run only during active simulation. Permanent weapon damage enhancement continues to apply according to an explicit later damage formula. If effects overlap, the approved rule is that the newly collected bonus replaces the previous bonus; no stacking. Pickups use both icon/shape and color. Their expiry, full-health collection behavior, unclaimed-drop recovery and exact projectile values remain open.
 
-### Art/audio direction proposal
+### Approved visual direction; animation/audio proposals
 
 Original arcade pixel art: navy/teal ocean, turquoise shallows, muted green islands, warm stone harbor, and restrained clouds/wakes so hazards remain visible. Player plane: bright silver with blue accents. Enemy fighters: olive/charcoal with distinct silhouettes. Boss: dark burgundy with cream bands for strong contrast. Fictional unit markings, with no commitment yet to particular historical factions or national insignia.
 
@@ -234,8 +234,37 @@ Propose animated propellers, left/right banking, muzzle flashes, hit flashes, pr
 
 Propose an original energetic arcade flight theme and a distinct boss theme, with separate cues for player fire, enemy fire, heavy fire, hits, destruction, repair pickup, bonus pickup, checkpoint, warning, victory and lesser escape. Audio remains optional and every threat cue has a visible equivalent.
 
-### Next review: visual direction
+### Visual review completed
 
-Create a preview-only concept board for player aircraft, enemy silhouettes, boss and coastal setting. This is proposed art for owner review, not a production sprite atlas or a screenshot of a working build. Keep design changes separate from approved mechanics. Audio and detailed implementation questions remain to be resolved.
+The owner approved the corrected concept board on 30 September 2026 at 21:51 (Asia/Shanghai), replying “Love it” to the visual-direction review. Approval covers the visible art style, aircraft designs/colors and coastal environment; it is not approval of unpresented audio or detailed mechanics. The board is a concept reference, not a production sprite atlas or a screenshot of a working build. Audio and detailed implementation questions remain to be resolved.
 
 Concept-board brief: detailed original arcade pixel art; WWII-style propeller craft; strict top-down view; bright silver/blue player pointing upward; distinct olive/charcoal enemy aircraft; medium supply aircraft with bright recognition stripes; four-engine dark burgundy/cream boss with two wing-gun positions; ocean, turquoise island shallows and warm harbor tones. Use invented unit markings and strong aircraft/background contrast. Essential UI in the eventual game remains crisp readable text. The image is a conversation visual preview and is not committed as a runtime asset by this documentation update.
+
+
+## 10. Visual approval and next design choices
+
+### Approved visual reference
+
+Approved reference: the corrected second concept board shown immediately before the owner's “Love it” on 30 September 2026. The first image showed firing effects at the propellers; the corrected version separates exactly two outer wing-gun positions from four propeller engines.
+
+- Detailed original arcade pixel art, with top-down aircraft and the coastal environment illustrated on the board.
+- Player: bright silver single-propeller plane with blue nose/wing accents.
+- Fighter: compact olive single-propeller silhouette.
+- Interceptor: slender charcoal aircraft with orange accents and distinguishable wings.
+- Bomber: broad muted gray-green twin-engine silhouette.
+- Supply aircraft: medium mustard-yellow/steel plane with cream recognition stripes and a supply symbol.
+- Boss: oversized burgundy aircraft with cream bands, four propeller engines, two separate outer wing-gun pods and a central fuselage.
+- Ocean: deep blue; island shallows: turquoise; islands: muted green; harbor: warm stone/tan warehouses and docks.
+- Friendly and hostile shots must remain visually distinguishable; player and boss must retain strong contrast against scenery.
+- Essential gameplay UI remains crisp readable text rather than text baked into art.
+
+The generated conversation reference was identified as `exec-a9904eb5-4acb-48b9-8c69-dc3701b4cbef.png`. That name is provenance, not a claim of a repository asset path or a runtime dependency. This revision saves the approved visual description; the image binary is not uploaded to GitHub by this change. Reuse the actual reference during production where available; if it cannot be retrieved, report that limitation rather than silently regenerating a supposed exact match.
+
+### Proposed next decisions — not yet approved
+
+1. **Audio:** original energetic arcade flight music, a distinct boss theme, and separate readable effects for weapons, damage, explosions, pickups and warnings. Low initial volume, user-gesture activation and visible mute; sound is optional and visual cues remain sufficient.
+2. **Initial difficulty scope:** one carefully tuned Standard difficulty for v0.1.0, hard but fair, with baseline equipment capable of completing the route/boss. No hidden increase in enemy strength from selecting upgrades. Additional difficulty presets remain later scope unless requested. This concerns this new cartridge only.
+3. **Assisted play:** a guided sequence of three tactical choices with no reflex requirement, instead of the action simulation. Clearly record assisted completion separately; preserve all mathematics and the team's narrative choice. Detailed choices/feedback and any mode switch must preserve run identity and cannot create upgrade rewards.
+4. **Classroom window:** a proposed five-minute authoritative shared action window from the team's action stage opening, containing each student's already approved three-minute active-play allowance. Teacher pause freezes/extends the shared deadline according to the existing platform contract; an individual pause/disconnect does not extend it. Teacher/deadline closure is neutral and distinct from a player who actively reaches the three-minute lesser-escape result. This proposed five-minute value requires this cartridge's own approval; it is not imported automatically from Vault Seven.
+
+These product decisions will feed the versioned implementation specification. Remaining numeric tuning, animation/asset contracts, adapter design, device layout and verification cases must be made concrete for review before substantial implementation.
