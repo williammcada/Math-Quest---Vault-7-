@@ -1,7 +1,7 @@
-# MathQuest aerial shooter — v0.1.0 design draft 1, revision 2
+# MathQuest aerial shooter — v0.1.0 design draft 1, revision 3
 
 **Date:** 30 September 2026 (Asia/Shanghai)  
-**Revision 2:** records the owner's 21:26 approval of timer, respawn and damage rules; adds a proposed encounter design for review.  
+**Revision 3:** records the owner's 21:33 approval of the presented encounter sequence, boss/reset design, enemy behaviors and pickup package. Art/audio and unpresented technical details remain proposals.  
 **Status:** DESIGN — accepted decisions and unresolved design questions; not an implementation-ready change specification.  
 **Working identifier:** aerial-shooter; final cartridge title and narrative remain open.  
 **Owner:** William McAda  
@@ -151,8 +151,8 @@ These remain proposals or unresolved implementation contracts:
 
 Resolve in discussion before declaring the implementation specification complete:
 1. Separate cumulative active-time and rewindable level-progress clocks; finalize checkpoint locations, boss-entry logic, death-transition timing and simultaneous terminal-event precedence.
-2. Finalize respawn placement/protection and enemy/boss reset details; full health, retained permanent upgrades, cleared temporary bonuses and spent claimed pickups are approved.
-3. Finalize aircraft collision separation and treatment of surface objects; aircraft collision damage of 20 is approved.
+2. Finalize exact respawn placement/protection and ordinary-enemy reset details; full health, retained permanent upgrades, cleared temporary bonuses, spent claimed pickups and full boss/gun reset are approved.
+3. Finalize aircraft collision separation; 20 collision damage is approved. Ships/buildings are below flight altitude: their gunfire threatens the player, not overlap with their artwork.
 4. Exact gate-count mapping when normal gates have unequal loads; teacher authority over optional preparation.
 5. Enemy statistics, silhouettes, entry/exit paths, fire cadence, targeting rules, warning cues, simultaneous limits and fair escape routes.
 6. Boss identity, phases, attacks, escorts, health, weak points and cleanup on success.
@@ -167,9 +167,17 @@ Resolve in discussion before declaring the implementation specification complete
 No tests were run and no support claim is verified for the new shooter. The next work remains detailed design, followed by the agreed change specification.
 
 
-## 9. Proposed level and encounter design — awaiting owner review
+## 9. Approved encounter outline; remaining detailed proposals
 
-All new choices in this section are proposals, not implied by approval of the three recovery/damage/timer rules. Working level descriptor: Coastal Escape; final title/narrative remains open.
+On 30 September 2026 at 21:33 (Asia/Shanghai), the owner approved the immediately preceding review:
+- The six time bands and setting/encounter progression shown below, including midpoint at 1:30 and boss checkpoint at 2:15.
+- The presented enemy roles: predictable formations, weaving interceptors aiming at the sampled player position, tougher bombers with heavy fans and gaps, telegraphed turrets, recognizable medium supply aircraft, and boss-support pairs.
+- Surface ships/buildings are below the flight altitude and only threaten the player through their attacks.
+- Oversized four-engine boss, two destructible wing guns followed by central fuselage phase, escorts in quieter moments and full boss/gun reset after checkpoint respawn.
+- Spread shot for 20 seconds, rapid fire for 20 seconds, one wingman for 30 seconds, and three 25-health pickup opportunities capped at maximum.
+- New temporary bonuses replace previous ones; the wingman provides firepower without absorbing damage.
+
+This approval does not silently ratify details only present in repository prose, exact carrier-arrival seconds within the reviewed time bands, numeric enemy/projectile tuning, art colors, soundtrack or unpresented implementation choices. Those remain proposals as marked. Working level descriptor: Coastal Escape; final title/narrative remains open.
 
 ### Two clocks
 
@@ -199,16 +207,16 @@ Drop times refer to carrier arrival, not automatic pickup delivery. Each carrier
 
 Proposed fairness constraints: visible warnings for fast/side entries; no attacks from invisible enemies; no deliberate ramming homing; preserve an avoidable route for baseline speed; legible hostile bullets distinct from friendly shots and background. Surface ships/buildings are below flight altitude and do not inflict aircraft-body collision damage; their projectiles do. Aerial body collision handling still needs exact contact/separation behavior.
 
-### Boss proposal
+### Approved boss structure
 
 An oversized four-engine armored bomber with two destructible wing gun positions:
 1. **Wing-gun phase:** alternating fans from the two positions. Destroying one visibly removes that firing source.
 2. **Fuselage phase:** expose the central weak point after both guns are disabled; use wider sweeping volleys with deliberate recovery gaps.
 3. Supporting fighter pairs appear at bounded intervals, not continuously, and are not simultaneous with the densest boss volley.
 
-Proposed checkpoint recovery resets boss/guns/escorts and hostile bullets to the start of this encounter. The player gets approved full health and retained earned upgrades, but less cumulative time. This boss-reset choice still requires approval. Plan the boss to be beatable with baseline weapon damage in the available no-death encounter time; exact health/fire-rate numbers need a later balancing sheet.
+Approved checkpoint recovery resets the boss and its guns. Resetting escorts and clearing hostile bullets are proposed recovery details. The player gets full health and retained earned upgrades, but less cumulative time. Baseline-weapon completion remains the proposed balancing target; exact health/fire-rate numbers need a later balancing sheet.
 
-### Temporary bonuses proposal
+### Approved temporary bonus durations and roles
 
 | Bonus | Proposed duration | Proposed behavior |
 | --- | --- | --- |
@@ -216,7 +224,7 @@ Proposed checkpoint recovery resets boss/guns/escorts and hostile bullets to the
 | Rapid fire | 20 seconds | Increases primary firing rate; exact multiplier is still open. |
 | Wingman | 30 seconds | One accompanying friendly plane fires forward; follows the player and cannot absorb damage as a shield. |
 
-Timers run only during active simulation. Permanent weapon damage enhancement continues to apply according to an explicit later damage formula. If effects overlap, the proposed simple rule is that the newly collected bonus replaces the previous bonus; no stacking. Pickups use both icon/shape and color. Their expiry, full-health collection behavior, unclaimed-drop recovery and exact projectile values remain open.
+Timers run only during active simulation. Permanent weapon damage enhancement continues to apply according to an explicit later damage formula. If effects overlap, the approved rule is that the newly collected bonus replaces the previous bonus; no stacking. Pickups use both icon/shape and color. Their expiry, full-health collection behavior, unclaimed-drop recovery and exact projectile values remain open.
 
 ### Art/audio direction proposal
 
@@ -226,6 +234,8 @@ Propose animated propellers, left/right banking, muzzle flashes, hit flashes, pr
 
 Propose an original energetic arcade flight theme and a distinct boss theme, with separate cues for player fire, enemy fire, heavy fire, hits, destruction, repair pickup, bonus pickup, checkpoint, warning, victory and lesser escape. Audio remains optional and every threat cue has a visible equivalent.
 
-### Next review request
+### Next review: visual direction
 
-Ask the owner to review the timeline, boss structure/reset policy and timed-bonus/repair package as a proposed design. Review a visual concept board after the overall direction is accepted. Do not treat silence about an unpresented detail as approval.
+Create a preview-only concept board for player aircraft, enemy silhouettes, boss and coastal setting. This is proposed art for owner review, not a production sprite atlas or a screenshot of a working build. Keep design changes separate from approved mechanics. Audio and detailed implementation questions remain to be resolved.
+
+Concept-board brief: detailed original arcade pixel art; WWII-style propeller craft; strict top-down view; bright silver/blue player pointing upward; distinct olive/charcoal enemy aircraft; medium supply aircraft with bright recognition stripes; four-engine dark burgundy/cream boss with two wing-gun positions; ocean, turquoise island shallows and warm harbor tones. Use invented unit markings and strong aircraft/background contrast. Essential UI in the eventual game remains crisp readable text. The image is a conversation visual preview and is not committed as a runtime asset by this documentation update.
