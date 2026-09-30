@@ -117,3 +117,8 @@ Immediate target is a reusable shooter module and hosted owner practice, followe
 Consulted handbook baseline remains 00cbde605ab08203b6b5fd2374d225155608fc29: AI-START-HERE.md, UNIVERSAL-RULES.md, CONDITIONAL-STANDARDS.md S-02/S-03/S-04, RELEASE-CHECKLIST.md and PROJECT-MAP.md. Apply existing MathQuest adoption plus approved U-09 saved-work controls; no universal handbook rule changes. Read the specification's exact source findings before adapting the shared host. Recheck current canonical source before implementation and preserve concurrent work.
 
 No shooter implementation, runtime production assets, deployment or device/classroom verification has occurred at this documentation checkpoint. Required evidence and release stages are listed in the specification. Preserve implementation and verified checkpoints separately.
+
+
+### Aerial implementation authorization — 30 September 2026
+
+The consolidated v0.1.0 specification and all twelve initial technical defaults are approved. Implementation proceeds on `implementation/aerial-shooter-v0.1.0`, practice first. Do not publish an unverified classroom integration or invent narrative placement.

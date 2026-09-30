@@ -1,13 +1,14 @@
 # MathQuest Aerial Shooter v0.1.0 — Implementation Specification
 
-**Document revision:** 1  
+**Document revision:** 2  
 **Date:** 30 September 2026, Asia/Shanghai  
-**Status:** CHANGE SPEC — approved product design consolidated; proposed technical defaults in §3 await review. No game implementation, runtime assets, deployment or gameplay verification is claimed.  
+**Status:** IMPLEMENT — owner approved all §3 technical defaults in the subsequent “Yes” response on 30 September 2026. Initial implementation is authorized; release and classroom deployment remain separate gates.  
 **Owner / credit:** William McAda / A WILLIAM MCADA PRODUCT  
 **Working game ID:** aerial-shooter  
 **Working level title:** Coastal Escape (descriptive title, not a final narrative decision)  
 **Canonical repository:** williammcada/Math-Quest---Vault-7-  
 **Design branch:** design/aerial-shooter-v0.1.0  
+**Implementation branch:** implementation/aerial-shooter-v0.1.0  
 **Code baseline:** 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28, merged MathQuest v0.9.4 candidate  
 **Pre-consolidation design checkpoint:** 4ac6d8a896361e3dd512cc1987c17bdcb9e3fc75  
 **Handbook baseline:** 00cbde605ab08203b6b5fd2374d225155608fc29  
@@ -20,7 +21,7 @@ Design and subsequently implement one polished, approximately three-minute top-d
 
 The immediate implementation target is the reusable game module and hosted owner-practice entry. The live classroom adapter, entitlement and timing contracts are specified here so the module can later enter a narrative cartridge without a physics rewrite. A test-room integration harness may verify those contracts; it must be labeled as a development harness and cannot masquerade as a finished narrative cartridge. Live classroom publication requires the later approved narrative placement and matched frontend/backend release.
 
-This document consolidates decisions explicitly approved in the conversation. §2 is approved. §3 contains new technical/tuning proposals, not retrospective approvals. Later sections make those proposals concrete and refer back to that review boundary. The owner requested advance design and questions about unspecified choices; do not treat the existence of this file as permission to silently settle a different product design.
+This document consolidates decisions explicitly approved in the conversation. §2 and §3 are approved. The owner approved the technical defaults after the consolidated specification was presented. Later sections make those approved initial defaults concrete. The owner requested advance design and questions about unspecified choices; do not treat the existence of this file as permission to silently settle a different product design.
 
 No shared infrastructure migration, multiplayer combat, new account system, new paid service, extra level, weapon shop, score leaderboard, additional difficulty preset or new math curriculum is included. Preserve existing cartridges, privacy controls, reports, accounts/credentials, math validation and deployment architecture.
 
@@ -54,9 +55,9 @@ The module version v0.1.0 is independent of the eventual MathQuest platform rele
 
 Approvals were recorded on 30 September 2026 at 21:26 (recovery/damage), 21:33 (encounters/boss/pickups), 21:51 (visual direction) and 21:57 (audio, Standard difficulty, assisted play and shared window), Asia/Shanghai.
 
-## 3. Proposed technical defaults for owner review
+## 3. Approved initial technical defaults
 
-These choices make the specification buildable. They are proposals to approve or amend, not features already implemented.
+These choices make the specification buildable. Approved on 30 September 2026 by the owner’s “Yes”; they remain initial tuning, not validated gameplay balance. Historical “proposed” and “candidate” wording below identifies their design origin, not outstanding approval.
 
 | ID | Proposed default | Reason / review implication |
 | --- | --- | --- |
@@ -170,7 +171,7 @@ Existing accepted server terminal state always wins. At the start of a command/t
 4. Otherwise boss destruction yields success.
 5. Otherwise active elapsed reaching 180 seconds yields lesser escape for the living/recovered player.
 
-This avoids arbitrary dependence on iteration order. The simultaneous last-life/boss case is a proposed explicit fairness choice in TD-10, not an owner-established preference.
+This avoids arbitrary dependence on iteration order. The simultaneous last-life/boss case is the approved initial fairness rule in TD-10.
 
 Terminal states are immutable. Stop damage, auto-fire, spawning and music transitions at closure. Allow the approved result effect to complete without keeping the playable clock running.
 

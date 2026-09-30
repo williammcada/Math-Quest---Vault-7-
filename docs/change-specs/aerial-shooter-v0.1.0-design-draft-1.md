@@ -275,3 +275,8 @@ These product decisions will feed the versioned implementation specification. Re
 On 30 September 2026 at 21:57, the owner replied “Agree” to the four presented recommendations: sound/music, one Standard difficulty, three-choice assisted alternative, and a five-minute authoritative shared window enclosing the three-minute active allowance.
 
 The [implementation specification](aerial-shooter-v0.1.0.md) consolidates those decisions, earlier gameplay/art approvals, proposed engine and tuning values, the authored event schedule, production asset requirements, MathQuest integration contracts and actual verification gates. Its §3 makes unapproved technical defaults explicit. This log remains history; no gameplay implementation, production asset package or verified release is created by consolidation.
+
+
+## Implementation authorization — 30 September 2026
+
+The owner approved the consolidated specification’s TD-01–TD-12 defaults with “Yes”. Proceed with practice-first implementation and identifiable checkpoints. Numerical tuning remains subject to playtesting. Narrative placement and matched classroom release remain later work.
