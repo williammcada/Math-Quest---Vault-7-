@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:31 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:35 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -37,6 +37,7 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 16. Meaningful normal and aerial combat; user explicitly wants enemy jumps, jump kicks, ranged attacks, and conventional arcade variety.
 17. The owner selected the offered three-lives-with-automatic-respawning option on 2026-09-30 at 21:31. Three lives means the initial life plus two returns. Respawn position, protection duration, exhaustion handling, and timer outcome remain proposals below.
 18. The owner approved the character appearances in CAST CONCEPT 01 (five heroes plus boss Nezha) on 2026-09-30 at 21:31.
+19. End-of-run structure approved at 21:35: respawn near teammates with full health and brief protection; preserve stage/enemy health/time; spectate after all three lives; end on team elimination; surviving players retreat with a lesser gameplay result at three minutes; defeating Nezha earns full victory. Gameplay results remain separate from mathematics accuracy.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -114,8 +115,8 @@ Still to define:
 - Minimum party size, solo practice, and missing characters.
 - Character selection, duplicate character policy, and late joining.
 - Shared stage/camera progression and split-player handling.
-- Remaining automatic-respawn details, loss of all lives, and team defeat (three lives and automatic respawning are accepted).
-- Three-minute clock ownership, start point, pause rules, and expiry outcome.
+- Exact respawn delay, protection duration, safe position, and same-update outcome precedence (life-exhaustion and team-defeat behavior are accepted).
+- Three-minute clock ownership, start point, and pause rules (expiry outcome accepted).
 - Disconnect/reconnect behavior, absent-player handling, teacher control.
 - Academic gates, optional math, pre-run upgrades, and evidence contract.
 - Learner data, retention, deletion, and inherited privacy boundaries.
@@ -144,13 +145,25 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Immediate next design topics: decide life-exhaustion and timer-expiry outcomes, then review a gameplay composition and detailed encounter plan. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+Immediate next design topics: party sizes and character selection, then review a gameplay composition and detailed encounter plan. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
 
-### End-of-run proposals awaiting owner response
+### End-of-run decisions — approved 2026-09-30 at 21:35
 
 - On an ordinary lost life with lives remaining: automatically return near the team, restore health, and grant a short clearly signaled protection interval.
 - Preserve stage progress, enemy/boss health, and the shared remaining time when a player respawns.
 - After a player's third life is lost: that player spectates while teammates continue.
 - If everyone exhausts all lives: end the run with a team defeat result.
 - If the three-minute limit expires with surviving players: end with a retreat/partial-success gameplay outcome; record whether Nezha was defeated separately. Keep gameplay outcome separate from academic evidence.
-- Decide these outcome proposals with the owner before treating them as implementation requirements.
+- Defeating Nezha earns full victory. These outcome rules are approved; numerical timing and edge-case precedence remain to be specified.
+
+### Multiplayer setup — proposal awaiting owner response
+
+- Support one to five human players, including solo practice.
+- Students choose from unclaimed heroes; one instance of each hero per team.
+- Smaller parties use only their chosen heroes; no automatic AI companions.
+- Each team plays its own level instance, with team members seeing shared enemies, boss health, pickups, progress, and the same remaining time.
+- Scale enemy count, boss durability, and available magic for the starting party size, with quantities to be tuned and tested.
+- Turn off friendly fire and blocking between teammates.
+- Progress through a shared play area and advance the camera together. Exact camera/lagging-player rules remain open.
+
+This proposal has not yet been accepted. Character availability and selection conflicts need authoritative resolution in the eventual multiplayer design. Party-size scaling must not make disconnecting or exhausting lives an advantage; exact roster changes and scaling policy remain to be designed.
