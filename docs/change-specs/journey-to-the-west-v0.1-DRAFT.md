@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:54 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 07:55 message on 2026-10-01.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -50,6 +50,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 25. Revised gameplay composition approved at 22:40 ("Yeah good. Proceed"): use the revised five-player courtyard composition as the visual direction, with player avatars at 90% and Nezha at 110% of the initial composition's scale. Continue design; this is not authorization to bypass the agreed design-before-implementation workflow. Input behavior, precise UI dimensions, and combat mechanics remain subject to the design review below.
 
 26. Combat package approved at 22:54: directional movement plus Attack/Jump/Magic; tap or hold normal combos and airborne attacks; arrows/WASD with J/K/L; the five specials summarized below; start with one magic charge, capacity three, one charge per special, with Magic Reserve adding one starting charge and capacity; target four to six uses per attentive player per full run; keep unused magic through respawns without granting new charges; full meters leave pickups for others. Exact damage and timing remain tuning work.
+
+27. Multiplayer session flow approved at 07:55 on 2026-10-01: students independently complete preparation, choose a character and upgrades, and mark Ready; each team launches automatically with a three-second countdown once all participants are ready; teachers may launch the ready subset, pause/resume one team or all teams, or end runs; the shared clock freezes during teacher pauses; no mid-run new players, but a disconnected player may reclaim their hero/state; teams continue while a member is disconnected; an all-team disconnect pauses briefly then ends as interrupted; starting party size fixes scaling; lagging players are warned then safely returned to the shared play area. Exact reconnect/grace intervals remain open.
 
 ## 3. Hero mechanics — specials approved; ordinary move details and tuning remain open
 
@@ -280,7 +282,7 @@ Magic economy:
 - Distribute party-scaled supplies through breakable props, selected enemy drops, the approach to Nezha, and accessible boss-arena supplies. Ensure the guaranteed transition does not leave all remaining magic behind.
 - Exact placement and quantity will be authored with the encounter specification and checked across party sizes.
 
-### Multiplayer session flow — proposal awaiting owner review
+### Multiplayer session flow — approved at 07:55 on 2026-10-01
 
 Recommended classroom behavior:
 - Use the existing MathQuest team assignment. Each team has its own preparation/character-selection lobby.
@@ -295,5 +297,18 @@ Recommended classroom behavior:
 - Keep the shared camera moving with the active group. A player falling behind receives a visible catch-up warning, then is brought forward safely without damage or resource changes; exact thresholds remain open.
 - Show an explicit reconnecting/paused/ended status so a frozen view is not mistaken for live play.
 
-Alternative to automatic team launch: teacher manually starts each ready team or all ready teams. This is the principal owner choice for the next review; none of this new session-flow proposal is approved by the combat-package approval.
+The owner approved this classroom flow with "Yes" on 2026-10-01 at 07:55. This approval does not settle the joining interface, exact reconnect/grace intervals, Cloudflare architecture, or classroom privacy and retention details.
 
+
+### Student entry and teacher lobby — proposal awaiting owner review
+
+Proposed flow for an in-person class:
+- Teacher creates the class session and assigns students to teams using the existing MathQuest classroom workflow.
+- Show a short-lived QR code and simple join code on the teacher display. It identifies the game session/team, not the student.
+- Student enters through the assigned team lobby, sees which heroes are claimed, selects an available hero, completes personal preparation, and presses Ready.
+- Teacher view shows team membership using the roster mapping available in the host system, hero selection, preparation/ready state, connection state, and whether each team is active, paused, or complete.
+- Teacher can launch all ready teams or a ready team, pause/resume, and end a run. A team may begin automatically once all its members are ready; the approved three-second countdown remains.
+- Minimize in-game typed student data. Keep identity/results in the existing classroom workflow where possible; exact roster integration, teacher-visible results, session-code lifetime, and data retention need a data-flow design.
+- QR/code expires when the class session closes; avoid reusing it across class periods.
+
+Next owner question: does the projected QR/join code and teacher-assigned team flow fit your classroom, or should students self-assign to teams after joining?
