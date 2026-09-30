@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:08 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:26 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -42,6 +42,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 21. Personal preparation upgrades approved at 21:57: in response to the shared-team versus individually earned/selected upgrade question, the owner chose "Individual choice." Each student earns and chooses upgrades for their own hero; choices do not grant the same bonuses to teammates. The menu, earning structure, and persistence through respawns were subsequently approved in decision 22.
 
 22. Preparation upgrade package approved at 22:08: choose up to three distinct personal upgrades from Power, Vitality, Magic Reserve, and Focus; required mathematics earns the first choice and each of two optional math blocks earns another; keep upgrades through automatic respawns. Accepted initial balance targets: +20% ordinary/aerial attack damage, +25% maximum health, +1 starting magic charge and +1 capacity, or +20% special damage respectively. Values are starting points for later balancing, not verified balance.
+
+23. Encounter plan approved at 22:26: accept the five-part pacing targets below; Nezha fights alone using a spear combination, returning ring, and signaled fire-wheel rush, combining attacks more aggressively below half health. For a surviving team, begin the boss encounter by elapsed 2:00; if behind, ordinary enemies withdraw and surviving heroes transition to the courtyard with their state preserved. Faster clears can reach Nezha earlier. This is design approval, not implementation authorization or evidence of balance.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -87,9 +89,9 @@ Accepted enemy types:
 - Shield bearers: positional counterplay or punish exposed recovery.
 - Charging brutes: visible windup, avoid the rush, punish the recovery.
 
-Entrances should create authored encounters, not damage players on spawn. Introduce behaviors before combining them. Proposed pacing: opening basics, middle mixed encounters and ambushes, approach encounter and supplies, roughly final minute for Nezha. This is a pacing target, not an approved forced-transition or spawn schedule.
+Entrances should create authored encounters, not damage players on spawn. Introduce behaviors before combining them. Approved pacing: opening basics, middle mixed encounters and ambushes, approach encounter and supplies, then Nezha by elapsed 2:00. Detailed timings below are pacing targets; the boss-arrival deadline and catch-up transition are accepted. Exact spawn counts and transition implementation remain open.
 
-Nezha's detailed move set, health, phases, arena hazards, and vulnerability windows remain to be designed.
+Nezha's three signature attacks, solo encounter, and more aggressive combinations below half health are approved below. Health, precise attack timings, vulnerability/stagger rules, and detailed hazard geometry remain to be designed.
 
 ## 6. Art and audio planning
 
@@ -149,7 +151,7 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Immediate next design topics: review the detailed encounter/boss proposal below, then a gameplay composition. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+Immediate next design topics: review GAMEPLAY COMPOSITION 01, then settle remaining controls, hero mechanics, magic economy, and multiplayer behavior. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
 
 ### End-of-run decisions — approved 2026-09-30 at 21:35
 
@@ -198,9 +200,9 @@ Approved four-option menu (numerical values are accepted starting points for lat
 
 These are simple numerical bonuses for the proof of concept; new move unlocks are not part of this upgrade package. Each option is intended to work for all five heroes. Percentages do not establish equal practical value; balance must be checked across hero kits and party sizes. Proposed clarification for the remaining respawn/magic design: grant Magic Reserve's extra starting charge once per run, rather than granting a fresh charge on every respawn.
 
-### Detailed encounter and Nezha proposal — awaiting owner review
+### Detailed encounter and Nezha plan — approved 2026-09-30 at 22:26
 
-The following is a new proposal, not approved by the owner's response about upgrades.
+The owner approved this encounter plan with "Yes" after the encounter/boss proposal and explicit recommendation to guarantee the boss encounter by elapsed 2:00. Precise balancing and implementation details remain open.
 
 | Target elapsed time | Location | Encounter purpose |
 | --- | --- | --- |
@@ -208,11 +210,11 @@ The following is a new proposal, not approved by the owner's response about upgr
 | 0:25–1:00 | Cave approach | Enemies emerge from cave mouths; leaping attackers descend from ledges with landing warnings; introduce dodgeable ranged fire |
 | 1:00–1:45 | Ruined shrine | Shield bearers and a charging brute join familiar enemies; a breakable barrier provides an entrance without immediate contact damage |
 | 1:45–2:00 | Courtyard approach | Short cleanup and clearly visible magic supplies in several locations; establish Nezha's arrival |
-| 2:00–3:00 | Courtyard | Nezha boss fight; no ordinary reinforcements in the proposed first version |
+| 2:00–3:00 | Courtyard | Nezha boss fight; no ordinary reinforcements in the first version |
 
-These are pacing targets, not mandatory waiting periods. Quick clears may advance the team and start the boss earlier. Proposed guarantee: for a team still alive, start Nezha's fight no later than elapsed 2:00, giving at least the final minute to the centerpiece encounter. If the party is behind, remaining ordinary enemies withdraw and a brief transition moves surviving heroes to the courtyard. Preserve health, lives, magic, chosen upgrades, and elapsed time; do not revive eliminated players or count bypassed enemies as defeated. Fit the transition within the first two minutes, without pausing or extending the three-minute action clock. Exact transition cues and camera behavior remain open.
+These are pacing targets, not mandatory waiting periods. Quick clears may advance the team and start the boss earlier. Approved guarantee: for a team still alive, start Nezha's fight no later than elapsed 2:00, giving at least the final minute to the centerpiece encounter. If the party is behind, remaining ordinary enemies withdraw and a brief transition moves surviving heroes to the courtyard. Preserve health, lives, magic, chosen upgrades, and elapsed time; do not revive eliminated players or count bypassed enemies as defeated. Fit the transition within the first two minutes, without pausing or extending the three-minute action clock. Exact transition cues and camera behavior remain open.
 
-Proposed boss design:
+Approved boss direction (detailed combat rules still open):
 - Fight Nezha alone, keeping the courtyard readable with as many as five heroes.
 - Spear combination: visible windup, a short close-range sequence, then a punishable recovery.
 - Returning ring: an outward and return path that players can read and evade; exact jumping/lane interaction remains to be specified.
@@ -221,5 +223,20 @@ Proposed boss design:
 - Use readable target cues and bounded tracking so a windup remains meaningful when the targeted player moves.
 - Preserve openings for all five heroes; resolve stagger limits, invulnerability, damage values, and special interactions in the combat specification.
 
-Owner review question: approve this encounter plan, including Nezha fighting alone and a guaranteed boss encounter by the final minute, or require players to clear earlier encounters before reaching him?
+### GAMEPLAY COMPOSITION 01 — visual proposal awaiting review
+
+Generated and displayed in the planning conversation after the encounter approval. Uses CAST CONCEPT 01 as its appearance reference. This is an illustrative gameplay composition, not an implemented screenshot, production sprite sheet, or tested touch interface. Image is available in the conversation and has not been added to this repository.
+
+Composition:
+- Landscape tablet proportions, side-on belt-scrolling courtyard with ground-depth movement.
+- All five approved heroes visibly separated across the floor, facing Nezha alone.
+- Subdued blue-grey/moss courtyard, layered mountain scenery, and stronger character colors; red/gold Nezha stands against cooler scenery.
+- Restrained spell effects, visible magic flasks, and a ground warning for the boss rush.
+- Compact team status across the top, shared timer, and separate Nezha health bar.
+- Proposed touch controls in a bottom strip outside the arena: cross-shaped directional pad and Attack, Jump, Magic buttons.
+- Character sizes, framing, HUD abbreviations, charge indicators, lane-warning geometry, and button dimensions are illustrative and do not settle the remaining mechanical or accessibility decisions.
+- The shown composition has not yet been approved. Final art must keep characters and attack cues readable during movement and overlapping effects.
+
+Next owner question: does this composition have the intended arcade feel and character scale, or should the characters be larger or smaller?
+
 
