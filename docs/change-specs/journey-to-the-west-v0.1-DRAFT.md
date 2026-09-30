@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:35 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 21:51 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -38,6 +38,7 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 17. The owner selected the offered three-lives-with-automatic-respawning option on 2026-09-30 at 21:31. Three lives means the initial life plus two returns. Respawn position, protection duration, exhaustion handling, and timer outcome remain proposals below.
 18. The owner approved the character appearances in CAST CONCEPT 01 (five heroes plus boss Nezha) on 2026-09-30 at 21:31.
 19. End-of-run structure approved at 21:35: respawn near teammates with full health and brief protection; preserve stage/enemy health/time; spectate after all three lives; end on team elimination; surviving players retreat with a lesser gameplay result at three minutes; defeating Nezha earns full victory. Gameplay results remain separate from mathematics accuracy.
+20. Multiplayer setup approved at 21:51: one to five human players including solo practice; student choice of unclaimed unique heroes; no AI companions; separate level instance per team; shared enemies/progress/timer; enemy numbers, boss health, and magic supply scale to team size; no friendly fire or teammate blocking; shared play area and camera progression.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -112,9 +113,8 @@ Owner suggests Cloudflare for multiplayer. Cloudflare is a candidate, not an app
 Local scope exception: the owner's explicit request authorizes real shared multiplayer combat for this new cartridge. The current host brief's individual-action policy remains unchanged for Vault Seven and Nightfall.
 
 Still to define:
-- Minimum party size, solo practice, and missing characters.
-- Character selection, duplicate character policy, and late joining.
-- Shared stage/camera progression and split-player handling.
+- Character selection conflicts, selection deadline, and late joining (student choice and unique heroes are accepted).
+- Exact camera progression and lagging-player handling (shared play area accepted).
 - Exact respawn delay, protection duration, safe position, and same-update outcome precedence (life-exhaustion and team-defeat behavior are accepted).
 - Three-minute clock ownership, start point, and pause rules (expiry outcome accepted).
 - Disconnect/reconnect behavior, absent-player handling, teacher control.
@@ -130,6 +130,7 @@ Read through connected GitHub tools:
 - mcada-project-handbook/CONDITIONAL-STANDARDS.md: blob dad2d3a05ca0f18260196ea51ac6351bffffdc1c.
 - MathQuest docs/PROJECT-BRIEF.md: version 0.5, blob 8e0a6040006922338e3b7b4c578d3741f4515aba.
 - MathQuest README.md: blob 09f18b6da9d793f56e32737e5169d7eb6c787654.
+- MathQuest docs/change-specs/v0.9.2.md: blob 87b49bd1a20ecbb7c0394688e35321a921f79fa5; sections 17–18 on equipment unlocks and teacher extensions read for preparation-loop planning. Source ref: 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28. Reading that specification does not verify current runtime behavior.
 
 These are file blob revisions except the explicitly identified host source commit. Tree inspection found no AGENTS.md.
 Applicable handbook scope: U-01–U-08 within this task; approved U-09 for any stored work/progress; S-02 academic evidence, S-03 live educational games, S-04 deployment/classroom operation. U-01–U-08 remain seeded and conditional modules remain draft in the handbook; this task does not globally ratify them or the proposed S-03 privacy safeguard. No handbook rule was edited.
@@ -145,7 +146,7 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Immediate next design topics: party sizes and character selection, then review a gameplay composition and detailed encounter plan. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+Immediate next design topics: math-earned preparation bonuses, then review a gameplay composition and detailed encounter plan. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
 
 ### End-of-run decisions — approved 2026-09-30 at 21:35
 
@@ -156,7 +157,7 @@ Immediate next design topics: party sizes and character selection, then review a
 - If the three-minute limit expires with surviving players: end with a retreat/partial-success gameplay outcome; record whether Nezha was defeated separately. Keep gameplay outcome separate from academic evidence.
 - Defeating Nezha earns full victory. These outcome rules are approved; numerical timing and edge-case precedence remain to be specified.
 
-### Multiplayer setup — proposal awaiting owner response
+### Multiplayer setup — approved 2026-09-30 at 21:51
 
 - Support one to five human players, including solo practice.
 - Students choose from unclaimed heroes; one instance of each hero per team.
@@ -166,4 +167,19 @@ Immediate next design topics: party sizes and character selection, then review a
 - Turn off friendly fire and blocking between teammates.
 - Progress through a shared play area and advance the camera together. Exact camera/lagging-player rules remain open.
 
-This proposal has not yet been accepted. Character availability and selection conflicts need authoritative resolution in the eventual multiplayer design. Party-size scaling must not make disconnecting or exhausting lives an advantage; exact roster changes and scaling policy remain to be designed.
+The owner accepted this setup. Character availability and selection conflicts need authoritative resolution in the eventual multiplayer design. Party-size scaling must not make disconnecting or exhausting lives an advantage; exact roster changes and scaling policy remain to be designed.
+
+### Mathematics and preparation bonuses — proposal awaiting owner response
+
+Existing MathQuest v0.9.2 specification sections 17–18 define a team preparation loop: required preparation grants one equipment slot; each of up to two completed optional math blocks adds another distinct slot; chosen team resources apply to all eligible student runs. Teacher extension controls include student/module selection, question count, placement, and difficulty. This is a retrieved existing contract, not yet an adopted requirement for Journey to the West.
+
+Recommended proposal:
+- Follow that acquisition pattern with one initial team bonus and up to two additional distinct bonuses earned through teacher-configured optional math blocks.
+- Team-selected bonuses apply to each participating hero for the run.
+- Candidate choices: stronger ordinary attacks, higher maximum health, or greater magic reserves. Exact names, strengths, duration, and visual changes remain provisional.
+- Collectible magic during combat continues to replenish only the individual collector.
+- Complete academic preparation before the shared three-minute action run. Rewards must not change recorded mathematical accuracy.
+- Academic block completion must retain the host's individual participation/evidence rules; a single teammate must not silently fulfill another student's required mathematics.
+
+Alternative requiring owner choice: individual students earn and select personal hero bonuses instead of a shared team loadout.
+Ask the owner to select shared-team or individual-hero upgrades before refining values or implementation.
