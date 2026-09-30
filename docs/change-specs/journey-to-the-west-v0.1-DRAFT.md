@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:30 message.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 22:40 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -46,6 +46,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 23. Encounter plan approved at 22:26: accept the five-part pacing targets below; Nezha fights alone using a spear combination, returning ring, and signaled fire-wheel rush, combining attacks more aggressively below half health. For a surviving team, begin the boss encounter by elapsed 2:00; if behind, ordinary enemies withdraw and surviving heroes transition to the courtyard with their state preserved. Faster clears can reach Nezha earlier. This is design approval, not implementation authorization or evidence of balance.
 
 24. Character scale revision requested at 22:30: relative to GAMEPLAY COMPOSITION 01, render each of the five player avatars at 90% of its original width and height and Nezha at 110%, maintaining proportions. Applies to in-arena characters, not HUD portraits. Record these as exact production scale targets; a generated preview is illustrative rather than a measured sprite transformation.
+
+25. Revised gameplay composition approved at 22:40 ("Yeah good. Proceed"): use the revised five-player courtyard composition as the visual direction, with player avatars at 90% and Nezha at 110% of the initial composition's scale. Continue design; this is not authorization to bypass the agreed design-before-implementation workflow. Input behavior, precise UI dimensions, and combat mechanics remain subject to the design review below.
 
 ## 3. Proposed hero mechanics — exact moves remain open
 
@@ -225,7 +227,7 @@ Approved boss direction (detailed combat rules still open):
 - Use readable target cues and bounded tracking so a windup remains meaningful when the targeted player moves.
 - Preserve openings for all five heroes; resolve stagger limits, invulnerability, damage values, and special interactions in the combat specification.
 
-### GAMEPLAY COMPOSITION 01 — visual proposal awaiting review
+### GAMEPLAY COMPOSITION 01 — revised visual direction approved at 22:40
 
 Generated and displayed in the planning conversation after the encounter approval. Uses CAST CONCEPT 01 as its appearance reference. This is an illustrative gameplay composition, not an implemented screenshot, production sprite sheet, or tested touch interface. Image is available in the conversation and has not been added to this repository.
 
@@ -237,7 +239,7 @@ Composition:
 - Compact team status across the top, shared timer, and separate Nezha health bar.
 - Proposed touch controls in a bottom strip outside the arena: cross-shaped directional pad and Attack, Jump, Magic buttons.
 - Character sizes, framing, HUD abbreviations, charge indicators, lane-warning geometry, and button dimensions are illustrative and do not settle the remaining mechanical or accessibility decisions.
-- The shown composition has not yet been approved. Final art must keep characters and attack cues readable during movement and overlapping effects.
+- The revised composition is approved as visual direction. Final art must keep characters and attack cues readable during movement and overlapping effects; runtime readability and touch usability remain unverified.
 
 Scale revision, 2026-09-30 at 22:30:
 - Owner requested: "Scale down player avatars by 10% and scale up boss by 10%".
@@ -247,3 +249,36 @@ Scale revision, 2026-09-30 at 22:30:
 - This request sets the scale direction; it does not constitute approval of every remaining UI or gameplay detail.
 
 
+
+### Combat package — proposed 2026-09-30 at 22:40, awaiting owner review
+
+The following consolidates the remaining player-facing combat choices into one review. These proposals are not approved by the owner's acceptance of the visual composition.
+
+Controls:
+- Directional pad for horizontal and ground-depth movement, including diagonals; normalize diagonal movement so it is not faster.
+- Three actions: Attack, Jump, Magic. Repeated taps or holding Attack progress the normal combo. Press Attack while airborne for the hero's aerial strike.
+- Use movement and jumping for evasion; no additional block or dodge button for this proof of concept.
+- Magic requires a fresh press; holding the button does not spend multiple charges. Invalid/empty activations spend nothing.
+- Keyboard equivalents: arrows or WASD to move; J attack, K jump, L magic.
+- Support moving while using action buttons, and jump-plus-attack input. Release held inputs on lost focus or canceled touch.
+- This proposal defines controls, not final button sizes or input buffering timings.
+
+Hero specials (confirming the proposed roles in section 3):
+- Sun Wukong — Monkey Swarm: two temporary copies join a brief staff assault; copies are effects of the special, not AI teammates.
+- Zhu Bajie — Earthshaker: heavy area shockwave that damages and knocks back ordinary enemies.
+- Sha Wujing — River Surge: a broad damaging current pushes enemies away.
+- Tang Sanzang — Lotus Ward: a damaging pulse with brief protection for nearby teammates, including the caster.
+- White Dragon Horse — White Horse Charge: temporarily become a steerable white horse and charge through enemies.
+- Every hero keeps effective ordinary and aerial attacks. Exact timing and damage coefficients remain tuning work.
+- Special utility must not lock the boss out of acting indefinitely. Horse repeat-hit limits and Tang protection overlap rules need explicit numerical definitions in the implementation specification.
+
+Magic economy:
+- Start with one charge, hold at most three, spend one per special.
+- Magic Reserve upgrade therefore starts with two charges and raises capacity to four.
+- Each pickup replenishes one charge for its collector only; a full meter leaves the pickup available.
+- Target roughly four to six special uses per attentive player in a full three-minute run before the extra starting charge from Magic Reserve. This is a tuning goal, not a guaranteed individual pickup share.
+- Retain unspent magic through automatic respawns; death does not grant extra charges. Retain earned upgrades as already approved.
+- Distribute party-scaled supplies through breakable props, selected enemy drops, the approach to Nezha, and accessible boss-arena supplies. Ensure the guaranteed transition does not leave all remaining magic behind.
+- Exact placement and quantity will be authored with the encounter specification and checked across party sizes.
+
+Next owner question: approve this combat package, or change any hero's special before proceeding to multiplayer session behavior and the remaining art/audio plan?
