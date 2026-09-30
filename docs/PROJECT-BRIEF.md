@@ -1,6 +1,6 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.7 — v0.9.4 baseline plus authored shooter level blockout
+**Brief version:** 0.8 — v0.9.4 baseline plus standalone shooter practice candidate
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
@@ -122,3 +122,9 @@ Before implementation, re-read the then-current source and this design, complete
 Following the owner's request, the [industrial shooter level blockout](level-design/shooter-v0.1/README.md) now provides exact Tiled/semantic geometry and a review image. It is based on design checkpoint `67802fca05fac4457d818f9449496cf7236bde8a`. Platforms, routes, ladder/water connections, enemy/hazard/repair placements, mandatory midpoint gate and boss-entry trigger are authored. The optional crawl roof and checkpoint backtracking door remain disabled pending decisions. This completes the initial level-authoring step, not the game engine or artwork/animation integration.
 
 The authoring script and static-check evidence are preserved with the map. Baseline route and pickup reachability checks pass under documented assumptions; combat/difficulty, production physics, Tiled application import and real-device play remain untested. Existing application/deployment and cartridge behavior remain unchanged. Next review the concrete geometry and input layout, then connect the accepted map to the separately checkpointed game implementation.
+
+## 13. Shooter standalone practice candidate — 30 September 2026
+
+Owner Continue after the authored map advances the side-scrolling shooter to `shooter-0.1.0-alpha.1` on `design/industrial-shooter-v0.1`. Source parent is map checkpoint `7be0061943f9a4087145a845ddb8258f5f31c612`. [Candidate documentation](../public/games/shooter/README.md) and [check record](checkpoints/shooter-0.1.0-alpha.1.md) define implemented behavior and verification limits.
+
+Entry is `public/practice-shooter.html`, with a reproducible self-contained review HTML. The authored map now feeds a fixed-step practice simulation, original pixel rendering, eight-direction touch/keyboard controls and original synthesized music/effects. No MathQuest live entry point, shared runtime, academic evidence, existing cartridge or service/deployment configuration is changed. Practice progression is in memory only and sends no results. Sound preference alone persists. Narrative, assisted play, server authority and live preparation remain separate integration work. Real Apple-device and hosted practice checks remain prerequisites for delivery claims; candidate source is not a verified release.
