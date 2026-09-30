@@ -1,6 +1,7 @@
-# MathQuest aerial shooter — v0.1.0 design draft 1
+# MathQuest aerial shooter — v0.1.0 design draft 1, revision 2
 
 **Date:** 30 September 2026 (Asia/Shanghai)  
+**Revision 2:** records the owner's 21:26 approval of timer, respawn and damage rules; adds a proposed encounter design for review.  
 **Status:** DESIGN — accepted decisions and unresolved design questions; not an implementation-ready change specification.  
 **Working identifier:** aerial-shooter; final cartridge title and narrative remain open.  
 **Owner:** William McAda  
@@ -52,11 +53,11 @@ The old asset/runtime contracts describe historical reference implementations. D
 | Aircraft | WWII-style propeller planes. |
 | Art | Arcade pixel art. |
 | Environment | Ocean, islands and possibly a coastal city for the first level. |
-| Duration | Approximately three minutes maximum for the action level; exact timer/checkpoint relationship remains to be confirmed. |
+| Duration | 180 seconds cumulative active play across all three lives. Checkpoint recovery does not refill the clock. |
 | Firing | Automatic primary fire. |
 | Touch controls | Familiar Mega Man/Chrono Circuit-style touchscreen controls. Proposed interpretation is a fixed cross-shaped directional pad with diagonal movement. |
 | Health | Health bar supporting approximately ten normal hits or five heavy hits at baseline. |
-| Lives | Three lives, with checkpoints at the midpoint and at the final boss. Exact restoration rules remain open. |
+| Lives | Three lives total (initial life plus two replacements), with midpoint and boss checkpoints. Before the midpoint, return to the beginning. Restore full applicable health and earned upgrades, clear temporary bonuses, and preserve claimed-pickup history. |
 | Boss | Large enemy aircraft in the final section, supported by smaller aircraft. |
 | Time expiry | If the player is still alive and the boss survives at the time limit, count an escape with a lesser individual outcome. |
 | Ordinary enemies | Formation fighters, weaving interceptors, tougher bombers, and ship/coastal gun turrets. |
@@ -125,15 +126,22 @@ An individual combat/escape result must not overwrite the team's chosen narrativ
 - Save/recovery/deletion behavior must conform to applicable platform rules; do not erase actual user records during development.
 - Verify actual supported iPhone/iPad models and browser versions. Responsive desktop checks do not establish real-device support.
 
-## 7. Proposed details awaiting approval
+## 7. Approved recovery, damage and timer rules
 
-These are proposals, not accepted final mechanics:
-- Normalize baseline health to 100, ordinary damage to 10 and heavy damage to 20; armor gives 150 health.
-- Brief post-hit invulnerability, duration to be specified.
-- One cumulative 180-second active-play budget across all three lives; checkpoint recovery does not refill this timer.
-- Each lost life restores the current checkpoint with full applicable health, retains math-earned upgrades, and consumes one of the three lives.
-- Checkpoint restoration clears temporary shooting effects; claimed supplies cannot be collected repeatedly through deaths.
-- Physical aircraft collisions count as heavy damage; their exact separation/collision response remains to be designed.
+Explicitly approved by the owner on 30 September 2026 at 21:26 (Asia/Shanghai):
+- Baseline health is 100. Ordinary bullets deal 10 damage; heavy shots and aircraft collisions deal 20. Armor gives 150 maximum/starting health.
+- Every damaging hit grants one second of protection from further damage.
+- One cumulative 180-second active-play budget covers all three lives. Checkpoint recovery rewinds section progress but never replenishes this budget.
+- A late death can leave too little time to reach or destroy the boss. If alive when the budget expires, the player gets the lesser escape outcome.
+- Three lives means the initial life plus two replacements. A death with a replacement remaining returns to the latest checkpoint (or the beginning before the first checkpoint).
+- Respawn restores full applicable health, retains math-earned upgrades, and clears temporary shooting effects.
+- Already-collected supplies remain spent across deaths; checkpoint replay must not grant them repeatedly.
+- Exhausting all lives ends the gameplay run as defeat.
+- Gameplay outcomes remain individual and do not overwrite the team narrative choice or academic results.
+
+### Details still open
+
+These remain proposals or unresolved implementation contracts:
 - A visible supply marker and distinct medium-aircraft silhouette identify each planned carrier.
 - Each temporary shooting effect has a clear visible timer; duration, stacking/replacement and damage interactions remain open.
 - Defeating an enemy carrier is required for its drop; pickup requires flying through it. Escape/expiry/missed pickup behavior remains open.
@@ -142,9 +150,9 @@ These are proposals, not accepted final mechanics:
 ## 8. Remaining design questions and deliverables
 
 Resolve in discussion before declaring the implementation specification complete:
-1. Exact cumulative timer, scroll progress, checkpoint rewind and boss-entry behavior, including what happens after dying close to the time limit.
-2. Respawn health, protection, temporary effects, enemy reset and pickup persistence.
-3. Aircraft collision damage and collision separation, including boss and surface objects.
+1. Separate cumulative active-time and rewindable level-progress clocks; finalize checkpoint locations, boss-entry logic, death-transition timing and simultaneous terminal-event precedence.
+2. Finalize respawn placement/protection and enemy/boss reset details; full health, retained permanent upgrades, cleared temporary bonuses and spent claimed pickups are approved.
+3. Finalize aircraft collision separation and treatment of surface objects; aircraft collision damage of 20 is approved.
 4. Exact gate-count mapping when normal gates have unequal loads; teacher authority over optional preparation.
 5. Enemy statistics, silhouettes, entry/exit paths, fire cadence, targeting rules, warning cues, simultaneous limits and fair escape routes.
 6. Boss identity, phases, attacks, escorts, health, weak points and cleanup on success.
@@ -157,3 +165,67 @@ Resolve in discussion before declaring the implementation specification complete
 13. Acceptance matrix for no/all upgrades, lives/checkpoints, all supply opportunities, timeout/boss/defeat, inputs, audio, interruptions, classroom evidence and existing-cartridge regression.
 
 No tests were run and no support claim is verified for the new shooter. The next work remains detailed design, followed by the agreed change specification.
+
+
+## 9. Proposed level and encounter design — awaiting owner review
+
+All new choices in this section are proposals, not implied by approval of the three recovery/damage/timer rules. Working level descriptor: Coastal Escape; final title/narrative remains open.
+
+### Two clocks
+
+Use cumulative active run time for the approved 180-second limit and a separate rewindable level-progress clock for scenery, authored waves and checkpoints. The schedule below describes a no-death traversal. A checkpoint replay rewinds only level progress and uses up the remaining cumulative budget. The final boss encounter continues until destruction, terminal defeat or the cumulative limit; it does not exit early merely because the scenery scrolls onward.
+
+| Level progress, no deaths | Setting and encounter | Planned supplies/checkpoints |
+| --- | --- | --- |
+| 0–25 seconds | Open ocean; first fighters arrive after a short movement lead-in, then alternate left/right formations. | Teach steering, forward alignment and bullet avoidance. |
+| 25–50 seconds | Island chain; weaving interceptors cross the field, followed by a readable formation. | Spread-shot carrier at 25 seconds; repair carrier at 45 seconds. |
+| 50–90 seconds | Shipping channel; staggered ship turrets fire aimed salvos, followed by an armored bomber and fighter cover. | Rapid-fire carrier at 65 seconds. |
+| 90–120 seconds | Coastal harbor; midpoint checkpoint, shore batteries and short interceptor waves alternate rather than attacking all at once. | Checkpoint at 90 seconds; repair carrier at 100 seconds. |
+| 120–135 seconds | Harbor exit/open water; final wingman carrier, then a brief lull and incoming-boss warning. | Wingman carrier at 125 seconds; boss checkpoint at 135 seconds. |
+| 135–180 seconds | Large enemy aircraft boss with pairs of supporting fighters. | Repair carrier at 150 seconds of no-death level progress; final encounter ends on boss destruction, defeat or cumulative timeout. |
+
+Drop times refer to carrier arrival, not automatic pickup delivery. Each carrier must be destroyed to release its pickup. Three repair opportunities are proposed, each restoring 25 health capped at the current maximum.
+
+### Enemy identities and fair attack patterns
+
+| Enemy | Proposed behavior | Counterplay |
+| --- | --- | --- |
+| Formation fighter | Three-plane V or staggered line; descends predictably and fires short straight volleys. | Move between lanes or align forward fire early. |
+| Weaving interceptor | Crosses on a shallow S path; fires at the player's sampled position, with no midflight bullet homing. | Change direction after the volley is released. |
+| Armored bomber | Slow, broad silhouette; telegraphed fan of heavy projectiles with readable gaps. | Use the gap or attack during the interval between salvos. |
+| Ship/coastal turret | Scrolls with the surface; visible aim/flash before a limited aimed volley. | Move after aim locks; destroy it or pass outside its firing lane. |
+| Supply aircraft | Distinct medium silhouette, bright recognition stripe and an S/R/W/repair icon; slower predictable traversal with limited covering fire. | Prioritize the carrier, then fly through its pickup. |
+| Boss escorts | Enter in pairs during defined boss pauses, using the existing formation-fighter behavior. | Clear escorts before the next heavy boss pattern. |
+
+Proposed fairness constraints: visible warnings for fast/side entries; no attacks from invisible enemies; no deliberate ramming homing; preserve an avoidable route for baseline speed; legible hostile bullets distinct from friendly shots and background. Surface ships/buildings are below flight altitude and do not inflict aircraft-body collision damage; their projectiles do. Aerial body collision handling still needs exact contact/separation behavior.
+
+### Boss proposal
+
+An oversized four-engine armored bomber with two destructible wing gun positions:
+1. **Wing-gun phase:** alternating fans from the two positions. Destroying one visibly removes that firing source.
+2. **Fuselage phase:** expose the central weak point after both guns are disabled; use wider sweeping volleys with deliberate recovery gaps.
+3. Supporting fighter pairs appear at bounded intervals, not continuously, and are not simultaneous with the densest boss volley.
+
+Proposed checkpoint recovery resets boss/guns/escorts and hostile bullets to the start of this encounter. The player gets approved full health and retained earned upgrades, but less cumulative time. This boss-reset choice still requires approval. Plan the boss to be beatable with baseline weapon damage in the available no-death encounter time; exact health/fire-rate numbers need a later balancing sheet.
+
+### Temporary bonuses proposal
+
+| Bonus | Proposed duration | Proposed behavior |
+| --- | --- | --- |
+| Spread shot | 20 seconds | Retains the forward stream and adds two angled streams for wide coverage. |
+| Rapid fire | 20 seconds | Increases primary firing rate; exact multiplier is still open. |
+| Wingman | 30 seconds | One accompanying friendly plane fires forward; follows the player and cannot absorb damage as a shield. |
+
+Timers run only during active simulation. Permanent weapon damage enhancement continues to apply according to an explicit later damage formula. If effects overlap, the proposed simple rule is that the newly collected bonus replaces the previous bonus; no stacking. Pickups use both icon/shape and color. Their expiry, full-health collection behavior, unclaimed-drop recovery and exact projectile values remain open.
+
+### Art/audio direction proposal
+
+Original arcade pixel art: navy/teal ocean, turquoise shallows, muted green islands, warm stone harbor, and restrained clouds/wakes so hazards remain visible. Player plane: bright silver with blue accents. Enemy fighters: olive/charcoal with distinct silhouettes. Boss: dark burgundy with cream bands for strong contrast. Fictional unit markings, with no commitment yet to particular historical factions or national insignia.
+
+Propose animated propellers, left/right banking, muzzle flashes, hit flashes, progressive boss damage, smoke and layered explosions. Keep HUD and instructions as sharp readable text outside the low-resolution art.
+
+Propose an original energetic arcade flight theme and a distinct boss theme, with separate cues for player fire, enemy fire, heavy fire, hits, destruction, repair pickup, bonus pickup, checkpoint, warning, victory and lesser escape. Audio remains optional and every threat cue has a visible equivalent.
+
+### Next review request
+
+Ask the owner to review the timeline, boss structure/reset policy and timed-bonus/repair package as a proposed design. Review a visual concept board after the overall direction is accepted. Do not treat silence about an unpresented detail as approval.
