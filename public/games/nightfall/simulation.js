@@ -1,6 +1,6 @@
 import {HAVEN_REVISION,havenEnvironment,havenEnemies,havenComplete,havenTick,havenSwitch,HAVEN_SWITCHES} from './false-haven-world.js';
-import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies,worldFor} from './world.js?v=0.9.4';
-import {threatFor} from './config.js?v=0.9.4';
+import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies,worldFor} from './world.js?v=0.9.4-fh1';
+import {threatFor} from './config.js?v=0.9.4-fh1';
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const emit=(s,type,text)=>{s.events.push({type,text});if(text){s.message=text;s.messageAt=s.time;}};
 export function createState(loadout=[],route='clinic',threat=1,scenario='city'){

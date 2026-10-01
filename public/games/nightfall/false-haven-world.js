@@ -7,7 +7,7 @@ export const HAVEN_TASKS=[
  {id:'passage_drained',label:'Wait for the service passage to drain',x:2432,y:1152,duration:6,requires:['power_pump'],automatic:true,prop:7},
  {id:'service_shortcut',label:'Open the manual service shortcut',x:2720,y:1408,duration:1.5,requires:['passage_drained'],prop:7},
  {id:'power_depot',label:'Return to the selector: power the depot',x:1856,y:544,duration:1,requires:['service_shortcut'],prop:7},
- {id:'trolley_parked',label:'Move the cargo trolley along its track',x:3240,y:880,duration:2,requires:['power_depot'],prop:6},
+ {id:'trolley_parked',label:'Move the cargo trolley along its track',x:3240,y:912,duration:2,requires:['power_depot'],prop:6},
  {id:'depot_shutter',label:'Raise the depot shutter',x:3360,y:880,duration:2,requires:['trolley_parked'],prop:7},
  {id:'gate_unlocked',label:'Unlock the evacuation gate in the booth',x:3328,y:512,duration:3,requires:['depot_shutter'],prop:7},
  {id:'barrier_released',label:'Release the vehicle barrier',x:2720,y:1584,duration:2,requires:['gate_unlocked'],prop:7},
@@ -15,6 +15,8 @@ export const HAVEN_TASKS=[
 ];
 export const HAVEN_BUILDINGS=[
  {id:'dorm',name:'SHELTER 04',x:256,y:256,w:576,h:512,door:512,floor:3},
+ {id:'canteen',name:'ABANDONED CANTEEN',x:384,y:960,w:448,h:320,door:576,floor:3},
+ {id:'medical',name:'INTAKE / MEDICAL',x:1056,y:128,w:384,h:320,door:1216,floor:3},
  {id:'supply',name:'SUPPLY / SHOTGUN',x:1056,y:768,w:384,h:320,door:1216,floor:2},
  {id:'booth',name:'EVACUATION CONTROL',x:3104,y:352,w:448,h:448,door:3200,floor:4}
 ];
@@ -25,7 +27,7 @@ export const HAVEN_WINDOWS=HAVEN_BUILDINGS.filter(b=>b.id!=='booth').flatMap(b=>
 const fence=(x,y,w,h)=>({x,y,w,h,gate:true});
 export const FIXED_FENCES=[fence(2560,0,16,1088),fence(2560,1280,16,64),fence(2560,1472,16,96),fence(2560,1792,16,128),
  fence(1952,704,448,16),fence(1952,704,16,288),fence(2384,704,16,288),fence(1952,976,144,16),fence(2224,976,176,16)];
-export const TROLLEY_START={x:3196,y:772,w:88,h:32},TROLLEY_END={x:3456,y:772,w:88,h:32};
+export const TROLLEY_START={x:3196,y:808,w:88,h:32},TROLLEY_END={x:3456,y:808,w:88,h:32};
 export function trolleyRect(s){const t=s.haven?.trolleyProgress||0;return {...TROLLEY_START,x:TROLLEY_START.x+(TROLLEY_END.x-TROLLEY_START.x)*t};}
 export function havenBarriers(s){const h=s.haven||{};return [...FIXED_FENCES,
  ...(!s.tasks.passage_drained?[{...fence(2560,1088,16,192),water:true}]:[]),
@@ -43,13 +45,13 @@ const DISTRACTIONS=[{id:'haven-alarm-a',kind:'alarm',propId:'alarm-car-a',label:
  {id:'haven-barrel-a',kind:'barrel',label:'Fuel barrel',x:1584,y:1088,duration:8,radius:500},{id:'haven-barrel-b',kind:'barrel',label:'Fuel barrel',x:3072,y:1312,duration:8,radius:500}];
 export function havenWorld(s){return {WORLD:HAVEN_WORLD,BUILDINGS:HAVEN_BUILDINGS,TASKS:HAVEN_TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS:HAVEN_WINDOWS,BARRIERS:havenBarriers(s)};}
 export function havenEnvironment(){return {powerCircuit:'off',drainStarted:null,trapClosed:false,speakerUntil:0,speakerReady:0,trolleyProgress:0,trolleyMoving:false,barricadeA:false,barricadeB:false,finaleAt:null,finaleSpawned:false};}
-export function havenEnemies(){const list=[];const clusters=[[1056,448,8],[1728,352,8],[2176,1120,8],[2944,480,7],[3008,1152,8],[3392,1568,7]];
+export function havenEnemies(){const list=[];const clusters=[[1056,544,8],[1728,352,8],[2176,1120,8],[2816,480,7],[3008,1152,8],[3392,1568,7]];
  for(const [x,y,n] of clusters)for(let j=0;j<n;j++){const i=list.length,kind=i%11===0?'brute':i%5===0?'crawler':i%3===0?'runner':'shambler',px=x+(j%4)*56,py=y+Math.floor(j/4)*72;list.push({id:'fh-'+i,x:px,y:py,homeX:px,homeY:py,kind,hp:kind==='brute'?6:kind==='shambler'?2:1,phase:'wander',timer:0,angle:Math.PI,deathTime:0});}return list;}
-export function havenFinale(){return Array.from({length:8},(_,i)=>{const x=3520+(i%2)*64,y=64+Math.floor(i/2)*64;return {id:'fh-finale-'+i,x,y,homeX:x,homeY:y,kind:i%3===0?'runner':'shambler',hp:i%3===0?1:2,phase:'investigate',target:{x:2720,y:1584},memory:90,timer:0,angle:Math.PI,deathTime:0,finale:true};});}
+export function havenFinale(){return Array.from({length:8},(_,i)=>{const x=(i<4?2640:2368)+(i%2)*48,y=1648+Math.floor((i%4)/2)*64;return {id:'fh-finale-'+i,x,y,homeX:x,homeY:y,kind:i%3===0?'runner':'shambler',hp:i%3===0?1:2,phase:'investigate',target:{x:2720,y:1584},memory:90,timer:0,angle:Math.PI,deathTime:0,finale:true};});}
 export const HAVEN_SWITCHES=[{id:'speaker',x:1872,y:864,label:'Broadcast to the inspection lane'}, {id:'trap',x:2048,y:1040,label:'Inspection gate'}, {id:'barricadeA',x:1472,y:864,label:'Shift shelter barricade'}, {id:'barricadeB',x:2816,y:1184,label:'Shift depot barricade'}];
 export const overlaps=(a,b,r=16)=>a.x>b.x-r&&a.x<b.x+b.w+r&&a.y>b.y-r&&a.y<b.y+b.h+r;
 export function havenComplete(s,id){const h=s.haven,t=HAVEN_TASKS.find(t=>t.id===id);if(!t||s.tasks[id]||!(t.requires||[]).every(k=>s.tasks[k]))return false;
- if(id==='trolley_parked'){if(s.enemies.some(e=>e.hp>0&&overlaps(e,{x:3196,y:752,w:348,h:72}))||overlaps(s,{x:3196,y:752,w:348,h:72})){s.message='Track occupied. Clear the marked trolley track.';s.messageAt=s.time;return false;}h.trolleyMoving=true;return true;}
+ if(id==='trolley_parked'){if(s.enemies.some(e=>e.hp>0&&overlaps(e,{x:3196,y:800,w:348,h:72}))||overlaps(s,{x:3196,y:800,w:348,h:72})){s.message='Track occupied. Clear the marked trolley track.';s.messageAt=s.time;return false;}h.trolleyMoving=true;return true;}
  s.tasks[id]=true;s.doorRevision++;s.checkpoint={x:s.x,y:s.y};
  if(id==='power_pump'){h.powerCircuit='pump';h.drainStarted=s.time;}
  if(id==='power_depot')h.powerCircuit='depot';
@@ -58,7 +60,7 @@ export function havenComplete(s,id){const h=s.haven,t=HAVEN_TASKS.find(t=>t.id==
  if(id==='escape')s.outcome='success';s.events.push({type:id==='escape'?'engine':'power',text:s.message});return true;}
 export function havenTick(s,dt){const h=s.haven;
  if(h.drainStarted!==null&&!s.tasks.passage_drained&&s.time-h.drainStarted>=6)havenComplete(s,'passage_drained');
- if(h.trolleyMoving){const track={x:3196,y:752,w:348,h:72};if(![s,...s.enemies.filter(e=>e.hp>0)].some(a=>overlaps(a,track))){h.trolleyProgress=Math.min(1,h.trolleyProgress+dt/2);s.doorRevision++;if(h.trolleyProgress===1){h.trolleyMoving=false;s.tasks.trolley_parked=true;s.message='Cargo trolley parked. Raise the shutter.';s.messageAt=s.time;}}}
+ if(h.trolleyMoving){const track={x:3196,y:800,w:348,h:72};if(![s,...s.enemies.filter(e=>e.hp>0)].some(a=>overlaps(a,track))){h.trolleyProgress=Math.min(1,h.trolleyProgress+dt/2);s.doorRevision++;if(h.trolleyProgress===1){h.trolleyMoving=false;s.tasks.trolley_parked=true;s.message='Cargo trolley parked. Raise the shutter.';s.messageAt=s.time;}}}
  if(h.finaleAt!==null&&!h.finaleSpawned&&s.time>=h.finaleAt){h.finaleSpawned=true;s.enemies.push(...havenFinale());s.events.push({type:'breach',text:'Perimeter breached!'});}
  if(s.time>=300&&!s.outcome)s.outcome='timed_out';
 }
