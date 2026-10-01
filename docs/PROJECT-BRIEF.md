@@ -138,3 +138,9 @@ Owner approved the consolidated v0.1 specification and first implementation stag
 Initial scope: normal team identity and gates; optional personal preparation and one-minute readiness; authoritative per-run WebSocket object; shared movement/sample combat, teacher controls, reconnect and engagement results; Wukong/raider animation atlases. The other hero models use explicit labeled art stand-ins in this development checkpoint. Full special timing, complete authored level/Nezha, remaining art and audio, and narrative remain later-stage work. Preserve all existing cartridges and academic evidence.
 
 Handbook intake revisions remain `AI-START-HERE.md` 6557a45, `UNIVERSAL-RULES.md` 9ec5c8d (U-09/U-10), `CONDITIONAL-STANDARDS.md` dad2d3a (S-02/S-03/S-04 selected). Source checkpoint precedes extended tests. Local runtime checks are not physical-device, real Cloudflare deployment or school-network evidence.
+
+## 13. Recovery continuation — shared controls checkpoint
+
+Recovered source and assets are preserved remotely at `316189b94dd2e0d73fd1dc605242ef40bb5167ff`. Continue on `implement/journey-stage1-controls` using [the bounded control specification](change-specs/journey-stage1-controls.md). This branch imports the canonical held-input module and adapts Journey only; integration with newer main and other in-flight cartridges remains a separate merge task. Existing three-minute timing remains the approved local exception for this checkpoint. No Math Arcade integration or deployment is included.
+
+Controls checkpoint verification: `docs/verification/journey-stage1-controls.md` (179 tests passing; five-client browser bridge passed). Next: short landscape viewport fit and complete hosted session verification. This checkpoint is not a verified release.
