@@ -2,7 +2,7 @@
 import {extendAssignments} from './extensions.js';
 import {cartridgeFor} from '../../public/cartridges.js';
 export const vaultItems=[{id:'scanner',title:'Code Scanner',text:'Restores corrupted cipher information.'},{id:'toolkit',title:'Silent Toolkit',text:'Jam security for three seconds at each checkpoint.'},{id:'cloak',title:'Cloak',text:'Five seconds of stealth, once per run.'}];
-export const equipmentItems=room=>room.state.config.cartridgeId==='nightfall'?cartridgeFor('nightfall').items:vaultItems;
+export const equipmentItems=room=>cartridgeFor(room.state.config.cartridgeId)?.items||vaultItems;
 export const equipmentSlots=t=>Math.min(3,1+(t.equipmentBlocks||[]).length);
 export function equipmentCommand(room,student,input){
  const t=room.teamFor(student),members=room.members(t.id),items=equipmentItems(room),ids=items.map(i=>i.id);
@@ -21,6 +21,7 @@ export function equipmentCommand(room,student,input){
  }
  if(input.type==='equipment.extend'||input.type==='supply.start'){
   if(!room.isLead(student,t))return fail('Only the Event Lead can request extra preparation.');
+  if(room.state.config.cartridgeId==='coastal-escape'&&!t.supply?.count)return fail('Gate sizes differ. Ask your teacher to set the extra preparation question count.');
   if(equipmentSlots(t)>=3)return fail('All three equipment slots are unlocked.');
   const moduleIds=t.supply?.moduleIds||room.state.config.modules.filter(m=>m.source==='preset').map(m=>m.id);
   if(!moduleIds.length&&!t.supply?.allowReuse)return fail('Ask the teacher to enable reuse of imported questions for extra preparation.');
