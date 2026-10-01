@@ -181,11 +181,11 @@ Alternate actions with movement/repositioning. Below half health, reduce gaps be
 
 Target a roughly 40–60-second solo boss encounter at ordinary competence, with faster completion for skilled/upgraded teams. Validate rather than guaranteeing this duration from health arithmetic. A player standing still and holding Attack should not reliably win. Normal hit reactions cannot permanently stun the boss; vulnerability comes from readable recovery windows.
 
-## 10. Art production proposal
+## 10. Art production plan — enemy direction approved
 
 Accepted anchors: CAST CONCEPT 01, GAMEPLAY COMPOSITION 01 revised, five players at 90% and Nezha at 110% relative to the original composition. The generated illustrations remain reference art; exact sprite dimensions/pivots must be defined in a production manifest.
 
-Propose these ordinary enemy looks for owner review:
+Ordinary enemy appearance direction approved by the owner at 08:50 on 2026-10-01:
 
 | Role | Original visual direction | Readability cue |
 | --- | --- | --- |
@@ -209,13 +209,13 @@ Use consistent pixel density and nearest-neighbor display; render ordinary inter
 
 Static scenery, sprite sheets, frame manifests and collision maps must be separate assets. Do not use an entire concept screenshot as the game, invent unseen animation quality, or infer collision solely from painted effects. The precise encounter/collision map should be authored as data and inspected with a debug overlay.
 
-## 11. Audio proposal
+## 11. Audio direction — approved
 
-Recommended direction for review: energetic arcade synthesis with Chinese-inspired percussion, plucked strings and flute colors, using original/licensed audio. Propose one 45–60-second looping stage theme, a distinct 30–45-second Nezha theme, short victory/retreat/defeat cues, and separate weapon, jump, hit, prop-break, pickup, special, boss-warning and UI sounds.
+Direction approved at 08:50 on 2026-10-01: energetic arcade synthesis with Chinese-inspired percussion, plucked strings and flute colors, using original/licensed audio. Propose one 45–60-second looping stage theme, a distinct 30–45-second Nezha theme, short victory/retreat/defeat cues, and separate weapon, jump, hit, prop-break, pickup, special, boss-warning and UI sounds.
 
 Per-device music/effects controls; gameplay remains understandable muted. Unlock audio during the student's Ready gesture so automatic launch is compatible with browser audio activation rules. Pause/resume tracks without doubling them; cap overlapping identical impact sounds so five heroes do not swamp warnings. New assets require provenance/license entries.
 
-This direction and the enemy looks are proposals, not yet owner-approved creative decisions.
+The enemy appearances, musical direction, distinct Nezha theme and recognizable effects are approved creative requirements. Proposed loop lengths, detailed production settings and finished assets remain subject to specification review and later verification.
 
 ## 12. Data, return to MathQuest, and deletion
 
@@ -282,10 +282,10 @@ All runtime rows are **Not run**.
 
 Optional questions during the 60-second readiness window were approved at 08:43 on 2026-10-01; section 4 records the policy and proposed cutoff handling.
 
-Creative choices for owner review: the proposed five enemy designs and arcade/Chinese-instrument audio direction. Numerical combat/respawn/reconnect defaults are collected here for one specification review rather than individual micro-approvals.
+The five enemy designs and arcade/Chinese-instrument audio direction were approved at 08:50. Numerical combat/respawn/reconnect defaults and production settings are collected for one consolidated specification review.
 
 Before implementation approval, close or explicitly accept:
-- reviewed enemy/audio direction and a production asset plan;
+- the detailed production asset plan, with enemy/audio direction already approved;
 - result/ending payload contract while preserving the requested deferred narrative slots;
 - selected WebSocket hostname/route, account budget, and the network feasibility gate;
 - the consolidated gameplay/engineering defaults in this document.
