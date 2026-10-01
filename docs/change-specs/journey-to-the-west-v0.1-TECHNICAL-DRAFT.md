@@ -73,8 +73,9 @@ For this cartridge, propose a narrow personal preparation policy:
 - Reuse the question provider and evidence format. Scope optional assignment/completion to the requesting student. Do not call the current team-wide equipment.extend unchanged.
 - Other students may prepare independently; their entitlement is not increased by a teammate's completion.
 - Do not silently omit compulsory work. Required gates and relevant decisions must complete before the 60-second readiness window.
-- Owner choice pending: close optional preparation before the handoff, or permit optional questions during the existing 60-second preparation/readiness window. Recommend the latter so one unfinished optional block cannot hold the whole team. Only completed blocks earn an upgrade; a student must finish or leave optional work, select a hero/loadout and press Ready to join the starting roster. At the deadline, start the ready subset under the accepted rule. Unfinished optional work earns no completion credit; preserve already submitted answers as academic evidence.
-- The current extension mechanism places the team at a gate and waits for everyone. Implementing the recommended choice would require a cartridge-specific optional-preparation state that does not block the host handoff. This policy is proposed for owner review, not an accepted change or permission to bypass compulsory mathematics.
+- Approved by the owner on 2026-10-01 at 08:43: optional questions remain available during the existing 60-second preparation/readiness window. Only completed blocks earn an upgrade; a student must finish or leave optional work, select a hero/loadout and press Ready to join the starting roster. Everyone ready starts the launch countdown early; otherwise, at the deadline, start the ready subset under the accepted rule. Unfinished optional work earns no completion credit; preserve already submitted answers as academic evidence.
+- Proposed cutoff detail: close optional questions at the readiness deadline (or earlier launch), award only blocks completed by that cutoff, and freeze starters' earned/selected upgrades at launch. If nobody is ready at expiry, keep the run unstarted and permit selection/Ready using already earned upgrades; do not reopen optional questions or grant another minute.
+- The current extension mechanism places the team at a gate and waits for everyone. The approved timing requires a cartridge-specific optional-preparation state that does not block the host handoff. Required gates must remain complete before readiness opens.
 
 Accepted upgrades: Power +20% ordinary/aerial damage; Vitality +25% max health; Magic Reserve +1 starting charge and capacity; Focus +20% special damage. No duplicates. Effects survive automatic respawns; additional starting magic is awarded once.
 
@@ -84,7 +85,7 @@ MathQuest should pass readiness eligibility and earned choices to the combat obj
 
 | State | Proposed behavior |
 | --- | --- |
-| Academic preparation | Existing MathQuest gates/decisions and personal optional preparation. No combat countdown. |
+| Academic preparation | Existing required MathQuest gates/decisions. No combat countdown. Optional personal questions may continue during readiness as approved. |
 | Ready | Host handoff opens one authoritative 60-second window; pick an unclaimed hero, confirm loadout and Ready. |
 | Launch | All eligible team members ready ends waiting early; otherwise deadline selects ready/connected/eligible players. Three-second countdown. |
 | Running | Start the 180-second active clock when control becomes available. Shared team simulation. |
@@ -279,11 +280,12 @@ All runtime rows are **Not run**.
 
 ## 15. Current review decisions and remaining limits
 
+Optional questions during the 60-second readiness window were approved at 08:43 on 2026-10-01; section 4 records the policy and proposed cutoff handling.
+
 Creative choices for owner review: the proposed five enemy designs and arcade/Chinese-instrument audio direction. Numerical combat/respawn/reconnect defaults are collected here for one specification review rather than individual micro-approvals.
 
 Before implementation approval, close or explicitly accept:
 - reviewed enemy/audio direction and a production asset plan;
-- optional individual preparation timing and closure relative to the 60-second readiness window (the existing host uses a team-wide checkpoint);
 - result/ending payload contract while preserving the requested deferred narrative slots;
 - selected WebSocket hostname/route, account budget, and the network feasibility gate;
 - the consolidated gameplay/engineering defaults in this document.
