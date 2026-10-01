@@ -1,0 +1,38 @@
+{
+  "build": "shooter-0.1.0-alpha.2",
+  "browser": "153.0.8010.0",
+  "scope": "Headless Chromium desktop and touch emulation; not real Safari",
+  "checks": [
+    {
+      "name": "desktop",
+      "passed": true,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "audioContext": "one running context before expiry"
+    },
+    {
+      "name": "phone",
+      "passed": true,
+      "viewport": {
+        "width": 852,
+        "height": 393
+      },
+      "audioContext": "one running context before expiry"
+    },
+    {
+      "name": "tablet",
+      "passed": true,
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "audioContext": "one running context before expiry"
+    },
+    {
+      "name": "standalone package start at boss",
+      "passed": true
+    }
+  ]
+}

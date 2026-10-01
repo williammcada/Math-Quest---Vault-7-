@@ -38,3 +38,5 @@ See `docs/checkpoints/shooter-0.1.0-alpha.2.md` for actual checks and limitation
 ## Alpha.2 playtest revision
 
 Owner completed alpha.1 in about two minutes initially and one minute on retry, with a roughly 15-second boss and a stuck D-pad incident. Alpha.2 adds independent release/cancellation recovery, three authored cover obstacles, approach-triggered hazard warnings, more durable later robots and a 180-HP boss with stronger second-phase patterns. Music is unchanged at the owner's instruction. The check record distinguishes scripted timing, emulation and actual phone evidence.
+
+Alpha.2 verification: 32 simulation/interface tests and desktop/phone/tablet Chromium emulation passed. A responsive baseline scripted boss run completed in approximately 30.72 seconds; stationary firing lost before victory. The original physical-phone control incident still needs owner confirmation on this revision. The 16 static map checks pass after the three added cover obstacles. See the alpha.2 check record for exact scope and remaining gates.

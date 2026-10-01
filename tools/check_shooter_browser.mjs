@@ -20,6 +20,7 @@ try{
     const context=await browser.newContext({viewport,hasTouch:mobile,isMobile:mobile,deviceScaleFactor:1});
     await context.addInitScript(()=>{const Native=window.AudioContext||window.webkitAudioContext;window.__audio=[];window.AudioContext=class extends Native{constructor(...args){super(...args);window.__audio.push(this);}};});
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+    if(process.env.SHOOTER_INPUT_TRACE)await page.addInitScript(()=>{window.__pointerTrace=[];for(const name of ['pointerdown','pointerup','pointercancel','touchstart','touchend','touchcancel'])window.addEventListener(name,e=>window.__pointerTrace.push({type:e.type,id:e.pointerId,target:e.target.id,touches:Array.from(e.touches||[]).map(t=>({id:t.identifier,target:t.target.id}))}),true);});
     const failed=[];page.on('response',r=>{if(r.status()>=400)failed.push(r.url());});
     await page.goto(base+'/practice-shooter.html');await page.locator('#start').waitFor();
     await page.screenshot({path:output+name+'-setup.png'});await page.locator('#start').click();await page.waitForTimeout(250);
@@ -35,7 +36,9 @@ try{
       a.x=pad.x+pad.width*.85;a.y=pad.y+pad.height*.5;
       for(const remaining of [[b],[a]]){
         await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[a,b]});
-        await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:remaining});
+        // CDP touchEnd names the released contacts; native TouchEvent.touches names those remaining.
+        await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:remaining[0]===a?[b]:[a]});
+        if(process.env.SHOOTER_INPUT_TRACE)console.log(await page.evaluate(()=>window.__pointerTrace));
         assert.equal(await page.locator('#pad').getAttribute('data-x'),remaining[0]===a?'1':'0');
         assert.equal(await page.locator('#jump').evaluate(e=>e.classList.contains('held')),remaining[0]===b);
         await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
