@@ -158,3 +158,7 @@ Use shared `public/engine/held-input.js` for action controls. Handbook [U-10](ht
 ## 15. Journey current-host integration — 1 October 2026
 
 Integrated main 59c11c9 and Journey remote 225909f on isolated branch `integrate/journey-stage1-host`. See [scope](change-specs/journey-stage1-host-integration.md) and [verification](verification/journey-host-integration.md). Source candidate 443a657 passed 198 tests, build validation and the actual frontend/Worker-class teacher/student browser flow through a local WebSocket bridge. Main shared-input code/tests and Aerial/Coastal preview assets retained. Full Coastal cartridge stays separately on its candidate branch. No version bump, deployment or verified-release claim. Existing 180-second Journey timing retained. Remaining production work: full cast/level/boss, then deferred story/audio; real Cloudflare endpoint/runtime, physical controls and school testing remain gates.
+
+## 16. Hero animation development checkpoint
+
+Four original hero atlases replace the labeled stand-ins; five-hero render review and 198 tests/build passed with limits in [verification](verification/journey-hero-animation.md). Atlas edge/pivot polish and complete horse choreography remain before production-ready art. Next: those corrections, then authored level/Nezha. No retiming, narrative/audio expansion or deployment.

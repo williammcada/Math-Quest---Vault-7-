@@ -1,0 +1,14 @@
+# Hero atlas provenance — 2026-10-01
+
+Built-in OpenAI image generation, original game designs, guided by the approved Journey cast descriptions. No film/ROM assets used. Transparent outputs preserved unchanged; no pixel postprocessing. Tang and Prince corrected with the built-in image editor. SHA-256 and geometry in manifest.json.
+
+## Prompt set / production directions
+
+Common generation directions: stylized-concept production sprite atlas; 1536×1024 transparent PNG; exact six columns × four rows; 256px cells; full-body right-facing original detailed 16-bit arcade pixel art; consistent foot anchor near (128,240); all weapons/effects within cells with margin; no text/grid/scenery/shadows. Rows: two idle/four walk; six combo attacks; jump rise/fall, aerial attack, landing, hurt, knockdown; two special, get-up, ready, two victory.
+
+- Bajie: broad pig face/large ears, plum and brown clothes, red sash, bronze trim, nine-toothed rake; heavy rake combo, compact ochre Earthshaker slam.
+- Wujing: tall broad bearded guardian, teal/indigo robes, large prayer beads, gold headband, crescent polearm; thrust/sweep combo, compact cyan River Surge.
+- Tang: youthful monk, ivory/saffron robes/red drape, ceremonial gold headdress/ringed staff; offensive staff/spell combo, golden Lotus Ward. Correction: replace row two only with exactly six full-body poses; restore monk in third cell and shorten/angle staff/effects to fit.
+- Prince: dark flowing hair/small pale horns, silver-white armor/pale cyan sash, sword combo; transform to white/cyan horse. Correction: bottom row exactly six poses (transform, horse, human get-up, ready, two victories), remove extra horse and shorten the extended sword in row two column two.
+
+Generated character concepts are game adaptations, not claims about the novel. These are candidate animation assets; seam/pivot polish and full horse choreography remain documented work.

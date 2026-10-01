@@ -1,13 +1,13 @@
-import {HEROES,ARENA} from './config.js';
+import {HERO_ART,HERO_CLIPS} from './hero-art.js';
 const SOURCE=256;
-const clips={idle:[0,1],walk:[2,3,4,5],attack:[6,7,8,9,10,11],jump:[12,13],air:[14],hurt:[16],down:[17],special:[18,19],victory:[22,23]};
+const clips=HERO_CLIPS;
 const enemyClips={walk:[2,3,4,5],windup:[6,7],attack:[8,9],recover:[10,11],hurt:[12,13],down:[17]};
 export class JourneyRenderer {
   constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.images={};this.frames=new Map();this.snapshot=null;this.started=performance.now();
-    for(const [key,file] of [['hero','wukong-stage1.png'],['enemy','raider-stage1.png']]){const img=new Image();img.src=new URL('../../assets/journey/'+file,import.meta.url).href;this.images[key]=img;}
+    for(const [key,file] of [...Object.entries(HERO_ART).map(([key,art])=>[key,art.file]),['enemy','raider-stage1.png']]){const img=new Image();img.src=new URL('../../assets/journey/'+file,import.meta.url).href;this.images[key]=img;}this.images.hero=this.images.wukong;
   }
   set(snapshot){this.snapshot=snapshot;}
-  sprite(img,frame,x,y,size,facing=1,alpha=1){if(!img.complete||!img.naturalWidth)return;
+  sprite(img,frame,x,y,size,facing=1,alpha=1){if(!img||!img.complete||!img.naturalWidth)return;
     const c=this.ctx;c.save();c.globalAlpha=alpha;c.translate(Math.round(x),Math.round(y));c.scale(facing,1);
     // Cells retain padding and a common foot anchor. No baked scene or hitbox.
     c.drawImage(img,(frame%6)*SOURCE,Math.floor(frame/6)*SOURCE,SOURCE,SOURCE,-size/2,-size*.96,size,size);c.restore();}
@@ -32,21 +32,17 @@ export class JourneyRenderer {
       const action=a.enemy?(a.hurt>0?'hurt':a.phase):(s.phase==='terminal'&&s.result?.outcome==='victory'?'victory':a.action);
       const signature=action+(a.enemy?'':a.combo);let cache=this.frames.get(a.id);if(!cache||cache.signature!==signature){cache={signature,start:now};this.frames.set(a.id,cache);}
       const list=(a.enemy?enemyClips:clips)[action]||[0],rate=action==='attack'?80:action==='walk'?105:200;
-      const index=Math.floor((now-cache.start)/rate),frame=list[['idle','walk','special','victory'].includes(action)?index%list.length:Math.min(index,list.length-1)];
+      const index=Math.floor((now-cache.start)/rate),frame=list[['idle','walk','special','victory'].includes(action)&&!(a.hero==='prince'&&action==='special')?index%list.length:Math.min(index,list.length-1)];
       const jump=!a.enemy&&a.jumpMs>0?Math.sin((1-a.jumpMs/700)*Math.PI)*55:0;
       const alpha=!a.enemy&&a.protectionMs>0?(Math.floor(now/90)%2?.45:1):1;
-      if(a.enemy||a.hero==='wukong'){
-        this.sprite(this.images[a.enemy?'enemy':'hero'],frame,a.x,a.y-jump,a.enemy?96:104,a.facing,alpha);
-        if(!a.enemy&&a.action==='special')for(const offset of [-55,55])this.sprite(this.images.hero,frame,a.x+offset,a.y-jump,104,a.facing,.35);
-      }else{
-        // Explicitly labeled stage-1 stand-ins; other hero art follows later.
-        c.fillStyle=HEROES.find(h=>h.id===a.hero)?.color||'#fff';c.fillRect(a.x-15,a.y-jump-48,30,43);c.beginPath();c.arc(a.x,a.y-jump-55,12,0,Math.PI*2);c.fill();c.fillStyle='#152630';c.font='bold 13px system-ui';c.textAlign='center';c.fillText(a.hero[0].toUpperCase(),a.x,a.y-jump-24);
-      }
+      const art=a.enemy?null:HERO_ART[a.hero];
+      this.sprite(this.images[a.enemy?'enemy':a.hero],frame,a.x,a.y-jump,a.enemy?96:art.size,a.facing,alpha);
+      if(!a.enemy&&a.hero==='wukong'&&a.action==='special')for(const offset of [-55,55])this.sprite(this.images.wukong,frame,a.x+offset,a.y-jump,art.size,a.facing,.35);
       if(a.enemy&&a.phase==='windup'){c.strokeStyle='#ffb95b';c.lineWidth=2;c.strokeRect(a.x-31,a.y-6,62,12);c.fillStyle='#ffd78c';c.font='bold 18px system-ui';c.textAlign='center';c.fillText('!',a.x,a.y-90);}
       if(a.hp>0){c.fillStyle='#142122';c.fillRect(a.x-22,a.y-100,44,4);c.fillStyle=a.enemy?'#c47165':'#a7dd92';c.fillRect(a.x-22,a.y-100,44*a.hp/a.maxHp,4);}
       if(!a.enemy){c.font='11px system-ui';c.textAlign='center';c.fillStyle='#eff4ec';c.fillText(a.alias,a.x,a.y+18);}
     }
     c.fillStyle='#d9c99c';c.font='12px system-ui';c.textAlign='left';c.fillText('MOUNTAIN TRAINING COURT',28,31);
-    c.fillStyle='#adbdc5';c.font='12px system-ui';c.textAlign='right';c.fillText('WUKONG + RAIDER ANIMATION SAMPLE',932,31);
+    c.fillStyle='#adbdc5';c.font='12px system-ui';c.textAlign='right';c.fillText('FIVE-HERO ANIMATION CHECKPOINT',932,31);
   }
 }
