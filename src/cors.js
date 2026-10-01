@@ -51,7 +51,7 @@ export async function withCors(request, env, handler, version) {
       status: 500, headers: { 'content-type': 'application/json; charset=utf-8' }
     });
   }
-  const output = new Response(result.body, result);
+  const output = result.webSocket ? new Response(null,{status:101,webSocket:result.webSocket,headers:result.headers}) : new Response(result.body, result);
   // Never let a CDN cache student state, teacher exports, or an origin-specific response.
   for (const [key, value] of headers) if (key !== 'vary') output.headers.set(key, value);
   addVary(output.headers, ['Origin']);

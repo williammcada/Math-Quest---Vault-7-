@@ -7,7 +7,7 @@ import {dispatchHorde} from '../../../public/games/nightfall/simulation.js';
 import {startSupply} from '../../engine/supply.js';
 export const expansionFor = room => {
   const c=cartridgeFor(room.state.config.cartridgeId);
-  return c?.contract ? c : null;
+  return c?.id==='nightfall' && c.contract ? c : null;
 };
 const fail=error=>({error});
 const key=items=>[...items].sort().join('|');

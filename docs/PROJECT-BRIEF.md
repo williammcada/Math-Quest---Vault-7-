@@ -1,12 +1,12 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.5 — v0.9.4 First Response implementation
+**Brief version:** 0.6 — Journey to the West design intake on its planning branch
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
-**Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
-**Current source baseline:** merged v0.9.3 at `c7ea42d7e54402357b5c56c52c44856666e4c2b9`; canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this revision. The v0.9.1 observation below is historical.
+**Status:** v0.9.4 remains the host source candidate. Journey to the West stage-1 implementation was authorized at 09:00 on 2026-10-01 and is isolated on `implement/journey-to-the-west-v0.1-stage1`; no deployment. Historical release observations below retain their original dates.
+**Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, current planning on `design/journey-to-the-west-v0.1`.  
+**Current source baseline:** main inspected on 2026-10-01 at `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28` (merged v0.9.4 candidate); canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this design intake. The v0.9.1 observations and earlier implementation intake below are historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Verify the new early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari. Complete school-network and classroom concurrency checks before claiming readiness.
+**Next work:** Implement and verify the approved Journey stage-1 foundation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -103,8 +103,58 @@ Required v0.9.2 changes: one base equipment slot plus one per completed optional
 
 Windows and landscape classroom iPads remain targets. iPhone Safari action layout targets landscape with portrait setup/help and a rotate prompt. Real iPhone model/iOS/Safari version and smallest supported physical device are pending real-device verification. A candidate is not verified iPhone or classroom support. Hosted practice, complete touch inputs, sound, interruption, recovery, Wi-Fi/mobile-network checks and exact source identity are required per cartridge and for future cartridges.
 
+## 11. Journey to the West design intake — 1 October 2026
+
+**Authorization:** Plan and ask questions before building. The owner approved optional questions during readiness at 08:43 and enemy/audio direction at 08:50; consolidated technical defaults and implementation remain pending approval. Journey to the West is an explicitly requested multiplayer cartridge exception to the host's individual-minigame scope; it does not change Vault Seven or Nightfall action rules.
+
+**Current specification:** [Journey to the West v0.1 — consolidated Review 1](change-specs/journey-to-the-west-v0.1.md), on `design/journey-to-the-west-v0.1`. Review checkpoint commit: `60248a1226997edd66ccd33a2577f89c9525a0ae`. Use that consolidated file for subsequent implementation planning. Preserve the [decision record](change-specs/journey-to-the-west-v0.1-DRAFT.md) as approval history and the [technical draft](change-specs/journey-to-the-west-v0.1-TECHNICAL-DRAFT.md) as historical source research. No game release or verification is implied.
+
+**Product scope:** One three-minute cooperative arcade brawler level, one to five players, five unique heroes from the traveling party, Nezha boss, detailed arcade pixel art, three total lives with automatic respawn, personal math-earned upgrades, and individual magic pickups. Reserve two opening-cutscene positions for later narrative work. Approved art direction and controls are recorded in the decision document.
+
+**Host integration:** Reuse normal MathQuest team joining and credentials. Do not add a second lobby code, student account or teacher team-assignment flow. Preserve required gates, relevant decisions, academic evidence and reports. At the normal minigame handoff, allow up to 60 seconds of readiness; launch early when everyone is ready, otherwise use the ready eligible subset. Keep the three-second launch countdown and 180-second action clock separate. Omitted players wait for the next run; reconnecting starters recover their existing state.
+
+**Confirmed source findings:** Normal joining uses the existing team PIN and currently has no five-member cap. Equipment voting/inventory and extension checkpoints are team-wide. The frontend polls every 2.5 seconds; current GameHost is a local individual-action runner. This cartridge therefore needs scoped personal-preparation changes, a five-member limit in normal joining, a multiplayer host and a combat transport. Exact file/blob provenance is in the technical draft.
+
+**Proposed engineering:** Keep QuestSession responsible for math, authorization and evidence; add a Cloudflare Durable Object per team/run for authoritative combat over WebSockets. Preserve the existing Pages frontend and academic HTTP relay. A selected WebSocket route/hostname, classroom connectivity, account budget, actual concurrency and latency remain unverified. No account, paid service, DNS or deployed source has been changed.
+
+**Privacy:** Carry only existing pseudonymous participant identity and earned entitlements into the combat service. Preserve no learner accounts/telemetry, original session expiry after 48 hours, teacher deletion and credential expiry. Proposed child combat records must expire with the parent and participate in deletion; do not start a new retention period per game.
+
+**Handbook refreshed for this intake:** AI-START-HERE.md blob `6557a45aaa6d29d7d1abde808e6d0ac248b08820`; UNIVERSAL-RULES.md `9ec5c8d2b9ab2757c043892b5d7218bc6090da04`; CONDITIONAL-STANDARDS.md `dad2d3a05ca0f18260196ea51ac6351bffffdc1c`; RELEASE-CHECKLIST.md `fbab310ffaa75f477f8d63b1885fa0cfeb2b20dd`. U-09 and the newly approved U-10 apply. U-10 requires held controls to release through cancellation, lost capture, interruption and teardown, with relevant physical-device verification; stuck input is release-blocking. Earlier U-01–U-08/S-02–S-04 selection remains task-scoped and does not ratify seeded/draft handbook modules globally. No handbook amendment was made.
+
+**Preparation timing approved at 08:43:** After required gates and relevant decisions, optional personal upgrade questions remain available during the existing 60-second readiness window. Only completed blocks earn upgrades. Students finish or leave optional work, select their hero/upgrades and press Ready; launch early when everyone is ready, otherwise start the ready eligible subset at the deadline. Optional work cannot hold the team. Exact cutoff edge cases are proposed in the technical draft. This is design approval, not implementation authorization.
+
+**Enemy/audio direction approved at 08:50:** Horned mountain raiders, scarf-wearing cliff acrobats, talisman casters, bronze shield guards and ox-like brutes in detailed arcade pixel art. Energetic arcade synth with Chinese-inspired percussion, plucked strings and flute; distinct Nezha theme and recognizable weapon, pickup and hero-special effects.
+
+**Consolidated review:** Review 1 gathers the proposed combat/respawn/reconnect/spawn numbers, production plan, result payload and first implementation stage. The owner has not yet approved that complete technical baseline. Narrative/cutscene/ending content remains deliberately deferred; the actual WebSocket hostname, account budget and school-network measurements remain operational gates.
+
+**First implementation stage after approval:** Reconcile the current host source; implement the existing-identity handoff and a small synchronized combat scene with readiness, clock, pause/reconnect and result return; produce one complete hero/enemy animation sample. Verify those components before expanding the full cast/level. Physical-device and school-network evidence remain required for classroom release.
+
+**Evidence state:** Source inspected; design documents saved. No Journey gameplay code, generated production sprite sheets, deployed multiplayer service, game tests, school-network tests or physical-device tests completed. The historical connected-iPad observations for mathematics are not evidence for this cartridge. Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
+
+## 12. Journey stage-1 implementation intake — 1 October 2026 at 09:00
+
+Owner approved the consolidated v0.1 specification and first implementation stage. Branch: `implement/journey-to-the-west-v0.1-stage1`, based on planning commit `688433bcce9184cc03f434690d2bc33b6bbd5462` / gameplay main `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28`. This scoped authorization supersedes the pending-approval statements in the earlier design intake.
+
+Initial scope: normal team identity and gates; optional personal preparation and one-minute readiness; authoritative per-run WebSocket object; shared movement/sample combat, teacher controls, reconnect and engagement results; Wukong/raider animation atlases. The other hero models use explicit labeled art stand-ins in this development checkpoint. Full special timing, complete authored level/Nezha, remaining art and audio, and narrative remain later-stage work. Preserve all existing cartridges and academic evidence.
+
+Handbook intake revisions remain `AI-START-HERE.md` 6557a45, `UNIVERSAL-RULES.md` 9ec5c8d (U-09/U-10), `CONDITIONAL-STANDARDS.md` dad2d3a (S-02/S-03/S-04 selected). Source checkpoint precedes extended tests. Local runtime checks are not physical-device, real Cloudflare deployment or school-network evidence.
+
+## 13. Recovery continuation — shared controls checkpoint
+
+Recovered source and assets are preserved remotely at `316189b94dd2e0d73fd1dc605242ef40bb5167ff`. Continue on `implement/journey-stage1-controls` using [the bounded control specification](change-specs/journey-stage1-controls.md). This branch imports the canonical held-input module and adapts Journey only; integration with newer main and other in-flight cartridges remains a separate merge task. Existing three-minute timing remains the approved local exception for this checkpoint. No Math Arcade integration or deployment is included.
+
+Controls checkpoint verification: `docs/verification/journey-stage1-controls.md` (179 tests passing; five-client browser bridge passed). Next: short landscape viewport fit and complete hosted session verification. This checkpoint is not a verified release.
+
+## 14. Journey landscape checkpoint — 1 October 2026
+
+Owner authorized the next viewport chunk. Baseline remote 794a6b4; scope: [landscape specification](change-specs/journey-stage1-landscape.md). Active match now fits dynamic viewport height, preserves canvas proportions, reserves touch targets and safe-area padding, and uses a compact landscape toolbar. Preparation retains normal scrolling. Evidence: [landscape verification](verification/journey-landscape.md), 179 tests passing and five-client browser checks across five viewport sizes. Physical-device and hosted verification remain outstanding. No deployment or handbook amendment. Next: isolated integration with current host and full session verification.
+
 ## Aerial v0.2.0 and shared controls — 1 October 2026
 
 Owner-approved change: five active minutes, 64 regular enemies (double), +10% player speed, and recurring stuck-control/native iPhone menu prevention. See [v0.2.0 specification](change-specs/aerial-shooter-v0.2.0.md) and [release evidence](releases/aerial-shooter-v0.2.0.md). This supersedes the earlier three-minute aerial target. Midpoint/boss checkpoints move to 150/225 seconds; old saves are retained separately.
 
 Use shared `public/engine/held-input.js` for action controls. Handbook [U-10](https://github.com/williammcada/mcada-project-handbook/blob/main/UNIVERSAL-RULES.md#u-10--prevent-stuck-controls-and-verify-touch-release) was strengthened in `c449f9abd191a989056dd64fd18bfe242d3ce59f`; S-03-A records the five-minute MathQuest default. Current canonical Vault/Nightfall hosts receive shared input recovery without gameplay retiming. Other repositories/historical builds are not claimed fixed. Physical iOS retest and classroom narrative integration remain pending.
+
+## 15. Journey current-host integration — 1 October 2026
+
+Integrated main 59c11c9 and Journey remote 225909f on isolated branch `integrate/journey-stage1-host`. See [scope](change-specs/journey-stage1-host-integration.md) and [verification](verification/journey-host-integration.md). Source candidate 443a657 passed 198 tests, build validation and the actual frontend/Worker-class teacher/student browser flow through a local WebSocket bridge. Main shared-input code/tests and Aerial/Coastal preview assets retained. Full Coastal cartridge stays separately on its candidate branch. No version bump, deployment or verified-release claim. Existing 180-second Journey timing retained. Remaining production work: full cast/level/boss, then deferred story/audio; real Cloudflare endpoint/runtime, physical controls and school testing remain gates.

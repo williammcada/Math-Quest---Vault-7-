@@ -1,7 +1,7 @@
 import {extendAssignments,extensionPreview} from './extensions.js';
 export function configureSupply(room,input){
  const t=room.state.teams[input.teamId];if(!t)return {error:'Team not found.'};
- if(t.supply?.started||['minigame','finale','victory'].includes(t.stage))return {error:'This crew has already committed its supply plan.'};
+ if(t.supply?.started||['minigame','finale','victory','brawl'].includes(t.stage))return {error:'This crew has already committed its supply plan.'};
  const count=Number(input.count??3);if(!Number.isInteger(count)||count<1||count>20)return {error:'Choose 1–20 questions per student.'};
  const modules=room.state.config.modules.filter(m=>!input.moduleIds?.length||input.moduleIds.includes(m.id));
  const allowed=modules.filter(m=>m.source==='preset'||input.allowReuse===true);
