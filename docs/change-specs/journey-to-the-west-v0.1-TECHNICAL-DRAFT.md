@@ -1,6 +1,6 @@
 # MathQuest: Journey to the West — Technical Design Draft v0.1
 
-**Stage:** DESIGN → CHANGE SPEC. Proposed engineering and production details for review; no implementation authorization or verification implied.
+**Stage:** Historical technical research draft, superseded for current review by the [consolidated v0.1 change specification, Review 1](journey-to-the-west-v0.1.md). Preserve this file as provenance; make future technical revisions in the consolidated specification. No implementation authorization or verification implied.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
 **Date:** 2026-10-01, Asia/Shanghai
