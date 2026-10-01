@@ -166,3 +166,9 @@ Four original hero atlases replace the labeled stand-ins; five-hero render revie
 ## 17. Prince horse development checkpoint
 
 Prince now transforms for 300ms, charges under server-authoritative steering for 3000ms, and returns for 300ms. One magic charge; at most two 30-damage hits per target, 600ms apart, Focus bonus retained. Pause freezes charge; stale/disconnected input stops steering and collision damage; death cancels it. Original supplemental horse atlas and expanded bounds for 94/120 hero frames added. Remaining 26 frames need art correction. Source c6385a7 passes 202 tests, build, art browser and teacher/student flow. See [verification](verification/journey-horse-and-frame-polish.md). No deployment, retiming or full-level completion claim.
+
+## 18. Bajie frame repair development checkpoint — 2 October 2026
+
+Baseline remote f5b2612. Twelve affected Bajie poses replaced with a separate, transparent, spaced atlas and explicit mapping. Current implementation branch `implement/journey-bajie-frame-repair`; source candidate 29be454 passed 202 tests, build, alpha-boundary verification and Chromium animation/contact-sheet review. See [verification](verification/journey-bajie-frame-repair.md). 106/120 poses now use isolated original bounds or replacement art; fourteen Wukong/Wujing/Prince poses remain the next art chunk. Gameplay, timing, input and academics unchanged. Full level/Nezha follows art work. No deployment or physical-device acceptance.
+
+Current handbook blobs read: AI-START-HERE 6557a45, UNIVERSAL-RULES 6bde7c1, CONDITIONAL-STANDARDS 1a79498.

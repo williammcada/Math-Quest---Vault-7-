@@ -1985,5 +1985,38 @@
       ]
     },
     "boundsAudit": "frame-bounds-audit.json"
+  },
+  "supplementalBajie": {
+    "file": "bajie-repair-stage3.png",
+    "width": 1536,
+    "height": 1024,
+    "columns": 4,
+    "rowBoundaries": [
+      0,
+      341,
+      683,
+      1024
+    ],
+    "footY": [
+      304,
+      615,
+      938
+    ],
+    "renderSize": 104,
+    "originalFrameIndices": [
+      1,
+      2,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15,
+      16
+    ],
+    "mapping": "public/games/journey/frame-repairs.js"
   }
 }
