@@ -80,3 +80,9 @@ New industrial robot cartridge, based on the accepted shooter alpha.2. Source wo
 For a complete offline walkthrough, download `public/Ironbreak-v0.1.0-cartridge-review.html`. It uses one simulated student and sample mathematics; it does not create a real classroom session. `public/Ironbreak-v0.1.0-practice.html` is action-only. Build these with `npm ci` and `npm run build:ironbreak`.
 
 Live deployment requires both this branch's `public/` frontend and `src/` Worker. Keep the existing relay/Pages architecture and existing sessions; do not copy legacy root files over `public/`. Review and device/network gates precede classroom release.
+
+Release preparation: [coordinated deployment handoff](docs/releases/ironbreak-v0.1.0-deployment.md). Keep the frontend unpublished until the matching Worker has been deployed and checked.
+
+## Coastal Escape cartridge candidate
+
+[Coastal Escape story preview](public/coastal-escape-preview.html) includes the fictional-island story, choices, original artwork/music and existing five-minute flight. It skips math explicitly for owner review and records no classroom evidence. The full v0.3.0 cartridge / v0.9.5 platform candidate is on `coastal-escape-v0.3-candidate`; see [deployment and verification](docs/releases/coastal-escape-v0.3.0.md). The current classroom frontend stays paired with its backend until the candidate Worker is deployed.

@@ -25,6 +25,8 @@ echo Publish the matching GitHub candidate when you are ready for hosted review.
 echo Keep GitHub Pages set to main and / (root).
 echo The Netlify relay needs to remain active. No Netlify upload is normally required.
 echo Read docs/releases/v0.9.4-candidate.md for deployment and test instructions.
+echo For this Ironbreak candidate, also follow docs/releases/ironbreak-v0.1.0-deployment.md.
+echo Verify the relay catalog includes ironbreak before publishing the frontend.
 pause
 exit /b 0
 :failed
