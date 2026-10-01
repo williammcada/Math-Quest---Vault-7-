@@ -3,7 +3,8 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:09 message.
+**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:23 “Proceed” message.
+**Technical companion:** [Source-grounded technical and production draft](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md). Its engineering and tuning proposals are not automatically approved by this decision record.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -120,34 +121,31 @@ Audio, music, boss theme, mute controls, and specific effects require their own 
 
 ## 7. Devices, hosting, and MathQuest integration
 
-Host context from docs/PROJECT-BRIEF.md: teacher Windows computer, landscape classroom iPads, iPhone Safari review support, keyboard and touch as appropriate. Retain those target devices for planning; actual compatibility remains unverified.
+Host targets remain the teacher's Windows computer, landscape classroom iPads, and iPhone Safari owner review. Actual compatibility for this new cartridge remains unverified.
 
-Owner suggests Cloudflare for multiplayer. Cloudflare is a candidate, not an approved replacement of existing infrastructure. Current MathQuest documentation describes a GitHub Pages front end, relay, and Cloudflare session service. This draft has not established whether the existing service is suitable for real-time combat. Choose an architecture only after designing and checking the required synchronization, authority, latency, cost, and school-network behavior.
+Source inspection on 2026-10-01 confirmed normal MathQuest team-code joining, existing student credentials and generated aliases, a GitHub Pages frontend, an HTTP relay, and a Cloudflare QuestSession service. Reuse normal joining. The frontend currently polls every 2.5 seconds; that transport does not supply the proposed combat synchronization. Existing equipment choices and extension checkpoints are team-wide, so personal preparation requires a cartridge-specific host change.
 
-Local scope exception: the owner's explicit request authorizes real shared multiplayer combat for this new cartridge. The current host brief's individual-action policy remains unchanged for Vault Seven and Nightfall.
+The [technical companion](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md) proposes a Cloudflare BrawlRun Durable Object per team/run with WebSocket combat traffic, while QuestSession continues to own academic progression and authorization. It defines a proposed handoff, readiness lifecycle, authoritative clock, teacher control, reconnect behavior, result return, 48-hour expiry and deletion cascade. The exact WebSocket hostname and school-network feasibility remain unresolved. No hosting/account settings have been changed.
 
-Still to define:
-- Character selection conflicts, selection deadline, and late joining (student choice and unique heroes are accepted).
-- Exact camera progression and lagging-player handling (shared play area accepted).
-- Exact respawn delay, protection duration, safe position, and same-update outcome precedence (life-exhaustion and team-defeat behavior are accepted).
-- Three-minute clock ownership, start point, and pause rules (expiry outcome accepted).
-- Disconnect/reconnect behavior, absent-player handling, teacher control.
-- Detailed academic completion/evidence rules and synchronization of team readiness; the personal upgrade menu and required/optional block earning structure are approved.
-- Learner data, retention, deletion, and inherited privacy boundaries.
-- Deployment process and concurrent classroom team count.
+The normal join path currently has no five-member limit. The proposal applies a five-member limit when creating/joining teams for this cartridge, without changing other cartridges. Do not discard extra students silently at the minigame.
+
+Local scope exception: the owner's explicit request authorizes designing real shared multiplayer combat for Journey to the West. The host brief's individual-action policy remains in place for Vault Seven and Nightfall.
+
+Accepted high-level mechanics are recorded above and in the dated decisions below. Exact combat timing, spawn budgets, boss health, network intervals and production requirements are collected as reviewable proposals in the technical companion. Remaining owner choices include enemy/audio direction and closure of optional personal math before the host handoff. The two opening-cutscene slots remain deliberately deferred.
 
 ## 8. Handbook and source provenance
 
 Read through connected GitHub tools:
 - mcada-project-handbook/AI-START-HERE.md: blob 6557a45aaa6d29d7d1abde808e6d0ac248b08820.
-- mcada-project-handbook/UNIVERSAL-RULES.md: blob 61edfde857762153535b21a0a63d9b912c0027f7.
+- mcada-project-handbook/UNIVERSAL-RULES.md: initially blob 61edfde857762153535b21a0a63d9b912c0027f7; refreshed on 2026-10-01 to blob 9ec5c8d2b9ab2757c043892b5d7218bc6090da04, including approved U-10.
+- mcada-project-handbook/RELEASE-CHECKLIST.md: refreshed blob fbab310ffaa75f477f8d63b1885fa0cfeb2b20dd.
 - mcada-project-handbook/CONDITIONAL-STANDARDS.md: blob dad2d3a05ca0f18260196ea51ac6351bffffdc1c.
 - MathQuest docs/PROJECT-BRIEF.md: version 0.5, blob 8e0a6040006922338e3b7b4c578d3741f4515aba.
 - MathQuest README.md: blob 09f18b6da9d793f56e32737e5169d7eb6c787654.
 - MathQuest docs/change-specs/v0.9.2.md: blob 87b49bd1a20ecbb7c0394688e35321a921f79fa5; sections 17–18 on equipment unlocks and teacher extensions read for preparation-loop planning. Source ref: 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28. Reading that specification does not verify current runtime behavior.
 
 These are file blob revisions except the explicitly identified host source commit. Tree inspection found no AGENTS.md.
-Applicable handbook scope: U-01–U-08 within this task; approved U-09 for any stored work/progress; S-02 academic evidence, S-03 live educational games, S-04 deployment/classroom operation. U-01–U-08 remain seeded and conditional modules remain draft in the handbook; this task does not globally ratify them or the proposed S-03 privacy safeguard. No handbook rule was edited.
+Applicable handbook scope: U-01–U-08 within this task; approved U-09 for any stored work/progress; approved U-10 for held-input release/recovery and physical-device verification; S-02 academic evidence, S-03 live educational games, S-04 deployment/classroom operation. U-01–U-08 remain seeded and conditional modules remain draft in the handbook; this task does not globally ratify them or the proposed S-03 privacy safeguard. No handbook rule was edited.
 
 Literary background consulted:
 - Academy of Chinese Studies, Journey to the West: https://chiculture.org.hk/en/china-five-thousand-years/2190
@@ -160,7 +158,7 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Immediate next design topics: review GAMEPLAY COMPOSITION 01, then settle remaining controls, hero mechanics, magic economy, and multiplayer behavior. Exact magic quantities and hero ability tuning remain proposals until accepted and tested.
+Current checkpoint: the revised composition, controls, specials, personal upgrades and high-level multiplayer/readiness behavior have been settled as recorded below. The new technical companion supplies proposed values and a production plan after inspecting the host source. Next owner review covers enemy appearance/audio and the optional-personal-math closure rule, followed by one consolidated specification review. Actual endpoint/network feasibility, implementation and verification remain separate work. Exact quantities and timing are proposed tuning, not verified balance.
 
 ### End-of-run decisions — approved 2026-09-30 at 21:35
 
@@ -337,4 +335,12 @@ Recommended operational details:
 - The one-minute value is a fixed initial design default; no additional teacher setting is required for the proof of concept.
 
 The core auto-start/one-minute decision comes from the owner. Zero-ready handling, exact cutoff sequencing, and countdown messaging are the assistant's recommended specification details. No implementation or runtime verification has occurred.
+
+### Source-grounded design checkpoint — 2026-10-01 at 08:23
+
+The owner's “Proceed” advances the planning workflow. The [technical and production draft](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md) now records the inspected host interfaces, proposed Cloudflare architecture, readiness state machine, combat defaults, encounter budgets, art/audio inventory and verification contract. Newly introduced technical numbers remain proposals for consolidated review.
+
+The one-minute readiness window starts only at the normal host-to-minigame handoff, after required gates and relevant decisions. Optional preparation needs an explicit closure rule before that handoff; a readiness timeout cannot bypass unfinished required math. Keep the already selected “all ready → three-second countdown” behavior, and proceed with the ready subset after the minute. The technical draft specifies zero-ready and reconnection edge cases for review.
+
+Source confirmation: main remained at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28. Actual deployed frontend/Worker identity was not established. The technical draft's provenance section lists inspected source files and handbook blob revisions. No gameplay implementation, deployment, network test or balance test occurred.
 
