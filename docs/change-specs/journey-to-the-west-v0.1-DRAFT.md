@@ -1,6 +1,6 @@
 # MathQuest: Journey to the West — Design Draft v0.1
 
-**Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
+**Status:** Approval history and earlier design proposals. Use the [consolidated v0.1 specification, Review 1](journey-to-the-west-v0.1.md) for the current implementation proposal. It awaits owner approval; implementation has not begun.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
 **Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:50 approval.
@@ -121,7 +121,7 @@ Proposed art sequence:
 4. Animation inventory and level/environment assets.
 
 A concept board is not a production sprite sheet, an implemented screen, or proof of animation quality.
-Audio, music, boss theme, mute controls, and specific effects require their own design decisions.
+Enemy/audio direction was approved at 08:50; see decision 31. The consolidated specification now proposes loop lengths, mute behavior and detailed effects production.
 
 ## 7. Devices, hosting, and MathQuest integration
 
