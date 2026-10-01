@@ -1,3 +1,4 @@
+import {havenWorld} from './false-haven-world.js';
 import {rescueWorld} from './rescue-world.js?v=0.9.4';
 import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.4';
 export const REVISION=CONFIG_REVISION;
@@ -50,7 +51,7 @@ export const WINDOWS=BUILDINGS.flatMap(b=>[
  {id:b.id+'-west',room:b.id,x:b.x,y:b.y+96,w:16,h:80},
  {id:b.id+'-east',room:b.id,x:b.x+b.w-16,y:b.y+96,w:16,h:80}
 ]);
-export const worldFor=s=>s?.scenario==='rescue'?rescueWorld(s.route):{WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,BARRIERS:[]};
+export const worldFor=s=>s?.scenario==='false-haven'?havenWorld(s):s?.scenario==='rescue'?rescueWorld(s.route):{WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,BARRIERS:[]};
 export const doorRects=(s)=>worldFor(s).BUILDINGS.map(b=>({id:b.id,x:b.door,y:b.y+b.h-16,w:80,h:16,door:true}));
 // Circular actors slide around real art footprints instead of oversized square corners.
 const overlap=(x,y,r,b)=>{const nx=Math.max(b.x,Math.min(x,b.x+b.w)),ny=Math.max(b.y,Math.min(y,b.y+b.h));return (x-nx)**2+(y-ny)**2<r*r;};
@@ -59,6 +60,7 @@ export function walls(s,{ignoreDoors=false}={}){
  const list=[...BARRIERS];
  for(const b of BUILDINGS){
    list.push({x:b.x,y:b.y,w:b.w,h:16});
+   if(!WINDOWS.some(w=>w.room===b.id))list.push({x:b.x,y:b.y,w:16,h:b.h},{x:b.x+b.w-16,y:b.y,w:16,h:b.h});
    for(const pane of WINDOWS.filter(w=>w.room===b.id)){
      list.push({x:pane.x,y:b.y,w:16,h:96},{x:pane.x,y:b.y+176,w:16,h:b.h-176});
      if(!s.windows?.[pane.id])list.push({...pane,window:true});
