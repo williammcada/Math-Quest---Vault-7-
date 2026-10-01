@@ -2,7 +2,7 @@ import {FALSE_HAVEN as c,havenScene,HAVEN_PERSONAL} from './cartridges/false-hav
 const gateNames=(c,n)=>[...c.gates.slice(0,2),...c.inserts.slice(0,n-3),c.gates[2]];
 import {GameHost} from './engine/game-host.js?v=0.9.4-fh2';
 import {falseHavenAdapter} from './games/nightfall/false-haven-adapter.js?v=0.9.4-fh2';
-const root=document.querySelector('#story'),crew=[{alias:'Your crew'}];let gates=3,names=gateNames(c,gates),team={stage:'briefing',gateIndex:0,inventory:[],runs:{}},host,css,returnButton;
+const root=document.querySelector('#story'),crew=[{alias:'Alex'},{alias:'Rowan'}];let gates=3,names=gateNames(c,gates),team={stage:'briefing',gateIndex:0,inventory:[],runs:{}},host,css,returnButton;
 const audio=new Audio(c.assets.ambient);audio.loop=true;audio.volume=.2;let musicOn=false;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function music(){if(musicOn){try{await audio.play();}catch{document.querySelector('#music').textContent='Retry music';}}else audio.pause();}
@@ -27,6 +27,7 @@ function fly(){
  root.innerHTML='<div id="preview-game"></div><button id="story-return">Continue to the final story decision</button>';
  const run={runId:crypto.randomUUID(),configRevision:c.revision,loadout:team.inventory,route:team.route,threat:1,status:'not_started',mode:'action',seq:0};
  host=new GameHost(root.querySelector('#preview-game'),{adapter:falseHavenAdapter,items:c.items,run,practice:true,send:async()=>{}});
+ host.root.querySelector('[data-restart]')?.remove();
  root.querySelector('#story-return').onclick=()=>{team.runs.preview={outcome:host.s.outcome||'skipped'};host.destroy();host=null;team.stage='finale';render();};
 }
 render();
