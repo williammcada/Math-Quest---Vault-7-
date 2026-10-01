@@ -1,3 +1,4 @@
+import {IRONBREAK} from '../public/cartridges/ironbreak.js';
 import {settleRescues} from './cartridges/nightfall/rescue-server.js';
 import {equipmentCommand,equipmentSlots,completeEquipmentBlock} from './engine/equipment.js';
 import {serverFor} from './cartridges/registry.js';
@@ -212,7 +213,7 @@ export class QuestSession {
     this.state={deleted:true};await this.ctx.storage.put('state',this.state);
   }
   async alarm(){
-    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code){if(settleRescues(this))await this.save();else await this.scheduleAlarm();}});
+    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code){const rescues=settleRescues(this),runs=this.state.config.cartridgeId==='ironbreak'&&settleRuns(this);if(rescues||runs)await this.save();else await this.scheduleAlarm();}});
     this.serial=work.catch(()=>{});return work;
   }
   async handle(request) {
@@ -358,7 +359,7 @@ export class QuestSession {
     const type = String(input.type);
     if(type==='teacher.setThreat'){
       const t=this.state.teams[input.teamId];
-      if(!expansionFor(this)||!t||this.state.status==='ended')return {error:'An open Nightfall team is required.'};
+      if(this.state.config.cartridgeId!=='nightfall'||!t||this.state.status==='ended')return {error:'An open Nightfall team is required.'};
       if(t.threatLocked||Object.values(t.runs||{}).some(r=>r.status!=='not_started'))return {error:'Threat is locked because a crew member has started.'};
       if(!Number.isInteger(input.threat)||input.threat<0||input.threat>4)return {error:'Choose threat 0–4.'};
       t.threat=input.threat;for(const r of Object.values(t.runs||{}))r.threat=input.threat;
@@ -604,6 +605,7 @@ export class QuestSession {
   resolveFinale(student) {return serverFor(this).resolveFinale.call(this,student);}
 
   fateFor(student) {
+    if(this.state.config.cartridgeId==='ironbreak'){const o=this.teamFor(student)?.runs?.[student.id]?.outcome;return {id:o||'pending',label:IRONBREAK.personal[o]||'Suit operation pending'};}
     if(expansionFor(this)){
       const outcome=this.teamFor(student)?.runs?.[student.id]?.outcome;
       return {id:outcome||'pending',label:outcome==='success'?'Reached the bus':['setback','lost'].includes(outcome)?'Did not make it out alive':outcome==='teacher_advanced'?'Closed by mission control':outcome==='timed_out'?'Awaiting review':'Crossing not recorded'};
@@ -825,9 +827,10 @@ export class QuestSession {
       ...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.route,r.equipment,r.adverseCount,r.status,r.outcome,r.activeElapsedMs,r.detections,r.integrityRemaining,r.checkpoint,r.fallbackUsed,r.startedAt,r.completedAt,r.clientBuild,r.mapRevision]),
       [],['TEAM OUTCOMES'],['Team','Final action','Ending','Credits','Route','Equipment','Completion reason'],...report.teams.map(t=>[t.name,t.finalAction,t.endingId,t.currency,t.route,t.inventory.join('|'),t.extraction?.completionReason])
     ];
-    if(expansionFor(this))rows.push([],['NIGHTFALL · ENGAGEMENT ONLY'],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
+    if(this.state.config.cartridgeId==='nightfall')rows.push([],['NIGHTFALL · ENGAGEMENT ONLY'],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
     rows.push([],['FIRST RESPONSE · ENGAGEMENT ONLY'],['Student ID','Alias','Team','Phase','Route','Mode','Outcome','Closure reason','Attempts','Retries'],...report.rescueEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.phase,r.route,r.mode,r.outcome,r.closureReason,r.attempts,r.retries]));
     rows.push([],['LIVE EXTENSIONS'],['Batch ID','Time','Student ID','Alias','Added','Total assigned','Gate index','Difficulty'],...(report.extensions||[]).flatMap(batch=>batch.targets.map(t=>[batch.id,batch.at,t.studentId,t.alias,t.count,t.total,t.gateIndex===null?'Last Checkpoint':t.gateIndex+1,batch.policy])),[],['ATTEMPT EXTENSION CONTEXT'],['Item ID','Student ID','Batch ID'],...report.attempts.map(a=>[a.itemId,a.studentId,a.extensionBatchId||'initial']));
+    if(this.state.config.cartridgeId==='ironbreak')rows.push([],['IRONBREAK · ENGAGEMENT ONLY'],['Student ID','Mode','Outcome','Closure reason','Attempts','Lives remaining','Checkpoint','Active ms','Upgrades','Boss HP','Guided steps','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.mode,r.outcome,r.closureReason,r.attempt,r.lives,r.checkpoint,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.enemies?.find(e=>e.type==='boss')?.hp,r.guidedStep,r.validation]));
     rows.push([],['V0.9 GAMEPLAY DETAILS'],['Student ID','Threat','Objectives','Door uses','Doors broken','Distractions','Toolkit checkpoints','Mode','Engine revision','Cloak used','Broken windows','Dispatch horde'],...report.gameplayEvidence.map(r=>[r.studentId,r.threat,Object.keys(r.snapshot?.tasks||r.objectives||{}).filter(k=>(r.snapshot?.tasks||r.objectives)[k]).join('|'),r.snapshot?.doorUses,r.snapshot?.doorsBroken,r.snapshot?.distractionsUsed,(r.jams||[]).join('|'),r.mode|| (r.fallbackUsed?'assisted':'action'),r.engineVersion||r.clientBuild,!!r.cloakUsed,Object.keys(r.snapshot?.windows||{}).join('|'),!!r.snapshot?.hordeTriggered]));
     return "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
   }
@@ -863,6 +866,7 @@ export class QuestSession {
   async scheduleAlarm(){
     if(!this.state.code||this.state.deleted)return;
     const deadlines=this.state.paused?[]:Object.values(this.state.teams).filter(t=>t.stage==='rescue'&&!t.rescue?.closedAt).map(t=>t.rescue.deadline);
+    if(!this.state.paused&&this.state.config.cartridgeId==='ironbreak')for(const t of Object.values(this.state.teams))if(t.stage==='minigame'&&t.finaleDeadline)deadlines.push(t.finaleDeadline);
     await this.ctx.storage.setAlarm?.(Math.max(Date.now(),Math.min(this.state.expiresAt,...deadlines)));
   }
   async save() {

@@ -1,6 +1,8 @@
+import {advanceIronbreak} from './ironbreak/server.js';
 import {vault7Server} from './vault-7/server.js';
 import {advanceExpansion} from '../expansion.js';
 const registry=new Map([
+ ['ironbreak',{advance(team){return advanceIronbreak(this,team);}}],
  ['vault-7',vault7Server],
  ['nightfall',{advance(team){return advanceExpansion(this,team);}}]
 ]);
