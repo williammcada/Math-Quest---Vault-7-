@@ -1,0 +1,42 @@
+[
+  {
+    "path": "public/false-haven-preview.html",
+    "matches": true,
+    "sha256": "a9a533e79245e20d1a6e7aeecc4c36af513be21f6eb88eb17bd47fef77cb6be8"
+  },
+  {
+    "path": "public/false-haven-preview.js",
+    "matches": true,
+    "sha256": "7324f3464868578ab1be031974f251c9cf47771630c0c580ea54fccfc2281c8b"
+  },
+  {
+    "path": "public/cartridges/false-haven.js",
+    "matches": true,
+    "sha256": "4d7cf835a66f92015c21db080b2e8001d540125bfa1eabb5e2135ecfcf910a5c"
+  },
+  {
+    "path": "public/cartridges.js",
+    "matches": true,
+    "sha256": "90e43d29ba5cfbb90d3b6939a9baa4b48ae49b263944c08c1e8fb8dbcb2386bb"
+  },
+  {
+    "path": "public/app.js",
+    "matches": true,
+    "sha256": "12b2c278890db12771093a3876dac4905d5158fcc593476611a3ed2559c72552"
+  },
+  {
+    "path": "public/engine/game-host.js",
+    "matches": true,
+    "sha256": "324e99549aa0bf59ee484c42a45d65143694f8fa0ba167931f1f391944f7b0f2"
+  },
+  {
+    "path": "public/games/registry.js",
+    "matches": true,
+    "sha256": "fe7f9444fa170f84055c7be46d501c1f387a4e095f8166c7eeeec939f7415f5d"
+  },
+  {
+    "path": "public/games/nightfall/false-haven-adapter.js",
+    "matches": true,
+    "sha256": "92fd01a3e36f7bef20f1ab1369a6aefd5e8cb3615a376b41ef690493bdd5f2ae"
+  }
+]
