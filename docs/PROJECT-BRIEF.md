@@ -6,7 +6,7 @@
 **Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, current planning on `design/journey-to-the-west-v0.1`.  
 **Current source baseline:** main inspected on 2026-10-01 at `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28` (merged v0.9.4 candidate); canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this design intake. The v0.9.1 observations and earlier implementation intake below are historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Complete Journey to the West design and a consolidated change specification before implementation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
+**Next work:** Review the consolidated Journey to the West v0.1 change specification before implementation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -105,9 +105,9 @@ Windows and landscape classroom iPads remain targets. iPhone Safari action layou
 
 ## 11. Journey to the West design intake — 1 October 2026
 
-**Authorization:** Plan and ask questions before building. The owner's latest “Proceed” advances design. Journey to the West is an explicitly requested multiplayer cartridge exception to the host's individual-minigame scope; it does not change Vault Seven or Nightfall action rules.
+**Authorization:** Plan and ask questions before building. The owner approved optional questions during readiness at 08:43 and enemy/audio direction at 08:50; consolidated technical defaults and implementation remain pending approval. Journey to the West is an explicitly requested multiplayer cartridge exception to the host's individual-minigame scope; it does not change Vault Seven or Nightfall action rules.
 
-**Canonical planning records:** [Accepted decisions](change-specs/journey-to-the-west-v0.1-DRAFT.md) and [source-grounded technical/production draft](change-specs/journey-to-the-west-v0.1-TECHNICAL-DRAFT.md), on `design/journey-to-the-west-v0.1`. Neither is a released or verified game.
+**Current specification:** [Journey to the West v0.1 — consolidated Review 1](change-specs/journey-to-the-west-v0.1.md), on `design/journey-to-the-west-v0.1`. Review checkpoint commit: `60248a1226997edd66ccd33a2577f89c9525a0ae`. Use that consolidated file for subsequent implementation planning. Preserve the [decision record](change-specs/journey-to-the-west-v0.1-DRAFT.md) as approval history and the [technical draft](change-specs/journey-to-the-west-v0.1-TECHNICAL-DRAFT.md) as historical source research. No game release or verification is implied.
 
 **Product scope:** One three-minute cooperative arcade brawler level, one to five players, five unique heroes from the traveling party, Nezha boss, detailed arcade pixel art, three total lives with automatic respawn, personal math-earned upgrades, and individual magic pickups. Reserve two opening-cutscene positions for later narrative work. Approved art direction and controls are recorded in the decision document.
 
@@ -123,6 +123,10 @@ Windows and landscape classroom iPads remain targets. iPhone Safari action layou
 
 **Preparation timing approved at 08:43:** After required gates and relevant decisions, optional personal upgrade questions remain available during the existing 60-second readiness window. Only completed blocks earn upgrades. Students finish or leave optional work, select their hero/upgrades and press Ready; launch early when everyone is ready, otherwise start the ready eligible subset at the deadline. Optional work cannot hold the team. Exact cutoff edge cases are proposed in the technical draft. This is design approval, not implementation authorization.
 
-**Remaining design review:** Enemy appearance and audio; consolidated combat, reconnect and spawn defaults; result/ending payload with narrative slots reserved; actual hosting route and feasibility gate.
+**Enemy/audio direction approved at 08:50:** Horned mountain raiders, scarf-wearing cliff acrobats, talisman casters, bronze shield guards and ox-like brutes in detailed arcade pixel art. Energetic arcade synth with Chinese-inspired percussion, plucked strings and flute; distinct Nezha theme and recognizable weapon, pickup and hero-special effects.
+
+**Consolidated review:** Review 1 gathers the proposed combat/respawn/reconnect/spawn numbers, production plan, result payload and first implementation stage. The owner has not yet approved that complete technical baseline. Narrative/cutscene/ending content remains deliberately deferred; the actual WebSocket hostname, account budget and school-network measurements remain operational gates.
+
+**First implementation stage after approval:** Reconcile the current host source; implement the existing-identity handoff and a small synchronized combat scene with readiness, clock, pause/reconnect and result return; produce one complete hero/enemy animation sample. Verify those components before expanding the full cast/level. Physical-device and school-network evidence remain required for classroom release.
 
 **Evidence state:** Source inspected; design documents saved. No Journey gameplay code, generated production sprite sheets, deployed multiplayer service, game tests, school-network tests or physical-device tests completed. The historical connected-iPad observations for mathematics are not evidence for this cartridge. Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
