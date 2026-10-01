@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:23 “Proceed” message.
+**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:43 approval.
 **Technical companion:** [Source-grounded technical and production draft](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md). Its engineering and tuning proposals are not automatically approved by this decision record.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
@@ -57,6 +57,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 28. Cartridge team integration clarified by the owner at 08:02 on 2026-10-01: the brawler is a minigame cartridge inside MathQuest. Students join/form teams as they normally do in MathQuest; the same team enters the cartridge. Do not add separate teacher assignment or a second QR/join-code/team-formation flow. Cloudflare is intended to provide the multiplayer backend for the cartridge; integration with existing team identity and results remains to be designed.
 
 29. Automatic launch limit requested at 08:09 on 2026-10-01: after MathQuest's math gates and relevant decisions are complete and the team reaches the minigame handoff, start automatically as soon as everyone is ready; if a member is absent or unready, allow one minute before proceeding with the ready players. Teacher intervention is not required for this timeout. The assistant recommends this as the default; see the explicit handoff and zero-ready handling below.
+
+30. Optional preparation timing approved on 2026-10-01 at 08:43: optional upgrade questions remain available during the 60-second readiness window, after required gates and relevant decisions are complete. Only completed blocks earn upgrades. Students finish or leave optional work, choose their hero/upgrades and press Ready; everyone ready starts the three-second countdown early, otherwise the deadline starts the ready eligible subset. Optional work cannot delay that deadline.
 
 ## 3. Hero mechanics — specials approved; ordinary move details and tuning remain open
 
@@ -131,7 +133,7 @@ The normal join path currently has no five-member limit. The proposal applies a 
 
 Local scope exception: the owner's explicit request authorizes designing real shared multiplayer combat for Journey to the West. The host brief's individual-action policy remains in place for Vault Seven and Nightfall.
 
-Accepted high-level mechanics are recorded above and in the dated decisions below. Exact combat timing, spawn budgets, boss health, network intervals and production requirements are collected as reviewable proposals in the technical companion. Remaining owner choices include enemy/audio direction and closure of optional personal math before the host handoff. The two opening-cutscene slots remain deliberately deferred.
+Accepted high-level mechanics are recorded above and in the dated decisions below. Exact combat timing, spawn budgets, boss health, network intervals and production requirements are collected as reviewable proposals in the technical companion. Remaining owner choices include enemy/audio direction. Optional personal math during the readiness window was approved at 08:43; see decision 30. The two opening-cutscene slots remain deliberately deferred.
 
 ## 8. Handbook and source provenance
 
@@ -158,7 +160,7 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Current checkpoint: the revised composition, controls, specials, personal upgrades and high-level multiplayer/readiness behavior have been settled as recorded below. The new technical companion supplies proposed values and a production plan after inspecting the host source. Next owner review covers enemy appearance/audio and the optional-personal-math closure rule, followed by one consolidated specification review. Actual endpoint/network feasibility, implementation and verification remain separate work. Exact quantities and timing are proposed tuning, not verified balance.
+Current checkpoint: the revised composition, controls, specials, personal upgrades and high-level multiplayer/readiness behavior have been settled as recorded below. The new technical companion supplies proposed values and a production plan after inspecting the host source. Next owner review covers enemy appearance/audio, followed by one consolidated specification review. Optional-personal-math timing was settled at 08:43. Actual endpoint/network feasibility, implementation and verification remain separate work. Exact quantities and timing are proposed tuning, not verified balance.
 
 ### End-of-run decisions — approved 2026-09-30 at 21:35
 
@@ -288,7 +290,7 @@ Magic economy:
 
 Recommended classroom behavior:
 - Use the existing MathQuest team assignment. Each team has its own preparation/character-selection lobby.
-- Students finish their own required mathematics, optionally earn additional upgrades, select an available hero and upgrades, then press Ready. Optional math keeps that student unready until they finish or choose to stop at an earned upgrade boundary.
+- Students finish their own required mathematics, optionally earn additional upgrades, select an available hero and upgrades, then press Ready. Optional math keeps that student unready until they finish or choose to stop; the 08:43 decision permits it during the readiness window and awards upgrades only for completed blocks.
 - Automatically launch that team when all its participating members are ready, or with the ready subset after the one-minute readiness window added at 08:09. Use the existing shared three-second launch countdown. The three-minute action clock starts when control is enabled; readiness waiting and launch countdown are outside it. Reserved opening cutscenes, once specified, also occur before the action clock.
 - A teacher can start a ready subset without bypassing any student's required mathematics; absent/unready students wait for the next run. Final ready roster determines party-size scaling.
 - Lock heroes and starting roster at launch. No new players enter mid-run; reconnecting members reclaim their existing hero/state.
@@ -340,7 +342,21 @@ The core auto-start/one-minute decision comes from the owner. Zero-ready handlin
 
 The owner's “Proceed” advances the planning workflow. The [technical and production draft](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md) now records the inspected host interfaces, proposed Cloudflare architecture, readiness state machine, combat defaults, encounter budgets, art/audio inventory and verification contract. Newly introduced technical numbers remain proposals for consolidated review.
 
-The one-minute readiness window starts only at the normal host-to-minigame handoff, after required gates and relevant decisions. Optional preparation needs an explicit closure rule before that handoff; a readiness timeout cannot bypass unfinished required math. Keep the already selected “all ready → three-second countdown” behavior, and proceed with the ready subset after the minute. The technical draft specifies zero-ready and reconnection edge cases for review.
+The one-minute readiness window starts only at the normal host-to-minigame handoff, after required gates and relevant decisions. At this 08:23 checkpoint, optional preparation timing was unresolved; decision 30 below supersedes that open item by allowing optional questions during the readiness window. A readiness timeout cannot bypass unfinished required math. Keep the already selected “all ready → three-second countdown” behavior, and proceed with the ready subset after the minute. The technical draft specifies zero-ready and reconnection edge cases for review.
 
 Source confirmation: main remained at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28. Actual deployed frontend/Worker identity was not established. The technical draft's provenance section lists inspected source files and handbook blob revisions. No gameplay implementation, deployment, network test or balance test occurred.
 
+### Optional questions during readiness — approved 2026-10-01 at 08:43
+
+The owner answered “Yes” to keeping optional upgrade questions available during the existing 60-second readiness window.
+
+- Required mathematics and relevant decisions are already complete when the window opens.
+- Optional blocks are individual and cannot prevent the host from opening readiness.
+- Only fully completed blocks earn an additional personal upgrade, within the accepted three-upgrade maximum.
+- A student finishes or leaves optional work, selects an available hero and earned upgrades, then presses Ready.
+- All ready starts the three-second launch countdown immediately. At 60 seconds, start that countdown with the ready, connected, eligible subset.
+- A student still unready at launch waits for the next run under the accepted entry rule.
+- Proposed cutoff detail: close optional questions at the end of the window, retain submitted answers as academic evidence and give no upgrade credit for an incomplete block. If nobody is ready, keep the game unstarted and allow hero/loadout selection using earned upgrades; do not open a second optional-math minute.
+- Readiness waiting and launch countdown remain outside the 180-second action clock.
+
+This approval settles preparation timing, not the remaining creative proposals or implementation authorization. Handbook files were rechecked at the same blob revisions recorded in section 8; the host main commit remains 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28.
