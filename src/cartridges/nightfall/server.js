@@ -1,3 +1,4 @@
+import {validateHaven} from '../false-haven/validation.js';
 import {openRescue,rescueCommand,rescueProjection} from './rescue-server.js';
 import {readyToLeave} from '../../engine/equipment.js';
 import { cartridgeFor, sceneFor } from '../../../public/cartridges.js';
@@ -42,6 +43,7 @@ export function settleRuns(room, forceTeam, outcome='teacher_advanced') {
 export function expansionCommand(room, student, input) {
   const c=expansionFor(room),t=room.teamFor(student),members=room.members(t.id),type=input.type;
   const respond=()=>{room.bump();return room.snapshot({deviceId:student.id});};
+  if(type.startsWith('rescue.')&&c.id!=='nightfall')return fail('This chapter has no early rescue phase.');
   if(type.startsWith('rescue.'))return rescueCommand(room,student,input);
   if(type==='supply.start')return startSupply(room,student);
   if(type==='choice.vote'){
@@ -53,7 +55,7 @@ export function expansionCommand(room, student, input) {
     if(!['decision','finale'].includes(t.stage)||!room.isLead(student,t))return fail('Only the current Event Lead can resolve an open choice.');
     const selected=winner(t.stage==='decision'?t.votes:t.finalVotes,members,student.id);
     if(selected===null)return fail('Every crew member must vote first.');
-    if(t.stage==='decision'){t.route=selected;if(room.state.config.engineVersion==='0.9.4')openRescue(room,t);else room.openGate(t,1);}
+    if(t.stage==='decision'){t.route=selected;if(c.id==='nightfall'&&room.state.config.engineVersion==='0.9.4')openRescue(room,t);else room.openGate(t,1);}
     else{
       t.finalAction=selected;t.stage='victory';t.completedAt=new Date().toISOString();
     }
@@ -71,8 +73,8 @@ export function expansionCommand(room, student, input) {
   }else if(type==='market.continue'){
     if(t.stage!=='market'||!room.isLead(student,t)||!readyToLeave(room,t))return fail('The Event Lead must confirm all earned equipment before starting.');
     t.stage='minigame';t.leadIndex=(t.leadIndex+1)%members.length;
-    t.finaleDeadline=null;t.runs={};t.threat??=1;
-    for(const m of members)t.runs[m.id]={runId:crypto.randomUUID(),configRevision:c.revision,engineVersion:room.state.config.engineVersion,mapRevision:c.revision,assetRevision:'nightfall-art-2',threat:t.threat,status:'not_started',mode:'action',seq:0,activeElapsedMs:0,loadout:[...t.inventory],route:t.route,createdAt:Date.now()};
+    t.finaleDeadline=c.teamWindowMs?Date.now()+c.teamWindowMs:null;t.runs={};t.threat??=1;
+    for(const m of members)t.runs[m.id]={runId:crypto.randomUUID(),configRevision:c.revision,engineVersion:room.state.config.engineVersion,mapRevision:c.mapRevision||c.revision,assetRevision:c.assetRevision||'nightfall-art-2',threat:t.threat,status:'not_started',mode:'action',seq:0,activeElapsedMs:0,loadout:[...t.inventory],route:t.route,createdAt:Date.now()};
     room.addEvent('market-committed',`${t.name} equipped ${t.inventory.join('|')}`,t.id,student.id);
   }else if(type.startsWith('minigame.')){
     const r=t.runs?.[student.id];
@@ -92,7 +94,8 @@ export function expansionCommand(room, student, input) {
       if(!Number.isInteger(input.seq)||input.seq<=r.seq)return fail('Stale run update.');
       if(!input.snapshot||typeof input.snapshot!=='object')return fail('A run snapshot is required.');
       if(JSON.stringify(input.snapshot).length>60000)return fail('Run snapshot is too large.');
-      if(input.snapshot){
+      if(c.id==='nightfall-false-haven'){const error=validateHaven(r,input);if(error)return fail(error);}
+      else if(input.snapshot){
         const s=input.snapshot,old=r.snapshot;
         if(s.threat!==r.threat)return fail('Threat conditions cannot change during a run.');
         const allowedEnemies=[...seededEnemies(r.threat),...(s.hordeTriggered?dispatchHorde():[])];
@@ -121,7 +124,7 @@ export function expansionCommand(room, student, input) {
         for(const [field,max] of [['health',3],['ammo',r.loadout.includes('ammo-pouch')?84:60],['vest',vest],['medkit',medkit]])if(!Number.isInteger(s[field]*(field==='health'?2:1))||s[field]<0||s[field]>max)return fail('Invalid equipment or health state.');
         if(s.damage!==(r.loadout.includes('carbine')?2:1)||old&&(s.vest>old.vest||s.medkit>old.medkit))return fail('Equipment cannot recharge during a run.');
       }
-      if(type==='minigame.complete'&&!['success','lost','setback','timed_out'].includes(input.outcome))return fail('Invalid finale outcome.');
+      if(c.id!=='nightfall-false-haven'&&type==='minigame.complete'&&!['success','lost','setback','timed_out'].includes(input.outcome))return fail('Invalid finale outcome.');
       r.seq=input.seq;r.activeElapsedMs=elapsed;
       if(input.snapshot)r.snapshot=input.snapshot;
       if(type==='minigame.complete'){
@@ -142,6 +145,6 @@ export function expansionProjection(room, team, teacher, viewer, base) {
     supply:teacher||mine?team.supply||null:null,
     voteTotals:tally(team.votes),finalVoteTotals:tally(team.finalVotes),marketSelectionTotals:tally(team.marketSelections),
     myMarketSelection:mine?(team.marketSelections[viewer.id]??null):undefined,
-    finale:teacher||mine?{deadline:team.finaleDeadline,run:mine?runs[viewer.id]:undefined,results:teacher?members.map(m=>({studentId:m.id,alias:m.alias,...runs[m.id]})):undefined}:null,
+    finale:teacher||mine?{deadline:team.finaleDeadline,serverNow:Date.now(),pausedAt:room.state.pausedAt,run:mine?runs[viewer.id]:undefined,results:teacher?members.map(m=>({studentId:m.id,alias:m.alias,...runs[m.id]})):undefined}:null,
     members:base.members?.map((m,i)=>({...m,minigameComplete:runs[members[i].id]?.status==='terminal'}))};
 }

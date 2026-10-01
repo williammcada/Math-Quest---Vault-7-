@@ -1,19 +1,19 @@
-import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4';
+import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4-fh2';
 import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
 import { hostingFor, fetchApi } from './hosting.js?v=0.9.4';
 import { CATALOG } from './catalog.js?v=0.9.4';
 import { StealthRuntime } from './stealth.js?v=0.9.4';
 import { SceneAssets } from './vault7-assets.js?v=0.9.4';
 import { TeacherAudio } from './teacher-audio.js?v=0.9.4';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4';
-import { FinaleHost } from './finale-host.js?v=0.9.4';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4-fh2';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-fh2';
+import { FinaleHost } from './finale-host.js?v=0.9.4-fh2';
 import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4';
 import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.4';
-import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.4';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.4-fh2';
 import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.4';
 forgetExpiredRooms();
-import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.4';
+import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.4-fh2';
 let setupCartridge='';
 let finaleHost=null;
 const app = document.querySelector("#app");
@@ -497,7 +497,7 @@ function renderStudent() {
     const action=item.stage==='rescue'?item.rescue:item.finale;
     if(!finaleHost){
       app.innerHTML=shell(`<section class="mission-head"><h1>${escapeHtml(presentationFor(state.cartridge.id)?.title||BRAND.name)}</h1></section><div id="finale-root"></div>`,true);
-      finaleHost=new (item.stage==='rescue'?RescueHost:FinaleHost)(document.querySelector('#finale-root'),{run:action.run,route:item.route,deadline:action.deadline,serverNow:action.serverNow,pausedAt:action.pausedAt,paused:state.paused,send:async(type,extra)=>{
+      finaleHost=new (item.stage==='rescue'?RescueHost:FinaleHost)(document.querySelector('#finale-root'),{cartridgeId:state.cartridge.id,run:action.run,route:item.route,deadline:action.deadline,serverNow:action.serverNow,pausedAt:action.pausedAt,paused:state.paused,send:async(type,extra)=>{
         const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
         const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(!['rescue','minigame'].includes(currentTeam()?.stage))render();}return incoming;
       }});

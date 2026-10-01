@@ -14,7 +14,7 @@ export function extensionPreview(room,input){
   const targets=[],skipped=[];
   for(const s of selected){
     const t=room.teamFor(s);
-    if(['rescue','minigame','extraction','victory'].includes(t.stage)||(room.state.config.cartridgeId==='nightfall'&&t.stage==='finale')){skipped.push(s.alias);continue;}
+    if(['rescue','minigame','extraction','victory'].includes(t.stage)||(room.state.config.cartridgeId!=='vault-7'&&t.stage==='finale')){skipped.push(s.alias);continue;}
     if(assignedCount(room,s)+count>400)return {error:`${s.alias} would exceed 400 assigned questions.`};
     if(t.extraGate)return {error:'Finish the current Last Checkpoint before adding another batch to this team.'};
     let gate=t.stage==='briefing'?0:t.stage==='gate'?t.gateIndex:t.gateIndex+1;

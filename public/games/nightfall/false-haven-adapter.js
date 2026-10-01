@@ -5,9 +5,11 @@ import {HAVEN_REVISION,HAVEN_TASKS,havenEnvironment,havenFinale,havenTick} from 
 import {solid,worldFor} from './world.js?v=0.9.4-fh1';
 export function createHaven(run={}){
  const s=createState(run.loadout||[], 'clinic',run.threat??1,'false-haven'),raw=run.snapshot;
- s.runId=run.runId;s.mode=run.mode||'action';
+ s.runId=run.runId;s.route=run.route||'shelter';s.mode=run.mode||'action';
  if(!raw||raw.revision!==HAVEN_REVISION||raw.runId!==run.runId)return s;
  const finite=(v,min,max,fallback)=>Number.isFinite(v)?Math.max(min,Math.min(max,v)):fallback;
+ for(const k of ['shots','hits','blocks','heals','doorUses','doorsBroken','distractionsUsed','shotgunShots','doorRevision'])s[k]=Math.floor(finite(raw[k],0,100000,0));
+ s.immune=finite(raw.immune,0,1.4,0);s.cooldown=finite(raw.cooldown,0,2,0);
  s.time=finite(raw.time,0,300,0);s.health=finite(raw.health,0,3,3);s.ammo=finite(raw.ammo,0,s.loadout.includes('ammo-pouch')?84:60,12);s.vest=finite(raw.vest,0,s.vest,0);
  s.tasks=Object.fromEntries(HAVEN_TASKS.filter(t=>raw.tasks?.[t.id]===true).map(t=>[t.id,true]));
  // Reject out-of-order progress rather than accidentally granting inaccessible objectives.
@@ -27,16 +29,16 @@ export function createHaven(run={}){
  s.outcome=['success','lost','timed_out','assisted_completed'].includes(raw.outcome)?raw.outcome:null;
  if(!s.outcome&&s.health<=0)s.outcome='lost';if(!s.outcome&&s.time>=300)s.outcome='timed_out';s.mode=raw.mode==='assisted'?'assisted':s.mode;return s;
 }
-const profile={...CONTROL_PROFILES.nightfall,help:CONTROL_PROFILES.nightfall.help.replace('One live run; no restart after defeat.','Five active minutes. Practice can be restarted; no mathematics or classroom records.')};
+const profile={...CONTROL_PROFILES.nightfall,help:CONTROL_PROFILES.nightfall.help.replace('One live run; no restart after defeat.','Five active minutes. In a classroom, the shared five-minute window continues during local pauses.')};
 export const falseHavenAdapter={
- id:'false-haven',title:'Nightfall II · False Haven · v0.1.0',revision:HAVEN_REVISION,media:MEDIA,controlProfile:profile,canvasLabel:'Explore the evacuation compound, restore machinery and escape in the bus',
+ id:'false-haven',title:'Nightfall II · False Haven · v0.2.0',activeLimitSeconds:300,revision:HAVEN_REVISION,media:MEDIA,controlProfile:profile,canvasLabel:'Explore the evacuation compound, restore machinery and escape in the bus',
  resultLabels:{success:'You escaped False Haven',lost:'Your radio fell silent',timed_out:'Escape incomplete — time expired',assisted_completed:'Guided escape completed'},
- resultText:'Practice only. No classroom evidence is sent.',
+ resultText:'Your individual field result is recorded separately from mathematics. Every crew member still participates in the final decision.',
  create:createHaven,step,render,loadArt,
  music:s=>s.outcome?'ending':s.haven.finaleAt!==null||s.enemies.some(e=>e.hp>0&&e.phase==='chase')?'danger':'ambient',
  alarm:s=>s.haven.speakerUntil>s.time&&!s.outcome,
  instructions:'The survivors reached the safe zone. Its gates locked behind them. Start the utility generator, drain the passage, and open its shortcut. Return to the power selector, power the depot, move the cargo trolley and unlock the vehicle exit. Then release the barrier and reach the bus. Follow the amber marker; M shows the map. Broadcasts and doors buy time. The shotgun is in Supply. Five active minutes; pauses stop the clock.',
  hud:s=>{const t=Math.max(0,300-Math.floor(s.time));return `HEALTH ${s.health}/3 · ${s.weapon==='shotgun'?'SHOTGUN '+s.shells:(s.damage===2?'CARBINE ':'PISTOL ')+s.ammo} · ${Math.floor(t/60)}:${String(t%60).padStart(2,'0')} · POWER ${s.haven.powerCircuit.toUpperCase()}`;},
  objective:s=>(nextObjective(s)?.label||'Escape complete')+(s.prompt?' · '+s.prompt:''),progress:s=>HAVEN_TASKS.filter(t=>s.tasks[t.id]).map(t=>t.id),
- assisted(s,root,onProgress){const t=nextObjective(s);if(!t)return;root.innerHTML='<h2></h2><p>Guided practice follows the same machinery sequence without reflex combat. It is recorded separately from action success.</p><button>Complete this step using the covered route</button>';root.querySelector('h2').textContent=t.label;root.querySelector('button').onclick=()=>{if(t.id==='passage_drained'){s.time+=6;havenTick(s,6);}else if(t.id==='trolley_parked'){s.tasks.trolley_parked=true;s.haven.trolleyProgress=1;}else completeTask(s,t.id);if(s.outcome==='success')s.outcome='assisted_completed';onProgress();};}
+ assisted(s,root,onProgress){const t=nextObjective(s);if(!t)return;root.innerHTML='<h2></h2><p>The guided route follows the same machinery sequence without reflex combat. It is recorded separately from action success.</p><button>Complete this step using the covered route</button>';root.querySelector('h2').textContent=t.label;root.querySelector('button').onclick=()=>{if(t.id==='passage_drained'){s.haven.drainStarted=s.time-6;havenTick(s,0);}else if(t.id==='trolley_parked'){s.tasks.trolley_parked=true;s.haven.trolleyProgress=1;}else completeTask(s,t.id);if(s.outcome==='success')s.outcome='assisted_completed';onProgress();};}
 };

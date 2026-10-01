@@ -122,3 +122,9 @@ Next: generalize hard-coded world/navigation dimensions with city/rescue regress
 ### False Haven implementation checkpoint — 1 October 2026
 
 [Practice candidate v0.1.0](releases/false-haven-v0.1.0.md) is implemented at exact application commit `0124d53351dd7f69e6c0a8ef58979a878304b808`. Its 178-test suite/build passed, hosted Pages files match, and hosted action-start/map/guided-completion/reload smoke passed. Reachable area measured 2.34× Chapter 1. The earlier CHANGE SPEC status above is historical; physical-device and sustained combat verification remain open. No classroom/Arcade registration or math-gate migration has been performed. Follow the release record for evidence and next verification.
+
+## False Haven cartridge integration — v0.2.0
+
+User authorized production of Chapter 2 as a cartridge, consistent with the established workflow. The integration specification is `docs/change-specs/false-haven-cartridge-v0.2.0.md` (GitHub specification checkpoint `fddd4c91ddcc435970b0798591067c34d9f6d3fb`). New ID `nightfall-false-haven`, content revision `false-haven-cartridge-0.2.0`; preserved map revision `false-haven-0.1.0` and platform engine 0.9.4. Full 3/4/5-gate classroom progression, team decisions, earned equipment, independent action/assisted records and three endings are implemented. Existing approved art/audio are reused. Owner preview: `public/false-haven-preview.html`.
+
+The authoritative five-minute team window begins at `market.continue`; teacher pause extends it, local pause/reload do not. Individual active play is also limited to 300 seconds. Catalog ID/revision prevents the new frontend from creating Chapter 2 against an older Worker. Deployment authentication was unavailable (`wrangler whoami`: not authenticated); do not call the live classroom cartridge verified until the Worker is deployed and tested. See `docs/releases/false-haven-cartridge-v0.2.0.md` for exact candidate and verification evidence.

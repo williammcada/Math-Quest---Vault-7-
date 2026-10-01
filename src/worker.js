@@ -212,7 +212,7 @@ export class QuestSession {
     this.state={deleted:true};await this.ctx.storage.put('state',this.state);
   }
   async alarm(){
-    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code){if(settleRescues(this))await this.save();else await this.scheduleAlarm();}});
+    const work=(this.serial||Promise.resolve()).then(async()=>{await this.ready;if(this.state.code&&Date.now()>=this.state.expiresAt)await this.purge();else if(this.state.code){const rescueChanged=settleRescues(this),runChanged=expansionFor(this)&&settleRuns(this);if(rescueChanged||runChanged)await this.save();else await this.scheduleAlarm();}});
     this.serial=work.catch(()=>{});return work;
   }
   async handle(request) {
@@ -825,7 +825,7 @@ export class QuestSession {
       ...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.route,r.equipment,r.adverseCount,r.status,r.outcome,r.activeElapsedMs,r.detections,r.integrityRemaining,r.checkpoint,r.fallbackUsed,r.startedAt,r.completedAt,r.clientBuild,r.mapRevision]),
       [],['TEAM OUTCOMES'],['Team','Final action','Ending','Credits','Route','Equipment','Completion reason'],...report.teams.map(t=>[t.name,t.finalAction,t.endingId,t.currency,t.route,t.inventory.join('|'),t.extraction?.completionReason])
     ];
-    if(expansionFor(this))rows.push([],['NIGHTFALL · ENGAGEMENT ONLY'],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
+    if(expansionFor(this))rows.push([],[`${this.state.config.cartridgeTitle} · ENGAGEMENT ONLY`],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
     rows.push([],['FIRST RESPONSE · ENGAGEMENT ONLY'],['Student ID','Alias','Team','Phase','Route','Mode','Outcome','Closure reason','Attempts','Retries'],...report.rescueEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.phase,r.route,r.mode,r.outcome,r.closureReason,r.attempts,r.retries]));
     rows.push([],['LIVE EXTENSIONS'],['Batch ID','Time','Student ID','Alias','Added','Total assigned','Gate index','Difficulty'],...(report.extensions||[]).flatMap(batch=>batch.targets.map(t=>[batch.id,batch.at,t.studentId,t.alias,t.count,t.total,t.gateIndex===null?'Last Checkpoint':t.gateIndex+1,batch.policy])),[],['ATTEMPT EXTENSION CONTEXT'],['Item ID','Student ID','Batch ID'],...report.attempts.map(a=>[a.itemId,a.studentId,a.extensionBatchId||'initial']));
     rows.push([],['V0.9 GAMEPLAY DETAILS'],['Student ID','Threat','Objectives','Door uses','Doors broken','Distractions','Toolkit checkpoints','Mode','Engine revision','Cloak used','Broken windows','Dispatch horde'],...report.gameplayEvidence.map(r=>[r.studentId,r.threat,Object.keys(r.snapshot?.tasks||r.objectives||{}).filter(k=>(r.snapshot?.tasks||r.objectives)[k]).join('|'),r.snapshot?.doorUses,r.snapshot?.doorsBroken,r.snapshot?.distractionsUsed,(r.jams||[]).join('|'),r.mode|| (r.fallbackUsed?'assisted':'action'),r.engineVersion||r.clientBuild,!!r.cloakUsed,Object.keys(r.snapshot?.windows||{}).join('|'),!!r.snapshot?.hordeTriggered]));
@@ -862,7 +862,7 @@ export class QuestSession {
 
   async scheduleAlarm(){
     if(!this.state.code||this.state.deleted)return;
-    const deadlines=this.state.paused?[]:Object.values(this.state.teams).filter(t=>t.stage==='rescue'&&!t.rescue?.closedAt).map(t=>t.rescue.deadline);
+    const deadlines=this.state.paused?[]:Object.values(this.state.teams).flatMap(t=>t.stage==='rescue'&&!t.rescue?.closedAt?[t.rescue.deadline]:t.stage==='minigame'&&t.finaleDeadline?[t.finaleDeadline]:[]);
     await this.ctx.storage.setAlarm?.(Math.max(Date.now(),Math.min(this.state.expiresAt,...deadlines)));
   }
   async save() {

@@ -1,4 +1,4 @@
-import {GameHost} from '../../engine/game-host.js?v=0.9.4';
+import {GameHost} from '../../engine/game-host.js?v=0.9.4-fh2';
 import {rescueAdapter} from './rescue-adapter.js?v=0.9.4';
 import {createRescue,checkpointFor} from './rescue.js?v=0.9.4';
 import {RESCUE_WINDOW_MS} from './rescue-world.js?v=0.9.4';

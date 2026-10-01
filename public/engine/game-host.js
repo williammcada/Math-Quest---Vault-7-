@@ -4,13 +4,13 @@ import {GameAudio} from './game-audio.js?v=0.9.4';
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class GameHost {
-  constructor(root,{adapter,items=[],run,route,deadline,send,practice=false,paused=false}){
-    this.adapter=adapter;this.items=items;this.art=null;this.gameAudio=new GameAudio(this.adapter.media);this.root=root;this.run=run;this.send=send;this.practice=practice;this.deadline=deadline;this.paused=paused;this.input={tank:true};this.localPaused=false;this.mode=run.mode||'action';this.started=run.status==='active';this.seq=run.seq||0;this.pending=null;this.sending=false;this.lastSent=0;this.dead=false;this.ac=new AbortController();
+  constructor(root,{adapter,items=[],run,route,deadline,send,practice=false,paused=false,serverNow,pausedAt}){
+    this.adapter=adapter;this.items=items;this.art=null;this.gameAudio=new GameAudio(this.adapter.media);this.root=root;this.run=run;this.send=send;this.practice=practice;this.deadline=deadline;this.clockOffset=Number.isFinite(serverNow)?serverNow-Date.now():0;this.pauseClock=pausedAt;this.paused=paused;this.input={tank:true};this.localPaused=false;this.mode=run.mode||'action';this.started=run.status==='active';this.seq=run.seq||0;this.pending=null;this.sending=false;this.lastSent=0;this.dead=false;this.ac=new AbortController();
     registerRecord(new URLSearchParams(globalThis.location?.search||'').get('session'),`mq-v09-finale-${run.runId}`);
     let saved;try{saved=JSON.parse(localStorage.getItem(`mq-v09-finale-${run.runId}`));}catch{}
     if(this.adapter.commandPrefix==='rescue'&&saved?.attemptId!==run.attemptId)saved=null;
-    if(saved?.seq>this.seq){this.seq=saved.seq;this.mode=saved.mode||this.mode;}
-    this.s=this.adapter.create({...run,route,snapshot:saved?.seq>=run.seq?saved.snapshot:run.snapshot});
+    if(saved?.seq>=this.seq){this.seq=saved.seq;this.mode=saved.mode||this.mode;}
+    this.s=this.adapter.create({...run,mode:this.mode,route,snapshot:saved?.seq>=run.seq?saved.snapshot:run.snapshot});
     this.render();this.adapter.loadArt().then(art=>{if(!this.dead){this.art=art;this.showOverlay();}}).catch(e=>{if(!this.dead){this.status.textContent='Artwork unavailable. Check the connection and restart practice, or choose the assisted route.';this.artError=e.message;this.showOverlay();}});this.last=performance.now();this.accumulator=0;this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   render(){
@@ -24,7 +24,7 @@ export class GameHost {
     on(this.root.querySelector('[data-reset]'),'click',()=>this.clear());
     on(this.root.querySelector('[data-pause]'),'click',()=>{this.help=false;this.localPaused=!this.localPaused;this.gameAudio.pause(this.localPaused||this.paused);this.clear();this.showOverlay();});
     on(this.root.querySelector('[data-sound]'),'click',async e=>{try{await this.gameAudio.toggle();this.sound=this.gameAudio.enabled;e.target.textContent=this.sound?'Sound on':'Sound off';if(this.sound)this.beep('key');}catch{this.status.textContent='Sound unavailable; the mission can continue.';}});
-    on(this.root.querySelector('[data-assist]'),'click',async()=>{if(this.s.outcome)return;this.clear();if(this.started&&!this.practice){const result=await this.transmit('minigame.assist');if(!result)return;}this.mode='assisted';this.root.classList.remove('mq-focus');this.persist();this.showOverlay();});
+    on(this.root.querySelector('[data-assist]'),'click',async()=>{if(this.s.outcome)return;this.clear();if(this.started&&!this.practice){const result=await this.transmit('minigame.assist');if(!result)return;}this.mode='assisted';this.s.mode=this.mode;this.root.classList.remove('mq-focus');this.persist();this.showOverlay();});
     this.root.querySelector('[data-restart]')?.addEventListener('click',()=>document.querySelector('#restart')?.click(),{signal:this.ac.signal});
     this.showOverlay();
   }
@@ -54,7 +54,7 @@ export class GameHost {
     else this.overlay.hidden=true;
   }
   assisted(){this.adapter.assisted(this.s,this.overlay,()=>{this.persist();if(this.s.outcome)this.finish();else this.assisted();});}
-  update(run,paused,deadline){if(paused!==this.paused){this.clear();this.gameAudio.pause(paused||this.localPaused);}this.paused=paused;this.deadline=deadline;if(run?.threat!==undefined&&run.threat!==this.run.threat&&!this.started){this.run=run;this.s=this.adapter.create({...run,route:this.s.route});}
+  update(run,paused,deadline,projection={}){if(Number.isFinite(projection.serverNow))this.clockOffset=projection.serverNow-Date.now();if(paused!==this.paused){this.clear();this.gameAudio.pause(paused||this.localPaused);}if(paused&&!this.paused)this.pauseClock=projection.pausedAt||Date.now()+this.clockOffset;if(!paused)this.pauseClock=null;this.paused=paused;this.deadline=deadline;if(run?.threat!==undefined&&run.threat!==this.run.threat&&!this.started){this.run=run;this.s=this.adapter.create({...run,route:this.s.route});}
     if(run?.status==='terminal'){this.s.outcome=run.outcome;this.pending=null;this.finished=true;}if(run?.seq>this.seq)this.seq=run.seq;this.showOverlay();}
   persist(){if(this.practice)return;try{localStorage.setItem(`mq-v09-finale-${this.run.runId}`,JSON.stringify({attemptId:this.run.attemptId,seq:this.seq,mode:this.mode,snapshot:this.s}));}catch{if(this.status)this.status.textContent='Local recovery storage unavailable. Keep this tab open.';}}
   queue(terminal=false){
@@ -72,7 +72,8 @@ export class GameHost {
       if(this.mode==='action'&&this.art){this.accumulator+=dt;while(this.accumulator>=1/60){this.adapter.step(this.s,{...this.input,tank:true},1/60);for(const event of this.s.events){if(['death','detected','respawn','retry','life_lost'].includes(event.type))this.clear();this.beep(event);}this.accumulator-=1/60;}}
       else if(this.mode==='assisted')this.s.time+=dt;
       this.gameAudio.music(this.adapter.music?.(this.s)||'ambient');
-      if(this.s.time>=7195&&!this.s.outcome){this.s.outcome='timed_out';}
+      if(this.adapter.activeLimitSeconds)this.s.time=Math.min(this.s.time,this.adapter.activeLimitSeconds);
+      if(this.s.time>=(this.adapter.activeLimitSeconds||7195)&&!this.s.outcome)this.s.outcome='timed_out';
       if(this.s.outcome)this.finish();
     }
     if(this.started&&!this.practice&&!this.paused&&!this.localPaused&&now-this.lastSent>5000){this.lastSent=now;if(!this.s.outcome)this.queue();else{if(!this.finished)this.finish();this.flush();}}
@@ -80,6 +81,6 @@ export class GameHost {
     this.draw();this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   beep(event){this.gameAudio.effect(event.type||event);}
-  draw(){if(this.ctx&&this.art){this.ctx=crispCanvas(this.canvas,640,360);this.adapter.render(this.ctx,this.s,this.art);}this.hud.textContent=this.adapter.hud(this.s);this.root.querySelector('.mq-objective').textContent=this.adapter.objective(this.s)+(this.s.message&&this.s.time-this.s.messageAt<6?' · '+this.s.message:'');}
+  draw(){if(this.ctx&&this.art){this.ctx=crispCanvas(this.canvas,640,360);this.adapter.render(this.ctx,this.s,this.art);}this.hud.textContent=this.adapter.hud(this.s)+(this.deadline&&!this.practice?' · CREW WINDOW '+Math.max(0,Math.ceil((this.deadline-(this.paused?(this.pauseClock||Date.now()+this.clockOffset):Date.now()+this.clockOffset))/1000))+'s · local pause does not extend it':'');this.root.querySelector('.mq-objective').textContent=this.adapter.objective(this.s)+(this.s.message&&this.s.time-this.s.messageAt<6?' · '+this.s.message:'');}
   destroy(){this.dead=true;this.root.classList.remove('mq-focus');this.persist();cancelAnimationFrame(this.frame);this.ac.abort();this.clear();this.gameAudio.destroy();}
 }

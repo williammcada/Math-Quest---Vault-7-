@@ -1,4 +1,4 @@
-import {GameHost} from './engine/game-host.js?v=0.9.4';
+import {GameHost} from './engine/game-host.js?v=0.9.4-fh2';
 import {falseHavenAdapter} from './games/nightfall/false-haven-adapter.js';
 const KEY='mq-false-haven-practice-v1';let host;
 const q=s=>document.querySelector(s),status=text=>q('#storage-status').textContent=text;

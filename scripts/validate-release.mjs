@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {SceneAssets} from '../public/vault7-assets.js';
 import {PRESET_MODULES} from '../src/math.js';
 import {CATALOG} from '../public/catalog.js';
-import {NIGHTFALL} from '../public/cartridges.js';
+import {NIGHTFALL,CARTRIDGES} from '../public/cartridges.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 assert.deepEqual(CATALOG,PRESET_MODULES,'Regenerate public catalog after changing module metadata.');
 const cartridge=JSON.parse(await readFile(resolve(root,'cartridges/vault-7.cartridge.json'),'utf8'));
@@ -21,7 +21,7 @@ assert.equal(hashes.size,15,'Every story scene must have distinct art.');
 for(const track of cartridge.assetManifest.music)assert.ok((await stat(resolve(root,'public',track.source))).size>20000);
 for(const folder of ['public','src'])for(const file of await readdir(resolve(root,folder))){if(!file.endsWith('.js'))continue;const run=spawnSync(process.execPath,['--check',resolve(root,folder,file)],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);}
 const index=await readFile(resolve(root,'public/index.html'),'utf8');assert.ok(index.includes('app.js?v=0.9.4'));
-for(const path of Object.values(NIGHTFALL.assets))assert.ok((await stat(resolve(root,'public',path))).size>1000,`Missing Nightfall asset: ${path}`);
+for(const path of CARTRIDGES.filter(c=>c.assets).flatMap(c=>Object.values(c.assets)))assert.ok((await stat(resolve(root,'public',path))).size>1000,`Missing Nightfall asset: ${path}`);
 assert.equal(NIGHTFALL.contract,'mq.cartridge/1.0');
 async function validateTree(dir){for(const entry of await readdir(dir,{withFileTypes:true})){const path=resolve(dir,entry.name);if(entry.isDirectory())await validateTree(path);else if(entry.name.endsWith('.js')){const check=spawnSync(process.execPath,['--check',path],{encoding:'utf8'});assert.equal(check.status,0,check.stderr);}}}
 await validateTree(resolve(root,'public'));await validateTree(resolve(root,'src'));
