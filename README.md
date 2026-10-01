@@ -73,6 +73,16 @@ Substantial MathQuest revisions follow this sequence:
 
 Five-minute flight, double regular enemies, +10% player movement, and shared touch-release/native-menu prevention. See root AGENTS.md and handbook U-10 for required shared input checks. Physical iPhone/iPad retesting remains pending.
 
+## Ironbreak v0.1.0 cartridge candidate
+
+New industrial robot cartridge, based on the accepted shooter alpha.2. Source work is on `feature/ironbreak-cartridge-v0.1`; not deployed to the classroom site. Read the [cartridge specification](docs/change-specs/ironbreak-v0.1.0.md) and [candidate verification record](docs/releases/ironbreak-v0.1.0.md).
+
+For a complete offline walkthrough, download `public/Ironbreak-v0.1.0-cartridge-review.html`. It uses one simulated student and sample mathematics; it does not create a real classroom session. `public/Ironbreak-v0.1.0-practice.html` is action-only. Build these with `npm ci` and `npm run build:ironbreak`.
+
+Live deployment requires both this branch's `public/` frontend and `src/` Worker. Keep the existing relay/Pages architecture and existing sessions; do not copy legacy root files over `public/`. Review and device/network gates precede classroom release.
+
+Release preparation: [coordinated deployment handoff](docs/releases/ironbreak-v0.1.0-deployment.md). Keep the frontend unpublished until the matching Worker has been deployed and checked.
+
 ## Coastal Escape cartridge candidate
 
 [Coastal Escape story preview](public/coastal-escape-preview.html) includes the fictional-island story, choices, original artwork/music and existing five-minute flight. It skips math explicitly for owner review and records no classroom evidence. The full v0.3.0 cartridge / v0.9.5 platform candidate is on `coastal-escape-v0.3-candidate`; see [deployment and verification](docs/releases/coastal-escape-v0.3.0.md). The current classroom frontend stays paired with its backend until the candidate Worker is deployed.
