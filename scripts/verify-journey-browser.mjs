@@ -65,7 +65,29 @@ try{
  await post('/control',{action:'pause',paused:false});await until(()=>evaluate(s,'!host.snap.paused'),'teacher resume');
  await evaluate(s,'host.socket.close()');await until(()=>evaluate(s,'host.connected && host.epoch===2'),'reconnect');assert.equal(run.sockets.size,5);
  await until(()=>evaluate(s,'host.renderer.images.hero.complete && host.renderer.images.hero.naturalWidth>0'),'artwork');
- const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:true},s);await fs.mkdir('docs/verification',{recursive:true});await fs.writeFile('docs/verification/journey-stage1-controls-browser.png',Buffer.from(shot.data,'base64'));
+ const layouts=[];
+ for(const [width,height] of [[844,390],[667,375],[568,320],[390,844],[1024,768]]){
+  await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true},s);
+  await evaluate(s,'new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  const geometry=await evaluate(s,`(()=>{const rect=q=>{const r=document.querySelector(q).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};return {viewport:{width:innerWidth,height:innerHeight},controls:['.j-dpad','[data-jkey="attack"]','[data-jkey="jump"]','[data-jkey="magic"]','.j-clear','.j-help'].map(rect),stage:rect('.j-stage'),hud:rect('.j-hud'),canvasFit:getComputedStyle(document.querySelector('canvas')).objectFit,keys:host.keys}})()`);
+  assert.equal(geometry.viewport.width,width);assert.equal(geometry.viewport.height,height);
+  for(const r of geometry.controls){assert.ok(r.x>=0&&r.y>=0&&r.right<=width+1&&r.bottom<=height+1,JSON.stringify({width,height,r}));assert.ok(r.width>=44&&r.height>=44);}
+  for(let i=0;i<geometry.controls.length;i++)for(let j=i+1;j<geometry.controls.length;j++){const a=geometry.controls[i],b=geometry.controls[j];assert.ok(a.right<=b.x||b.right<=a.x||a.bottom<=b.y||b.bottom<=a.y,'Controls overlap: '+JSON.stringify({width,height,i,j}));}
+  assert.ok(geometry.stage.height>=80,JSON.stringify(geometry));assert.ok(geometry.stage.bottom<=geometry.controls[0].y+1);assert.equal(geometry.canvasFit,'contain');assert.equal(geometry.keys.x,0);
+  const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false},s);await fs.mkdir('docs/verification',{recursive:true});await fs.writeFile(`docs/verification/journey-landscape-${width}x${height}.png`,Buffer.from(shot.data,'base64'));
+  layouts.push({width,height,battlefieldHeight:geometry.stage.height});
+ }
+ // Actual browser touch dispatch uses the rendered hit areas after resize.
+ await evaluate(s,"host.helpOpen=false;window.dispatchEvent(new Event('focus'))");
+ const pad=await evaluate(s,"(()=>{const r=document.querySelector('.j-dpad').getBoundingClientRect();return {x:r.x+r.width*.8,y:r.y+r.height*.5}})()");
+ await call('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...pad,id:1}]},s);
+ await until(()=>evaluate(s,'host.keys.x>0'),'fresh touch after resize');
+ await call('Emulation.setDeviceMetricsOverride',{width:844,height:390,deviceScaleFactor:1,mobile:true},s);
+ await until(()=>evaluate(s,'host.keys.x===0'),'resize neutralizes held touch');
+ await call('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]},s);
+ await evaluate(s,"document.querySelector('.j-help').click()");
+ const help=await evaluate(s,"(()=>{const r=document.querySelector('.j-message').getBoundingClientRect();return {bottom:r.bottom,height:innerHeight,text:document.querySelector('.j-message').textContent}})()");assert.ok(help.text.includes('Move:'));assert.ok(help.bottom<=help.height);
+ console.log(JSON.stringify({layouts}));
  await post('/control',{action:'end'});await until(()=>Promise.resolve(results.length===1),'result');assert.equal(errors.length,0,errors.join('\n'));
  console.log(JSON.stringify({passed:true,clients:5,browser:'Chromium',viewport:'844x390 emulation',checks:['real WebSocket bridge to production BrawlRun','unique heroes','all-ready launch','authoritative movement/release','blur clears queued magic','teacher pause/resume','reconnect retains five players','artwork loads','one result'],limitations:['Node bridge and in-memory storage; not Cloudflare workerd','not physical iOS','not school network','not full QuestSession browser flow']}));
 }finally{for(const s of clients)try{await evaluate(s,'host?.destroy()');}catch{}browser.close();chrome.kill();await run.purge();for(const socket of wss.clients)socket.terminate();await new Promise(r=>wss.close(r));await new Promise(r=>server.close(r));}

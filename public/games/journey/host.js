@@ -42,6 +42,7 @@ export class JourneyHost {
     this.renderPrep();this.renderHud();}
   update(state){this.state=state;const j=state.teams[0]?.journey;if(!j)return;if(j.snapshot&&(!this.snap||j.snapshot.revision>=this.snap.revision))this.receive(j.snapshot);this.renderOptional();}
   renderPrep(){const s=this.snap;if(!s)return;const me=s.players.find(p=>p.id===this.id);if(!me)return;
+    this.root.querySelector('.journey-host').classList.toggle('j-match',s.phase!=='ready');
     const prep=this.root.querySelector('.j-prep');prep.hidden=s.phase!=='ready';const key=JSON.stringify(s.players.map(p=>[p.id,p.hero,p.ready,p.slots]));
     if(this.prepKey!==key){this.prepKey=key;const heroes=this.root.querySelector('.j-heroes');heroes.innerHTML=HEROES.map(h=>{const owner=s.players.find(p=>p.hero===h.id);return '<button data-hero="'+h.id+'" '+(me.ready||owner&&owner.id!==this.id?'disabled':'')+' class="'+(me.hero===h.id?'selected':'')+'"><b>'+esc(h.name)+'</b><small>'+esc(owner?.alias||h.special)+'</small></button>';}).join('');
       heroes.querySelectorAll('button').forEach(b=>b.onclick=()=>this.wsSend({type:'reserveHero',hero:b.dataset.hero}));

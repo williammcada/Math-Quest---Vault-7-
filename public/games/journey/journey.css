@@ -3,3 +3,27 @@
 .j-answer-fields{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0}.j-answer-fields input{width:105px;margin:0}.j-fraction{display:inline-flex;flex-direction:column;gap:0}.j-fraction input:first-child{border-bottom:2px solid #132c31}.j-answer-fields sup input{width:70px;font-size:14px}.j-answer-fields small{font-size:12px}
 
 .journey-host .j-hud,.journey-host .j-heading,.journey-host .j-status{touch-action:none}.journey-host .j-prep,.journey-host .j-tools,.journey-host .j-message{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default;touch-action:auto}
+
+/* The live match owns its viewport; preparation remains in normal document flow. */
+.journey-host.j-match{position:fixed;inset:0;z-index:100;box-sizing:border-box;width:100%;max-width:none;height:100vh;height:100dvh;margin:0;padding: max(4px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:3px;background:#142a2c;overflow:hidden}
+.j-match>.j-heading,.j-match>.j-status,.j-match>.j-hud,.j-match>.j-controls,.j-match>.j-tools,.j-match>.j-message{flex:none}
+.j-match .j-stage{flex:1;min-height:0;overflow:hidden}
+.journey-host.j-match .j-stage canvas{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:contain}
+.j-match .j-heading h1{font-size:18px;margin:0}.j-match .j-heading small{font-size:10px}
+.j-match .j-status{padding:0;font-size:13px}.j-match .j-hud{min-height:0}
+.j-match .j-player{padding:3px 5px}.j-match .j-player small{white-space:normal}
+.j-match .j-controls{padding:2px 4px;gap:8px}.j-match .j-dpad{width:104px;height:84px;font-size:21px;line-height:26px}
+.j-match .j-actions{gap:8px}.j-match .j-actions button{width:64px;height:64px}
+.j-match .j-tools{gap:8px}.j-match .j-tools button{padding:4px 10px;min-height:44px}
+.j-match .j-message{margin:0;font-size:12px;min-height:0}.j-match .j-message:empty{display:none}
+@media(orientation:landscape) and (max-height:500px){
+ .j-match .j-heading>div{display:flex;align-items:baseline;gap:10px}.j-match .j-heading small{display:none}
+ .j-match .j-player span{display:none}.j-match .j-player{font-size:11px}.j-match .j-player small{font-size:10px}
+ .j-match .j-tools span{display:none}.j-match .j-controls{height:76px}.j-match .j-dpad{height:76px;line-height:24px}
+}
+
+@media(orientation:landscape) and (max-height:500px) and (min-width:568px){
+ .j-match .j-tools{position:absolute;left:max(124px,calc(env(safe-area-inset-left) + 116px));bottom:max(20px,calc(env(safe-area-inset-bottom) + 16px));gap:6px}
+ .j-match .j-tools button{padding:4px 8px;font-size:11px}
+ .j-match:has(.j-message:not(:empty)) .j-tools{position:static}
+}
