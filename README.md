@@ -76,3 +76,9 @@ Five-minute flight, double regular enemies, +10% player movement, and shared tou
 ## Coastal Escape cartridge candidate
 
 [Coastal Escape story preview](public/coastal-escape-preview.html) includes the fictional-island story, choices, original artwork/music and existing five-minute flight. It skips math explicitly for owner review and records no classroom evidence. The full v0.3.0 cartridge / v0.9.5 platform candidate is on `coastal-escape-v0.3-candidate`; see [deployment and verification](docs/releases/coastal-escape-v0.3.0.md). The current classroom frontend stays paired with its backend until the candidate Worker is deployed.
+
+## Nightfall II: False Haven — v0.1.0 practice candidate
+
+[Play Chapter 2](https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html) · [Specification](docs/change-specs/nightfall-chapter-2-v0.1.0.md) · [Verification and limits](docs/releases/false-haven-v0.1.0.md)
+
+Escape a compromised safe zone using power, drainage, a speaker trap, movable cargo and the original Nightfall weapons/enemies. Map footprint is 2.25× Chapter 1; measured reachable area is 2.34×. Five active minutes. Practice has no math gate or student evidence; classroom/Arcade integration remains separate. Candidate 0124d53 passed 178 automated tests and hosted smoke checks; physical iPhone/iPad and sustained combat playtesting remain pending.

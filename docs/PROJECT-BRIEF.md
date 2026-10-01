@@ -118,3 +118,7 @@ Source inspected: `59c11c90c2f0893333dfe30b62578fd73deb9bbf`, canonical `public/
 Build a separate practice scenario first; retain existing GitHub Pages/Worker delivery. Do not register an unfinished classroom cartridge or silently migrate existing session gate/timer behavior. Future Math-Arcade admission uses math before each new run; classroom integration needs its own explicit lifecycle contract. Target Windows keyboard/browser and landscape iPad/iPhone, with real-device verification pending. Use approved U-10 and shared held-input implementation; U-09 applies to any persisted Chapter 2 progress. Consulted handbook blob revisions and detailed acceptance checks are in the specification.
 
 Next: generalize hard-coded world/navigation dimensions with city/rescue regression checks, then checkpoint the compound implementation before extended verification. Preserve the exact passing candidate before release and deployment.
+
+### False Haven implementation checkpoint — 1 October 2026
+
+[Practice candidate v0.1.0](releases/false-haven-v0.1.0.md) is implemented at exact application commit `0124d53351dd7f69e6c0a8ef58979a878304b808`. Its 178-test suite/build passed, hosted Pages files match, and hosted action-start/map/guided-completion/reload smoke passed. Reachable area measured 2.34× Chapter 1. The earlier CHANGE SPEC status above is historical; physical-device and sustained combat verification remain open. No classroom/Arcade registration or math-gate migration has been performed. Follow the release record for evidence and next verification.

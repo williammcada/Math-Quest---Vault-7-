@@ -1,0 +1,57 @@
+{
+  "candidate": "0124d53351dd7f69e6c0a8ef58979a878304b808",
+  "verifiedUrl": "https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html",
+  "method": "Downloaded all ten hosted runtime files and compared exact bytes to candidate checkout; all matched.",
+  "files": [
+    {
+      "path": "public/practice-false-haven.html",
+      "sha256": "2904eb28157378a0c0822bc175346b676351be61ae3aa72424c8a98cf6219ee2",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/practice-false-haven.js",
+      "sha256": "e92b430c2598e38f78bce857c9424a68cbc2bd03e00caa073b9b28e9b09c086e",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/false-haven.css",
+      "sha256": "a17a5e7b8dc23e0c7bfee1775ad5b20f0d50dcf68e08bcc3b396e65727ece552",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/false-haven-world.js",
+      "sha256": "8990e7548ead5742c85d01a5c56d15b5668b876952be9d33a04c23855d3a6f2d",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/false-haven-adapter.js",
+      "sha256": "58a769dcc0d26a9c0a0c7845fa502fad12e418c37bf31ca6df49f9dfbba2d8a0",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/false-haven-renderer.js",
+      "sha256": "f75b750d91b2b39a9f5a410cae797d9bc73b7fec6ff7fb488da7c09e64846e94",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/world.js",
+      "sha256": "cf00cf996900cf8a392f93c37991ccd951519bf04e299d018c47307b811d5ee5",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/simulation.js",
+      "sha256": "abd83f2d0390c621cd0fcdae7cfe5975c6d1d172e2c1ae1188a8f6f2389d445f",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/renderer.js",
+      "sha256": "b0f6b8a2f64c8778041ca3e389058b650a09bd64f2c21fd5f977038733eb1f61",
+      "hostedMatch": true
+    },
+    {
+      "path": "public/games/nightfall/hardware.js",
+      "sha256": "fe26e1642c762a33eb7df7e30d4aa7fee2180ede4087c4d69b830f0976054bc6",
+      "hostedMatch": true
+    }
+  ]
+}
