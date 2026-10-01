@@ -2,11 +2,11 @@
 
 **Brief version:** 0.6 — Journey to the West design intake on its planning branch
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** v0.9.4 remains the host source candidate. Journey to the West is design work only; no new cartridge implementation or deployment. Historical release observations below retain their original dates.
+**Status:** v0.9.4 remains the host source candidate. Journey to the West stage-1 implementation was authorized at 09:00 on 2026-10-01 and is isolated on `implement/journey-to-the-west-v0.1-stage1`; no deployment. Historical release observations below retain their original dates.
 **Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, current planning on `design/journey-to-the-west-v0.1`.  
 **Current source baseline:** main inspected on 2026-10-01 at `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28` (merged v0.9.4 candidate); canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this design intake. The v0.9.1 observations and earlier implementation intake below are historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Review the consolidated Journey to the West v0.1 change specification before implementation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
+**Next work:** Implement and verify the approved Journey stage-1 foundation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -130,3 +130,11 @@ Windows and landscape classroom iPads remain targets. iPhone Safari action layou
 **First implementation stage after approval:** Reconcile the current host source; implement the existing-identity handoff and a small synchronized combat scene with readiness, clock, pause/reconnect and result return; produce one complete hero/enemy animation sample. Verify those components before expanding the full cast/level. Physical-device and school-network evidence remain required for classroom release.
 
 **Evidence state:** Source inspected; design documents saved. No Journey gameplay code, generated production sprite sheets, deployed multiplayer service, game tests, school-network tests or physical-device tests completed. The historical connected-iPad observations for mathematics are not evidence for this cartridge. Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
+
+## 12. Journey stage-1 implementation intake — 1 October 2026 at 09:00
+
+Owner approved the consolidated v0.1 specification and first implementation stage. Branch: `implement/journey-to-the-west-v0.1-stage1`, based on planning commit `688433bcce9184cc03f434690d2bc33b6bbd5462` / gameplay main `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28`. This scoped authorization supersedes the pending-approval statements in the earlier design intake.
+
+Initial scope: normal team identity and gates; optional personal preparation and one-minute readiness; authoritative per-run WebSocket object; shared movement/sample combat, teacher controls, reconnect and engagement results; Wukong/raider animation atlases. The other hero models use explicit labeled art stand-ins in this development checkpoint. Full special timing, complete authored level/Nezha, remaining art and audio, and narrative remain later-stage work. Preserve all existing cartridges and academic evidence.
+
+Handbook intake revisions remain `AI-START-HERE.md` 6557a45, `UNIVERSAL-RULES.md` 9ec5c8d (U-09/U-10), `CONDITIONAL-STANDARDS.md` dad2d3a (S-02/S-03/S-04 selected). Source checkpoint precedes extended tests. Local runtime checks are not physical-device, real Cloudflare deployment or school-network evidence.

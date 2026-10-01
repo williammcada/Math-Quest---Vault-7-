@@ -1,3 +1,5 @@
+import {JourneyHost} from './games/journey/host.js?v=jttw-stage1';
+let journeyHost=null;
 import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4';
 import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
 import { hostingFor, fetchApi } from './hosting.js?v=0.9.4';
@@ -360,9 +362,18 @@ function renderTeacher() {
     <div class="dashboard-grid">
       <section class="panel join-panel"><h2>Student access</h2><canvas id="qr" width="180" height="180" aria-label="QR code for the student join link"></canvas><p id="qr-error" class="fine" hidden>QR unavailable—open the link below.</p><div class="url">${escapeHtml(joinUrl)}</div><p>Team codes</p>${state.teams.map(item => `<div class="code-row"><b>${escapeHtml(item.name)}</b><code>${escapeHtml(item.pin)}</code></div>`).join("")}</section>
       <section class="panel controls"><h2>Session controls</h2><button class="primary" data-teacher-command="start" ${state.status !== "setup" || studentCount === 0 || launchPending ? "disabled" : ""}>${launchPending ? "Launching…" : "Launch briefing"}</button><button class="secondary" data-teacher-command="pause" ${state.status !== "active" || busy ? "disabled" : ""}>${state.paused ? "Resume" : "Pause"}</button><button class="secondary" data-teacher-command="report-csv">Download CSV</button><button class="secondary" data-teacher-command="report">Download JSON</button><button class="danger" data-teacher-command="end" ${state.status === "ended" || busy ? "disabled" : ""}>End session</button><p class="launch-status ${launchPending ? "pending" : ""}">${escapeHtml(launchStatus)}</p>${launchPending ? "" : noticeHtml()}<p class="fine">${state.attempts} answer attempts recorded · revision ${state.revision}</p></section>
-      ${state.cartridge.id==='vault-7'?teacherAudio.markup():cartridgeAudio.markup()}
+      ${state.cartridge.id==='vault-7'?teacherAudio.markup():state.cartridge.id==='nightfall'?cartridgeAudio.markup():''}
       <section class="panel teams"><h2>Team progress</h2><div class="teams-grid">${teamCards}</div></section>
     </div>`);
+  if(state.cartridge.id==='journey-west'){
+    document.querySelectorAll('.team-card').forEach((card,i)=>{const team=state.teams[i],j=team.journey;if(!j?.runId)return;
+      const section=document.createElement('section');section.className='j-teacher-controls';
+      const status=document.createElement('p');status.textContent='Journey: '+(j.snapshot?.phase||'opening')+(j.result?' · '+j.result.outcome:'');section.append(status);
+      for(const [action,label] of [['start','Start ready players'],['pause','Pause team'],['resume','Resume team'],['end','End run']]){
+        const button=document.createElement('button');button.textContent=label;button.disabled=!!j.result;button.onclick=()=>command('teacher.journey.'+action,{teamId:team.id});section.append(button);
+      }card.append(section);
+    });
+  }
   drawQr(document.querySelector("#qr"), joinUrl);
   app.insertAdjacentHTML('beforeend',developerTools());
   document.querySelector('.hero h1').textContent='MathQuest Dashboard';
@@ -374,7 +385,7 @@ function renderTeacher() {
   bindTeamTools(state,command);
   teacherAudio.bind();
   cartridgeAudio.bind();
-  if(state.cartridge.id!=='vault-7'){
+  if(state.cartridge.id==='nightfall'){
     document.querySelector('.hero h1').textContent='MathQuest Dashboard';
     document.querySelectorAll('.team-card').forEach((card,i)=>{const t=state.teams[i];if(t.stage==='rescue'){const close=document.createElement('button');close.textContent='Close rescue and open Gate 2';close.onclick=()=>command('teacher.closeRescue',{teamId:t.id});card.append(close);const note=document.createElement('p');note.textContent='First Response · '+(t.rescue?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status} · ${r.retries} retries`).join(' | ');card.append(note);}if(t.stage==='minigame'){const button=document.createElement('button');button.textContent='Finish remaining crossings';button.onclick=()=>command('teacher.advanceFinale',{teamId:t.id});card.append(button);const p=document.createElement('p');p.textContent=(t.finale?.results||[]).map(r=>`${r.alias}: ${r.outcome||r.status}`).join(' | ');card.append(p);}});
   }
@@ -492,6 +503,18 @@ function memberStatus(item, member) {
 function renderStudent() {
   if (!state) return renderLoading();
   const item = currentTeam(), student = state.student;
+  const journeyActive=state.cartridge.id==='journey-west'&&['brawl','victory'].includes(item.stage)&&item.journey?.runId&&state.status!=='ended';
+  if(journeyHost&&!journeyActive){journeyHost.destroy();journeyHost=null;}
+  if(journeyActive){
+    if(!journeyHost){
+      app.innerHTML=shell('<div id="journey-root"></div>',true);
+      journeyHost=new JourneyHost(document.querySelector('#journey-root'),{state,send:async(type,extra)=>{
+        const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
+        const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision)state=incoming;return incoming;
+      }});
+    }else journeyHost.update(state);
+    return;
+  }
   if(finaleHost&&(!['rescue','minigame'].includes(item.stage)||finaleHost.run.phase==='early-rescue'&&item.stage!=='rescue'||state.status==='ended')){finaleHost.destroy();finaleHost=null;}
   if(['rescue','minigame'].includes(item.stage)&&state.status!=='ended'){
     const action=item.stage==='rescue'?item.rescue:item.finale;
@@ -510,7 +533,7 @@ function renderStudent() {
   if (extractionRuntime) { extractionRuntime.destroy(); extractionRuntime=null; }
   if (state.paused) return renderPaused(item);
   let body = "";
-  if(state.cartridge.id!=='vault-7'&&item.stage!=='gate')body=expansionBody(state,item,sceneBlock(item))||'';
+  if(state.cartridge.id==='nightfall'&&item.stage!=='gate')body=expansionBody(state,item,sceneBlock(item))||'';
   else if (item.stage === "briefing") body = renderBriefing(item, student);
   else if (item.stage === "gate") body = renderMath(item, student);
   else if (item.stage === "decision") body = renderDecision(item, student);
@@ -520,7 +543,7 @@ function renderStudent() {
   else body = renderVictory(item, student);
   app.innerHTML = shell(`${narrativeHeader(item)}${leadBanner(item, student)}${noticeHtml()}${body}${memberProgress(item)}${statusBar(item, student)}`, true);
   bindStudentActions(item, student);
-  if(state.cartridge.id!=='vault-7')bindExpansion(item,command);
+  if(state.cartridge.id==='nightfall')bindExpansion(item,command);
 }
 
 function renderWaiting(item, student) {
@@ -532,7 +555,7 @@ function renderWaiting(item, student) {
 
 function renderPaused(item) {
   app.innerHTML = shell(`${narrativeHeader(item)}<section class="panel centered"><div class="pause-icon">Ⅱ</div><h2>Mission paused</h2><p>Your teacher has paused the mission. Keep your work and wait for the signal.</p></section>`, true);
-  if(state.cartridge.id!=='vault-7')document.querySelector('.centered p').textContent='Your teacher has paused the mission. Keep your work and wait for the signal.';
+  if(state.cartridge.id==='nightfall')document.querySelector('.centered p').textContent='Your teacher has paused the mission. Keep your work and wait for the signal.';
 }
 
 function renderEnded(item) {
@@ -562,6 +585,7 @@ function renderExtraction(item, student) {
 }
 
 function renderBriefing(item, student) {
+  if(state.cartridge.id==='journey-west')return sceneBlock(item)+'<section class="panel briefing-card"><p>Complete your mathematics, then choose a hero and personal upgrades with your team. Gameplay results are recorded separately from math accuracy.</p><button class="primary wide" data-action="briefing.ready" '+(student.briefingReady?'disabled':'')+'>'+(student.briefingReady?'Ready for the gates':'Begin preparation')+'</button></section>';
   return `${sceneBlock(item)}<section class="panel briefing-card">
     <div class="secret-preview"><small>SECRET MESSAGE // ${item.secretNumbers.length} SYMBOLS</small><b>${item.secretNumbers.join(" · ")}</b><span>The meaning is hidden until the final gate.</span></div>
     <p class="personal-order">Agent ${escapeHtml(student.alias)}, confirm that you understand: accurate work keeps you alive. Mistakes may change your fate.</p>

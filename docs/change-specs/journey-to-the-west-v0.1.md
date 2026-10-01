@@ -1,8 +1,8 @@
 # MathQuest: Journey to the West — Consolidated Change Specification v0.1
 
-**Stage:** CHANGE SPEC — Review 1, awaiting owner approval before implementation.
+**Stage:** APPROVED SPECIFICATION — owner approved Review 1 and the first implementation stage at 09:00 on 2026-10-01 (Asia/Shanghai).
 **Revision:** 2026-10-01, after the owner's 08:50 creative-direction approval.
-**Status rule:** Previously approved requirements remain accepted. The numerical, architectural and production defaults below are the proposed implementation baseline for this consolidated review; they are not verified balance or runtime results.
+**Status rule:** Review 1 is the approved implementation baseline. Values previously marked proposed are now accepted starting defaults, subject to measured tuning; they are not verified balance or runtime results. The initial build is explicitly the stage-1 multiplayer/animation checkpoint.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
 **Date:** 2026-10-01, Asia/Shanghai
@@ -409,3 +409,7 @@ Cloudflare primary documentation checked 2026-10-01:
 - [CF1: Use WebSockets](https://developers.cloudflare.com/durable-objects/best-practices/websockets/)
 - [CF2: Durable Object lifecycle](https://developers.cloudflare.com/durable-objects/concepts/durable-object-lifecycle/)
 - [CF3: Durable Objects pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/)
+
+## Implementation authorization — 2026-10-01 at 09:00
+
+The owner answered “Yes” to approving the consolidated specification and first implementation stage. Work proceeds on `implement/journey-to-the-west-v0.1-stage1` from planning commit `688433bcce9184cc03f434690d2bc33b6bbd5462`, whose gameplay baseline is main `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28`. Stage 1 provides the existing-team handoff and synchronized sample scene plus Wukong/raider animation assets. Full authored level, remaining hero art, complete special choreography, Nezha and soundtrack integration follow later stages. No deployment or classroom verification is implied.

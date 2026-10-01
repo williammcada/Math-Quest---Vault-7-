@@ -1,0 +1,48 @@
+{
+  "build": "jttw-0.1.0-stage1",
+  "source": "OpenAI built-in image generation, 2026-10-01; original game designs",
+  "cells": {
+    "columns": 6,
+    "rows": 4,
+    "width": 256,
+    "height": 256
+  },
+  "assets": [
+    {
+      "file": "wukong-stage1.png",
+      "sha256": "fd60cd0f49c7512611892daa87dc51c1b8c96a7799304aa8dfeed43006d64f45",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "raider-stage1.png",
+      "sha256": "6e3f56b3441be4b7a15ede42749c7db2ae99f373a40288142954d35ecd32643d",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "cast-concept.png",
+      "sha256": "5a494d76d2e1474d4c9b5b44e9a51b5623d2222d2261faf350cbbebb217bbdad",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "alphaRange": null
+    }
+  ]
+}
