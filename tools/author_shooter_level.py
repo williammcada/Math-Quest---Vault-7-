@@ -52,6 +52,10 @@ for label,x in [('MID-entry',2208),('BOSS-entry',5376)]:
     obj('Solids',label+'-base','solid',x,352,16,288,supports_player=False)
 # Small cover in the midpoint fight: baseline jump easily clears it.
 obj('Solids','C-cover','solid',2304,304,32,32,supports_player=True)
+# Authored cover beats interrupt straight-line firing; every bypass stays baseline-accessible.
+obj('Solids','B-machine-cover','solid',1312,304,32,32,supports_player=True)
+obj('Solids','D-press-housing','solid',3056,288,32,48,supports_player=True)
+obj('Solids','E-security-cover','solid',4832,304,48,32,supports_player=True)
 
 for name,x,y1,y2 in [
  ('LA1',272,192,336),('LA2',752,192,336),('LA3',768,336,496),
@@ -72,11 +76,11 @@ ENEMIES = [
  ('H01','heavy',2432,336,'C'),
  ('P04','patrol',2864,336,'D'),('P05','patrol',3232,336,'D'),('P06','patrol',4000,336,'D'),('T03','turret',3248,128,'D'),('T04','turret',3600,272,'D'),('D03','drone',3648,112,'D'),('L02','lobber',4112,192,'D'),('S02','skimmer',3760,496,'D'),
  ('P07','patrol',4352,336,'E'),('P08','patrol',5136,336,'E'),('T05','turret',5008,112,'E'),('D04','drone',4608,144,'E'),('H02','heavy',4720,336,'E'),('H03','heavy',5008,336,'E')]
-hp={'patrol':2,'turret':4,'drone':2,'heavy':8,'lobber':3,'skimmer':3}
+hp={'patrol':4,'turret':5,'drone':3,'heavy':12,'lobber':5,'skimmer':4}
 for name,kind,x,y,sector in ENEMIES:
     ow,oh = (40,48) if kind=='heavy' else (32,20) if kind=='skimmer' else (24,24) if kind in ['turret','drone'] else (24,32)
-    obj('Enemies',name,kind,x-ow/2,y-oh,ow,oh,hp=hp[kind],sector=sector,feet_x=x,feet_y=y,mandatory=name=='H01',reset_section='START' if sector in 'ABC' else 'MID',patrol_radius=32 if kind in ['patrol','heavy','skimmer'] else 0,requires_visible_warning=True)
-obj('Enemies','BOSS01','boss',6112,176,128,160,hp=80,sector='F',mandatory=True,reset_section='BOSS',palette='violet-silver-lime',attack_sequence='high_volley,floor_sweep,overhead_strike')
+    obj('Enemies',name,kind,x-ow/2,y-oh,ow,oh,hp=2 if name=='P01' else hp[kind],sector=sector,feet_x=x,feet_y=y,mandatory=name=='H01',reset_section='START' if sector in 'ABC' else 'MID',patrol_radius=32 if kind in ['patrol','heavy','skimmer'] else 0,requires_visible_warning=True)
+obj('Enemies','BOSS01','boss',6112,176,128,160,hp=180,sector='F',mandatory=True,reset_section='BOSS',palette='violet-silver-lime',attack_sequence='high_volley,floor_sweep,overhead_strike')
 
 for name,kind,x,y,w,h,warn,section in [
  ('HZ01','water_pulse',1376,480,64,32,1.0,'START'),
@@ -100,7 +104,7 @@ obj('Annotations','HEAVY-BYPASS','route_choice',4624,272,432,64,note='H02/H03 ce
 obj('Annotations','DROP-PRACTICE','drop_through',352,160,64,32,note='Drop from thin upper deck onto middle deck.')
 
 SECTORS=[('A','Loading apron',0,800),('B','Coolant works',800,2208),('C','Transfer lock',2208,2704),('D','Foundry crossing',2704,4208),('E','Security approach',4208,5408),('F','Security chamber',5408,6400)]
-geometry={'revision':'industrial-level-blockout-0.1','world':{'width':W,'height':H,'tile':TILE},'status':'authored blockout; not integrated gameplay','sectors':[dict(id=a,title=b,x0=c,x1=d) for a,b,c,d in SECTORS], 'layers':layers,'physics':dict(body_width=20,body_height=28,run_speed=180,jump_velocity=-380,gravity=1000), 'pending':['crawl roof disabled','checkpoint backtrack door disabled','dynamic hazard and combat fairness untested']}
+geometry={'revision':'industrial-level-blockout-0.2','world':{'width':W,'height':H,'tile':TILE},'status':'authored geometry used by practice candidate; live integration pending','sectors':[dict(id=a,title=b,x0=c,x1=d) for a,b,c,d in SECTORS], 'layers':layers,'physics':dict(body_width=20,body_height=28,run_speed=180,jump_velocity=-380,gravity=1000), 'pending':['crawl roof disabled','checkpoint backtrack door disabled','dynamic hazard and combat fairness untested']}
 (OUT/'level.geometry.json').write_text(json.dumps(geometry,indent=2)+'\n')
 
 # Standard finite orthogonal Tiled JSON with zlib-compressed tile data and explicit semantic objects.
@@ -242,7 +246,7 @@ font_path='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 bold_path='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 def f(n,bold=False):return ImageFont.truetype(bold_path if bold else font_path,n)
 d.text((36,22),'MATHQUEST / INDUSTRIAL SHOOTER',font=f(30,True),fill='#edf7ff')
-d.text((36,65),'Authored level blockout v0.1  •  6,400 × 640 world units  •  16-unit tiles',font=f(19),fill='#91afc6')
+d.text((36,65),'Authored level blockout v0.2  •  6,400 × 640 world units  •  16-unit tiles',font=f(19),fill='#91afc6')
 d.text((36,96),'Exact placement for review. Geometry checks are not a gameplay or difficulty test.',font=f(17),fill='#c5d7e6')
 spans=[(0,2208,'01  LOADING APRON → COOLANT WORKS'),(2208,4352,'02  TRANSFER LOCK → FOUNDRY'),(4352,6400,'03  SECURITY APPROACH → BOSS')]
 scale=.7; ox=58

@@ -1,11 +1,11 @@
 {
-  "revision": "industrial-level-blockout-0.1",
+  "revision": "industrial-level-blockout-0.2",
   "world": {
     "width": 6400,
     "height": 640,
     "tile": 16
   },
-  "status": "authored blockout; not integrated gameplay",
+  "status": "authored geometry used by practice candidate; live integration pending",
   "sectors": [
     {
       "id": "A",
@@ -179,6 +179,60 @@
         "x": 2304,
         "y": 304,
         "width": 32,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "name": "B-machine-cover",
+        "type": "solid",
+        "x": 1312,
+        "y": 304,
+        "width": 32,
+        "height": 32,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "name": "D-press-housing",
+        "type": "solid",
+        "x": 3056,
+        "y": 288,
+        "width": 32,
+        "height": 48,
+        "rotation": 0,
+        "visible": true,
+        "properties": [
+          {
+            "name": "supports_player",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "name": "E-security-cover",
+        "type": "solid",
+        "x": 4832,
+        "y": 304,
+        "width": 48,
         "height": 32,
         "rotation": 0,
         "visible": true,
@@ -753,7 +807,7 @@
     ],
     "Ladders": [
       {
-        "id": 40,
+        "id": 43,
         "name": "LA1",
         "type": "ladder",
         "x": 264,
@@ -771,7 +825,7 @@
         ]
       },
       {
-        "id": 41,
+        "id": 44,
         "name": "LA2",
         "type": "ladder",
         "x": 744,
@@ -789,7 +843,7 @@
         ]
       },
       {
-        "id": 42,
+        "id": 45,
         "name": "LA3",
         "type": "ladder",
         "x": 760,
@@ -807,7 +861,7 @@
         ]
       },
       {
-        "id": 43,
+        "id": 46,
         "name": "LB1",
         "type": "ladder",
         "x": 1240,
@@ -825,7 +879,7 @@
         ]
       },
       {
-        "id": 44,
+        "id": 47,
         "name": "LB2",
         "type": "ladder",
         "x": 1256,
@@ -843,7 +897,7 @@
         ]
       },
       {
-        "id": 45,
+        "id": 48,
         "name": "LB3",
         "type": "ladder",
         "x": 1784,
@@ -861,7 +915,7 @@
         ]
       },
       {
-        "id": 46,
+        "id": 49,
         "name": "LB4",
         "type": "ladder",
         "x": 1768,
@@ -879,7 +933,7 @@
         ]
       },
       {
-        "id": 47,
+        "id": 50,
         "name": "LB5",
         "type": "ladder",
         "x": 2136,
@@ -897,7 +951,7 @@
         ]
       },
       {
-        "id": 48,
+        "id": 51,
         "name": "LB6",
         "type": "ladder",
         "x": 2152,
@@ -915,7 +969,7 @@
         ]
       },
       {
-        "id": 49,
+        "id": 52,
         "name": "LD1",
         "type": "ladder",
         "x": 2792,
@@ -933,7 +987,7 @@
         ]
       },
       {
-        "id": 50,
+        "id": 53,
         "name": "LD2",
         "type": "ladder",
         "x": 2808,
@@ -951,7 +1005,7 @@
         ]
       },
       {
-        "id": 51,
+        "id": 54,
         "name": "LD3",
         "type": "ladder",
         "x": 3144,
@@ -969,7 +1023,7 @@
         ]
       },
       {
-        "id": 52,
+        "id": 55,
         "name": "LD4",
         "type": "ladder",
         "x": 3160,
@@ -987,7 +1041,7 @@
         ]
       },
       {
-        "id": 53,
+        "id": 56,
         "name": "LD5",
         "type": "ladder",
         "x": 3704,
@@ -1005,7 +1059,7 @@
         ]
       },
       {
-        "id": 54,
+        "id": 57,
         "name": "LD6",
         "type": "ladder",
         "x": 3928,
@@ -1023,7 +1077,7 @@
         ]
       },
       {
-        "id": 55,
+        "id": 58,
         "name": "LD7",
         "type": "ladder",
         "x": 3944,
@@ -1041,7 +1095,7 @@
         ]
       },
       {
-        "id": 56,
+        "id": 59,
         "name": "LE1",
         "type": "ladder",
         "x": 4312,
@@ -1059,7 +1113,7 @@
         ]
       },
       {
-        "id": 57,
+        "id": 60,
         "name": "LE2",
         "type": "ladder",
         "x": 4328,
@@ -1077,7 +1131,7 @@
         ]
       },
       {
-        "id": 58,
+        "id": 61,
         "name": "LE3",
         "type": "ladder",
         "x": 4888,
@@ -1095,7 +1149,7 @@
         ]
       },
       {
-        "id": 59,
+        "id": 62,
         "name": "LE4",
         "type": "ladder",
         "x": 5320,
@@ -1113,7 +1167,7 @@
         ]
       },
       {
-        "id": 60,
+        "id": 63,
         "name": "LE5",
         "type": "ladder",
         "x": 5336,
@@ -1133,7 +1187,7 @@
     ],
     "Water": [
       {
-        "id": 61,
+        "id": 64,
         "name": "WB",
         "type": "surface_water",
         "x": 800,
@@ -1156,7 +1210,7 @@
         ]
       },
       {
-        "id": 62,
+        "id": 65,
         "name": "WD",
         "type": "surface_water",
         "x": 2736,
@@ -1179,7 +1233,7 @@
         ]
       },
       {
-        "id": 63,
+        "id": 66,
         "name": "WE",
         "type": "surface_water",
         "x": 4240,
@@ -1204,7 +1258,7 @@
     ],
     "Enemies": [
       {
-        "id": 64,
+        "id": 67,
         "name": "P01",
         "type": "patrol",
         "x": 404.0,
@@ -1257,7 +1311,7 @@
         ]
       },
       {
-        "id": 65,
+        "id": 68,
         "name": "P02",
         "type": "patrol",
         "x": 676.0,
@@ -1270,7 +1324,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -1310,7 +1364,7 @@
         ]
       },
       {
-        "id": 66,
+        "id": 69,
         "name": "T01",
         "type": "turret",
         "x": 644.0,
@@ -1323,7 +1377,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 4
+            "value": 5
           },
           {
             "name": "sector",
@@ -1363,7 +1417,7 @@
         ]
       },
       {
-        "id": 67,
+        "id": 70,
         "name": "D01",
         "type": "drone",
         "x": 676.0,
@@ -1376,7 +1430,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 3
           },
           {
             "name": "sector",
@@ -1416,7 +1470,7 @@
         ]
       },
       {
-        "id": 68,
+        "id": 71,
         "name": "P03",
         "type": "patrol",
         "x": 1396.0,
@@ -1429,7 +1483,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -1469,7 +1523,7 @@
         ]
       },
       {
-        "id": 69,
+        "id": 72,
         "name": "T02",
         "type": "turret",
         "x": 1524.0,
@@ -1482,7 +1536,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 4
+            "value": 5
           },
           {
             "name": "sector",
@@ -1522,7 +1576,7 @@
         ]
       },
       {
-        "id": 70,
+        "id": 73,
         "name": "D02",
         "type": "drone",
         "x": 1764.0,
@@ -1535,7 +1589,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 3
           },
           {
             "name": "sector",
@@ -1575,7 +1629,7 @@
         ]
       },
       {
-        "id": 71,
+        "id": 74,
         "name": "S01",
         "type": "skimmer",
         "x": 1632.0,
@@ -1588,7 +1642,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 3
+            "value": 4
           },
           {
             "name": "sector",
@@ -1628,7 +1682,7 @@
         ]
       },
       {
-        "id": 72,
+        "id": 75,
         "name": "L01",
         "type": "lobber",
         "x": 1972.0,
@@ -1641,7 +1695,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 3
+            "value": 5
           },
           {
             "name": "sector",
@@ -1681,7 +1735,7 @@
         ]
       },
       {
-        "id": 73,
+        "id": 76,
         "name": "H01",
         "type": "heavy",
         "x": 2412.0,
@@ -1694,7 +1748,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 8
+            "value": 12
           },
           {
             "name": "sector",
@@ -1734,7 +1788,7 @@
         ]
       },
       {
-        "id": 74,
+        "id": 77,
         "name": "P04",
         "type": "patrol",
         "x": 2852.0,
@@ -1747,7 +1801,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -1787,7 +1841,7 @@
         ]
       },
       {
-        "id": 75,
+        "id": 78,
         "name": "P05",
         "type": "patrol",
         "x": 3220.0,
@@ -1800,7 +1854,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -1840,7 +1894,7 @@
         ]
       },
       {
-        "id": 76,
+        "id": 79,
         "name": "P06",
         "type": "patrol",
         "x": 3988.0,
@@ -1853,7 +1907,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -1893,7 +1947,7 @@
         ]
       },
       {
-        "id": 77,
+        "id": 80,
         "name": "T03",
         "type": "turret",
         "x": 3236.0,
@@ -1906,7 +1960,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 4
+            "value": 5
           },
           {
             "name": "sector",
@@ -1946,7 +2000,7 @@
         ]
       },
       {
-        "id": 78,
+        "id": 81,
         "name": "T04",
         "type": "turret",
         "x": 3588.0,
@@ -1959,7 +2013,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 4
+            "value": 5
           },
           {
             "name": "sector",
@@ -1999,7 +2053,7 @@
         ]
       },
       {
-        "id": 79,
+        "id": 82,
         "name": "D03",
         "type": "drone",
         "x": 3636.0,
@@ -2012,7 +2066,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 3
           },
           {
             "name": "sector",
@@ -2052,7 +2106,7 @@
         ]
       },
       {
-        "id": 80,
+        "id": 83,
         "name": "L02",
         "type": "lobber",
         "x": 4100.0,
@@ -2065,7 +2119,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 3
+            "value": 5
           },
           {
             "name": "sector",
@@ -2105,7 +2159,7 @@
         ]
       },
       {
-        "id": 81,
+        "id": 84,
         "name": "S02",
         "type": "skimmer",
         "x": 3744.0,
@@ -2118,7 +2172,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 3
+            "value": 4
           },
           {
             "name": "sector",
@@ -2158,7 +2212,7 @@
         ]
       },
       {
-        "id": 82,
+        "id": 85,
         "name": "P07",
         "type": "patrol",
         "x": 4340.0,
@@ -2171,7 +2225,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -2211,7 +2265,7 @@
         ]
       },
       {
-        "id": 83,
+        "id": 86,
         "name": "P08",
         "type": "patrol",
         "x": 5124.0,
@@ -2224,7 +2278,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 4
           },
           {
             "name": "sector",
@@ -2264,7 +2318,7 @@
         ]
       },
       {
-        "id": 84,
+        "id": 87,
         "name": "T05",
         "type": "turret",
         "x": 4996.0,
@@ -2277,7 +2331,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 4
+            "value": 5
           },
           {
             "name": "sector",
@@ -2317,7 +2371,7 @@
         ]
       },
       {
-        "id": 85,
+        "id": 88,
         "name": "D04",
         "type": "drone",
         "x": 4596.0,
@@ -2330,7 +2384,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 2
+            "value": 3
           },
           {
             "name": "sector",
@@ -2370,7 +2424,7 @@
         ]
       },
       {
-        "id": 86,
+        "id": 89,
         "name": "H02",
         "type": "heavy",
         "x": 4700.0,
@@ -2383,7 +2437,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 8
+            "value": 12
           },
           {
             "name": "sector",
@@ -2423,7 +2477,7 @@
         ]
       },
       {
-        "id": 87,
+        "id": 90,
         "name": "H03",
         "type": "heavy",
         "x": 4988.0,
@@ -2436,7 +2490,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 8
+            "value": 12
           },
           {
             "name": "sector",
@@ -2476,7 +2530,7 @@
         ]
       },
       {
-        "id": 88,
+        "id": 91,
         "name": "BOSS01",
         "type": "boss",
         "x": 6112,
@@ -2489,7 +2543,7 @@
           {
             "name": "hp",
             "type": "int",
-            "value": 80
+            "value": 180
           },
           {
             "name": "sector",
@@ -2521,7 +2575,7 @@
     ],
     "Hazards": [
       {
-        "id": 89,
+        "id": 92,
         "name": "HZ01",
         "type": "water_pulse",
         "x": 1376,
@@ -2559,7 +2613,7 @@
         ]
       },
       {
-        "id": 90,
+        "id": 93,
         "name": "HZ02",
         "type": "falling_load",
         "x": 3072,
@@ -2597,7 +2651,7 @@
         ]
       },
       {
-        "id": 91,
+        "id": 94,
         "name": "HZ03",
         "type": "falling_load",
         "x": 3728,
@@ -2635,7 +2689,7 @@
         ]
       },
       {
-        "id": 92,
+        "id": 95,
         "name": "HZ04",
         "type": "press",
         "x": 3520,
@@ -2673,7 +2727,7 @@
         ]
       },
       {
-        "id": 93,
+        "id": 96,
         "name": "HZ05",
         "type": "water_pulse",
         "x": 3488,
@@ -2711,7 +2765,7 @@
         ]
       },
       {
-        "id": 94,
+        "id": 97,
         "name": "HZ06",
         "type": "falling_load",
         "x": 4896,
@@ -2751,7 +2805,7 @@
     ],
     "Pickups": [
       {
-        "id": 95,
+        "id": 98,
         "name": "R01",
         "type": "repair",
         "x": 504,
@@ -2779,7 +2833,7 @@
         ]
       },
       {
-        "id": 96,
+        "id": 99,
         "name": "R02",
         "type": "repair",
         "x": 1864,
@@ -2807,7 +2861,7 @@
         ]
       },
       {
-        "id": 97,
+        "id": 100,
         "name": "R03",
         "type": "repair",
         "x": 3752,
@@ -2835,7 +2889,7 @@
         ]
       },
       {
-        "id": 98,
+        "id": 101,
         "name": "R04",
         "type": "repair",
         "x": 5032,
@@ -2865,7 +2919,7 @@
     ],
     "Checkpoints": [
       {
-        "id": 99,
+        "id": 102,
         "name": "START",
         "type": "checkpoint",
         "x": 80,
@@ -2908,7 +2962,7 @@
         ]
       },
       {
-        "id": 100,
+        "id": 103,
         "name": "MID",
         "type": "checkpoint",
         "x": 2624,
@@ -2951,7 +3005,7 @@
         ]
       },
       {
-        "id": 101,
+        "id": 104,
         "name": "BOSS",
         "type": "checkpoint",
         "x": 5440,
@@ -2996,7 +3050,7 @@
     ],
     "Gates": [
       {
-        "id": 102,
+        "id": 105,
         "name": "MID-GUARD-GATE",
         "type": "enemy_gate",
         "x": 2528,
@@ -3019,7 +3073,7 @@
         ]
       },
       {
-        "id": 103,
+        "id": 106,
         "name": "BOSS-ARENA-TRIGGER",
         "type": "boss_trigger",
         "x": 5552,
@@ -3044,7 +3098,7 @@
     ],
     "Annotations": [
       {
-        "id": 106,
+        "id": 109,
         "name": "PRONE-USE",
         "type": "stance_encounter",
         "x": 1952,
@@ -3062,7 +3116,7 @@
         ]
       },
       {
-        "id": 107,
+        "id": 110,
         "name": "HEAVY-BYPASS",
         "type": "route_choice",
         "x": 4624,
@@ -3080,7 +3134,7 @@
         ]
       },
       {
-        "id": 108,
+        "id": 111,
         "name": "DROP-PRACTICE",
         "type": "drop_through",
         "x": 352,
@@ -3100,7 +3154,7 @@
     ],
     "PendingDesign": [
       {
-        "id": 104,
+        "id": 107,
         "name": "CRAWL-ROOF",
         "type": "disabled_proposal",
         "x": 1808,
@@ -3123,7 +3177,7 @@
         ]
       },
       {
-        "id": 105,
+        "id": 108,
         "name": "MID-BACKTRACK-DOOR",
         "type": "disabled_proposal",
         "x": 2592,

@@ -55,7 +55,8 @@ export function render(ctx,g){
       rect(x+46,y+65,35,26,'#292640');rect(x+55,y+71,17,14,P.lime);rect(x+92,y+57,27,35,'#a6b9ca');
       const gunY=e.attack==='low'?y+135:e.attack==='high'?y+124:y+93;rect(x-17,gunY,44,19,P.silver);rect(x-23,gunY+4,10,11,'#30384a');
       for(let j=0;j<3;j++)rect(x+15+j*12,y+99,6,5,'#d0bedf');
-      if(warn){rect(x+3,y-12,120,4,P.lime);if(e.attack==='overhead'){line(e.targetX,92,e.targetX,332,'#f0cc70');rect(e.targetX-20,332,40,3,'#ffd574');text('MOVE',e.targetX-14,302,'#ffd574',11);}else {const hy=e.attack==='low'?329:312;for(let dx=5590;dx<x;dx+=24)rect(dx,hy,10,2,'#aa8257');}}
+      if(e.enraged){rect(x+5,y+38,7,26,P.lime);rect(x+111,y+38,7,26,P.lime);}
+      if(warn){rect(x+3,y-12,120,4,P.lime);if(e.attack==='overhead'){line(e.targetX,92,e.targetX,332,'#f0cc70');rect(e.targetX-25,332,50,3,'#ffd574');text('MOVE',e.targetX-14,302,'#ffd574',11);}else {const hy=e.attack==='low'?329:312;for(let dx=5590;dx<x;dx+=24)rect(dx,hy,10,2,'#aa8257');}}
     }else if(e.type==='turret'){
       rect(e.x+8,e.y-24,8,24,'#40566a');rect(e.x,e.y,e.w,12,color);rect(e.x+5,e.y+12,15,10,'#69657e');line(e.x+12,e.y+17,e.x+12+(e.dir||-1)*14,e.y+30,'#d5a564',5);rect(e.x+8,e.y+5,8,4,warn?'#ffe27e':'#f976a7');
     }else if(e.type==='drone'){
@@ -89,6 +90,6 @@ export function render(ctx,g){
   for(const b of g.bullets){rect(b.x-b.r,b.y-b.r,b.r*2,b.r*2,b.side==='player'?'#ffeaae':'#fa83be');if(b.side==='player')rect(b.x-b.vx/75,b.y-b.vy/75,3,2,'#d98c40');}
   for(const e of g.effects){const radius=(1-e.life/e.total)*24;for(let j=0;j<8;j++){const a=j*Math.PI/4;rect(e.x+Math.cos(a)*radius,e.y+Math.sin(a)*radius,Math.max(2,e.life/e.total*6),Math.max(2,e.life/e.total*6),e.color);}}
   ctx.restore();
-  if(g.bossActive){const b=g.enemies.find(e=>e.type==='boss');rect(168,11,304,16,'#101c2b');rect(170,13,300*b.hp/b.maxHP,12,P.violet);text('SECURITY ROBOT',267,23,'#f4f3e8',10);}
+  if(g.bossActive){const b=g.enemies.find(e=>e.type==='boss');rect(168,11,304,16,'#101c2b');rect(170,13,300*b.hp/b.maxHP,12,P.violet);text(b.enraged?'SECURITY ROBOT / PHASE 2':'SECURITY ROBOT',b.enraged?242:267,23,'#f4f3e8',10);}
   if(g.messageUntil>g.t){const w=Math.min(590,g.message.length*6.5+24);rect((640-w)/2,335,w,21,'#0a1b2dea');text(g.message,(640-w)/2+12,350,'#e6efec',11);}
 }

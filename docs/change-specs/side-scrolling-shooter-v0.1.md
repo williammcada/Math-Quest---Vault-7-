@@ -318,3 +318,17 @@ Following the delivered blockout, the owner asked to Continue. Work advances to 
 The candidate uses the exact authored geometry and proposed baseline tuning. It implements stationary prone without crawling, leaves both PendingDesign colliders disabled, and retains the proposed no-heal-on-first-arrival setting for review. It uses the simple boss pattern loop without the unapproved second-phase reversal. Practice freely selects upgrade combinations for testing; no live entitlement is awarded. Classroom integration, server authority, interrupted-run persistence, narrative and assisted play remain deferred. Code-drawn original pixel assets and original synthesized music/effects are initial production work, with final animation and audio/device review outstanding. Shared GameHost/GameAudio, existing cartridges, infrastructure and live entry points are unchanged.
 
 The practice README states the candidate behavior and limits. This does not ratify every numerical/design proposal or establish the 2–3-minute balance target. The checkpoint report records actual verification results.
+
+## 18. Owner playtest revision — 1 October 2026 (alpha.2)
+
+Owner reports approximately two minutes on the first run, one minute on the second, a boss defeated by mostly stationary firing in about 15 seconds, insufficient encounter variety and one stuck touchscreen control. The later clarification confirms music was inaudible because the phone was silent; retain the existing music and sound implementation.
+
+Build `shooter-0.1.0-alpha.2` addresses that feedback as a review candidate. Numerical tuning below supersedes the corresponding alpha.1 starting values for this candidate; it does not claim a novice playtest result.
+
+- Input: optional/caught pointer capture; capture-phase window release/move/cancel listeners; native touch reconciliation when pointer release is missed; independent thumb ownership; neutral input outside the pad; cleanup on interruption/resize; no arbitrary stationary-hold timeout. Keyboard aliases retain their own held state.
+- Boss: 180 HP (was 80); faster high/low shots; at half health, four-shot high volleys, two low sweeps spaced 0.95 s, and two overhead strikes, each separately locked and warned for 1.1 s. No attack starts until the previous boss projectiles clear. Core remains damageable; warning durations remain intact.
+- Encounters: first patrol remains 2 HP; later patrols 4, turrets 5, drones 3, heavies 12, lobbers 5, skimmers 4. Visible robots begin their readable warning without the previous extra idle delay.
+- Hazards: approach arms a complete warning immediately within 170 px (140 px for water), followed by the existing short active window and cooldown. This fixes hazards being passed before their first cycle.
+- Level geometry v0.2: authored 32-px-high cover at x1312 and x4832, plus 48-px-high machinery at x3056. These interrupt flat middle-route firing, provide cover, and preserve upper/water alternatives. Baseline jumps remain sufficient. No additional enemies, health, lives or mandatory upgrades.
+
+Handbook amendment U-10 records the owner's explicitly requested shared stuck-control testing requirement. It applies to future/revised held-control projects; it does not imply a completed audit of all existing apps. The alpha.2 check record must distinguish automated failure-path coverage from reproducing the owner's issue on the actual phone.

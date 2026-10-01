@@ -1,6 +1,6 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.8 — v0.9.4 baseline plus standalone shooter practice candidate
+**Brief version:** 0.9 — v0.9.4 baseline plus shooter alpha.2 playtest revision
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.9.4 frontend and session-engine candidate. Hosted/device verification pending; address migration remains separate.
 **Repository:** `williammcada/Math-Quest---Vault-7-`, branch `main`.  
@@ -128,3 +128,9 @@ The authoring script and static-check evidence are preserved with the map. Basel
 Owner Continue after the authored map advances the side-scrolling shooter to `shooter-0.1.0-alpha.1` on `design/industrial-shooter-v0.1`. Source parent is map checkpoint `7be0061943f9a4087145a845ddb8258f5f31c612`. [Candidate documentation](../public/games/shooter/README.md) and [check record](checkpoints/shooter-0.1.0-alpha.1.md) define implemented behavior and verification limits.
 
 Entry is `public/practice-shooter.html`, with a reproducible self-contained review HTML. The authored map now feeds a fixed-step practice simulation, original pixel rendering, eight-direction touch/keyboard controls and original synthesized music/effects. No MathQuest live entry point, shared runtime, academic evidence, existing cartridge or service/deployment configuration is changed. Practice progression is in memory only and sends no results. Sound preference alone persists. Narrative, assisted play, server authority and live preparation remain separate integration work. Real Apple-device and hosted practice checks remain prerequisites for delivery claims; candidate source is not a verified release.
+
+## 14. Shooter owner-playtest follow-up — 1 October 2026
+
+Owner timing: about 120 s first completion, 60 s second completion, boss about 15 s and too easy. One stuck D-pad incident reported. Alpha.2 strengthens touch release handling, adds three authored middle-route cover obstacles, activates hazards on approach, increases later-robot pressure and gives the boss a longer two-phase encounter. Existing music retained at the owner's explicit clarification.
+
+Handbook U-10 is approved by owner request and preserved at `1d4a64ea8a23149cae483cb5f60bb4c94f2c2a05` (v0.1.2). Its required real-device confirmation is not replaced by browser emulation. No migration of other projects is claimed. See [alpha.2 check record](checkpoints/shooter-0.1.0-alpha.2.md). Source parent `ed4b877b0ed6e0d9f39a6af17256be1b40163d5b`; design branch preserved; live classroom deployment remains separate.

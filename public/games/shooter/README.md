@@ -1,6 +1,6 @@
 # Industrial Shooter — first playable practice candidate
 
-Build: `shooter-0.1.0-alpha.1`. A WILLIAM MCADA PRODUCT.
+Build: `shooter-0.1.0-alpha.2`. A WILLIAM MCADA PRODUCT.
 
 Entry: `public/practice-shooter.html`. Optional self-contained review package: `public/practice-shooter-standalone.html`. Run `python tools/build_shooter_practice.py` after changing a module or the authored map. Serve `public/` with the existing frontend host or a local static HTTP server. No build framework, account, service, or downloaded dependency is required to play.
 
@@ -21,7 +21,7 @@ The existing shared GameHost assumes tank controls and live result submission. T
 
 The owner's Continue after the delivered map is used to proceed with a reviewable practice implementation. Numerical values and placements remain tuning candidates. No claim is made that unseen design details were individually approved.
 
-Stationary prone works; crawling and its optional roof remain disabled. Checkpoints do not heal on first arrival, matching the map's proposed setting; respawns restore full health. The optional midpoint backtracking door remains disabled. Earlier-section pickups stay collected across later-checkpoint retries, so they cannot be refreshed through backtracking. Boss choreography uses the simple high/low/overhead loop at every health level; the unreviewed second-phase reversal is deferred.
+Stationary prone works; crawling and its optional roof remain disabled. Checkpoints do not heal on first arrival, matching the map's proposed setting; respawns restore full health. The optional midpoint backtracking door remains disabled. Earlier-section pickups stay collected across later-checkpoint retries, so they cannot be refreshed through backtracking. Boss choreography retains the high/low/overhead sequence. The alpha.2 owner-playtest revision adds double low sweeps and a second separately warned overhead strike below half health; the earlier reversal proposal remains unused.
 
 Practice supports all eight upgrade combinations and three launch positions. Timed practice uses a five-minute wall-clock deadline from Start and three lives; local pause/backgrounding/retry never extends it. Untimed practice retains three lives. A new manually started practice run may reset both, explicitly outside classroom evidence. Live team-window authority is unimplemented and must not be inferred from this local review timer.
 
@@ -33,8 +33,8 @@ Player collider: 20×28 standing, 20×16 crouched, 20×10 prone. Separate drawn 
 
 `SOUND_MANIFEST` in audio.js is the exact event-to-synth mapping, including separate base/spread shots, robot launch/hit/destruction, jump/double-jump/landing/splash, hurt/downed, repair/checkpoint/respawn, hazard warnings/impacts, three boss cues, boss fire/destruction and timeout. `level` and `boss` use separate original sequences and tempos. These synthesized assets need listening/mix review on actual Apple devices.
 
-See `docs/checkpoints/shooter-0.1.0-alpha.1.md` for actual checks and limitations. This candidate is not a classroom-ready or verified release.
+See `docs/checkpoints/shooter-0.1.0-alpha.2.md` for actual checks and limitations. This candidate is not a classroom-ready or verified release.
 
-## Current check summary
+## Alpha.2 playtest revision
 
-Twenty-five simulation/interface tests passed, followed by actual headless Chromium desktop/phone/tablet emulation and standalone-entry checks. The browser checks cover simultaneous pointer input, rotation, pause/resume, timeout and one resumed audio context. Real Safari/audio listening remain untested. A baseline scripted boss run completed in about 13.72 seconds, shorter than the planned 30–45 seconds; pacing needs a tuning revision before calling this a satisfactory finished level. Full active-threat route completion and a 60-second performance run remain pending.
+Owner completed alpha.1 in about two minutes initially and one minute on retry, with a roughly 15-second boss and a stuck D-pad incident. Alpha.2 adds independent release/cancellation recovery, three authored cover obstacles, approach-triggered hazard warnings, more durable later robots and a 180-HP boss with stronger second-phase patterns. Music is unchanged at the owner's instruction. The check record distinguishes scripted timing, emulation and actual phone evidence.

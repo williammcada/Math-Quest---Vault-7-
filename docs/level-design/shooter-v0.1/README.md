@@ -1,4 +1,4 @@
-# Industrial Shooter — authored level blockout v0.1
+# Industrial Shooter — authored level blockout v0.2
 
 30 September 2026 · A WILLIAM MCADA PRODUCT
 
@@ -53,3 +53,7 @@ This establishes a useful geometric baseline, not production-engine parity. Comb
 From the repository, run `python tools/author_shooter_level.py` with Python 3 and Pillow. The script regenerates the TMJ, tiny tileset, geometry, review image, route traces and checks. Current source of truth is that authored script; editing the generated TMJ alone will be overwritten on regeneration. If Tiled becomes the primary editor later, explicitly reverse that ownership and make the engine export read the TMJ instead.
 
 The approved image remains an art reference; the simple blockout should not be mistaken for the final visual quality. No application entry point, gameplay module, live room or deployed site is changed by this level-authoring checkpoint.
+
+## Geometry v0.2 / alpha.2 update
+
+The 1 October owner playtest prompted three authored middle-route machinery/cover obstacles: x1312 (32 px high), x3056 (48 px high), x4832 (32 px high). Baseline route and repair-cache reachability checks were regenerated and passed. The actor HP metadata now matches alpha.2 candidate tuning, including the 180-HP boss. Dynamic combat and owner pacing remain separate playtest checks. Earlier source checkpoints retain the original v0.1 geometry.

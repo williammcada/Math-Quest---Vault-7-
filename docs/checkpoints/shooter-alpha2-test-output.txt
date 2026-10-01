@@ -1,0 +1,90 @@
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+✔ standalone setup, start, pause, restart cancellation and confirmed reset (37.596137ms)
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+✔ capture failure, outside release and lost capture always release the correct control (13.503964ms)
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+✔ native touch reconciliation repairs a missing pointer release in both thumb release orders (9.010371ms)
+
+Warning! Happy DOM has JavaScript evaluation enabled and is running in an insecure environment.
+
+A VM Context is not an isolated environment, and if you run untrusted code you are at risk of RCE (Remote Code Execution) attacks. The attacker can escape the VM and run code at process level.
+
+It is recommended to disable code generation and freeze all builtins at process level by running node with the flags "--disallow-code-generation-from-strings" and "--frozen-intrinsics". You can suppress this warning by setting "suppressInsecureJavaScriptEnvironmentWarning" to "true" at your own risk.
+
+For more information, see https://github.com/capricorn86/happy-dom/wiki/JavaScript-Evaluation-Warning
+
+
+✔ rapid slides/taps, interruption and fresh input do not retain old contacts (15.617227ms)
+✔ keyboard input, help/resume, fire toggle, and blur pause work in the packaged HTML (10.090522ms)
+✔ authored inventory and all eight distinct upgrade combinations (40.152013ms)
+✔ fixed-step run speed, agility rate and platform seam crossing (1.724087ms)
+✔ baseline full jump crosses a required 80px gap and lands (3.165964ms)
+✔ early jump release reduces height; hold does not auto-repeat (1.216804ms)
+✔ drop-through affects a thin deck, but never a solid floor (1.653302ms)
+✔ one jump normally, two distinct presses with agility, no third jump (0.867096ms)
+✔ double Down enters stationary prone; cancellation clears gesture history (0.416818ms)
+✔ ladder ascends, descends adjacent connector, and jump disengages (1.073011ms)
+✔ surface swimming has no dive, permits fire, and jumps onto bank (2.377306ms)
+✔ all four repair cache positions collect at low health; full health leaves them (1.237806ms)
+✔ guard gate blocks all three heights until H01 is defeated (0.886805ms)
+✔ checkpoints do not refill on first arrival; jumping cannot skip them (0.239876ms)
+✔ three deaths consume exactly three lives, protection prevents stacked hits (1.172459ms)
+✔ checkpoint retry resets current/later sections and retains earlier state (0.336739ms)
+✔ deadline wins over a downed retry and never overwrites resolved success (0.258012ms)
+✔ fast bullet segment intersects cover before a target behind it (0.24926ms)
+✔ spread hits boss once per volley; single victory remains terminal (0.39789ms)
+✔ boss trigger cannot be skipped with a jump; retry restores boss HP only on new attempt (0.290691ms)
+✔ boss high volley is duckable; low sweep is jumpable without agility (5.925025ms)
+✔ offscreen enemies cannot launch unseen projectiles (6.652224ms)
+✔ eight directional sectors and center dead zone (0.326274ms)
+✔ all emitted effect names have a declared original sound (0.097285ms)
+✔ baseline boss encounter can reach success through ordinary controls and damage rules (41.643438ms)
+✔ standing and continuously firing no longer wins the boss fight (10.247034ms)
+✔ approach-triggered hazards show the full warning before damage (0.938602ms)
+✔ three new cover beats remain jumpable without agility (1.316272ms)
+✔ second-phase low sweep sends two spaced shots and overhead repeats its warning (6.261515ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 371.156383

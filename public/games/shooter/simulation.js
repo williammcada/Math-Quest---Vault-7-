@@ -15,13 +15,13 @@ export function rayRect(x,y,nx,ny,r,pad=0){
   }
   return lo;
 }
-function enemyState(e){const hp=e.type==='boss'?C.bossHP:e.hp;return {...copy(e),hp,maxHP:hp,homeX:e.x,homeY:e.y,state:'idle',clock:.4+(Number(e.id.slice(1))||0)*.11,phase:0,hit:0,volleyHits:[],burst:0,burstClock:0};}
+function enemyState(e){const hp=e.type==='boss'?C.bossHP:e.id==='P01'?2:ENEMY[e.type].hp;return {...copy(e),hp,maxHP:hp,homeX:e.x,homeY:e.y,state:'idle',clock:0,phase:0,hit:0,volleyHits:[],burst:0,burstClock:0};}
 export function createGame({upgrades=[],checkpoint='START',timed=true,now=Date.now()}={}){
   if(!Array.isArray(upgrades)||new Set(upgrades).size!==upgrades.length||upgrades.some(x=>!UPGRADES.includes(x)))throw Error('Choose distinct supported upgrades.');
   if(!sectionRank.hasOwnProperty(checkpoint))throw Error('Choose a supported checkpoint.');
   const g={revision:WORLD.revision,upgrades:[...upgrades],checkpoint,timed,deadline:timed?now+C.windowMs:null,
     status:'active',outcome:null,lives:C.lives,attempt:1,t:0,activeTime:0,damage:0,kills:0,
-    enemies:WORLD.layers.Enemies.map(enemyState),hazards:WORLD.layers.Hazards.map((h,i)=>({...copy(h),clock:i*.57,state:'idle'})),
+    enemies:WORLD.layers.Enemies.map(enemyState),hazards:WORLD.layers.Hazards.map(h=>({...copy(h),clock:0,state:'idle',armed:false})),
     pickups:WORLD.layers.Pickups.map(p=>({...copy(p),collected:false})),bullets:[],effects:[],events:[],
     bossActive:false,bossGate:false,volley:0,camera:{x:0,y:0},message:'Reach the security chamber',messageUntil:5,prev:{},lastDown:-10};
   for(const e of g.enemies)if(sectionRank[e.reset_section]<sectionRank[checkpoint])e.hp=0;
@@ -52,7 +52,7 @@ export function retry(g,now=Date.now()){
   if(expire(g,now)||g.status!=='downed'||g.lives<1)return false;
   const rank=sectionRank[g.checkpoint];
   g.enemies=g.enemies.map(e=>sectionRank[e.reset_section]>=rank?enemyState(WORLD.layers.Enemies.find(a=>a.id===e.id)):e);
-  for(const h of g.hazards)if(sectionRank[h.reset_section]>=rank){h.clock=0;h.state='idle';}
+  for(const h of g.hazards)if(sectionRank[h.reset_section]>=rank){h.clock=0;h.state='idle';h.armed=false;}
   for(const p of g.pickups)if(sectionRank[p.reset_section]>=rank)p.collected=false;
   g.attempt++;g.status='active';g.effects=[];spawn(g);event(g,'respawn');return true;
 }
@@ -140,7 +140,7 @@ function robotShot(g,e){
 }
 function robots(g,dt){
   for(const e of g.enemies){if(e.hp<=0||e.type==='boss')continue;e.hit=Math.max(0,e.hit-dt);
-    if(!visible(g,e)){e.state='idle';e.clock=Math.max(e.clock,.45);e.burst=0;continue;}
+    if(!visible(g,e)){e.state='idle';e.clock=0;e.burst=0;continue;}
     const cfg=ENEMY[e.type];e.clock-=dt;
     if(e.state==='idle'){
       if(e.type==='drone'){e.x=e.homeX+Math.sin(g.t*.8+e.homeX)*38;e.y=e.homeY+Math.sin(g.t*1.3)*12;}
@@ -162,27 +162,34 @@ function robots(g,dt){
 function boss(g,dt){
   const e=g.enemies.find(e=>e.type==='boss');if(!g.bossActive||e.hp<=0)return;e.hit=Math.max(0,e.hit-dt);e.clock-=dt;
   if(e.state==='idle'){e.state='arrival';e.clock=1.2;}
-  else if((e.state==='arrival'||e.state==='recover')&&e.clock<=0){
+  else if((e.state==='arrival'||e.state==='recover')&&e.clock<=0&&!g.bullets.some(b=>b.owner==='boss'&&b.life>0)){
+    e.enraged=e.hp<=e.maxHP/2;
     e.attack=['high','low','overhead'][e.phase%3];e.state='warning';e.clock={high:.9,low:1,overhead:1.1}[e.attack];
+    e.strikes=e.enraged?2:1;
     e.targetX=clamp(g.player.x,5590,6090);event(g,'boss-'+e.attack,e.x,e.y);
-    message(g,{high:'HIGH VOLLEY — duck',low:'FLOOR SWEEP — jump',overhead:'OVERHEAD STRIKE — move'}[e.attack]);
-  }else if(e.state==='warning'&&e.clock<=0){e.state='attack';e.clock=e.attack==='high'?.55:.2;e.burst=e.attack==='high'?3:1;e.burstClock=0;}
+    message(g,{high:'HIGH VOLLEY — duck',low:e.enraged?'DOUBLE SWEEP — jump twice':'FLOOR SWEEP — jump',overhead:e.enraged?'TWIN STRIKES — keep moving':'OVERHEAD STRIKE — move'}[e.attack]);
+  }else if(e.state==='warning'&&e.clock<=0){e.state='attack';e.clock=e.attack==='high'?.7:e.attack==='low'&&e.enraged?1.1:e.attack==='overhead'?.85:.2;e.burst=e.attack==='high'?(e.enraged?4:3):e.attack==='low'&&e.enraged?2:1;e.burstClock=0;}
   if(e.state==='attack'){
     e.burstClock-=dt;if(e.burst>0&&e.burstClock<=0){
-      if(e.attack==='high')bullet(g,{x:e.x-6,y:312,vx:-230,vy:0,side:'enemy',r:4,life:3});
-      else if(e.attack==='low')bullet(g,{x:e.x-6,y:329,vx:-155,vy:0,side:'enemy',r:6,life:4});
-      else bullet(g,{x:e.targetX,y:90,vx:0,vy:310,side:'enemy',r:13,life:2});
-      event(g,'boss-fire',e.x,e.y);e.burst--;e.burstClock=.18;
+      if(e.attack==='high')bullet(g,{x:e.x-6,y:312,vx:-280,vy:0,side:'enemy',owner:'boss',r:4,life:3});
+      else if(e.attack==='low')bullet(g,{x:e.x-6,y:329,vx:e.enraged?-210:-190,vy:0,side:'enemy',owner:'boss',r:6,life:4});
+      else bullet(g,{x:e.targetX,y:90,vx:0,vy:350,side:'enemy',owner:'boss',r:18,life:2});
+      event(g,'boss-fire',e.x,e.y);e.burst--;e.burstClock=e.attack==='low'?.95:.18;
     }
-    if(e.clock<=0&&!e.burst){e.state='recover';e.clock=e.attack==='high'?1.2:1.5;e.phase++;}
+    if(e.clock<=0&&!e.burst){
+      if(e.attack==='overhead'&&e.strikes>1){e.strikes--;e.state='warning';e.clock=1.1;e.targetX=clamp(g.player.x,5590,6090);event(g,'boss-overhead');message(g,'SECOND STRIKE — move again');}
+      else{e.state='recover';e.clock=e.attack==='high'?1.2:1.5;e.phase++;}
+    }
   }
   if(overlap(body(g.player),e))damage(g,'boss-contact');
 }
 function hazards(g,dt){
   for(const h of g.hazards){
-    if(!visible(g,h)){h.clock=0;h.state='idle';continue;}
-    h.clock=(h.clock+dt)%h.period_seconds;
+    if(!visible(g,h)){h.clock=0;h.state='idle';h.armed=false;continue;}
     const a=h.period_seconds-h.active_seconds,w=a-h.warning_seconds,old=h.state;
+    const distance=Math.max(h.x-g.player.x,g.player.x-(h.x+h.w),0);
+    if(!h.armed){if(distance>(h.type==='water_pulse'?140:170))continue;h.armed=true;h.clock=w;}
+    else h.clock=(h.clock+dt)%h.period_seconds;
     h.state=h.clock>=a?'active':h.clock>=w?'warning':'idle';
     if(old!==h.state&&h.state!=='idle')event(g,h.state==='warning'?'hazard-warning':'hazard-impact',h.x,h.y);
     h.hitbox=h.type==='water_pulse'?{x:h.x,y:h.y,w:h.w,h:h.h}:{x:h.x,y:h.y+Math.min(1,(h.clock-a)/.22)*(h.h-24),w:h.w,h:24};

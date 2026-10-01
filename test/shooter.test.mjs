@@ -59,7 +59,7 @@ test('three deaths consume exactly three lives, protection prevents stacked hits
 });
 test('checkpoint retry resets current/later sections and retains earlier state',()=>{
   const g=createGame({checkpoint:'MID',now:0});g.pickups[2].collected=true;g.enemies.find(e=>e.id==='P04').hp=0;g.status='downed';g.lives=2;const deadline=g.deadline;
-  assert.equal(retry(g,10000),true);assert.equal(g.player.x,2640);assert.equal(g.enemies.find(e=>e.id==='H01').hp,0);assert.equal(g.enemies.find(e=>e.id==='P04').hp,2);assert.equal(g.pickups[0].collected,true);assert.equal(g.pickups[2].collected,false);assert.equal(g.deadline,deadline);
+  assert.equal(retry(g,10000),true);assert.equal(g.player.x,2640);assert.equal(g.enemies.find(e=>e.id==='H01').hp,0);assert.equal(g.enemies.find(e=>e.id==='P04').hp,4);assert.equal(g.pickups[0].collected,true);assert.equal(g.pickups[2].collected,false);assert.equal(g.deadline,deadline);
 });
 test('deadline wins over a downed retry and never overwrites resolved success',()=>{
   const g=createGame({now:0});g.status='downed';assert.equal(retry(g,300000),false);assert.equal(g.outcome,'time_window_closed');
@@ -75,7 +75,7 @@ test('spread hits boss once per volley; single victory remains terminal',()=>{
   g.bullets.push({x:6090,y:310,vx:2000,vy:0,gravity:0,r:2,side:'player',life:1,volley:71});run(g,1);assert.equal(g.outcome,'success');const kills=g.kills;run(g,120,{fire:true});assert.equal(g.kills,kills);
 });
 test('boss trigger cannot be skipped with a jump; retry restores boss HP only on new attempt',()=>{
-  const g=place(createGame({checkpoint:'BOSS',now:0}),5583,240);run(g,1,{x:1});assert.equal(g.bossActive,true);assert.equal(g.bossGate,true);const b=g.enemies.find(e=>e.type==='boss');b.hp=25;g.status='downed';g.lives=2;retry(g,10);assert.equal(g.enemies.find(e=>e.type==='boss').hp,80);assert.equal(g.player.x,5456);assert.equal(g.bossGate,false);
+  const g=place(createGame({checkpoint:'BOSS',now:0}),5583,240);run(g,1,{x:1});assert.equal(g.bossActive,true);assert.equal(g.bossGate,true);const b=g.enemies.find(e=>e.type==='boss');b.hp=25;g.status='downed';g.lives=2;retry(g,10);assert.equal(g.enemies.find(e=>e.type==='boss').hp,C.bossHP);assert.equal(g.player.x,5456);assert.equal(g.bossGate,false);
 });
 test('boss high volley is duckable; low sweep is jumpable without agility',()=>{
   for(const attack of ['high','low']){const g=place(createGame({checkpoint:'BOSS',now:0}),5940,336);for(const e of g.enemies)if(e.type!=='boss')e.hp=0;g.hazards=[];g.bossActive=true;const b=g.enemies.find(e=>e.type==='boss');Object.assign(b,{state:'warning',attack,clock:.05});g.player.immunity=0;
@@ -96,14 +96,35 @@ test('all emitted effect names have a declared original sound',()=>{
 test('baseline boss encounter can reach success through ordinary controls and damage rules',()=>{
   const g=createGame({checkpoint:'BOSS',now:0});
   for(let n=0;n<12000&&g.status==='active';n++){
-    const p=g.player,b=g.enemies.find(e=>e.type==='boss');let x=p.x<5840?1:p.x>5990?-1:0,y=0,jump=false;
+    const p=g.player,b=g.enemies.find(e=>e.type==='boss');let x=p.x<5840?1:p.x>6040?-1:0,y=0,jump=p.vy<0;
     if(g.bossActive){
-      if(g.bullets.some(a=>a.side==='enemy'&&a.vx<0&&a.y>322&&a.x-p.x<100&&a.x>p.x-20)&&p.grounded)jump=true;
+      if(g.bullets.some(a=>a.side==='enemy'&&a.vx<0&&a.y>322&&a.x-p.x<75&&a.x>p.x-20)&&p.grounded)jump=true;
       if(g.bullets.some(a=>a.side==='enemy'&&a.vx<0&&a.y>300&&a.y<320&&a.x-p.x<180&&a.x>p.x-20)&&p.grounded)y=1;
-      if(b.attack==='overhead'&&(b.state==='warning'||b.state==='attack')&&Math.abs(p.x-b.targetX)<55)x=p.x<5960?1:-1;
+      if(b.attack==='overhead'&&(b.state==='warning'||b.state==='attack')&&Math.abs(p.x-b.targetX)<55)x=b.targetX<5920?1:-1;
+      else if(x===0&&p.facing<0)x=1;
     }
     step(g,{x,y,jump,fire:true});
   }
   assert.equal(g.outcome,'success');assert.equal(g.lives,3);assert.ok(g.player.hp>0);
+  assert.ok(g.t>=30&&g.t<=45,'scripted boss target: 30–45 seconds');
   // This catches a usable end-to-end combat path, not novice difficulty or pacing.
+});
+
+test('standing and continuously firing no longer wins the boss fight',()=>{
+  const g=createGame({checkpoint:'BOSS'});for(let n=0;n<3600&&g.status==='active';n++)step(g,{x:g.player.x<5840?1:0,fire:true});
+  assert.equal(g.status,'downed');assert.ok(g.enemies.find(e=>e.type==='boss').hp>0);
+});
+test('approach-triggered hazards show the full warning before damage',()=>{
+  const g=place(quiet(),3400,336);g.camera={x:3170,y:116};const source=WORLD.layers.Hazards.find(h=>h.type==='press');g.hazards=[{...source,clock:0,state:'idle',armed:false}];
+  run(g,1);assert.equal(g.hazards[0].state,'warning');assert.ok(g.events.some(e=>e.type==='hazard-warning'));
+  run(g,48);assert.equal(g.hazards[0].state,'warning');run(g,8);assert.equal(g.hazards[0].state,'active');
+});
+test('three new cover beats remain jumpable without agility',()=>{
+  for(const [x,end] of [[1270,1344],[3010,3088],[4790,4880]]){const g=place(quiet(),x,336);run(g,55,{x:1,jump:true});assert.ok(g.player.x>end);assert.equal(g.player.hp,3);assert.ok(g.player.y<=336);}
+});
+test('second-phase low sweep sends two spaced shots and overhead repeats its warning',()=>{
+  for(const attack of ['low','overhead']){const g=place(createGame({checkpoint:'BOSS'}),5800,336),b=g.enemies.find(e=>e.type==='boss');g.player.immunity=99;g.bossActive=true;Object.assign(b,{hp:80,enraged:true,state:'warning',attack,clock:.01,strikes:2});
+    let fired=0,warnings=0;for(let n=0;n<200;n++){step(g,{fire:false});fired+=g.events.filter(e=>e.type==='boss-fire').length;warnings+=g.events.filter(e=>e.type==='boss-overhead').length;}
+    assert.equal(fired,2,attack);if(attack==='overhead')assert.equal(warnings,1);
+  }
 });
