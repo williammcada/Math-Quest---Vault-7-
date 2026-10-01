@@ -58,7 +58,7 @@ export class BrawlModel {
     if(!Number.isFinite(message.x)||!Number.isFinite(message.y)||Math.abs(message.x)>1||Math.abs(message.y)>1||typeof message.attack!=='boolean'||(message.jump!==undefined&&typeof message.jump!=='boolean')||(message.magic!==undefined&&typeof message.magic!=='boolean'))failure('Invalid input.');
     p.seq=message.seq;p.lastInput=now;p.input={x:message.x,y:message.y,attack:message.attack};
     if(p.respawnMs>0)return;
-    if(message.jump&&p.jumpMs<=0){p.jumpMs=700;p.aerialUsed=false;p.action='jump';this.event('jump',{playerId:id});}
+    if(message.jump&&p.jumpMs<=0&&!p.horseMs){p.jumpMs=700;p.aerialUsed=false;p.action='jump';this.event('jump',{playerId:id});}
     if(message.magic)this.special(p);
   }
   startScene(){this.s.phase='running';const n=this.s.starters.length;
@@ -90,13 +90,14 @@ export class BrawlModel {
       if(!p.shieldMs)p.shield=0;
       if(p.lives<=0){p.action='down';continue;}
       if(p.respawnMs>0){p.respawnMs=Math.max(0,p.respawnMs-dt);if(!p.respawnMs){p.hp=p.maxHp;p.protectionMs=LIMITS.protection;p.x=180;p.y=330;p.action='idle';this.changed(true);}continue;}
-      if(!p.connected||!p.available){p.input=neutral();continue;}
+      if(!p.connected||!p.available){p.input=neutral();if(p.horseMs>0)this.horseStep(p,dt);continue;}
       p.activeMs+=dt;if(wallNow-p.lastInput>LIMITS.inputLease)p.input=neutral();
-      const len=Math.hypot(p.input.x,p.input.y)||1,scale=Math.max(1,len),speed=p.action==='horse'?290:160;
+      const len=Math.hypot(p.input.x,p.input.y)||1,scale=Math.max(1,len),speed=p.horseMs?(p.horseMs>300&&p.horseMs<=3300?290:0):160;
       p.x=clamp(p.x+p.input.x/scale*speed*seconds,ARENA.left,ARENA.right);p.y=clamp(p.y+p.input.y/scale*speed*.65*seconds,ARENA.far,ARENA.near);
-      if(p.input.x)p.facing=Math.sign(p.input.x);
-      if(!p.actionMs)p.action=p.jumpMs?'jump':len&& (p.input.x||p.input.y)?'walk':'idle';
-      if(p.input.attack&&p.attackCooldown<=0&&p.actionMs<=0){if(p.jumpMs){if(!p.aerialUsed){p.aerialUsed=true;this.attack(p,14);}}else{const values=p.hero==='bajie'?[14,24]:p.hero==='wujing'?[10,10,12]:p.hero==='prince'?[7,9,14]:[8,8,14];this.attack(p,values[p.combo%values.length]);p.combo++;}}
+      if(p.input.x){const facing=Math.sign(p.input.x);if(p.horseMs>0&&facing!==p.facing)p.horseTurnMs=140;p.facing=facing;}
+      if(p.horseMs>0)this.horseStep(p,dt);
+      if(!p.actionMs&&!p.horseMs)p.action=p.jumpMs?'jump':len&& (p.input.x||p.input.y)?'walk':'idle';
+      if(!p.horseMs&&p.input.attack&&p.attackCooldown<=0&&p.actionMs<=0){if(p.jumpMs){if(!p.aerialUsed){p.aerialUsed=true;this.attack(p,14);}}else{const values=p.hero==='bajie'?[14,24]:p.hero==='wujing'?[10,10,12]:p.hero==='prince'?[7,9,14]:[8,8,14];this.attack(p,values[p.combo%values.length]);p.combo++;}}
       for(const item of this.s.pickups){if(item.taken||Math.hypot(p.x-item.x,(p.y-item.y)*2)>28)continue;
         if(item.kind==='magic'&&p.magic<p.capacity){p.magic++;item.taken=true;this.event('pickup',{playerId:p.id});this.changed(true);}}
     }
@@ -118,15 +119,28 @@ export class BrawlModel {
     for(const e of this.s.enemies)if(e.hp>0&&(e.x-p.x)*p.facing>=-18&&Math.abs(e.x-p.x)<(p.hero==='tang'?200:95)&&Math.abs(e.y-p.y)<30){e.hp=Math.max(0,e.hp-damage*power);e.hurt=180;this.event('hit',{enemyId:e.id});}
     for(const prop of this.s.props)if(prop.hp>0&&Math.abs(prop.x-p.x)<95&&Math.abs(prop.y-p.y)<35){prop.hp-=damage*power;if(prop.hp<=0){this.s.pickups.push({id:prop.id+'-magic',kind:'magic',x:prop.x,y:prop.y,taken:false});this.event('break');this.changed(true);}}
   }
-  special(p){if(p.magic<=0||p.actionMs>0||p.respawnMs>0||p.lives<=0)return;p.magic--;p.action='special';p.actionMs=700;
+  special(p){if(p.magic<=0||p.horseMs>0||p.actionMs>0||p.respawnMs>0||p.lives<=0)return;p.magic--;p.action='special';p.actionMs=700;
+    if(p.hero==='prince'){p.horseMs=3600;p.horseHits={};p.horseImpactMs=0;p.horseTurnMs=0;p.jumpMs=0;p.action='horse-transform';p.actionMs=3600;this.event('special',{playerId:p.id,hero:p.hero});this.changed(true);return;}
     const amount={wukong:72,bajie:60,wujing:54,tang:40,prince:60}[p.hero]*(p.upgrades.includes('focus')?1.2:1);
     // Stage-1 special is an authority/effect sample. Full move timing is stage 2.
     for(const e of this.s.enemies)if(e.hp>0&&Math.abs(e.x-p.x)<200&&Math.abs(e.y-p.y)<80)e.hp=Math.max(0,e.hp-amount);
     if(p.hero==='tang')for(const id of this.s.starters){const ally=this.player(id);if(ally.lives>0&&Math.hypot(p.x-ally.x,p.y-ally.y)<200){ally.shield=Math.max(ally.shield,20);if(!ally.shieldMs)ally.shieldMs=2000;}}
     this.event('special',{playerId:p.id,hero:p.hero});this.changed(true);}
+  horseStep(p,dt){
+    const before=p.horseMs;p.horseMs=Math.max(0,p.horseMs-dt);p.horseImpactMs=Math.max(0,(p.horseImpactMs||0)-dt);p.horseTurnMs=Math.max(0,(p.horseTurnMs||0)-dt);
+    if(p.horseMs>3300){p.action='horse-transform';return;}
+    if(p.horseMs<=300){p.action=p.horseMs?'horse-return':'idle';if(!p.horseMs){p.actionMs=0;p.horseHits={};}return;}
+    p.action=p.horseImpactMs?'horse-impact':p.horseTurnMs?'horse-turn':p.input.x||p.input.y?'horse':'horse-idle';
+    // Charge collisions are server-position based, never an instant area pulse.
+    if(p.hurtMs>0||!(p.input.x||p.input.y)||before<=300)return;
+    for(const e of this.s.enemies){if(e.hp<=0||Math.abs(e.x-p.x)>58||Math.abs(e.y-p.y)>26)continue;
+      const hit=p.horseHits[e.id];if(hit&&(hit.count>=2||this.s.activeMs-hit.at<600))continue;
+      e.hp=Math.max(0,e.hp-30*(p.upgrades.includes('focus')?1.2:1));e.hurt=180;p.horseHits[e.id]={count:(hit?.count||0)+1,at:this.s.activeMs};p.horseImpactMs=140;p.action='horse-impact';this.event('hit',{enemyId:e.id,playerId:p.id});
+    }
+  }
   hurt(p,amount){if(p.hp<=0||p.hurtMs>0||p.protectionMs>0||p.respawnMs>0)return;
     const absorbed=Math.min(p.shield,amount);p.shield-=absorbed;p.hp=Math.max(0,p.hp-(amount-absorbed));p.hurtMs=LIMITS.hurt;p.action='hurt';p.actionMs=260;this.event('hurt',{playerId:p.id});
-    if(p.hp===0){p.lives--;p.input=neutral();p.action='down';p.respawnMs=p.lives>0?LIMITS.respawn:0;this.changed(true);}}
+    if(p.hp===0){p.horseMs=0;p.horseHits={};p.horseImpactMs=0;p.horseTurnMs=0;p.actionMs=0;p.lives--;p.input=neutral();p.action='down';p.respawnMs=p.lives>0?LIMITS.respawn:0;this.changed(true);}}
   finish(outcome,reason){if(this.s.result)return this.s.result;this.s.phase='terminal';for(const p of Object.values(this.s.players))p.input=neutral();
     this.s.result={runId:this.s.runId,teamId:this.s.teamId,build:JOURNEY_BUILD,protocol:PROTOCOL,outcome,reason,activeElapsedMs:Math.round(this.s.activeMs),bossDefeated:outcome==='victory',sample:true,
       players:Object.values(this.s.players).map(p=>({studentId:p.id,hero:p.hero,upgrades:[...p.upgrades],participation:!p.started?'not_started':p.lives<=0?'spectated':p.connected?'active':'disconnected',livesUsed:p.started?3-p.lives:0,activeElapsedMs:Math.round(p.activeMs)}))};

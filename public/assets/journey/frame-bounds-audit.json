@@ -1,0 +1,52 @@
+{
+  "wukong": {
+    "isolatedFrames": 18,
+    "uniformFallbackFrames": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      16
+    ]
+  },
+  "bajie": {
+    "isolatedFrames": 12,
+    "uniformFallbackFrames": [
+      1,
+      2,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15,
+      16
+    ]
+  },
+  "wujing": {
+    "isolatedFrames": 18,
+    "uniformFallbackFrames": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      15
+    ]
+  },
+  "tang": {
+    "isolatedFrames": 24,
+    "uniformFallbackFrames": []
+  },
+  "prince": {
+    "isolatedFrames": 22,
+    "uniformFallbackFrames": [
+      7,
+      8
+    ]
+  }
+}

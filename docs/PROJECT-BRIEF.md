@@ -162,3 +162,7 @@ Integrated main 59c11c9 and Journey remote 225909f on isolated branch `integrate
 ## 16. Hero animation development checkpoint
 
 Four original hero atlases replace the labeled stand-ins; five-hero render review and 198 tests/build passed with limits in [verification](verification/journey-hero-animation.md). Atlas edge/pivot polish and complete horse choreography remain before production-ready art. Next: those corrections, then authored level/Nezha. No retiming, narrative/audio expansion or deployment.
+
+## 17. Prince horse development checkpoint
+
+Prince now transforms for 300ms, charges under server-authoritative steering for 3000ms, and returns for 300ms. One magic charge; at most two 30-damage hits per target, 600ms apart, Focus bonus retained. Pause freezes charge; stale/disconnected input stops steering and collision damage; death cancels it. Original supplemental horse atlas and expanded bounds for 94/120 hero frames added. Remaining 26 frames need art correction. Source c6385a7 passes 202 tests, build, art browser and teacher/student flow. See [verification](verification/journey-horse-and-frame-polish.md). No deployment, retiming or full-level completion claim.

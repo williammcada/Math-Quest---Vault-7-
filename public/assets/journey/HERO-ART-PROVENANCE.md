@@ -12,3 +12,9 @@ Common generation directions: stylized-concept production sprite atlas; 1536×10
 - Prince: dark flowing hair/small pale horns, silver-white armor/pale cyan sash, sword combo; transform to white/cyan horse. Correction: bottom row exactly six poses (transform, horse, human get-up, ready, two victories), remove extra horse and shorten the extended sword in row two column two.
 
 Generated character concepts are game adaptations, not claims about the novel. These are candidate animation assets; seam/pivot polish and full horse choreography remain documented work.
+
+## Horse supplement — 1 October 2026
+
+`prince-charge-stage3.png`: original built-in image generation using the Prince atlas as identity reference. Prompt requested a transparent 1536×1024, four-column/four-row atlas: human transformation, horse standing/rearing, four gallop strides, turn, impact, dissolve, return and supplemental sword poses. Original output preserved without pixel edits. Actual row boundaries are explicit in manifest/renderer because generated poses did not conform to uniform cells.
+
+`scripts/art/journey-frame-bounds.py` analyzes alpha connected components of original six-column hero sheets; it does not alter pixels. 94 of 120 frames receive safe expanded source bounds; 26 ambiguous frames retain uniform cuts. These can still clip weapons/effects and need later artwork correction. Horse gallop screenshot inspected in Chromium; this is development art, not final production acceptance.

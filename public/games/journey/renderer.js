@@ -1,16 +1,18 @@
 import {HERO_ART,HERO_CLIPS} from './hero-art.js';
+import {FRAME_BOUNDS} from './frame-bounds.js';
 const SOURCE=256;
 const clips=HERO_CLIPS;
 const enemyClips={walk:[2,3,4,5],windup:[6,7],attack:[8,9],recover:[10,11],hurt:[12,13],down:[17]};
 export class JourneyRenderer {
   constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.images={};this.frames=new Map();this.snapshot=null;this.started=performance.now();
-    for(const [key,file] of [...Object.entries(HERO_ART).map(([key,art])=>[key,art.file]),['enemy','raider-stage1.png']]){const img=new Image();img.src=new URL('../../assets/journey/'+file,import.meta.url).href;this.images[key]=img;}this.images.hero=this.images.wukong;
+    for(const [key,file] of [...Object.entries(HERO_ART).map(([key,art])=>[key,art.file]),['enemy','raider-stage1.png'],['horse','prince-charge-stage3.png']]){const img=new Image();img.src=new URL('../../assets/journey/'+file,import.meta.url).href;this.images[key]=img;}this.images.hero=this.images.wukong;
   }
   set(snapshot){this.snapshot=snapshot;}
-  sprite(img,frame,x,y,size,facing=1,alpha=1){if(!img||!img.complete||!img.naturalWidth)return;
+  sprite(img,frame,x,y,size,facing=1,alpha=1,bounds=null){if(!img||!img.complete||!img.naturalWidth)return;
     const c=this.ctx;c.save();c.globalAlpha=alpha;c.translate(Math.round(x),Math.round(y));c.scale(facing,1);
     // Cells retain padding and a common foot anchor. No baked scene or hitbox.
-    c.drawImage(img,(frame%6)*SOURCE,Math.floor(frame/6)*SOURCE,SOURCE,SOURCE,-size/2,-size*.96,size,size);c.restore();}
+    const source=bounds?.source||[(frame%6)*SOURCE,Math.floor(frame/6)*SOURCE,SOURCE,SOURCE],pivot=bounds?.pivot||[128,245.76],scale=size/SOURCE;
+    c.drawImage(img,...source,-pivot[0]*scale,-pivot[1]*scale,source[2]*scale,source[3]*scale);c.restore();}
   draw(now=performance.now()){
     const canvas=this.canvas,c=this.ctx,s=this.snapshot;if(!c)return;
     if(canvas.width!==960||canvas.height!==420){canvas.width=960;canvas.height=420;}c.imageSmoothingEnabled=false;
@@ -36,8 +38,13 @@ export class JourneyRenderer {
       const jump=!a.enemy&&a.jumpMs>0?Math.sin((1-a.jumpMs/700)*Math.PI)*55:0;
       const alpha=!a.enemy&&a.protectionMs>0?(Math.floor(now/90)%2?.45:1):1;
       const art=a.enemy?null:HERO_ART[a.hero];
-      this.sprite(this.images[a.enemy?'enemy':a.hero],frame,a.x,a.y-jump,a.enemy?96:art.size,a.facing,alpha);
-      if(!a.enemy&&a.hero==='wukong'&&a.action==='special')for(const offset of [-55,55])this.sprite(this.images.wukong,frame,a.x+offset,a.y-jump,art.size,a.facing,.35);
+      if(!a.enemy&&a.hero==='prince'&&action.startsWith('horse')){
+        const horseFrames={'horse-transform':[0,1],'horse':[4,5,6,7],'horse-idle':[2],'horse-turn':[8],'horse-impact':[9],'horse-return':[10,11]};
+        const seq=horseFrames[action]||[2],idx=Math.floor((now-cache.start)/100),f=seq[action==='horse'?idx%seq.length:Math.min(idx,seq.length-1)];
+        const rows=[0,290,520,765,1024],row=Math.floor(f/4),col=f%4,feet=[272,510,758,997];
+        this.sprite(this.images.horse,f,a.x,a.y,104,a.facing,alpha,{source:[col*384,rows[row],384,rows[row+1]-rows[row]],pivot:[192,feet[row]-rows[row]]});
+      }else this.sprite(this.images[a.enemy?'enemy':a.hero],frame,a.x,a.y-jump,a.enemy?96:art.size,a.facing,alpha,a.enemy?null:FRAME_BOUNDS[a.hero]?.[frame]);
+      if(!a.enemy&&a.hero==='wukong'&&a.action==='special')for(const offset of [-55,55])this.sprite(this.images.wukong,frame,a.x+offset,a.y-jump,art.size,a.facing,.35,FRAME_BOUNDS.wukong?.[frame]);
       if(a.enemy&&a.phase==='windup'){c.strokeStyle='#ffb95b';c.lineWidth=2;c.strokeRect(a.x-31,a.y-6,62,12);c.fillStyle='#ffd78c';c.font='bold 18px system-ui';c.textAlign='center';c.fillText('!',a.x,a.y-90);}
       if(a.hp>0){c.fillStyle='#142122';c.fillRect(a.x-22,a.y-100,44,4);c.fillStyle=a.enemy?'#c47165':'#a7dd92';c.fillRect(a.x-22,a.y-100,44*a.hp/a.maxHp,4);}
       if(!a.enemy){c.font='11px system-ui';c.textAlign='center';c.fillStyle='#eff4ec';c.fillText(a.alias,a.x,a.y+18);}

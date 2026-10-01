@@ -1939,5 +1939,51 @@
     245.76
   ],
   "renderSize": 104,
-  "collisionSource": "src/cartridges/journey/model.js; visual pixels are not collision geometry"
+  "collisionSource": "src/cartridges/journey/model.js; visual pixels are not collision geometry",
+  "supplementalHorse": {
+    "file": "prince-charge-stage3.png",
+    "width": 1536,
+    "height": 1024,
+    "columns": 4,
+    "rowBoundaries": [
+      0,
+      290,
+      520,
+      765,
+      1024
+    ],
+    "footY": [
+      272,
+      510,
+      758,
+      997
+    ],
+    "renderSize": 104,
+    "clips": {
+      "transform": [
+        0,
+        1
+      ],
+      "idle": [
+        2
+      ],
+      "gallop": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "turn": [
+        8
+      ],
+      "impact": [
+        9
+      ],
+      "return": [
+        10,
+        11
+      ]
+    },
+    "boundsAudit": "frame-bounds-audit.json"
+  }
 }
