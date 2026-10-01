@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 08:02 message on 2026-10-01.
+**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:09 message.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -54,6 +54,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 27. Multiplayer session flow approved at 07:55 on 2026-10-01: students independently complete preparation, choose a character and upgrades, and mark Ready; each team launches automatically with a three-second countdown once all participants are ready; teachers may launch the ready subset, pause/resume one team or all teams, or end runs; the shared clock freezes during teacher pauses; no mid-run new players, but a disconnected player may reclaim their hero/state; teams continue while a member is disconnected; an all-team disconnect pauses briefly then ends as interrupted; starting party size fixes scaling; lagging players are warned then safely returned to the shared play area. Exact reconnect/grace intervals remain open.
 
 28. Cartridge team integration clarified by the owner at 08:02 on 2026-10-01: the brawler is a minigame cartridge inside MathQuest. Students join/form teams as they normally do in MathQuest; the same team enters the cartridge. Do not add separate teacher assignment or a second QR/join-code/team-formation flow. Cloudflare is intended to provide the multiplayer backend for the cartridge; integration with existing team identity and results remains to be designed.
+
+29. Automatic launch limit requested at 08:09 on 2026-10-01: after MathQuest's math gates and relevant decisions are complete and the team reaches the minigame handoff, start automatically as soon as everyone is ready; if a member is absent or unready, allow one minute before proceeding with the ready players. Teacher intervention is not required for this timeout. The assistant recommends this as the default; see the explicit handoff and zero-ready handling below.
 
 ## 3. Hero mechanics — specials approved; ordinary move details and tuning remain open
 
@@ -289,7 +291,7 @@ Magic economy:
 Recommended classroom behavior:
 - Use the existing MathQuest team assignment. Each team has its own preparation/character-selection lobby.
 - Students finish their own required mathematics, optionally earn additional upgrades, select an available hero and upgrades, then press Ready. Optional math keeps that student unready until they finish or choose to stop at an earned upgrade boundary.
-- Automatically launch that team when all its participating members are ready, using a shared three-second countdown. The three-minute action clock starts after the countdown when control is enabled. Reserved opening cutscenes, once specified, occur before the action clock.
+- Automatically launch that team when all its participating members are ready, or with the ready subset after the one-minute readiness window added at 08:09. Use the existing shared three-second launch countdown. The three-minute action clock starts when control is enabled; readiness waiting and launch countdown are outside it. Reserved opening cutscenes, once specified, also occur before the action clock.
 - A teacher can start a ready subset without bypassing any student's required mathematics; absent/unready students wait for the next run. Final ready roster determines party-size scaling.
 - Lock heroes and starting roster at launch. No new players enter mid-run; reconnecting members reclaim their existing hero/state.
 - Teacher controls can pause/resume one team or all teams, freezing simulation and action time, and end a run. Students cannot pause the shared action for everyone. Teacher-ended runs are recorded as interrupted, separately from victory, retreat, or defeat.
@@ -314,8 +316,25 @@ For each existing MathQuest team:
 - Cloudflare is the proposed multiplayer backend for the cartridge session. Its technical connection to MathQuest team/session identity, reconnect authorization, and the existing result/evidence flow still requires an architecture design.
 - Do not add a separate QR code or duplicate team-formation flow for this cartridge.
 
-Open handoff detail: specify when the end-of-MathQuest condition hands a team into combat, and what happens when one assigned student is absent or not ready. Preserve the existing individual mathematics requirements and do not count cartridge entry as a substitute for them.
+Handoff condition clarified at 08:09: MathQuest has completed the required gates and relevant decisions and released the team to its minigame. Start the readiness window at that host handoff. Do not start this window merely because the first student finishes an earlier math gate. Preserve individual mathematics eligibility; the timeout does not award missing preparation or bypass required math. Exact host event/field mapping remains to be checked against source.
 
 The owner's clarification supersedes the preceding separate QR-code/teacher-assigned lobby proposal. Normal MathQuest team formation remains the source of team membership.
 
-Next owner question: when the team reaches the cartridge, should it wait until every assigned member has finished their required MathQuest preparation and is ready, with the teacher able to proceed with the ready students if someone is absent?
+### One-minute readiness window — requested default and recommended details
+
+Owner request, 2026-10-01 at 08:09: after the MathQuest gates and decisions, launch automatically when everyone is ready, otherwise wait one minute then proceed even if someone is absent. The assistant recommends adopting this default.
+
+Recommended operational details:
+- On the normal MathQuest-to-minigame handoff, show a shared 60-second readiness timer alongside character selection and Ready status.
+- If everyone is ready earlier, immediately end the waiting period and begin the already approved three-second launch countdown.
+- At 60 seconds, begin the three-second launch countdown with the ready, connected, eligible players, provided at least one exists. Size the encounter and supply budget for that actual starting group.
+- Freeze the final roster and loadouts at the launch boundary. A not-ready student receives no automatically assigned hero or AI replacement.
+- If nobody is ready at expiry, keep the game unstarted. Once at least one eligible player is ready, begin the launch countdown without another full minute of waiting.
+- The readiness timer and launch countdown do not consume the three-minute action clock.
+- Teacher pause also suspends a pending readiness/launch countdown; teacher start/end controls remain available.
+- Preserve the prior mid-run entry rule: a student omitted from the starting roster waits for the next run. A member who actually started and then disconnected can reconnect to their existing hero/state.
+- Show a plain message such as "Starting with ready players in 0:45" so students understand the deadline.
+- The one-minute value is a fixed initial design default; no additional teacher setting is required for the proof of concept.
+
+The core auto-start/one-minute decision comes from the owner. Zero-ready handling, exact cutoff sequencing, and countdown messaging are the assistant's recommended specification details. No implementation or runtime verification has occurred.
+
