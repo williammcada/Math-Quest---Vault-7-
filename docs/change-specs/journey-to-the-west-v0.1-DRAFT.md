@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:43 approval.
+**Recorded:** 2026-09-30 to 2026-10-01, Asia/Shanghai, through the owner's 08:50 approval.
 **Technical companion:** [Source-grounded technical and production draft](journey-to-the-west-v0.1-TECHNICAL-DRAFT.md). Its engineering and tuning proposals are not automatically approved by this decision record.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
@@ -59,6 +59,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 29. Automatic launch limit requested at 08:09 on 2026-10-01: after MathQuest's math gates and relevant decisions are complete and the team reaches the minigame handoff, start automatically as soon as everyone is ready; if a member is absent or unready, allow one minute before proceeding with the ready players. Teacher intervention is not required for this timeout. The assistant recommends this as the default; see the explicit handoff and zero-ready handling below.
 
 30. Optional preparation timing approved on 2026-10-01 at 08:43: optional upgrade questions remain available during the 60-second readiness window, after required gates and relevant decisions are complete. Only completed blocks earn upgrades. Students finish or leave optional work, choose their hero/upgrades and press Ready; everyone ready starts the three-second countdown early, otherwise the deadline starts the ready eligible subset. Optional work cannot delay that deadline.
+
+31. Enemy and audio direction approved on 2026-10-01 at 08:50: horned saber-wielding mountain raider, scarf-wearing cliff acrobat with jump kicks, robed talisman caster, bronze-armored shield guard, and ox-like mountain brute with club/charge. Use the approved detailed arcade pixel style. Audio combines energetic arcade synth with Chinese-inspired percussion, plucked strings and flute, a distinct Nezha boss theme, and recognizable weapon, pickup and hero-special effects. This approves the direction, not finished assets or the separate proposed loop lengths and combat values.
 
 ## 3. Hero mechanics — specials approved; ordinary move details and tuning remain open
 
@@ -133,7 +135,7 @@ The normal join path currently has no five-member limit. The proposal applies a 
 
 Local scope exception: the owner's explicit request authorizes designing real shared multiplayer combat for Journey to the West. The host brief's individual-action policy remains in place for Vault Seven and Nightfall.
 
-Accepted high-level mechanics are recorded above and in the dated decisions below. Exact combat timing, spawn budgets, boss health, network intervals and production requirements are collected as reviewable proposals in the technical companion. Remaining owner choices include enemy/audio direction. Optional personal math during the readiness window was approved at 08:43; see decision 30. The two opening-cutscene slots remain deliberately deferred.
+Accepted high-level mechanics are recorded above and in the dated decisions below. Exact combat timing, spawn budgets, boss health, network intervals and production requirements are collected as reviewable proposals in the technical companion. Enemy/audio direction was approved at 08:50 (decision 31); optional personal math during readiness was approved at 08:43 (decision 30). Consolidated technical defaults remain for specification review. The two opening-cutscene slots remain deliberately deferred.
 
 ## 8. Handbook and source provenance
 
@@ -160,7 +162,7 @@ No implementation, gameplay testing, network testing, or deployment has occurred
 Before implementation, complete and approve a versioned change specification including the game, art, timing, multiplayer, and MathQuest contracts.
 Future verification must include different party sizes and hero combinations, simultaneous specials, pickup consumption exactly once, boss stun/damage exploits, touch controls, browser interruption, teacher pause, reconnect, and the actual school-network path.
 
-Current checkpoint: the revised composition, controls, specials, personal upgrades and high-level multiplayer/readiness behavior have been settled as recorded below. The new technical companion supplies proposed values and a production plan after inspecting the host source. Next owner review covers enemy appearance/audio, followed by one consolidated specification review. Optional-personal-math timing was settled at 08:43. Actual endpoint/network feasibility, implementation and verification remain separate work. Exact quantities and timing are proposed tuning, not verified balance.
+Current checkpoint: the revised composition, controls, specials, personal upgrades and high-level multiplayer/readiness behavior have been settled as recorded below. The new technical companion supplies proposed values and a production plan after inspecting the host source. Next owner review is the consolidated v0.1 change specification. Optional-personal-math timing was settled at 08:43 and enemy/audio direction at 08:50. Actual endpoint/network feasibility, implementation and verification remain separate work. Exact quantities and timing are proposed tuning, not verified balance.
 
 ### End-of-run decisions — approved 2026-09-30 at 21:35
 
@@ -360,3 +362,7 @@ The owner answered “Yes” to keeping optional upgrade questions available dur
 - Readiness waiting and launch countdown remain outside the 180-second action clock.
 
 This approval settles preparation timing, not the remaining creative proposals or implementation authorization. Handbook files were rechecked at the same blob revisions recorded in section 8; the host main commit remains 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28.
+
+### Enemy and audio direction — approved 2026-10-01 at 08:50
+
+The owner answered “Yes” to the five proposed enemy appearances and the proposed music/sound direction, summarized in decision 31. New production sheets, animations and audio files have not yet been generated or verified. Narrative and two opening-cutscene slots remain reserved. This approval does not authorize skipping the final specification review before implementation.
