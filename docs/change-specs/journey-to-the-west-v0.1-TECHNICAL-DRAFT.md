@@ -72,8 +72,9 @@ For this cartridge, propose a narrow personal preparation policy:
 - Store personal completed block IDs and selected upgrade IDs by student, not in team.inventory.
 - Reuse the question provider and evidence format. Scope optional assignment/completion to the requesting student. Do not call the current team-wide equipment.extend unchanged.
 - Other students may prepare independently; their entitlement is not increased by a teammate's completion.
-- Do not silently omit compulsory work. Optional preparation completes before the host releases the team to the 60-second readiness stage.
-- Review how an unfinished optional block is closed or canceled before handoff; the current extension mechanism places the team at a gate and waits for everyone. This is a remaining host-policy detail, not permission to fabricate academic completion.
+- Do not silently omit compulsory work. Required gates and relevant decisions must complete before the 60-second readiness window.
+- Owner choice pending: close optional preparation before the handoff, or permit optional questions during the existing 60-second preparation/readiness window. Recommend the latter so one unfinished optional block cannot hold the whole team. Only completed blocks earn an upgrade; a student must finish or leave optional work, select a hero/loadout and press Ready to join the starting roster. At the deadline, start the ready subset under the accepted rule. Unfinished optional work earns no completion credit; preserve already submitted answers as academic evidence.
+- The current extension mechanism places the team at a gate and waits for everyone. Implementing the recommended choice would require a cartridge-specific optional-preparation state that does not block the host handoff. This policy is proposed for owner review, not an accepted change or permission to bypass compulsory mathematics.
 
 Accepted upgrades: Power +20% ordinary/aerial damage; Vitality +25% max health; Magic Reserve +1 starting charge and capacity; Focus +20% special damage. No duplicates. Effects survive automatic respawns; additional starting magic is awarded once.
 
@@ -282,7 +283,7 @@ Creative choices for owner review: the proposed five enemy designs and arcade/Ch
 
 Before implementation approval, close or explicitly accept:
 - reviewed enemy/audio direction and a production asset plan;
-- optional individual preparation closure before the minigame (the existing host uses a team-wide checkpoint);
+- optional individual preparation timing and closure relative to the 60-second readiness window (the existing host uses a team-wide checkpoint);
 - result/ending payload contract while preserving the requested deferred narrative slots;
 - selected WebSocket hostname/route, account budget, and the network feasibility gate;
 - the consolidated gameplay/engineering defaults in this document.
