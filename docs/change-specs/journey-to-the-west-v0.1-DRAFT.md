@@ -3,7 +3,7 @@
 **Status:** DESIGN; accepted decisions plus explicitly provisional proposals. Not an implementation specification or release.
 **Owner:** William McAda
 **Credit:** A WILLIAM MCADA PRODUCT
-**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 07:55 message on 2026-10-01.
+**Recorded:** 2026-09-30, Asia/Shanghai, through the owner's 08:02 message on 2026-10-01.
 **Canonical repository:** williammcada/Math-Quest---Vault-7-
 **Planning branch:** design/journey-to-the-west-v0.1
 **Host source baseline:** main at 7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28 (merged v0.9.4 candidate).
@@ -52,6 +52,8 @@ Use DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED 
 26. Combat package approved at 22:54: directional movement plus Attack/Jump/Magic; tap or hold normal combos and airborne attacks; arrows/WASD with J/K/L; the five specials summarized below; start with one magic charge, capacity three, one charge per special, with Magic Reserve adding one starting charge and capacity; target four to six uses per attentive player per full run; keep unused magic through respawns without granting new charges; full meters leave pickups for others. Exact damage and timing remain tuning work.
 
 27. Multiplayer session flow approved at 07:55 on 2026-10-01: students independently complete preparation, choose a character and upgrades, and mark Ready; each team launches automatically with a three-second countdown once all participants are ready; teachers may launch the ready subset, pause/resume one team or all teams, or end runs; the shared clock freezes during teacher pauses; no mid-run new players, but a disconnected player may reclaim their hero/state; teams continue while a member is disconnected; an all-team disconnect pauses briefly then ends as interrupted; starting party size fixes scaling; lagging players are warned then safely returned to the shared play area. Exact reconnect/grace intervals remain open.
+
+28. Cartridge team integration clarified by the owner at 08:02 on 2026-10-01: the brawler is a minigame cartridge inside MathQuest. Students join/form teams as they normally do in MathQuest; the same team enters the cartridge. Do not add separate teacher assignment or a second QR/join-code/team-formation flow. Cloudflare is intended to provide the multiplayer backend for the cartridge; integration with existing team identity and results remains to be designed.
 
 ## 3. Hero mechanics — specials approved; ordinary move details and tuning remain open
 
@@ -300,15 +302,20 @@ Recommended classroom behavior:
 The owner approved this classroom flow with "Yes" on 2026-10-01 at 07:55. This approval does not settle the joining interface, exact reconnect/grace intervals, Cloudflare architecture, or classroom privacy and retention details.
 
 
-### Student entry and teacher lobby — proposal awaiting owner review
+### MathQuest team handoff — updated per owner clarification
 
-Proposed flow for an in-person class:
-- Teacher creates the class session and assigns students to teams using the existing MathQuest classroom workflow.
-- Show a short-lived QR code and simple join code on the teacher display. It identifies the game session/team, not the student.
-- Student enters through the assigned team lobby, sees which heroes are claimed, selects an available hero, completes personal preparation, and presses Ready.
-- Teacher view shows team membership using the roster mapping available in the host system, hero selection, preparation/ready state, connection state, and whether each team is active, paused, or complete.
-- Teacher can launch all ready teams or a ready team, pause/resume, and end a run. A team may begin automatically once all its members are ready; the approved three-second countdown remains.
-- Minimize in-game typed student data. Keep identity/results in the existing classroom workflow where possible; exact roster integration, teacher-visible results, session-code lifetime, and data retention need a data-flow design.
-- QR/code expires when the class session closes; avoid reusing it across class periods.
+The Journey to the West brawler is a cartridge inside MathQuest. Students form or join their teams through MathQuest's normal team flow. The existing team proceeds into the cartridge as a group; the cartridge does not create a separate class session, ask the teacher to reassign teams, or issue a second QR/join code.
 
-Next owner question: does the projected QR/join code and teacher-assigned team flow fit your classroom, or should students self-assign to teams after joining?
+For each existing MathQuest team:
+- Carry the current team roster and each member's existing MathQuest participation/preparation context into that team's cartridge instance.
+- Keep the previously approved student choices inside that team: each participating student selects their own unclaimed hero and personal upgrades in the normal cartridge preparation step.
+- Use the existing MathQuest handoff to start the cartridge and return to the host experience when the run ends.
+- Keep each team's combat session separate, with shared enemies, boss health, pickups, progress, and timer for that team.
+- Cloudflare is the proposed multiplayer backend for the cartridge session. Its technical connection to MathQuest team/session identity, reconnect authorization, and the existing result/evidence flow still requires an architecture design.
+- Do not add a separate QR code or duplicate team-formation flow for this cartridge.
+
+Open handoff detail: specify when the end-of-MathQuest condition hands a team into combat, and what happens when one assigned student is absent or not ready. Preserve the existing individual mathematics requirements and do not count cartridge entry as a substitute for them.
+
+The owner's clarification supersedes the preceding separate QR-code/teacher-assigned lobby proposal. Normal MathQuest team formation remains the source of team membership.
+
+Next owner question: when the team reaches the cartridge, should it wait until every assigned member has finished their required MathQuest preparation and is ready, with the teacher able to proceed with the ready students if someone is absent?
