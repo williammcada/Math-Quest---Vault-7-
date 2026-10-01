@@ -1,4 +1,4 @@
-import {CONTROL_PROFILES,controlMarkup,bindGameInput,crispCanvas} from './engine/controls.js?v=0.9.4';
+import {CONTROL_PROFILES,controlMarkup,bindGameInput,crispCanvas} from './engine/controls.js?v=0.9.4-input1';
 import {drawHardware} from './vault-art.js?v=0.9.4';
 import {registerRecord} from './privacy.js?v=0.9.4';
 import { fetchApi } from './hosting.js?v=0.9.4';
@@ -54,7 +54,7 @@ export class StealthRuntime{
   }
   bind(){
     const signal=this.abort.signal;
-    this.inputBinding=bindGameInput(this.root,CONTROL_PROFILES.vault,{signal,onChange:v=>this.input=v,blocked:()=>this.fallback||!this.started||this.blocked()||this.sim.state==='terminal',onPause:()=>{if(this.started&&this.sim.state!=='terminal'){this.localPaused=true;this.showOverlay();if(this.fallback)this.showFallback();this.save();}}});
+    this.inputBinding=bindGameInput(this.root,CONTROL_PROFILES.vault,{signal,onChange:v=>this.input=v,blocked:()=>this.fallback||!this.started||this.blocked()||this.sim.state!=='playing',onPause:()=>{if(this.started&&this.sim.state!=='terminal'){this.localPaused=true;this.showOverlay();if(this.fallback)this.showFallback();this.save();}}});
     const reset=()=>this.inputBinding.clear();this.resetInput=reset;
     window.addEventListener('online',()=>this.flush(),{signal});
     this.root.addEventListener('click',e=>{const action=e.target.closest('[data-run]')?.dataset.run;if(!action)return;
@@ -154,10 +154,10 @@ export class StealthRuntime{
   loop(stamp){
     if(this.destroyed)return;
     if(this.sound&&this.started&&!this.blocked()&&this.sim.state!=='terminal'){if(this.music.paused&&!this.musicPending){this.musicPending=true;this.music.play().catch(()=>{this.sound=false;this.connection.textContent='Tap Music + effects to enable audio.';}).finally(()=>this.musicPending=false);}}else if(!this.music.paused)this.music.pause();
-    const dt=this.lastFrame?Math.min(.1,(stamp-this.lastFrame)/1000):0;this.lastFrame=stamp;
+    this.inputBinding.poll();const dt=this.lastFrame?Math.min(.1,(stamp-this.lastFrame)/1000):0;this.lastFrame=stamp;
     if(this.started&&!this.blocked()&&!this.fallback&&this.sim.state!=='terminal'){
       this.accumulator+=dt;let n=0;while(this.accumulator>=RULES.step&&n<5){this.sim.step(this.input);this.accumulator-=RULES.step;n++;}if(n===5)this.accumulator=0;
-      for(const event of this.sim.events.splice(0)){this.enqueue(event.type,event);this.beep(event.type);}this.showOverlay();
+      for(const event of this.sim.events.splice(0)){if(['detected','respawn','complete'].includes(event.type))this.resetInput();this.enqueue(event.type,event);this.beep(event.type);}this.showOverlay();
     }else this.accumulator=0;
     if(!this.fallback)this.draw();
     if(stamp-this.lastHUD>100){this.updateHUD();this.lastHUD=stamp;}

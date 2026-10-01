@@ -1,0 +1,16 @@
+{
+  "browser": "153.0.8010.0",
+  "delivery": "Standalone file; external requests blocked",
+  "input": "Chromium native touch via CDP plus explicit interruption events",
+  "checks": [
+    "Native touch hold remains active; releasing stops movement without a timeout",
+    "Native multi-touch preserves the remaining finger in both release orders",
+    "Sliding outside neutralizes movement; reentry and touch cancellation work",
+    "HUD long-press does not select text; native-menu event is prevented and safely pauses",
+    "Death, blur, rotation and resume require fresh input and recover normally",
+    "Earlier flight remains intact; new five-minute flight saves and resumes",
+    "Assisted alternative still completes"
+  ],
+  "errors": [],
+  "physicalIOS": "Not run; owner iPhone retest required"
+}

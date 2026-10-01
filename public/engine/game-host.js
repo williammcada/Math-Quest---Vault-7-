@@ -1,4 +1,4 @@
-import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.4';
+import {bindGameInput,controlMarkup,crispCanvas} from './controls.js?v=0.9.4-input1';
 import {registerRecord} from '../privacy.js?v=0.9.4';
 import {GameAudio} from './game-audio.js?v=0.9.4';
 
@@ -67,9 +67,9 @@ export class GameHost {
   }
   finish(){if(this.finished)return;this.finished=true;this.gameAudio.alarm(false);this.clear();this.queue(true);this.showOverlay();}
   tick(now){
-    if(this.dead)return;const dt=Math.min(.1,(now-this.last)/1000);this.last=now;
+    if(this.dead)return;this.inputBinding.poll();const dt=Math.min(.1,(now-this.last)/1000);this.last=now;
     if(this.started&&!this.paused&&!this.localPaused&&!document.hidden&&!globalThis.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches&&!this.s.outcome){
-      if(this.mode==='action'&&this.art){this.accumulator+=dt;while(this.accumulator>=1/60){this.adapter.step(this.s,{...this.input,tank:true},1/60);for(const event of this.s.events)this.beep(event);this.accumulator-=1/60;}}
+      if(this.mode==='action'&&this.art){this.accumulator+=dt;while(this.accumulator>=1/60){this.adapter.step(this.s,{...this.input,tank:true},1/60);for(const event of this.s.events){if(['death','detected','respawn','retry','life_lost'].includes(event.type))this.clear();this.beep(event);}this.accumulator-=1/60;}}
       else if(this.mode==='assisted')this.s.time+=dt;
       this.gameAudio.music(this.adapter.music?.(this.s)||'ambient');
       if(this.s.time>=7195&&!this.s.outcome){this.s.outcome='timed_out';}

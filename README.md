@@ -66,3 +66,9 @@ Substantial MathQuest revisions follow this sequence:
 6. **Verified checkpoint** — preserve the tested candidate.
 7. **Release** — approve the verified checkpoint as a release.
 8. **Deploy** — publish that exact released source.
+
+## Coastal Escape aerial practice v0.2.0
+
+[Play the aerial practice](https://williammcada.github.io/Math-Quest---Vault-7-/aerial-shooter-practice.html) · [Change specification](docs/change-specs/aerial-shooter-v0.2.0.md) · [Verification and limits](docs/releases/aerial-shooter-v0.2.0.md)
+
+Five-minute flight, double regular enemies, +10% player movement, and shared touch-release/native-menu prevention. See root AGENTS.md and handbook U-10 for required shared input checks. Physical iPhone/iPad retesting remains pending.

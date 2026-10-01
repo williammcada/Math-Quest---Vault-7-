@@ -1,0 +1,16 @@
+{
+  "browser": "153.0.8010.0",
+  "environment": "Headless Chromium; simulated phone/tablet viewports. Physical iOS retest pending.",
+  "checks": [
+    "Start, touch movement, 56px D-pad and contained layout at 844x300",
+    "Start, touch movement, 56px D-pad and contained layout at 667x300",
+    "Start, touch movement, 56px D-pad and contained layout at 812x295",
+    "Start, touch movement, 56px D-pad and contained layout at 568x260",
+    "Start, touch movement, 56px D-pad and contained layout at 667x375",
+    "Start, touch movement, 56px D-pad and contained layout at 1024x768",
+    "Portrait-to-landscape unlocks start; return to portrait pauses; resume preserves clock; toolbar resizing remains contained",
+    "Visual viewport resize works independently of window dimensions"
+  ],
+  "errors": [],
+  "external": []
+}
