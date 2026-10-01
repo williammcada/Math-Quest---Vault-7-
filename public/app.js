@@ -1,3 +1,4 @@
+import {IronbreakHost} from './games/shooter/host.js?v=ironbreak-0.1.0';
 import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4';
 import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
 import { hostingFor, fetchApi } from './hosting.js?v=0.9.4';
@@ -360,7 +361,7 @@ function renderTeacher() {
     <div class="dashboard-grid">
       <section class="panel join-panel"><h2>Student access</h2><canvas id="qr" width="180" height="180" aria-label="QR code for the student join link"></canvas><p id="qr-error" class="fine" hidden>QR unavailable—open the link below.</p><div class="url">${escapeHtml(joinUrl)}</div><p>Team codes</p>${state.teams.map(item => `<div class="code-row"><b>${escapeHtml(item.name)}</b><code>${escapeHtml(item.pin)}</code></div>`).join("")}</section>
       <section class="panel controls"><h2>Session controls</h2><button class="primary" data-teacher-command="start" ${state.status !== "setup" || studentCount === 0 || launchPending ? "disabled" : ""}>${launchPending ? "Launching…" : "Launch briefing"}</button><button class="secondary" data-teacher-command="pause" ${state.status !== "active" || busy ? "disabled" : ""}>${state.paused ? "Resume" : "Pause"}</button><button class="secondary" data-teacher-command="report-csv">Download CSV</button><button class="secondary" data-teacher-command="report">Download JSON</button><button class="danger" data-teacher-command="end" ${state.status === "ended" || busy ? "disabled" : ""}>End session</button><p class="launch-status ${launchPending ? "pending" : ""}">${escapeHtml(launchStatus)}</p>${launchPending ? "" : noticeHtml()}<p class="fine">${state.attempts} answer attempts recorded · revision ${state.revision}</p></section>
-      ${state.cartridge.id==='vault-7'?teacherAudio.markup():cartridgeAudio.markup()}
+      ${state.cartridge.id==='vault-7'?teacherAudio.markup():state.cartridge.id==='nightfall'?cartridgeAudio.markup():'<section class="panel"><h2>Ironbreak · v0.1.0 candidate</h2><p>Individual suit runs share one five-minute crew window. Each device has level and boss music controls.</p></section>'}
       <section class="panel teams"><h2>Team progress</h2><div class="teams-grid">${teamCards}</div></section>
     </div>`);
   drawQr(document.querySelector("#qr"), joinUrl);
@@ -497,7 +498,7 @@ function renderStudent() {
     const action=item.stage==='rescue'?item.rescue:item.finale;
     if(!finaleHost){
       app.innerHTML=shell(`<section class="mission-head"><h1>${escapeHtml(presentationFor(state.cartridge.id)?.title||BRAND.name)}</h1></section><div id="finale-root"></div>`,true);
-      finaleHost=new (item.stage==='rescue'?RescueHost:FinaleHost)(document.querySelector('#finale-root'),{run:action.run,route:item.route,deadline:action.deadline,serverNow:action.serverNow,pausedAt:action.pausedAt,paused:state.paused,send:async(type,extra)=>{
+      finaleHost=new (state.cartridge.id==='ironbreak'?IronbreakHost:item.stage==='rescue'?RescueHost:FinaleHost)(document.querySelector('#finale-root'),{run:action.run,route:item.route,deadline:action.deadline,serverNow:action.serverNow,pausedAt:action.pausedAt,paused:state.paused,send:async(type,extra)=>{
         const response=await fetchApi(endpoint('command'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,deviceId,commandId:uid(),...extra})});
         const incoming=await parseResponse(response);if(!state||incoming.revision>=state.revision){state=incoming;if(!['rescue','minigame'].includes(currentTeam()?.stage))render();}return incoming;
       }});

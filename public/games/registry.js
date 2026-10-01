@@ -1,6 +1,8 @@
+import {ironbreakAdapter} from './shooter/adapter.js';
 import {nightfallAdapter} from './nightfall/adapter.js?v=0.9.4';
 // Vault 7 retains its verified runtime. Both games have explicit practice entries.
 export const GAME_REGISTRY=Object.freeze({
+ ironbreak:{adapter:ironbreakAdapter,practice:'./practice-shooter.html'},
  'topdown-combat':{adapter:nightfallAdapter,practice:'./practice-nightfall.html'},
  stealth:{runtime:'./stealth.js',practice:'./dev-extraction.html'}
 });

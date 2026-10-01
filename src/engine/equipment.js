@@ -2,7 +2,7 @@
 import {extendAssignments} from './extensions.js';
 import {cartridgeFor} from '../../public/cartridges.js';
 export const vaultItems=[{id:'scanner',title:'Code Scanner',text:'Restores corrupted cipher information.'},{id:'toolkit',title:'Silent Toolkit',text:'Jam security for three seconds at each checkpoint.'},{id:'cloak',title:'Cloak',text:'Five seconds of stealth, once per run.'}];
-export const equipmentItems=room=>room.state.config.cartridgeId==='nightfall'?cartridgeFor('nightfall').items:vaultItems;
+export const equipmentItems=room=>cartridgeFor(room.state.config.cartridgeId)?.items||vaultItems;
 export const equipmentSlots=t=>Math.min(3,1+(t.equipmentBlocks||[]).length);
 export function equipmentCommand(room,student,input){
  const t=room.teamFor(student),members=room.members(t.id),items=equipmentItems(room),ids=items.map(i=>i.id);
