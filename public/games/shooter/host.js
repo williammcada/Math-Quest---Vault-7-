@@ -6,10 +6,10 @@ import {IRONBREAK,GUIDED} from '../../cartridges/ironbreak.js';
 import {registerRecord} from '../../privacy.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class IronbreakHost{
- constructor(root,{run,deadline,serverNow,pausedAt,paused=false,send}){
-  this.root=root;this.run=run;this.send=send;this.deadline=deadline;this.teacherPaused=paused;this.pausedAt=pausedAt;this.offset=(serverNow||Date.now())-Date.now();this.s=adapter.create(run);this.seq=run.seq;this.paused=true;this.fire=true;this.acc=0;this.last=performance.now();this.lastSend=this.last;this.ac=new AbortController();this.audio=new ShooterAudio();this.key=`mq-ironbreak-${run.runId}`;
-  registerRecord(new URLSearchParams(location.search).get('session'),this.key);
-  try{const p=JSON.parse(localStorage.getItem(this.key));if(p?.attemptId===run.attemptId&&p.seq>run.seq&&run.status!=='terminal'){this.pending=p;this.s=adapter.create({...run,snapshot:p.snapshot});this.seq=p.seq;}}catch{}
+ constructor(root,{run,deadline,serverNow,pausedAt,paused=false,send,recovery=true}){
+  this.root=root;this.recovery=recovery;this.run=run;this.send=send;this.deadline=deadline;this.teacherPaused=paused;this.pausedAt=pausedAt;this.offset=(serverNow||Date.now())-Date.now();this.s=adapter.create(run);this.seq=run.seq;this.paused=true;this.fire=true;this.acc=0;this.last=performance.now();this.lastSend=this.last;this.ac=new AbortController();this.audio=new ShooterAudio();this.key=`mq-ironbreak-${run.runId}`;
+  try{if(this.recovery)registerRecord(new URLSearchParams(location.search).get('session'),this.key);}catch{}
+  try{const p=this.recovery?JSON.parse(localStorage.getItem(this.key)):null;if(p?.attemptId===run.attemptId&&p.seq>run.seq&&run.status!=='terminal'){this.pending=p;this.s=adapter.create({...run,snapshot:p.snapshot});this.seq=p.seq;}}catch{}
   this.render();this.fit();this.frame=requestAnimationFrame(t=>this.tick(t));
  }
  render(){
@@ -27,7 +27,7 @@ export class IronbreakHost{
  fit(){const v=window.visualViewport;this.shell.style.setProperty('--ib-width',`${v?.width||innerWidth}px`);this.shell.style.setProperty('--ib-height',`${v?.height||innerHeight}px`);this.portrait=(v?.height||innerHeight)>(v?.width||innerWidth);this.clear();if(this.portrait)this.pause();else this.overlay();}
  blocked(){return this.dead||this.paused||this.teacherPaused||this.portrait||document.hidden||this.run.status!=='active'||this.s.status!=='active'||this.run.mode!=='action'||!this.ctx||!!this.pending&&this.networkError;}
  toggleFire(){this.fire=!this.fire;this.root.querySelector('[data-fire]').textContent=this.fire?'Fire ON':'Fire OFF';}
- pause(){if(this.dead)return;this.paused=true;this.clear();this.audio.pause(true);this.overlay();}
+ pause(){if(this.dead)return;this.paused=true;this.clear();this.audio.pause(true);this.queue();this.overlay();}
  async audioStart(){try{await this.audio.start();this.audio.pause(this.blocked());}catch{this.status.textContent='Sound unavailable; you can continue.';}}
  async resume(){
   if(this.busy||this.teacherPaused||this.run.status==='terminal')return;
@@ -56,7 +56,7 @@ export class IronbreakHost{
  queue(){
   if(this.pending||this.run.status!=='active'||this.run.mode!=='action')return;
   this.pending={...this.identity(),commandId:crypto.randomUUID(),seq:++this.seq,activeElapsedMs:Math.round(this.s.activeTime*1000),snapshot:adapter.snapshot(this.s)};
-  try{localStorage.setItem(this.key,JSON.stringify(this.pending));}catch{this.status.textContent='Local recovery unavailable. Keep this tab open.';}
+  try{if(this.recovery)localStorage.setItem(this.key,JSON.stringify(this.pending));}catch{this.status.textContent='Local recovery unavailable. Keep this tab open.';}
  }
  async flush(){
   if(this.sending)return false;if(!this.pending)return true;

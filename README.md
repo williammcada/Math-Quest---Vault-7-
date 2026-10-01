@@ -72,3 +72,11 @@ Substantial MathQuest revisions follow this sequence:
 [Play the aerial practice](https://williammcada.github.io/Math-Quest---Vault-7-/aerial-shooter-practice.html) · [Change specification](docs/change-specs/aerial-shooter-v0.2.0.md) · [Verification and limits](docs/releases/aerial-shooter-v0.2.0.md)
 
 Five-minute flight, double regular enemies, +10% player movement, and shared touch-release/native-menu prevention. See root AGENTS.md and handbook U-10 for required shared input checks. Physical iPhone/iPad retesting remains pending.
+
+## Ironbreak v0.1.0 cartridge candidate
+
+New industrial robot cartridge, based on the accepted shooter alpha.2. Source work is on `feature/ironbreak-cartridge-v0.1`; not deployed to the classroom site. Read the [cartridge specification](docs/change-specs/ironbreak-v0.1.0.md) and [candidate verification record](docs/releases/ironbreak-v0.1.0.md).
+
+For a complete offline walkthrough, download `public/Ironbreak-v0.1.0-cartridge-review.html`. It uses one simulated student and sample mathematics; it does not create a real classroom session. `public/Ironbreak-v0.1.0-practice.html` is action-only. Build these with `npm ci` and `npm run build:ironbreak`.
+
+Live deployment requires both this branch's `public/` frontend and `src/` Worker. Keep the existing relay/Pages architecture and existing sessions; do not copy legacy root files over `public/`. Review and device/network gates precede classroom release.

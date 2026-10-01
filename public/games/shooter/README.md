@@ -1,42 +1,26 @@
-# Industrial Shooter — first playable practice candidate
+# Ironbreak v0.1.0 — cartridge candidate
 
-Build: `shooter-0.1.0-alpha.2`. A WILLIAM MCADA PRODUCT.
+A WILLIAM MCADA PRODUCT. The combat/level baseline remains `shooter-0.1.0-alpha.2`; cartridge identity is `ironbreak-0.1.0`.
 
-Entry: `public/practice-shooter.html`. Optional self-contained review package: `public/practice-shooter-standalone.html`. Run `python tools/build_shooter_practice.py` after changing a module or the authored map. Serve `public/` with the existing frontend host or a local static HTTP server. No build framework, account, service, or downloaded dependency is required to play.
+Ironbreak is registered with MathQuest's existing teacher/student session runtime. Its authored story supports 3–5 required gates, a priority vote, earned team equipment, individual three-life action runs, guided tactical play, an authoritative five-minute crew window, and a final vote/epilogue. See `docs/change-specs/ironbreak-v0.1.0.md` for the contract and `docs/releases/ironbreak-v0.1.0.md` for verification limits.
 
-This is a separate practice candidate. It does not connect to rooms, publish student evidence, award live upgrades, or change Vault Seven/Nightfall. It has not been deployed to the existing classroom site. iPhone/iPad Safari and school-network verification remain pending.
+## Review entries
 
-## Implementation
+- `public/Ironbreak-v0.1.0-cartridge-review.html`: self-contained offline story-to-ending review using the actual session engine in memory. One simulated student, one GCF question per required gate, two per optional block. It sends no classroom records; reload/reset discards the review.
+- `public/Ironbreak-v0.1.0-practice.html`: self-contained action-only review with free equipment/checkpoint selection. No math or classroom evidence.
+- `public/practice-shooter.html`: hosted module-based action practice.
+- `public/index.html`: actual multi-student MathQuest frontend. Requires the matching updated Worker to select Ironbreak.
 
-- `world.js`: deterministic semantic export from the authored level, including 24 robots, boss, six hazards, four repair caches and checkpoint geometry. Disabled design proposals are excluded.
-- `simulation.js`: DOM-free fixed-step model. Movement, directional continuous fire, one-way drops, ladders, surface swimming, stationary prone, double jump, warnings, robot/boss attacks, damage protection, pickups, checkpoint resets and three lives.
-- `config.js`: version and proposed numerical tuning. Spread is three rays with one damage per target per volley. Armor is four health. Agility is +10% movement and a second jump.
-- `renderer.js`: original code-drawn pixel graphics following the approved palette and silhouettes. This is initial playable art, not the complete final sprite/animation inventory from the design specification.
-- `input.js`: a sliding eight-sector pointer pad, independent Jump pointer, keyboard parity and cancellation handling. Directions are cleared on pause, blur, visibility loss and orientation changes.
-- `audio.js`: original synthesized level/boss scores and named effects. No copied franchise audio. Warnings have visible counterparts. The audio class is isolated for practice; shared GameAudio and GameHost remain unchanged.
+`public/ironbreak-review.html` and its script are packaging inputs; use the generated single-file cartridge review. Regenerate both self-contained files with `npm ci` then `npm run build:ironbreak`. The pinned esbuild tool is a development dependency already used transitively by the repository; no player-side dependency is added.
 
-The existing shared GameHost assumes tank controls and live result submission. This practice controller is small and independent; it does not duplicate its session/network/persistence code. Live integration still requires the planned adapter, server authority, narrative choice, assisted route and regression checks.
+## Components
 
-## Candidate choices and retained open decisions
+`simulation.js`, `world.js`, `renderer.js`, `config.js`, and `audio.js` retain the accepted alpha.2 level/combat/music bytes. `input.js` is now a shooter profile over `public/engine/held-input.js`. `adapter.js` defines the pure game interface; `host.js` connects it to issued runs, acknowledged snapshots, retry and guided commands. A dedicated host is necessary because the existing hosts hard-code Nightfall/flight assumptions; input ownership remains shared.
 
-The owner's Continue after the delivered map is used to proceed with a reviewable practice implementation. Numerical values and placements remain tuning candidates. No claim is made that unseen design details were individually approved.
+Narrative and guided content: `public/cartridges/ironbreak.js`. Server lifecycle/validation: `src/cartridges/ironbreak/server.js`. Existing equipment, math, privacy, teacher controls and reports remain the host's responsibility. Server validation is an envelope, not authoritative combat replay. Recovery removes transient bullets/effects without restoring health, lives or time. At most the unacknowledged interval may need reconciliation; pending snapshots keep stable command/attempt identities.
 
-Stationary prone works; crawling and its optional roof remain disabled. Checkpoints do not heal on first arrival, matching the map's proposed setting; respawns restore full health. The optional midpoint backtracking door remains disabled. Earlier-section pickups stay collected across later-checkpoint retries, so they cannot be refreshed through backtracking. Boss choreography retains the high/low/overhead sequence. The alpha.2 owner-playtest revision adds double low sweeps and a second separately warned overhead strike below half health; the earlier reversal proposal remains unused.
+Authored-map provenance and complete geometry remain preserved on `design/industrial-shooter-v0.1` at `b67cd57bcaa09c7bb733c91ab8a24f50b2415dde`, under `docs/level-design/shooter-v0.1`. Do not redraw or regenerate that map from chat history.
 
-Practice supports all eight upgrade combinations and three launch positions. Timed practice uses a five-minute wall-clock deadline from Start and three lives; local pause/backgrounding/retry never extends it. Untimed practice retains three lives. A new manually started practice run may reset both, explicitly outside classroom evidence. Live team-window authority is unimplemented and must not be inferred from this local review timer.
+## Release boundary
 
-No run progress or results are persisted. Reload discards the current practice run. Restart identifies this scope and offers cancellation; only the Sound on/off preference is retained locally. No user-data deletion or recovery migrations are needed for this candidate. Exact interrupted-run persistence is still required before live integration.
-
-## Art and sound manifest
-
-Player collider: 20×28 standing, 20×16 crouched, 20×10 prone. Separate drawn body/weapon poses cover idle/run/jump, crouch/prone, climb, swim, damage protection and downed. Robot states expose warning, attack, recovery, hit and destruction. Boss palette is violet/silver/lime, independent of factory orange/steel. Final frame counts, richer animation, arrival/destruction choreography and victory poses remain art-production work.
-
-`SOUND_MANIFEST` in audio.js is the exact event-to-synth mapping, including separate base/spread shots, robot launch/hit/destruction, jump/double-jump/landing/splash, hurt/downed, repair/checkpoint/respawn, hazard warnings/impacts, three boss cues, boss fire/destruction and timeout. `level` and `boss` use separate original sequences and tempos. These synthesized assets need listening/mix review on actual Apple devices.
-
-See `docs/checkpoints/shooter-0.1.0-alpha.2.md` for actual checks and limitations. This candidate is not a classroom-ready or verified release.
-
-## Alpha.2 playtest revision
-
-Owner completed alpha.1 in about two minutes initially and one minute on retry, with a roughly 15-second boss and a stuck D-pad incident. Alpha.2 adds independent release/cancellation recovery, three authored cover obstacles, approach-triggered hazard warnings, more durable later robots and a 180-HP boss with stronger second-phase patterns. Music is unchanged at the owner's instruction. The check record distinguishes scripted timing, emulation and actual phone evidence.
-
-Alpha.2 verification: 32 simulation/interface tests and desktop/phone/tablet Chromium emulation passed. A responsive baseline scripted boss run completed in approximately 30.72 seconds; stationary firing lost before victory. The original physical-phone control incident still needs owner confirmation on this revision. The 16 static map checks pass after the three added cover obstacles. See the alpha.2 check record for exact scope and remaining gates.
+This branch is a cartridge candidate, not a deployed classroom release. Physical iPhone/iPad input, viewport stability and native-menu interference checks remain separate release gates. Hosted frontend/Worker, school-network and classroom concurrency checks remain pending. Existing MathQuest engine version stays v0.9.4; the new cartridge carries its own revision.
