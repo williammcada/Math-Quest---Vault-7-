@@ -1,3 +1,4 @@
+import {COASTAL_ESCAPE,coastalScene} from './cartridges/coastal-escape.js';
 // Trusted content registry. Academic selection belongs to question-provider.js.
 export const NIGHTFALL = {
   id: 'nightfall', title: 'Nightfall: Last Bus Out', revision: 'nightfall-city-5',
@@ -27,10 +28,11 @@ export const NIGHTFALL = {
   },
   assets: { cover:'./assets/nightfall/cover.png', radio:'./assets/nightfall/radio.png', market:'./assets/nightfall/market.png', ending:'./assets/nightfall/ending.png', ambient:'./assets/nightfall/ambient.mp3', finale:'./assets/nightfall/finale.mp3' }
 };
-export const CARTRIDGES = [{id:'vault-7',title:'Vault 7',revision:'vault7-0.9',gameId:'stealth',resolution:{type:'cipher',minigamePlacement:'post_final_decision'},presentation:{emblem:'VII',theme:'vault',cover:'./assets/vault7/scenes/cover.webp',coverAlt:'Vault 7 under a storm-lit mountain',summary:'Science-fiction infiltration · 3–5 gates · cipher finale',stageLabels:{rescue:'First Response',finale:"Asterion's Fate",extraction:'Solo Extraction'},practice:{title:'Vault 7 extraction',href:'./dev-extraction.html'}}}, NIGHTFALL];
+export const CARTRIDGES = [{id:'vault-7',title:'Vault 7',revision:'vault7-0.9',gameId:'stealth',resolution:{type:'cipher',minigamePlacement:'post_final_decision'},presentation:{emblem:'VII',theme:'vault',cover:'./assets/vault7/scenes/cover.webp',coverAlt:'Vault 7 under a storm-lit mountain',summary:'Science-fiction infiltration · 3–5 gates · cipher finale',stageLabels:{rescue:'First Response',finale:"Asterion's Fate",extraction:'Solo Extraction'},practice:{title:'Vault 7 extraction',href:'./dev-extraction.html'}}}, NIGHTFALL, COASTAL_ESCAPE];
 export const cartridgeFor = id => CARTRIDGES.find(c=>c.id===id);
 export function gateNames(c, count) { return [...c.gates.slice(0,2),...c.inserts.slice(0,count-3),c.gates[2]]; }
 export function sceneFor(c, team, names, crew) {
+  if(c.id==='coastal-escape')return coastalScene(c,team,names,crew);
   if(team.extraGate)return {title:'Last Checkpoint',eyebrow:c.title,paragraphs:['Mission control has added a final review check. Complete your newly assigned questions; your crew’s pending decision, equipment and progress are preserved.'],image:c.assets.radio};
   const rescued=team.route==='clinic'?'Imani, the medic':'Tomas, the mechanic';
   const roster=crew.map(s=>s.alias).join(', ');
