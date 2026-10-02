@@ -142,3 +142,7 @@ Release preparation, 1 October: owner requested proceeding with PR #5 and curren
 ## Coastal Escape cartridge v0.3.0 — approved 1 October 2026
 
 See [approved specification](change-specs/coastal-escape-v0.3.0.md). Actual baseline is `6631cda52593fde611a3352489814f7d4bfbe3d3`; handbook `c50115ba1fea9cb552f3ad1415e670a219118b56`. Owner approved fictional Merrow island, operator/records route choice, deliver/exchange/destroy final decisions, Nightfall-style 3–5 math gates, earned team aircraft equipment, one individual five-minute escort and everyone's final vote. Story choices and action outcomes remain independent of academic evidence. Full candidate platform version is v0.9.5, cartridge v0.3.0, unchanged action tuning v0.2.0. Preserve live v0.9.4 frontend until its matching Worker can be deployed. A public owner story preview may ship separately; it produces no classroom evidence.
+
+## Combined cartridges v0.9.6 — 2 October 2026
+
+Owner authorized one combined candidate for Ironbreak and Coastal Escape, preserving main’s False Haven, Nightfall and Vault Seven. See [combined specification](change-specs/combined-cartridges-v0.9.6.md). Canonical combined candidate branch: `release/combined-cartridges-v0.9.6`. Platform identity is v0.9.6; individual game/cartridge revisions remain intact. Publish only the isolated review hub/standalone review ahead of backend deployment. Existing individual-branch deployment instructions are historical; deploy this combined Worker once when ready. No Cloudflare deployment now.
