@@ -1,4 +1,6 @@
 import {validateHaven} from '../false-haven/validation.js';
+
+import {ironbreakCommand,ironbreakProjection,settleIronbreak} from '../ironbreak/server.js';
 import {openRescue,rescueCommand,rescueProjection} from './rescue-server.js';
 import {readyToLeave} from '../../engine/equipment.js';
 import { cartridgeFor, sceneFor } from '../../../public/cartridges.js';
@@ -27,6 +29,7 @@ export function advanceExpansion(room, team) {
   else room.openGate(team,team.gateIndex+1);
 }
 export function settleRuns(room, forceTeam, outcome='teacher_advanced') {
+  if(room.state.config.cartridgeId==='ironbreak')return settleIronbreak(room,forceTeam,outcome);
   let changed=false;
   for(const t of Object.values(room.state.teams)){
     if(t.stage!=='minigame')continue;
@@ -41,6 +44,7 @@ export function settleRuns(room, forceTeam, outcome='teacher_advanced') {
   return changed;
 }
 export function expansionCommand(room, student, input) {
+  if(room.state.config.cartridgeId==='ironbreak')return ironbreakCommand(room,student,input);
   const c=expansionFor(room),t=room.teamFor(student),members=room.members(t.id),type=input.type;
   const respond=()=>{room.bump();return room.snapshot({deviceId:student.id});};
   if(type.startsWith('rescue.')&&c.id!=='nightfall')return fail('This chapter has no early rescue phase.');
@@ -55,7 +59,7 @@ export function expansionCommand(room, student, input) {
     if(!['decision','finale'].includes(t.stage)||!room.isLead(student,t))return fail('Only the current Event Lead can resolve an open choice.');
     const selected=winner(t.stage==='decision'?t.votes:t.finalVotes,members,student.id);
     if(selected===null)return fail('Every crew member must vote first.');
-    if(t.stage==='decision'){t.route=selected;if(c.id==='nightfall'&&room.state.config.engineVersion==='0.9.4')openRescue(room,t);else room.openGate(t,1);}
+    if(t.stage==='decision'){t.route=selected;if(c.id==='nightfall'&&['0.9.4','0.9.5','0.9.6'].includes(room.state.config.engineVersion))openRescue(room,t);else room.openGate(t,1);}
     else{
       t.finalAction=selected;t.stage='victory';t.completedAt=new Date().toISOString();
     }
@@ -137,6 +141,7 @@ export function expansionCommand(room, student, input) {
   return respond();
 }
 export function expansionProjection(room, team, teacher, viewer, base) {
+  if(room.state.config.cartridgeId==='ironbreak')return ironbreakProjection(room,team,teacher,viewer,base);
   const c=expansionFor(room),members=room.members(team.id),mine=viewer?.teamId===team.id;
   const tally=values=>Object.values(values).reduce((r,v)=>(r[v]=(r[v]||0)+1,r),{});
   const runs=team.runs||{};

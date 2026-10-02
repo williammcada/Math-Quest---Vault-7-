@@ -4,29 +4,17 @@
 
 MathQuest is a cartridge-based classroom mathematics game platform. Teachers configure academic content and a shared classroom session; students complete mathematics, team decisions, resource choices, and individual action-game sequences inside cartridge-specific narratives.
 
-The current cartridges are:
-
-* **Vault Seven**
-* **Nightfall: Last Bus Out**
+The combined candidate includes **Vault Seven**, **Nightfall: Last Bus Out**, **False Haven**, **Ironbreak** and **Coastal Escape**.
 
 ## Canonical project status
 
-**Candidate:** MathQuest v0.9.4, branch `release/v0.9.4`. Nightfall First Response inserts a personal rescue/escort between the first team vote and Gate 2. Unlimited retries share one server-controlled five-minute team window.
+**Candidate:** MathQuest v0.9.6, branch `release/combined-cartridges-v0.9.6`. This combines the cartridge work into one frontend and Worker deployment. Cloudflare has not been updated; hosted classroom validation remains pending.
 
-**Starting main source:** merged v0.9.3, `c7ea42d7e54402357b5c56c52c44856666e4c2b9`. Canonical frontend `public/`; session engine `src/`. Both components identify v0.9.4. This feature requires the updated Worker.
+**Review now:** [Open the cartridge review hub](https://williammcada.github.io/Math-Quest---Vault-7-/public/cartridge-review.html). These static previews work independently of the classroom backend. Ironbreak includes offline sample math; Coastal Escape and False Haven previews skip math.
 
-**Existing addresses:** repository `williammcada/Math-Quest---Vault-7-`; Pages `https://williammcada.github.io/Math-Quest---Vault-7-/`; Netlify relay `https://vault7mathquest.netlify.app/api/`. The separate address migration remains inactive.
+See the [combined release report and single Windows deployment handoff](docs/releases/combined-cartridges-v0.9.6.md) and [change specification](docs/change-specs/combined-cartridges-v0.9.6.md). Use **Code → Download ZIP** on the combined branch when ready. Do not deploy separate cartridge branches in succession.
 
-See the [v0.9.4 candidate report](docs/releases/v0.9.4-candidate.md), [change specification](docs/change-specs/v0.9.4.md), and [address migration handoff](docs/migrations/v0.9.3-addresses.md). Earlier candidate reports and specifications remain historical evidence.
-
-## Test/deploy this candidate at the existing addresses
-
-1. Download `release/v0.9.4` from its repository Code page using **Code → Download ZIP**, then extract the full directory.
-2. Finish active classroom sessions. Run `Deploy_Backend_Windows.bat` to check and update the **existing** Cloudflare Worker to v0.9.4. Keep its Worker name, storage binding and migration unchanged. Publishing only the frontend cannot enable First Response.
-3. Publish the frontend through the established Pages process when ready for hosted review. Pages remains `main` and `/ (root)`; root entry points forward into `public/`. Do not copy `public/` over the repository root.
-4. Run `public/connection-test.html`; expect frontend and server v0.9.4. Create fresh teacher/student rooms for the new sequence. Existing v0.9.2 rooms remain compatible and retain their original sequence, without a retroactive rescue insertion.
-5. Open Nightfall practice and select **First Response · five-minute rescue window**, then Clinic or Depot Garage. The practice timer includes delayed Start and local pauses; Restart practice is outside classroom evidence. Later-city equipment/threat/checkpoint controls are disabled for this chapter.
-6. Verify live rescue → Gate 2, pause/reconnect/expiry, later city independence, and both cartridges on target devices. The unchanged Netlify relay needs no upload. No repository/address rename is part of this feature.
+The canonical frontend remains `public/`; session engine remains `src/`. Existing Pages and relay addresses remain unchanged. Earlier candidate reports are historical; the separate [address migration](docs/migrations/v0.9.3-addresses.md) remains inactive.
 
 ## Architecture
 
@@ -72,6 +60,16 @@ Substantial MathQuest revisions follow this sequence:
 [Play the aerial practice](https://williammcada.github.io/Math-Quest---Vault-7-/aerial-shooter-practice.html) · [Change specification](docs/change-specs/aerial-shooter-v0.2.0.md) · [Verification and limits](docs/releases/aerial-shooter-v0.2.0.md)
 
 Five-minute flight, double regular enemies, +10% player movement, and shared touch-release/native-menu prevention. See root AGENTS.md and handbook U-10 for required shared input checks. Physical iPhone/iPad retesting remains pending.
+
+## Ironbreak v0.1.0 cartridge candidate
+
+New industrial robot cartridge, based on the accepted shooter alpha.2. Source work is on `feature/ironbreak-cartridge-v0.1`; not deployed to the classroom site. Read the [cartridge specification](docs/change-specs/ironbreak-v0.1.0.md) and [candidate verification record](docs/releases/ironbreak-v0.1.0.md).
+
+For a complete offline walkthrough, download `public/Ironbreak-v0.1.0-cartridge-review.html`. It uses one simulated student and sample mathematics; it does not create a real classroom session. `public/Ironbreak-v0.1.0-practice.html` is action-only. Build these with `npm ci` and `npm run build:ironbreak`.
+
+Live deployment requires both this branch's `public/` frontend and `src/` Worker. Keep the existing relay/Pages architecture and existing sessions; do not copy legacy root files over `public/`. Review and device/network gates precede classroom release.
+
+Release preparation: [coordinated deployment handoff](docs/releases/ironbreak-v0.1.0-deployment.md). Keep the frontend unpublished until the matching Worker has been deployed and checked.
 
 ## Coastal Escape cartridge candidate
 
