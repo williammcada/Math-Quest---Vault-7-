@@ -12,7 +12,7 @@ export class JourneyRenderer {
   sprite(img,frame,x,y,size,facing=1,alpha=1,bounds=null){if(!img||!img.complete||!img.naturalWidth)return;
     const c=this.ctx;c.save();c.globalAlpha=alpha;c.translate(Math.round(x),Math.round(y));c.scale(facing,1);
     // Cells retain padding and a common foot anchor. No baked scene or hitbox.
-    const source=bounds?.source||[(frame%6)*SOURCE,Math.floor(frame/6)*SOURCE,SOURCE,SOURCE],pivot=bounds?.pivot||[128,245.76],scale=size/SOURCE;
+    const source=bounds?.source||[(frame%6)*SOURCE,Math.floor(frame/6)*SOURCE,SOURCE,SOURCE],pivot=bounds?.pivot||[128,245.76],scale=size/SOURCE*(bounds?.scale??1);
     c.drawImage(img,...source,-pivot[0]*scale,-pivot[1]*scale,source[2]*scale,source[3]*scale);c.restore();}
   draw(now=performance.now()){
     const canvas=this.canvas,c=this.ctx,s=this.snapshot;if(!c)return;
