@@ -25,7 +25,7 @@ export class GameHost {
     on(this.root.querySelector('[data-reset]'),'click',()=>this.clear());
     on(this.root.querySelector('[data-pause]'),'click',()=>{this.help=false;this.localPaused=!this.localPaused;this.gameAudio.pause(this.localPaused||this.paused);this.clear();this.showOverlay();});
     on(this.root.querySelector('[data-sound]'),'click',async e=>{try{await this.gameAudio.toggle();this.sound=this.gameAudio.enabled;e.target.textContent=this.sound?'Sound on':'Sound off';if(this.sound)this.beep('key');}catch{this.status.textContent='Sound unavailable; the mission can continue.';}});
-    on(this.root.querySelector('[data-assist]'),'click',async()=>{if(this.s.outcome)return;this.clear();if(this.started&&!this.practice){const result=await this.transmit('minigame.assist');if(!result)return;}this.mode='assisted';this.s.mode=this.mode;this.root.classList.remove('mq-focus');this.persist();this.showOverlay();});
+    on(this.root.querySelector('[data-assist]'),'click',async()=>{if(this.s.outcome)return;this.clear();if(this.started&&!this.practice){const result=await this.transmit('minigame.assist');if(!result)return;}this.mode='assisted';this.s.mode=this.mode;this.gameAudio.pause(true);this.root.classList.remove('mq-focus');this.persist();this.showOverlay();});
     this.root.querySelector('[data-restart]')?.addEventListener('click',()=>document.querySelector('#restart')?.click(),{signal:this.ac.signal});
     this.showOverlay();
   }
