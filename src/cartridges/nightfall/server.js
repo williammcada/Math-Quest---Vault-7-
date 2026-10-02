@@ -1,3 +1,4 @@
+import {validateBlackline} from '../blackline/validation.js';
 import {validateHaven} from '../false-haven/validation.js';
 import {openRescue,rescueCommand,rescueProjection} from './rescue-server.js';
 import {readyToLeave} from '../../engine/equipment.js';
@@ -94,7 +95,8 @@ export function expansionCommand(room, student, input) {
       if(!Number.isInteger(input.seq)||input.seq<=r.seq)return fail('Stale run update.');
       if(!input.snapshot||typeof input.snapshot!=='object')return fail('A run snapshot is required.');
       if(JSON.stringify(input.snapshot).length>60000)return fail('Run snapshot is too large.');
-      if(c.id==='nightfall-false-haven'){const error=validateHaven(r,input);if(error)return fail(error);}
+      if(c.id==='blackline'){const error=validateBlackline(r,input);if(error)return fail(error);}
+      else if(c.id==='nightfall-false-haven'){const error=validateHaven(r,input);if(error)return fail(error);}
       else if(input.snapshot){
         const s=input.snapshot,old=r.snapshot;
         if(s.threat!==r.threat)return fail('Threat conditions cannot change during a run.');
@@ -124,7 +126,7 @@ export function expansionCommand(room, student, input) {
         for(const [field,max] of [['health',3],['ammo',r.loadout.includes('ammo-pouch')?84:60],['vest',vest],['medkit',medkit]])if(!Number.isInteger(s[field]*(field==='health'?2:1))||s[field]<0||s[field]>max)return fail('Invalid equipment or health state.');
         if(s.damage!==(r.loadout.includes('carbine')?2:1)||old&&(s.vest>old.vest||s.medkit>old.medkit))return fail('Equipment cannot recharge during a run.');
       }
-      if(c.id!=='nightfall-false-haven'&&type==='minigame.complete'&&!['success','lost','setback','timed_out'].includes(input.outcome))return fail('Invalid finale outcome.');
+      if(!['nightfall-false-haven','blackline'].includes(c.id)&&type==='minigame.complete'&&!['success','lost','setback','timed_out'].includes(input.outcome))return fail('Invalid finale outcome.');
       r.seq=input.seq;r.activeElapsedMs=elapsed;
       if(input.snapshot)r.snapshot=input.snapshot;
       if(type==='minigame.complete'){

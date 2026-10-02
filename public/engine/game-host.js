@@ -5,9 +5,9 @@ import {GameAudio} from './game-audio.js?v=0.9.4';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class GameHost {
   constructor(root,{adapter,items=[],run,route,deadline,send,practice=false,paused=false,serverNow,pausedAt}){
-    this.adapter=adapter;this.items=items;this.art=null;this.gameAudio=new GameAudio(this.adapter.media);this.root=root;this.run=run;this.send=send;this.practice=practice;this.deadline=deadline;this.clockOffset=Number.isFinite(serverNow)?serverNow-Date.now():0;this.pauseClock=pausedAt;this.paused=paused;this.input={tank:true};this.localPaused=false;this.mode=run.mode||'action';this.started=run.status==='active';this.seq=run.seq||0;this.pending=null;this.sending=false;this.lastSent=0;this.dead=false;this.ac=new AbortController();
-    registerRecord(new URLSearchParams(globalThis.location?.search||'').get('session'),`mq-v09-finale-${run.runId}`);
-    let saved;try{saved=JSON.parse(localStorage.getItem(`mq-v09-finale-${run.runId}`));}catch{}
+    this.adapter=adapter;this.items=items;this.art=null;this.gameAudio=this.adapter.createAudio?.()||new GameAudio(this.adapter.media);this.root=root;this.run=run;this.send=send;this.practice=practice;this.deadline=deadline;this.clockOffset=Number.isFinite(serverNow)?serverNow-Date.now():0;this.pauseClock=pausedAt;this.paused=paused;this.input={tank:true};this.localPaused=false;this.mode=run.mode||'action';this.started=run.status==='active';this.seq=run.seq||0;this.pending=null;this.sending=false;this.lastSent=0;this.dead=false;this.ac=new AbortController();
+    if(!this.practice)registerRecord(new URLSearchParams(globalThis.location?.search||'').get('session'),`mq-v09-finale-${run.runId}`);
+    let saved;try{if(!this.practice)saved=JSON.parse(localStorage.getItem(`mq-v09-finale-${run.runId}`));}catch{}
     if(this.adapter.commandPrefix==='rescue'&&saved?.attemptId!==run.attemptId)saved=null;
     if(saved?.seq>=this.seq){this.seq=saved.seq;this.mode=saved.mode||this.mode;}
     this.s=this.adapter.create({...run,mode:this.mode,route,snapshot:saved?.seq>=run.seq?saved.snapshot:run.snapshot});
@@ -15,6 +15,7 @@ export class GameHost {
   }
   render(){
     this.root.innerHTML=`<section class="nf-game"><div class="mq-rotate" role="status">Rotate your phone to landscape to play. Your run is paused.</div><div class="nf-toolbar"><b>${esc(this.adapter.title)}</b><button data-view>Expand game</button><button data-pause>Pause</button><button data-help>Controls</button><button data-map>Map</button><button data-sound>Sound off</button><button data-assist>Assisted route</button><button data-reset>Reset controls</button>${this.practice?'<button data-restart>Restart practice</button>':''}</div><p class="nf-equipment">${this.run.loadout.length?this.run.loadout.map(id=>esc(this.items.find(i=>i.id===id)?.title||id)).join(' + '):esc(this.adapter.kitText||'Standard kit: 12 rounds, 3 health')}</p><div class="nf-screen"><canvas width="640" height="360" aria-label="${esc(this.adapter.canvasLabel)}"></canvas><div class="nf-overlay"></div></div><div class="nf-hud" aria-live="off"></div><p class="mq-objective"></p>${controlMarkup(this.adapter.controlProfile)}<p class="nf-status" role="status"></p></section>`;
+    if(this.adapter.id==='blackline-racer')this.root.querySelector('[data-map]').hidden=true;
     this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d');if(!this.ctx)this.mode='assisted';this.overlay=this.root.querySelector('.nf-overlay');this.hud=this.root.querySelector('.nf-hud');this.status=this.root.querySelector('.nf-status');
     const on=(el,event,fn)=>el.addEventListener(event,fn,{signal:this.ac.signal});
     this.inputBinding=bindGameInput(this.root,this.adapter.controlProfile,{signal:this.ac.signal,onChange:value=>this.input=value,blocked:()=>!this.started||this.localPaused||this.paused||!!this.s.outcome||!!this.s.dialogue,onPause:()=>{this.localPaused=true;this.gameAudio.pause(true);this.persist();this.showOverlay();},onMap:()=>this.s.map=!this.s.map});
@@ -72,6 +73,7 @@ export class GameHost {
       if(this.mode==='action'&&this.art){this.accumulator+=dt;while(this.accumulator>=1/60){this.adapter.step(this.s,{...this.input,tank:true},1/60);for(const event of this.s.events){if(['death','detected','respawn','retry','life_lost'].includes(event.type))this.clear();this.beep(event);}this.accumulator-=1/60;}}
       else if(this.mode==='assisted')this.s.time+=dt;
       this.gameAudio.music(this.adapter.music?.(this.s)||'ambient');
+      if(this.mode==='action')this.gameAudio.update?.(this.s);
       if(this.adapter.activeLimitSeconds)this.s.time=Math.min(this.s.time,this.adapter.activeLimitSeconds);
       if(this.s.time>=(this.adapter.activeLimitSeconds||7195)&&!this.s.outcome)this.s.outcome='timed_out';
       if(this.s.outcome)this.finish();

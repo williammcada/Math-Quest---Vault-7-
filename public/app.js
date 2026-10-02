@@ -5,10 +5,10 @@ import { CATALOG } from './catalog.js?v=0.9.4';
 import { StealthRuntime } from './stealth.js?v=0.9.4';
 import { SceneAssets } from './vault7-assets.js?v=0.9.4';
 import { TeacherAudio } from './teacher-audio.js?v=0.9.4';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4-fh2';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-fh2';
-import { FinaleHost } from './finale-host.js?v=0.9.4-fh2';
-import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4-bl2';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-bl2';
+import { FinaleHost } from './finale-host.js?v=0.9.4-bl2';
+import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4-bl2';
 import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.4';
 import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.4-fh2';
 import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.4';
@@ -360,7 +360,7 @@ function renderTeacher() {
     <div class="dashboard-grid">
       <section class="panel join-panel"><h2>Student access</h2><canvas id="qr" width="180" height="180" aria-label="QR code for the student join link"></canvas><p id="qr-error" class="fine" hidden>QR unavailable—open the link below.</p><div class="url">${escapeHtml(joinUrl)}</div><p>Team codes</p>${state.teams.map(item => `<div class="code-row"><b>${escapeHtml(item.name)}</b><code>${escapeHtml(item.pin)}</code></div>`).join("")}</section>
       <section class="panel controls"><h2>Session controls</h2><button class="primary" data-teacher-command="start" ${state.status !== "setup" || studentCount === 0 || launchPending ? "disabled" : ""}>${launchPending ? "Launching…" : "Launch briefing"}</button><button class="secondary" data-teacher-command="pause" ${state.status !== "active" || busy ? "disabled" : ""}>${state.paused ? "Resume" : "Pause"}</button><button class="secondary" data-teacher-command="report-csv">Download CSV</button><button class="secondary" data-teacher-command="report">Download JSON</button><button class="danger" data-teacher-command="end" ${state.status === "ended" || busy ? "disabled" : ""}>End session</button><p class="launch-status ${launchPending ? "pending" : ""}">${escapeHtml(launchStatus)}</p>${launchPending ? "" : noticeHtml()}<p class="fine">${state.attempts} answer attempts recorded · revision ${state.revision}</p></section>
-      ${state.cartridge.id==='vault-7'?teacherAudio.markup():cartridgeAudio.markup()}
+      ${state.cartridge.id==='vault-7'?teacherAudio.markup():cartridgeAudio.markup(state.cartridge.id)}
       <section class="panel teams"><h2>Team progress</h2><div class="teams-grid">${teamCards}</div></section>
     </div>`);
   drawQr(document.querySelector("#qr"), joinUrl);
