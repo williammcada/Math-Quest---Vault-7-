@@ -1,4 +1,4 @@
-export const JOURNEY_BUILD = 'jttw-0.1.0-stage1';
+export const JOURNEY_BUILD = 'jttw-0.1.0-stage5-combat';
 export const PROTOCOL = 'jttw-combat/1';
 export const HEROES = [
   {id:'wukong',name:'Sun Wukong',color:'#f4b94e',special:'Monkey Swarm'},

@@ -1,4 +1,5 @@
 import {HEROES,UPGRADES,LIMITS,ARENA,JOURNEY_BUILD,PROTOCOL} from '../../../public/games/journey/config.js';
+import {startLevel,levelStep,enemyStep,projectileStep,damageEnemy} from './encounters.js';
 
 const copy = value => structuredClone(value);
 const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
@@ -61,11 +62,7 @@ export class BrawlModel {
     if(message.jump&&p.jumpMs<=0&&!p.horseMs){p.jumpMs=700;p.aerialUsed=false;p.action='jump';this.event('jump',{playerId:id});}
     if(message.magic)this.special(p);
   }
-  startScene(){this.s.phase='running';const n=this.s.starters.length;
-    // Stage 1 is the integration/animation scene, not the authored full level.
-    this.s.enemies=Array.from({length:n+1},(_,i)=>({id:'raider-'+i,kind:'raider',x:560+i*60,y:245+(i%3)*45,hp:70,maxHp:70,phase:'walk',timer:600+i*220,facing:-1,hurt:0}));
-    this.s.props=Array.from({length:n},(_,i)=>({id:'crate-'+i,x:330+i*80,y:345,hp:16}));
-    this.s.pickups=Array.from({length:n},(_,i)=>({id:'magic-'+i,kind:'magic',x:400+i*45,y:245,taken:false}));
+  startScene(){this.s.phase='running';startLevel(this);
     this.event('start');this.changed(true);}
   advance(now){if(!Number.isFinite(now))failure('Invalid server time.');let remaining=Math.max(0,now-this.s.lastAt);this.s.lastAt=Math.max(this.s.lastAt,now);
     if(this.s.phase==='terminal')return;if(now>=this.s.expiresAt){this.finish('interrupted','session_expired');return;}if(this.paused)return;
@@ -84,6 +81,7 @@ export class BrawlModel {
     this.changed();
   }
   simulate(dt,wallNow){const seconds=dt/1000;
+    levelStep(this,dt);
     const players=this.s.starters.map(id=>this.player(id));
     for(const p of players){
       for(const k of ['actionMs','attackCooldown','jumpMs','protectionMs','hurtMs','shieldMs'])p[k]=Math.max(0,p[k]-dt);
@@ -99,31 +97,26 @@ export class BrawlModel {
       if(!p.actionMs&&!p.horseMs)p.action=p.jumpMs?'jump':len&& (p.input.x||p.input.y)?'walk':'idle';
       if(!p.horseMs&&p.input.attack&&p.attackCooldown<=0&&p.actionMs<=0){if(p.jumpMs){if(!p.aerialUsed){p.aerialUsed=true;this.attack(p,14);}}else{const values=p.hero==='bajie'?[14,24]:p.hero==='wujing'?[10,10,12]:p.hero==='prince'?[7,9,14]:[8,8,14];this.attack(p,values[p.combo%values.length]);p.combo++;}}
       for(const item of this.s.pickups){if(item.taken||Math.hypot(p.x-item.x,(p.y-item.y)*2)>28)continue;
-        if(item.kind==='magic'&&p.magic<p.capacity){p.magic++;item.taken=true;this.event('pickup',{playerId:p.id});this.changed(true);}}
+        if(item.kind==='magic'&&p.magic<p.capacity){p.magic++;item.taken=true;this.event('pickup',{playerId:p.id});this.changed(true);}
+        else if(item.kind==='health'&&p.hp<p.maxHp){p.hp=Math.min(p.maxHp,p.hp+25);item.taken=true;this.event('pickup',{playerId:p.id,kind:'health'});this.changed(true);}}
     }
     const targets=players.filter(p=>p.lives>0&&!p.respawnMs&&(p.connected&&p.available||wallNow-(p.disconnectedAt??0)<LIMITS.withdraw));
-    for(const e of this.s.enemies){if(e.hp<=0){e.phase='down';continue;}e.hurt=Math.max(0,e.hurt-dt);if(!targets.length)continue;
-      const p=targets.reduce((a,b)=>Math.hypot(b.x-e.x,b.y-e.y)<Math.hypot(a.x-e.x,a.y-e.y)?b:a);
-      e.facing=p.x<e.x?-1:1;e.timer-=dt;
-      if(e.phase==='windup'&&e.timer<=0){e.phase='attack';e.timer=250;for(const target of targets)if(Math.abs(target.x-e.x)<65&&Math.abs(target.y-e.y)<26&&(!target.jumpMs||target.jumpMs<110))this.hurt(target,12);this.event('enemyAttack',{enemyId:e.id});}
-      else if(e.phase==='attack'&&e.timer<=0){e.phase='recover';e.timer=650;}
-      else if(e.phase==='recover'&&e.timer<=0){e.phase='walk';e.timer=0;}
-      else if(e.phase==='walk'&&!e.hurt){const dx=p.x-e.x,dy=p.y-e.y,dist=Math.hypot(dx,dy)||1;
-        if(Math.abs(dx)<56&&Math.abs(dy)<22){e.phase='windup';e.timer=650;}
-        else{e.x+=dx/dist*65*seconds;e.y=clamp(e.y+dy/dist*50*seconds,ARENA.far,ARENA.near);}}
-    }
-    if(players.every(p=>p.lives===0))this.finish('defeat','all_lives_lost');
+    for(const e of this.s.enemies)enemyStep(this,e,dt,targets);
+    projectileStep(this,dt,targets);
+    // Resolve a simultaneous pre-deadline boss/last-player death as victory.
+    if(this.s.level?.stage===4&&this.s.enemies.some(e=>e.kind==='nezha'&&e.hp<=0))this.finish('victory','nezha_defeated');
+    else if(players.every(p=>p.lives===0))this.finish('defeat','all_lives_lost');
   }
   attack(p,damage){p.action=p.jumpMs?'air':'attack';p.actionMs=320;p.attackCooldown=p.hero==='bajie'?700:400;const power=p.upgrades.includes('power')?1.2:1;
     this.event('attack',{playerId:p.id});
-    for(const e of this.s.enemies)if(e.hp>0&&(e.x-p.x)*p.facing>=-18&&Math.abs(e.x-p.x)<(p.hero==='tang'?200:95)&&Math.abs(e.y-p.y)<30){e.hp=Math.max(0,e.hp-damage*power);e.hurt=180;this.event('hit',{enemyId:e.id});}
-    for(const prop of this.s.props)if(prop.hp>0&&Math.abs(prop.x-p.x)<95&&Math.abs(prop.y-p.y)<35){prop.hp-=damage*power;if(prop.hp<=0){this.s.pickups.push({id:prop.id+'-magic',kind:'magic',x:prop.x,y:prop.y,taken:false});this.event('break');this.changed(true);}}
+    for(const e of this.s.enemies)if(e.hp>0&&(e.x-p.x)*p.facing>=-18&&Math.abs(e.x-p.x)<(p.hero==='tang'?200:95)&&Math.abs(e.y-p.y)<30)damageEnemy(this,e,damage*power,p);
+    for(const prop of this.s.props)if(prop.hp>0&&Math.abs(prop.x-p.x)<95&&Math.abs(prop.y-p.y)<35){prop.hp-=damage*power;if(prop.hp<=0){const id=prop.pickupId||prop.id+'-magic';if(!this.s.pickups.some(x=>x.id===id))this.s.pickups.push({id,kind:'magic',x:prop.x,y:prop.y,taken:false});this.event('break');this.changed(true);}}
   }
   special(p){if(p.magic<=0||p.horseMs>0||p.actionMs>0||p.respawnMs>0||p.lives<=0)return;p.magic--;p.action='special';p.actionMs=700;
     if(p.hero==='prince'){p.horseMs=3600;p.horseHits={};p.horseImpactMs=0;p.horseTurnMs=0;p.jumpMs=0;p.action='horse-transform';p.actionMs=3600;this.event('special',{playerId:p.id,hero:p.hero});this.changed(true);return;}
     const amount={wukong:72,bajie:60,wujing:54,tang:40,prince:60}[p.hero]*(p.upgrades.includes('focus')?1.2:1);
     // Stage-1 special is an authority/effect sample. Full move timing is stage 2.
-    for(const e of this.s.enemies)if(e.hp>0&&Math.abs(e.x-p.x)<200&&Math.abs(e.y-p.y)<80)e.hp=Math.max(0,e.hp-amount);
+    for(const e of this.s.enemies)if(e.hp>0&&Math.abs(e.x-p.x)<200&&Math.abs(e.y-p.y)<80)damageEnemy(this,e,amount,p,true);
     if(p.hero==='tang')for(const id of this.s.starters){const ally=this.player(id);if(ally.lives>0&&Math.hypot(p.x-ally.x,p.y-ally.y)<200){ally.shield=Math.max(ally.shield,20);if(!ally.shieldMs)ally.shieldMs=2000;}}
     this.event('special',{playerId:p.id,hero:p.hero});this.changed(true);}
   horseStep(p,dt){
@@ -135,16 +128,17 @@ export class BrawlModel {
     if(p.hurtMs>0||!(p.input.x||p.input.y)||before<=300)return;
     for(const e of this.s.enemies){if(e.hp<=0||Math.abs(e.x-p.x)>58||Math.abs(e.y-p.y)>26)continue;
       const hit=p.horseHits[e.id];if(hit&&(hit.count>=2||this.s.activeMs-hit.at<600))continue;
-      e.hp=Math.max(0,e.hp-30*(p.upgrades.includes('focus')?1.2:1));e.hurt=180;p.horseHits[e.id]={count:(hit?.count||0)+1,at:this.s.activeMs};p.horseImpactMs=140;p.action='horse-impact';this.event('hit',{enemyId:e.id,playerId:p.id});
+      if(e.phase==='entrance')continue;
+      damageEnemy(this,e,30*(p.upgrades.includes('focus')?1.2:1),p,true);p.horseHits[e.id]={count:(hit?.count||0)+1,at:this.s.activeMs};p.horseImpactMs=140;p.action='horse-impact';
     }
   }
   hurt(p,amount){if(p.hp<=0||p.hurtMs>0||p.protectionMs>0||p.respawnMs>0)return;
     const absorbed=Math.min(p.shield,amount);p.shield-=absorbed;p.hp=Math.max(0,p.hp-(amount-absorbed));p.hurtMs=LIMITS.hurt;p.action='hurt';p.actionMs=260;this.event('hurt',{playerId:p.id});
     if(p.hp===0){p.horseMs=0;p.horseHits={};p.horseImpactMs=0;p.horseTurnMs=0;p.actionMs=0;p.lives--;p.input=neutral();p.action='down';p.respawnMs=p.lives>0?LIMITS.respawn:0;this.changed(true);}}
   finish(outcome,reason){if(this.s.result)return this.s.result;this.s.phase='terminal';for(const p of Object.values(this.s.players))p.input=neutral();
-    this.s.result={runId:this.s.runId,teamId:this.s.teamId,build:JOURNEY_BUILD,protocol:PROTOCOL,outcome,reason,activeElapsedMs:Math.round(this.s.activeMs),bossDefeated:outcome==='victory',sample:true,
+    this.s.result={runId:this.s.runId,teamId:this.s.teamId,build:JOURNEY_BUILD,protocol:PROTOCOL,outcome,reason,activeElapsedMs:Math.round(this.s.activeMs),bossDefeated:reason==='nezha_defeated',sample:true,encounterStage:this.s.level?.stage??null,
       players:Object.values(this.s.players).map(p=>({studentId:p.id,hero:p.hero,upgrades:[...p.upgrades],participation:!p.started?'not_started':p.lives<=0?'spectated':p.connected?'active':'disconnected',livesUsed:p.started?3-p.lives:0,activeElapsedMs:Math.round(p.activeMs)}))};
     this.event('result',{outcome,reason});this.changed(true);return this.s.result;}
   snapshot(now=Date.now()){const s=this.s;return {runId:s.runId,build:s.build,protocol:s.protocol,teamId:s.teamId,phase:s.phase,serverNow:now,paused:this.paused,pauses:[...s.pauses],readyMs:s.readyMs,launchMs:s.launchMs,activeMs:s.activeMs,recoveryMs:s.recoveryMs,revision:s.revision,starters:[...s.starters],
-    players:Object.values(s.players).map(({input,lastInput,seq,disconnectedAt,...p})=>({...copy(p),visible:!p.started||p.connected&&p.available||now-(disconnectedAt??0)<LIMITS.withdraw})),enemies:copy(s.enemies),props:copy(s.props),pickups:copy(s.pickups),events:copy(s.events),result:copy(s.result)};}
+    players:Object.values(s.players).map(({input,lastInput,seq,disconnectedAt,...p})=>({...copy(p),visible:!p.started||p.connected&&p.available||now-(disconnectedAt??0)<LIMITS.withdraw})),level:s.level?{stage:s.level.stage,name:s.level.name,bossWarning:s.level.bossWarning}:null,projectiles:copy(s.projectiles||[]),enemies:copy(s.enemies),props:copy(s.props),pickups:copy(s.pickups),events:copy(s.events),result:copy(s.result)};}
 }

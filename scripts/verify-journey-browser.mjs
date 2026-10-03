@@ -9,6 +9,7 @@ import {spawn} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
 import {BrawlRun} from '../src/cartridges/journey/durable-object.js';
+import {enterStage,levelStep} from '../src/cartridges/journey/encounters.js';
 
 const wsModule=await import(pathToFileURL(process.env.JOURNEY_WS_PACKAGE));
 const WebSocketServer=wsModule.WebSocketServer || wsModule.default.WebSocketServer || wsModule.default.Server;
@@ -65,6 +66,24 @@ try{
  await post('/control',{action:'pause',paused:false});await until(()=>evaluate(s,'!host.snap.paused'),'teacher resume');
  await evaluate(s,'host.socket.close()');await until(()=>evaluate(s,'host.connected && host.epoch===2'),'reconnect');assert.equal(run.sockets.size,5);
  await until(()=>evaluate(s,'host.renderer.images.hero.complete && host.renderer.images.hero.naturalWidth>0'),'artwork');
+ // Controlled stage fixtures exercise production transport and rendering, not balance.
+ const stageChecks=[];
+ await call('Emulation.setDeviceMetricsOverride',{width:1024,height:768,deviceScaleFactor:1,mobile:false},s);
+ for(let stage=0;stage<5;stage++){
+  await run.enqueue(async()=>{
+   for(const p of Object.values(run.model.s.players))p.protectionMs=1e6;
+   if(stage)enterStage(run.model,stage);
+   for(let i=0;i<8;i++)levelStep(run.model,900);
+   if(stage===4){const e=run.model.s.enemies[0];e.phase='windup';e.move='rush';e.timer=900;e.laneY=e.y;e.aim={x:200,y:e.y};}
+   await run.after(true);
+  });
+  await until(async()=> (await Promise.all(clients.map(s=>evaluate(s,`host.snap?.level?.stage===${stage}`)))).every(Boolean),'stage '+stage+' synchronized');
+  await evaluate(s,'new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false},s);
+  await fs.writeFile(`docs/verification/journey-stage5-scene-${stage}.png`,Buffer.from(shot.data,'base64'));
+  stageChecks.push({stage,clients:5,enemies:run.model.s.enemies.length});
+ }
+ console.log(JSON.stringify({stageChecks,fixtureOnly:true}));
  const layouts=[];
  for(const [width,height] of [[844,390],[667,375],[568,320],[390,844],[1024,768]]){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true},s);
@@ -74,7 +93,7 @@ try{
   for(const r of geometry.controls){assert.ok(r.x>=0&&r.y>=0&&r.right<=width+1&&r.bottom<=height+1,JSON.stringify({width,height,r}));assert.ok(r.width>=44&&r.height>=44);}
   for(let i=0;i<geometry.controls.length;i++)for(let j=i+1;j<geometry.controls.length;j++){const a=geometry.controls[i],b=geometry.controls[j];assert.ok(a.right<=b.x||b.right<=a.x||a.bottom<=b.y||b.bottom<=a.y,'Controls overlap: '+JSON.stringify({width,height,i,j}));}
   assert.ok(geometry.stage.height>=80,JSON.stringify(geometry));assert.ok(geometry.stage.bottom<=geometry.controls[0].y+1);assert.equal(geometry.canvasFit,'contain');assert.equal(geometry.keys.x,0);
-  const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false},s);await fs.mkdir('docs/verification',{recursive:true});await fs.writeFile(`docs/verification/journey-landscape-${width}x${height}.png`,Buffer.from(shot.data,'base64'));
+  const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false},s);await fs.mkdir('docs/verification',{recursive:true});await fs.writeFile(`docs/verification/journey-stage5-landscape-${width}x${height}.png`,Buffer.from(shot.data,'base64'));
   layouts.push({width,height,battlefieldHeight:geometry.stage.height});
  }
  // Actual browser touch dispatch uses the rendered hit areas after resize.
