@@ -1,12 +1,12 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.6 — Journey to the West design intake on its planning branch
+**Brief version:** 0.7 — Journey authored combat checkpoint
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** v0.9.4 remains the host source candidate. Journey to the West stage-1 implementation was authorized at 09:00 on 2026-10-01 and is isolated on `implement/journey-to-the-west-v0.1-stage1`; no deployment. Historical release observations below retain their original dates.
-**Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, current planning on `design/journey-to-the-west-v0.1`.  
-**Current source baseline:** main inspected on 2026-10-01 at `7ac12fb98f7ccda591be4ee0bd6baa2f0ee81c28` (merged v0.9.4 candidate); canonical frontend `public/`, session engine `src/`. Actual running frontend/Worker bytes were not established during this design intake. The v0.9.1 observations and earlier implementation intake below are historical.
+**Status:** v0.9.4 remains this branch's host baseline. Journey's stage-5 authored combat work is isolated on `implement/journey-encounters-stage5`; no merge or deployment. Historical release observations below retain their original dates.
+**Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, Journey development on `implement/journey-encounters-stage5`.
+**Current source baseline:** Journey remote `f93b9f6a15ead3a13b0c88f309d6ffc6f2f81716`; stage-5 local test candidate `e120c62`. Canonical frontend `public/`, session engine `src/`. This isolated candidate has not been reconciled with newer main or deployed. Earlier source and release observations below are historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Implement and verify the approved Journey stage-1 foundation; see section 11. Existing host verification remains separate: early rescue lifecycle and both cartridge regressions on hosted desktop, landscape iPad and iPhone Safari, plus school-network/classroom concurrency checks.
+**Next work:** Production enemy/boss/environment art, remaining four special choreographies, measured solo/team balance, audio and narrative; then current-main reconciliation and live Cloudflare/physical-device/school verification. Do not interpret the historical intake sections below as current completion status. Latest Journey progress is in section 20.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -176,3 +176,9 @@ Current handbook blobs read: AI-START-HERE 6557a45, UNIVERSAL-RULES 6bde7c1, CON
 ## 19. Remaining hero frame repair — 2 October 2026
 
 Fourteen Wukong/Wujing/Prince poses replaced; all 120 frame positions now have isolated bounds or supplemental art. Source candidate passed 202 tests, build, alpha-boundary and Chromium review in both directions. Exact game code/art recovered after interrupted upload; see [verification and recovery](verification/journey-remaining-frame-repair.md). Next: authored encounters and Nezha, with choreography/story/audio still pending. No deployment or physical-device acceptance. Handbook files consulted at 6557a45 / 6bde7c1 / 1a79498 / release checklist 8aeb220.
+
+## 20. Authored combat checkpoint — 3 October 2026
+
+Continuation from remote f93b9f6 on `implement/journey-encounters-stage5`. Mountain/cave/shrine/courtyard waves, five ordinary role behaviors, deterministic supplies and Nezha spear/ring/rush implemented. Preserves 180-second approved local scope, one-to-five fixed starter scaling, math/teacher/reconnect/input behavior and earlier hero art. Runtime identifies `jttw-0.1.0-stage5-combat`.
+
+Source e120c62 passes 218 Node tests and build; five-client stage/render/control checks plus complete teacher/student flow passed through local Node bridges. See [specification](change-specs/journey-encounters-stage5.md) and [verification](verification/journey-encounters-stage5.md). Enemy/boss art is explicitly a technical proxy, not production art; scene assets, four special choreographies, balance, story/audio and real devices/network remain pending. No main merge, release or deployment. Handbook revisions unchanged: 6557a45 / 6bde7c1 / 1a79498 / 8aeb220.

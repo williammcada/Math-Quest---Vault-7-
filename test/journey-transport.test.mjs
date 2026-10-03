@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {BrawlRun} from '../src/cartridges/journey/durable-object.js';
 import {PROTOCOL,JOURNEY_BUILD} from '../public/games/journey/config.js';
+import {enterStage} from '../src/cartridges/journey/encounters.js';
 
 // Simulated Durable Object storage/socket harness, not a deployed Cloudflare test.
 async function fixture(){
@@ -43,5 +44,19 @@ test('teacher termination delivers one result and purge closes all five sockets'
  const f=await fixture();try{const clients=[];for(let i=0;i<5;i++)clients.push(await f.authenticate('p'+i));
  await f.post('/control',{action:'pause',paused:true});assert.equal(f.run.model.paused,true);await f.post('/control',{action:'end'});await new Promise(r=>setImmediate(r));await f.run.after(true);
  assert.equal(f.deliveries.length,1);assert.equal(f.deliveries[0].result.outcome,'interrupted');await f.close();for(const s of clients)assert.equal(s.closed.code,4004);assert.equal(f.store.size,0);
+ }finally{await f.close();}
+});
+test('server-resolved boss victory reaches every socket and the outbox exactly once',async()=>{
+ const f=await fixture();try{
+  const clients=[];
+  for(let i=0;i<5;i++){const s=await f.authenticate('p'+i);clients.push(s);await f.message(s,{type:'reserveHero',hero:['wukong','bajie','wujing','tang','prince'][i]});await f.post('/ready',{studentId:'p'+i,upgrades:[]});}
+  const m=f.run.model;m.startScene();enterStage(m,4);const e=m.s.enemies[0],p=m.player('p0');
+  // A near-death boss fixture tests the genuine input/damage/result path, not balance.
+  e.hp=1;e.phase='recover';e.timer=900;p.x=e.x-50;p.y=e.y;p.facing=1;
+  await f.message(clients[0],{type:'input',seq:1,x:0,y:0,attack:true});
+  m.advance(m.s.lastAt+34);await f.run.after(true);await new Promise(r=>setImmediate(r));await f.run.after(true);
+  assert.equal(f.deliveries.length,1);assert.equal(f.deliveries[0].result.outcome,'victory');assert.equal(f.deliveries[0].result.bossDefeated,true);
+  for(const s of clients)assert.equal(s.messages.filter(x=>x.type==='snapshot').at(-1).snapshot.result.outcome,'victory');
+  await f.post('/control',{action:'end'});assert.equal(m.s.result.outcome,'victory');assert.equal(f.deliveries.length,1);
  }finally{await f.close();}
 });
