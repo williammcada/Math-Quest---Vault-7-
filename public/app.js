@@ -10,7 +10,7 @@ import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-fh2';
 import { FinaleHost } from './finale-host.js?v=0.9.4-fh2';
 import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4';
 import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.4';
-import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=0.9.4-fh2';
+import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=dev-20261006';
 import {forgetRoom,forgetExpiredRooms} from './privacy.js?v=0.9.4';
 forgetExpiredRooms();
 import {BRAND,presentationFor,setBrandContext,markMarkup,cartridgeCard} from './brand.js?v=0.9.4-fh2';
