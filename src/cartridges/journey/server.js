@@ -1,5 +1,6 @@
 import {checkItem,hashSeed} from '../../math.js';
 import {JOURNEY_BUILD,PROTOCOL} from '../../../public/games/journey/config.js';
+import {JOURNEY_STORY} from '../../../public/games/journey/story.js';
 
 export const isJourney=room=>room.state.config.cartridgeId==='journey-west';
 const error=message=>({error:message});
@@ -10,7 +11,7 @@ export async function runCall(room,team,path,data){
   const result=await res.json();if(!res.ok||result.error)throw Error(result.error||'Combat service unavailable.');return result;
 }
 export function journeyScene(team,members,names){
-  return {title:team.stage==='gate'?names[team.gateIndex]:team.stage==='victory'?'Journey field record':'Journey to the West',eyebrow:'COOPERATIVE JOURNEY',paragraphs:team.stage==='briefing'?['Complete your assigned mathematics with your team. Then choose a hero and personal upgrades for a shared three-minute encounter.']:team.stage==='gate'?['Every traveler completes their own questions before the team moves on.']:[],artId:null};
+  return {title:team.stage==='gate'?names[team.gateIndex]:team.stage==='victory'?'Journey field record':JOURNEY_STORY.title,eyebrow:'AN ORIGINAL JOURNEY ADVENTURE',paragraphs:team.stage==='briefing'?[JOURNEY_STORY.opening[0].text]:team.stage==='gate'?[JOURNEY_STORY.gates[Math.min(team.gateIndex,2)],'Every traveler completes their own questions before the team moves on.']:team.stage==='victory'?[JOURNEY_STORY.endings[team.journeyResult?.outcome]||JOURNEY_STORY.endings.interrupted]:[],artId:null,...(team.stage==='briefing'?{image:'./assets/journey/cast-concept.png',imageAlt:'The five travelers and Nezha'}:{})};
 }
 export const journeyServer={scene:journeyScene,advance(team){
   if(!this.members(team.id).every(s=>s.gateComplete))return;

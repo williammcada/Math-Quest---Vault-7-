@@ -2,17 +2,24 @@ import {answerInput,readAnswer} from './math-input.js';
 import {HEROES,UPGRADES,JOURNEY_BUILD,PROTOCOL,LIMITS} from './config.js';
 import {JourneyRenderer} from './renderer.js';
 import {bindJourneyInput} from './input.js';
+import {JourneyAudio} from './audio.js';
+import {JOURNEY_STORY} from './story.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export class JourneyHost {
   constructor(root,{state,send}){this.root=root;this.send=send;this.id=state.student.id;this.runId=state.teams[0].journey.runId;this.state=state;this.controller=new AbortController();this.keys={x:0,y:0,attack:false,jump:false,magic:false};this.edges={jump:false,magic:false};this.seq=0;this.epoch=0;this.connected=false;this.destroyed=false;this.upgrades=new Set();this.connectionMessage='Connecting…';
     if(!document.querySelector('[data-journey-css]')){const link=document.createElement('link');link.rel='stylesheet';link.href=new URL('./journey.css',import.meta.url).href;link.dataset.journeyCss='1';document.head.append(link);}
     root.innerHTML='<section class="journey-host"><header class="j-heading"><div><small>MATHQUEST · '+JOURNEY_BUILD+'</small><h1>Journey to the West</h1></div><span class="j-connection" role="status">Connecting…</span></header><div class="j-status" role="status"></div><div class="j-hud"></div><div class="j-stage"><canvas aria-label="Shared Journey combat scene"></canvas><div class="j-overlay"></div></div><section class="j-prep"><div class="j-heroes"></div><div class="j-upgrades"></div><button class="j-ready">Ready</button><section class="j-optional"></section></section><div class="j-controls"><div class="j-dpad" data-dpad aria-label="Movement pad"><span>▲</span><span>◀　▶</span><span>▼</span></div><div class="j-actions"><button data-jkey="attack">Attack<small>J</small></button><button data-jkey="jump">Jump<small>K</small></button><button data-jkey="magic">Magic<small>L</small></button></div></div><div class="j-tools"><button class="j-clear">Reset controls</button><button class="j-help">Controls</button><span>Development scene · five hero animation sets; full level and boss pending.</span></div><p class="j-message" role="status"></p></section>';
-    root.querySelector('.j-tools span').textContent='Combat checkpoint · enemy/boss art, sound and story pending.';
+    root.querySelector('.j-tools span').textContent='Play-test candidate · A WILLIAM MCADA PRODUCT';
+    this.audio=new JourneyAudio();
+    const audioPanel=document.createElement('div');audioPanel.className='j-audio';root.querySelector('.j-tools').after(audioPanel);
+    for(const [key,label] of [['music','Music'],['effects','Sound effects']]){const b=document.createElement('button');b.textContent=label+': on';b.setAttribute('aria-pressed','true');this.on(b,'click',()=>{this.audio.unlock().catch(()=>{});this.audio[key]=!this.audio[key];this.audio.silence();b.textContent=label+': '+(this.audio[key]?'on':'off');b.setAttribute('aria-pressed',String(this.audio[key]));});audioPanel.append(b);}
+    const story=document.createElement('section');story.className='j-story';root.querySelector('.j-prep').prepend(story);story.innerHTML='<h2>'+esc(JOURNEY_STORY.opening[1].title)+'</h2><p>'+esc(JOURNEY_STORY.opening[1].text)+'</p>';
+    const ending=document.createElement('p');ending.className='j-ending';ending.hidden=true;root.querySelector('.j-stage').after(ending);
     this.renderer=new JourneyRenderer(root.querySelector('canvas'));
     this.input=bindJourneyInput(root,next=>{this.edges.jump||=next.jump&&!this.keys.jump;this.edges.magic||=next.magic&&!this.keys.magic;this.keys=next;},{signal:this.controller.signal,blocked:()=>this.inputBlocked(),onReset:()=>this.resetInput(),onInterrupt:()=>{this.helpOpen=true;this.resetInput();this.message('Controls paused on this device. Tap Controls to resume; the team continues.');}});
     this.on(root.querySelector('.j-clear'),'click',()=>{this.resetInput();this.message('Controls released. Press a direction or action to continue.');});
     this.on(root.querySelector('.j-help'),'click',()=>{this.helpOpen=!this.helpOpen;this.resetInput();this.message(this.helpOpen?'Move: D-pad or arrows/WASD. Attack: J. Jump: K. Magic: L. Hold Attack for combos. Close Controls to resume your input; the team continues.':'');});
-    this.on(root.querySelector('.j-ready'),'click',()=>this.action('journey.ready',{upgrades:[...this.upgrades]}));
+    this.on(root.querySelector('.j-ready'),'click',()=>{this.audio.unlock().catch(()=>this.message('Audio unavailable; gameplay remains usable muted.'));this.action('journey.ready',{upgrades:[...this.upgrades]});});
     this.on(document,'visibilitychange',()=>this.setAvailable(!document.hidden));this.on(window,'pagehide',()=>this.setAvailable(false));this.on(window,'focus',()=>this.setAvailable(!document.hidden));this.on(window,'blur',()=>this.setAvailable(false));
     this.interval=setInterval(()=>this.flushInput(),50);this.ping=setInterval(()=>{this.wsSend({type:'ping',at:Date.now()});if(this.connected&&Date.now()-(this.lastReceived||0)>5000){this.socket?.close();}},1000);
     const frame=()=>{if(this.destroyed)return;this.renderer.draw();this.updateClock();this.raf=requestAnimationFrame(frame);};frame();this.update(state);this.connect();
@@ -27,19 +34,19 @@ export class JourneyHost {
       socket.onmessage=e=>{if(this.destroyed||socket!==this.socket)return;this.lastReceived=Date.now();let m;try{m=JSON.parse(e.data);}catch{return;}
         if(m.type==='authenticated'){this.connected=true;this.epoch=m.epoch;this.seq=0;this.connectionMessage='Team connected';this.setAvailable(!document.hidden);}
         if(m.type==='snapshot')this.receive(m.snapshot);if(m.type==='error')this.message(m.message);if(m.type==='pong')this.connectionMessage='Team connected · '+Math.max(0,Date.now()-m.at)+' ms';};
-      socket.onclose=e=>{if(socket!==this.socket||this.destroyed)return;this.connected=false;this.resetInput();this.connectionMessage=e.code===4009?'This player is controlled on another connection.':'Reconnecting…';if(e.code!==4009&&e.code!==4004&&this.snap?.phase!=='terminal')this.retry=setTimeout(()=>this.connect(),1000);};
+      socket.onclose=e=>{if(socket!==this.socket||this.destroyed)return;this.connected=false;this.audio.stopped=true;this.audio.silence();this.resetInput();this.connectionMessage=e.code===4009?'This player is controlled on another connection.':'Reconnecting…';if(e.code!==4009&&e.code!==4004&&this.snap?.phase!=='terminal')this.retry=setTimeout(()=>this.connect(),1000);};
       socket.onerror=()=>{this.connectionMessage='Connection unavailable';};
     }catch(e){this.connectionMessage='Connection unavailable';this.message(e.message);if(!this.destroyed)this.retry=setTimeout(()=>this.connect(),3000);}
     finally{this.connecting=false;}
   }
   wsSend(message){if(this.connected&&this.socket?.readyState===WebSocket.OPEN)this.socket.send(JSON.stringify({...message,runId:this.runId,epoch:this.epoch}));}
-  setAvailable(value){this.resetInput();this.wsSend({type:'availability',available:!!value});}
+  setAvailable(value){this.resetInput();if(!value){this.audio.stopped=true;this.audio.silence();}this.wsSend({type:'availability',available:!!value});}
   inputBlocked(){const me=this.snap?.players.find(p=>p.id===this.id);return !this.connected||this.snap?.phase!=='running'||this.snap.paused||document.hidden||this.helpOpen||!me?.started||!me.lives||me.respawnMs>0;}
   resetInput(){this.input?.clear();this.edges={jump:false,magic:false};this.keys={x:0,y:0,attack:false,jump:false,magic:false};this.wsSend({type:'input',seq:++this.seq,...this.keys});}
   flushInput(){this.input?.poll();if(this.inputBlocked()){this.edges={jump:false,magic:false};return;}
     this.wsSend({type:'input',seq:++this.seq,x:this.keys.x,y:this.keys.y,attack:this.keys.attack,jump:this.edges.jump,magic:this.edges.magic});this.edges={jump:false,magic:false};}
   receive(snapshot){if(snapshot.runId!==this.runId)return;const previous=this.snap?.players.find(p=>p.id===this.id),next=snapshot.players.find(p=>p.id===this.id);const changed=this.snap?.phase!==snapshot.phase||this.snap?.paused!==snapshot.paused||previous?.lives!==next?.lives||Boolean(previous?.respawnMs)!==Boolean(next?.respawnMs);
-    this.snap=snapshot;this.receivedAt=performance.now();this.renderer.set(snapshot);if(changed){this.resetInput();this.edges={jump:false,magic:false};}
+    this.snap=snapshot;this.receivedAt=performance.now();this.renderer.set(snapshot);this.audio.sync(snapshot);const ending=this.root.querySelector('.j-ending');ending.hidden=snapshot.phase!=='terminal';ending.textContent=JOURNEY_STORY.endings[snapshot.result?.outcome]||'';if(changed){this.resetInput();this.edges={jump:false,magic:false};}
     this.renderPrep();this.renderHud();}
   update(state){this.state=state;const j=state.teams[0]?.journey;if(!j)return;if(j.snapshot&&(!this.snap||j.snapshot.revision>=this.snap.revision))this.receive(j.snapshot);this.renderOptional();}
   renderPrep(){const s=this.snap;if(!s)return;const me=s.players.find(p=>p.id===this.id);if(!me)return;
@@ -68,6 +75,7 @@ export class JourneyHost {
     else if(s.phase==='recovery'){status='Team connection lost';cover='Reconnecting · '+Math.max(0,Math.ceil((s.recoveryMs-elapsed)/1000))+'s';}
     else if(s.phase==='running'){const left=Math.max(0,Math.ceil((LIMITS.active-s.activeMs-elapsed)/1000));status=Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+' remaining';const me=s.players.find(p=>p.id===this.id);if(!me?.started)cover='Watching this run';else if(!me.lives)cover='Spectating';else if(me.respawnMs>0)cover='Returning…';}
     else if(s.phase==='terminal'){status='Field record saved · '+(s.result?.outcome||'ended');cover=(s.result?.outcome||'Complete').toUpperCase();}
+    this.root.querySelector('.j-audio').hidden=s.phase!=='ready'&&!this.helpOpen;
     this.root.querySelector('.j-status').textContent=status;overlay.textContent=cover;overlay.hidden=!cover;}
-  destroy(){this.destroyed=true;this.resetInput();this.controller.abort();clearInterval(this.interval);clearInterval(this.ping);clearTimeout(this.retry);cancelAnimationFrame(this.raf);this.socket?.close();}
+  destroy(){this.destroyed=true;this.resetInput();this.audio.destroy();this.controller.abort();clearInterval(this.interval);clearInterval(this.ping);clearTimeout(this.retry);cancelAnimationFrame(this.raf);this.socket?.close();}
 }

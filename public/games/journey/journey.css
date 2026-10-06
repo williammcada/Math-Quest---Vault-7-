@@ -5,6 +5,7 @@
 .journey-host .j-hud,.journey-host .j-heading,.journey-host .j-status{touch-action:none}.journey-host .j-prep,.journey-host .j-tools,.journey-host .j-message{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default;touch-action:auto}
 
 /* The live match owns its viewport; preparation remains in normal document flow. */
+.j-story{padding:16px;background:linear-gradient(#10212bea,#10212be0),url('../../assets/journey/environment-courtyard-stage7.png') center/cover;border:1px solid #758173;line-height:1.5}.j-story h2{font-size:20px;margin:0}.j-audio{display:flex;gap:8px;flex:none}.j-ending{font-size:14px;line-height:1.4;margin:4px 0;max-height:25vh;overflow:auto;flex:none}
 .journey-host.j-match{position:fixed;inset:0;z-index:100;box-sizing:border-box;width:100%;max-width:none;height:100vh;height:100dvh;margin:0;padding: max(4px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:3px;background:#142a2c;overflow:hidden}
 .j-match>.j-heading,.j-match>.j-status,.j-match>.j-hud,.j-match>.j-controls,.j-match>.j-tools,.j-match>.j-message{flex:none}
 .j-match .j-stage{flex:1;min-height:0;overflow:hidden}

@@ -1,12 +1,12 @@
 # Project Brief — MathQuest
 
-**Brief version:** 0.7 — Journey authored combat checkpoint
+**Brief version:** 0.8 — Journey Thursday play-test resources
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.9.4 remains this branch's host baseline. Journey's stage-5 authored combat work is isolated on `implement/journey-encounters-stage5`; no merge or deployment. Historical release observations below retain their original dates.
 **Repository:** `williammcada/Math-Quest---Vault-7-`; host source on `main`, Journey development on `implement/journey-encounters-stage5`.
 **Current source baseline:** Journey remote `f93b9f6a15ead3a13b0c88f309d6ffc6f2f81716`; stage-5 local test candidate `e120c62`. Canonical frontend `public/`, session engine `src/`. This isolated candidate has not been reconciled with newer main or deployed. Earlier source and release observations below are historical.
 **Source/baseline:** v0.9.0 baseline commit `601184761b8247999b731a9720261788c79f3c66`; recovered v0.9.1 implementation checkpoint `576b711c10b28b6d8491495c90f37c42bb57c8d9`; canonical v0.9.1 source directory `public/`; deployment repair commit `66a0f59c17309398084bdfb831cc02a9eebeb75d`.  
-**Next work:** Production enemy/boss/environment art, remaining four special choreographies, measured solo/team balance, audio and narrative; then current-main reconciliation and live Cloudflare/physical-device/school verification. Do not interpret the historical intake sections below as current completion status. Latest Journey progress is in section 20.
+**Next work:** Thursday solo practice and human feedback; current-main reconciliation before multiplayer deployment; live Cloudflare/physical-device/school verification. Stage-8 source now includes enemy/environment art, timed specials, procedural audio, original story and offline solo packaging. Historical baseline/status paragraphs above remain provenance, not current completion claims. Latest progress is section 21.
 
 ## 1. Purpose, audience and detailed scope
 
@@ -182,3 +182,9 @@ Fourteen Wukong/Wujing/Prince poses replaced; all 120 frame positions now have i
 Continuation from remote f93b9f6 on `implement/journey-encounters-stage5`. Mountain/cave/shrine/courtyard waves, five ordinary role behaviors, deterministic supplies and Nezha spear/ring/rush implemented. Preserves 180-second approved local scope, one-to-five fixed starter scaling, math/teacher/reconnect/input behavior and earlier hero art. Runtime identifies `jttw-0.1.0-stage5-combat`.
 
 Source e120c62 passes 218 Node tests and build; five-client stage/render/control checks plus complete teacher/student flow passed through local Node bridges. See [specification](change-specs/journey-encounters-stage5.md) and [verification](verification/journey-encounters-stage5.md). Enemy/boss art is explicitly a technical proxy, not production art; scene assets, four special choreographies, balance, story/audio and real devices/network remain pending. No main merge, release or deployment. Handbook revisions unchanged: 6557a45 / 6bde7c1 / 1a79498 / 8aeb220.
+
+## 21. Thursday play-test resources — 6 October 2026
+
+Owner authorized courtyard, remaining specials, audio, original narrative and a ready-to-open solo package. Runtime jttw-0.1.0-stage8-playtest on isolated Journey branch. Four environments, enemy/boss sprite integration, four timed specials plus retained horse, original 48s/36s synthesized themes, sound cues, two opening story positions and outcome epilogues implemented. Offline solo practice bundles the exact shared model/input and all loaded art; no Cloudflare or classroom evidence. Desktop Chromium file-open, complete art load, start, movement, pause/resume and magic checked. 231 tests/build and local five-client + teacher/student flows pass. See verification/journey-stage8.md and verification/JOURNEY-START-HERE.txt.
+
+Not a deployment or verified classroom release. Current-main reconciliation, physical controls/audio, human balance and school network remain gates. Tang ordinary attacks remain instant finite-range hits rather than traveling projectiles. Do not hide this remaining specification gap.

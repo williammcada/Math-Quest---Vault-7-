@@ -37,7 +37,7 @@ test('Journey reset drops queued one-shot actions and transmits a neutral frame'
  h.resetInput();assert.deepEqual(h.edges,{jump:false,magic:false});assert.deepEqual(sent[0],{type:'input',seq:3,x:0,y:0,attack:false,jump:false,magic:false});
 });
 test('Journey death and respawn snapshots both require fresh input',()=>{
- const h=Object.create(JourneyHost.prototype);let resets=0;h.id='p';h.runId='r';h.renderer={set(){}};h.resetInput=()=>resets++;h.renderPrep=h.renderHud=()=>{};
+ const h=Object.create(JourneyHost.prototype);let resets=0;h.id='p';h.runId='r';h.renderer={set(){}};h.audio={sync(){}};h.root={querySelector:()=>({})};h.resetInput=()=>resets++;h.renderPrep=h.renderHud=()=>{};
  const snapshot=(lives,respawnMs)=>({runId:'r',phase:'running',paused:false,players:[{id:'p',lives,respawnMs,started:true}]});
  h.snap=snapshot(3,0);h.receive(snapshot(2,2000));assert.equal(resets,1);h.receive(snapshot(2,1900));assert.equal(resets,1);h.receive(snapshot(2,0));assert.equal(resets,2);
 });
