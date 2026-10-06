@@ -82,3 +82,7 @@ Five-minute flight, double regular enemies, +10% player movement, and shared tou
 [Play Chapter 2](https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html) · [Specification](docs/change-specs/nightfall-chapter-2-v0.1.0.md) · [Verification and limits](docs/releases/false-haven-v0.1.0.md)
 
 Escape a compromised safe zone using power, drainage, a speaker trap, movable cargo and the original Nightfall weapons/enemies. Map footprint is 2.25× Chapter 1; measured reachable area is 2.34×. Five active minutes. Practice has no math gate or student evidence; classroom/Arcade integration remains separate. Candidate 0124d53 passed 178 automated tests and hosted smoke checks; physical iPhone/iPad and sustained combat playtesting remain pending.
+
+## DEV homepage update — 2026-10-06
+
+Open Developer tools on the [MathQuest homepage](https://williammcada.github.io/Math-Quest---Vault-7-/public/) for question-free action practice: Vault 7, Nightfall, Nightfall II, Blackline, Ironbreak and Coastal Escape. Existing story reviews remain available separately (Ironbreak story review retains sample math). Frontend-only update; no new classroom cartridge activation. All six hosted starts checked in desktop Chrome. Owner/device playtesting remains pending October 8. [Verification record](docs/releases/dev-homepage-2026-10-06.md).
