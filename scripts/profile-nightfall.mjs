@@ -11,26 +11,29 @@ const browser=await chromium.launch({executablePath:'/tmp/chromium',headless:tru
 try{
 const page=await browser.newPage({viewport:{width:1280,height:800}});
 await page.goto(`http://127.0.0.1:${server.address().port}/false-haven-preview.html`);
-const results=await page.evaluate(async()=>{
+const results=await page.evaluate(async realTime=>{
  const {createState,step,makeNoise,navigationField}=await import('./games/nightfall/simulation.js');
  const {render,loadArt}=await import('./games/nightfall/renderer.js');
  const {havenSwitch}=await import('./games/nightfall/false-haven-world.js');
  const {solid}=await import('./games/nightfall/world.js');
- const art=await loadArt(),canvas=document.createElement('canvas');canvas.width=1280;canvas.height=720;const ctx=canvas.getContext('2d');ctx.scale(2,2);
+ const {falseHavenAdapter}=await import('./games/nightfall/false-haven-adapter.js');
+ const cityArt=await loadArt(),havenArt=await falseHavenAdapter.loadArt(),canvas=document.createElement('canvas');canvas.width=1280;canvas.height=720;const ctx=canvas.getContext('2d');ctx.scale(2,2);
  const stats=a=>{a.sort((a,b)=>a-b);return {median:a[Math.floor(a.length*.5)],p95:a[Math.floor(a.length*.95)],max:a.at(-1),over16ms:a.filter(t=>t>16.7).length};};
  const out=[];
  for(const [scenario,x,y,speaker] of [['city',1168,600,false],['false-haven',640,1728,false],['false-haven',1728,650,false],['false-haven',1872,864,true]]){
-  const s=createState([], 'clinic',1,scenario);s.x=x;s.y=y;s.immune=999;const sim=[],draw=[],active=[];if(speaker)havenSwitch(s,'speaker');
+  const art=scenario==='false-haven'?havenArt:cityArt,s=createState([], 'clinic',1,scenario);s.x=x;s.y=y;s.immune=999;const sim=[],draw=[],active=[];if(speaker)havenSwitch(s,'speaker');
   const nav=[];for(let i=0;i<6;i++){let t=performance.now();navigationField(s,{x:x+i*32,y});nav.push(performance.now()-t);}
+  let previous;const frameIntervals=[];if(realTime){canvas.style.width='960px';canvas.style.height='540px';document.body.replaceChildren(canvas);}
   for(let i=0;i<360;i++){
+   if(realTime){const now=await new Promise(requestAnimationFrame);if(previous!==undefined)frameIntervals.push(now-previous);previous=now;}
    const nx=x+Math.sin(i/30)*80;if(!solid(s,nx,y))s.x=nx;
    if(i%24===0)makeNoise(s,s.x,s.y,580,1.2,'shot');
    let t=performance.now();step(s,{},1/60);sim.push(performance.now()-t);active.push(s.activeCount);
    t=performance.now();render(ctx,s,art);draw.push(performance.now()-t);
   }
-  out.push({scenario,position:{x,y},speaker,activeMax:Math.max(...active),nav:stats(nav),simulation:stats(sim),drawing:stats(draw)});
+  out.push({scenario,position:{x,y},speaker,activeMax:Math.max(...active),nav:stats(nav),simulation:stats(sim),drawing:stats(draw),...(realTime?{frameIntervals:stats(frameIntervals)}:{})});
  }
  return out;
-});
-console.log(JSON.stringify({browser:browser.version(),environment:'Linux headless Chromium; synthetic moving-player combat; 360 fixed steps per scenario; 2x canvas. Not physical Windows/iOS FPS.',results},null,2));
+},process.env.REALTIME==='1');
+console.log(JSON.stringify({browser:browser.version(),realTime:process.env.REALTIME==='1',environment:'Linux headless Chromium; synthetic moving-player combat; 360 fixed steps per scenario; 2x canvas. Not physical Windows/iOS FPS.',results},null,2));
 }finally{await browser.close();await new Promise(r=>server.close(r));}

@@ -1,6 +1,6 @@
-import {HAVEN_PERSONAL} from './cartridges/false-haven.js?v=0.2.0';
+import {HAVEN_PERSONAL} from './cartridges/false-haven.js?v=0.9.4-fh3';
 import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
-import {cartridgeFor} from './cartridges.js?v=0.9.4-fh2';
+import {cartridgeFor} from './cartridges.js?v=0.9.4-fh3';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function expansionBody(state,team,scene){
   const c=cartridgeFor(state.cartridge.id),s=state.student;

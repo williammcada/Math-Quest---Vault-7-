@@ -1,5 +1,5 @@
-import {havenWorld} from './false-haven-world.js';
-import {rescueWorld} from './rescue-world.js?v=0.9.4-fh1';
+import {havenWorld} from './false-haven-world.js?v=0.9.4-fh3';
+import {rescueWorld} from './rescue-world.js?v=0.9.4-fh3';
 import {CONFIG_REVISION,threatFor} from './config.js?v=0.9.4-fh1';
 export const REVISION=CONFIG_REVISION;
 export const WORLD={width:2560,height:1280,tile:32,bus:{x:1168,y:1120}};

@@ -1,4 +1,4 @@
-import {CARTRIDGES} from '../cartridges.js?v=0.9.4-fh2';
+import {CARTRIDGES} from '../cartridges.js?v=0.9.4-fh3';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // DEV entries are independent of the classroom cartridge registry.
 export const practiceTools=[

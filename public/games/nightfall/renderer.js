@@ -1,24 +1,28 @@
-import {drawHaven} from './false-haven-renderer.js';
-import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective,worldFor} from './world.js?v=0.9.4-fh1';
-import {drawCar,drawFixtures} from './hardware.js?v=0.9.4-fh1';
+import {drawHaven} from './false-haven-renderer.js?v=0.9.4-fh3';
+import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective,worldFor} from './world.js?v=0.9.4-fh3';
+import {drawCar,drawFixtures} from './hardware.js?v=0.9.4-fh3';
 const motionPreference=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
 export const MEDIA={actors:'./assets/nightfall/city/actors.png',tiles:'./assets/nightfall/city/tiles.png',props:'./assets/nightfall/city/props.png',ambient:'./assets/nightfall/city/ambient.mp3',danger:'./assets/nightfall/city/danger.mp3',ending:'./assets/nightfall/city/ending.mp3',effects:'./assets/nightfall/city/effects.wav',sfx:Object.fromEntries(['step','shot','shotgun','glass','alarm','moan','enemy-death','breach'].map(k=>[k,'./assets/nightfall/city/v092/'+k+'.wav']))};
-export async function loadArt(){const art={};await Promise.all(['actors','tiles','props'].map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=async()=>{try{const [width,height]=({tiles:[256,256],props:[512,512],actors:[736,580]})[key];art[key]=globalThis.createImageBitmap?await createImageBitmap(im,{resizeWidth:width,resizeHeight:height,resizeQuality:'pixelated'}):im;resolve();}catch(error){reject(error);}};im.onerror=()=>reject(new Error(`Missing or invalid image: ${MEDIA[key]}`));im.src=MEDIA[key];})));return art;}
+export async function loadArt(media=MEDIA){const art={};await Promise.all(['actors','tiles','props'].map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=async()=>{try{const [width,height]=({tiles:[256,256],props:[512,512],actors:[736,580]})[key];art[key]=globalThis.createImageBitmap?await createImageBitmap(im,{resizeWidth:width,resizeHeight:height,resizeQuality:'pixelated'}):im;resolve();}catch(error){reject(error);}};im.onerror=()=>reject(new Error(`Missing or invalid image: ${media[key]}`));im.src=media[key];})));return art;}
 function cell(c,im,n,cols,rows,x,y,w,h){if(!im)return;const sw=im.width/cols,sh=im.height/rows;c.drawImage(im,(n%cols)*sw,Math.floor(n/cols)*sh,sw,sh,x,y,w,h);}
 // Static ground is composed once per visible 512px chunk, not hundreds of
 // high-resolution atlas copies per frame. Cache is scoped to decoded artwork.
-const groundCache=new WeakMap();
+const groundCache=new WeakMap(),groundPixels=new WeakMap();
 function drawGround(c,s,art,buildings,ox,oy){
  if(!globalThis.document){return false;}
  let chunks=groundCache.get(art);if(!chunks){chunks=new Map();groundCache.set(art,chunks);}
+ let tiles=groundPixels.get(art);
+ if(!tiles){const sheet=document.createElement('canvas');sheet.width=sheet.height=128;const g=sheet.getContext('2d',{willReadFrequently:true});g.imageSmoothingEnabled=false;g.drawImage(art.tiles,0,0,128,128);tiles=g.getImageData(0,0,128,128).data;groundPixels.set(art,tiles);}
  for(let cy=Math.floor(oy/512)*512;cy<oy+360;cy+=512)for(let cx=Math.floor(ox/512)*512;cx<ox+640;cx+=512){
   const key=`${s.scenario}:${s.route}:${cx}:${cy}`;let canvas=chunks.get(key);
-  if(!canvas){canvas=document.createElement('canvas');canvas.width=canvas.height=512;const g=canvas.getContext('2d');g.imageSmoothingEnabled=false;
+  if(!canvas){canvas=document.createElement('canvas');canvas.width=canvas.height=512;const g=canvas.getContext('2d',{willReadFrequently:true}),pixels=g.createImageData(512,512);
    for(let y=cy;y<cy+512;y+=32)for(let x=cx;x<cx+512;x+=32){
     const room=buildings.find(b=>x>=b.x&&y>=b.y&&x<b.x+b.w&&y<b.y+b.h);let tile=room?room.floor:0;
     if(!room&&(x%256<32||y%256<32))tile=1;if(!room&&x===1184)tile=8;
-    cell(g,art.tiles,tile,4,4,x-cx,y-cy,32,32);
+    const tx=tile%4*32,ty=Math.floor(tile/4)*32;
+    for(let row=0;row<32;row++){const start=((ty+row)*128+tx)*4;pixels.data.set(tiles.subarray(start,start+128),((y-cy+row)*512+x-cx)*4);}
    }
+   g.putImageData(pixels,0,0);
    // Keep long sessions bounded even if several scenarios share an art object.
    if(chunks.size>=48)chunks.delete(chunks.keys().next().value);chunks.set(key,canvas);
   }
