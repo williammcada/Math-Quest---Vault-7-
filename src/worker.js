@@ -1,3 +1,7 @@
+import {BLACKLINE_PERSONAL} from '../public/cartridges/blackline.js';
+import {IRONBREAK} from '../public/cartridges/ironbreak.js';
+import {COASTAL_PERSONAL} from '../public/cartridges/coastal-escape.js';
+import {HAVEN_PERSONAL} from '../public/cartridges/false-haven.js';
 import {settleRescues} from './cartridges/nightfall/rescue-server.js';
 import {equipmentCommand,equipmentSlots,completeEquipmentBlock} from './engine/equipment.js';
 import {serverFor} from './cartridges/registry.js';
@@ -13,8 +17,8 @@ import {configureSupply,awardSupply} from './engine/supply.js';
 
 const ACTIVE_MS = 20_000;
 export const RETENTION_MS=48*60*60*1000;
-const VERSION = "0.9.4";
-const supportedEngine=version=>["0.9.2","0.9.4"].includes(version);
+const VERSION = "0.9.7";
+const supportedEngine=version=>["0.9.2","0.9.4","0.9.5","0.9.6","0.9.7"].includes(version);
 const DIFFICULTY_POLICIES = ["session", "foundation", "standard", "challenge"];
 const GATE_PATHS = {
   3: ["Perimeter Power", "Containment Laboratory", "Isolation Core"],
@@ -318,6 +322,7 @@ export class QuestSession {
     };
     names.forEach((name, index) => {
       const team = teamTemplate(name, randomCode(4), index);
+      if(cartridge.id==='coastal-escape'){const loads=this.state.config.gateLoads;if(loads.every(n=>n===loads[0]))team.supply={count:loads[0],enabled:true,moduleIds:modules.filter(m=>m.source==='preset').map(m=>m.id),allowReuse:false};}
       this.state.teams[team.id] = team;
     });
     this.addEvent("session-created", `${cartridge.title} created with ${totalQuestions} questions across ${gateCount} gates`);
@@ -358,7 +363,7 @@ export class QuestSession {
     const type = String(input.type);
     if(type==='teacher.setThreat'){
       const t=this.state.teams[input.teamId];
-      if(!expansionFor(this)||!t||this.state.status==='ended')return {error:'An open Nightfall team is required.'};
+      if(this.state.config.cartridgeId!=='nightfall'||!t||this.state.status==='ended')return {error:'An open Nightfall team is required.'};
       if(t.threatLocked||Object.values(t.runs||{}).some(r=>r.status!=='not_started'))return {error:'Threat is locked because a crew member has started.'};
       if(!Number.isInteger(input.threat)||input.threat<0||input.threat>4)return {error:'Choose threat 0–4.'};
       t.threat=input.threat;for(const r of Object.values(t.runs||{}))r.threat=input.threat;
@@ -604,6 +609,9 @@ export class QuestSession {
   resolveFinale(student) {return serverFor(this).resolveFinale.call(this,student);}
 
   fateFor(student) {
+    const personal=this.state.config.cartridgeId==='blackline'?BLACKLINE_PERSONAL:this.state.config.cartridgeId==='coastal-escape'?COASTAL_PERSONAL:this.state.config.cartridgeId==='nightfall-false-haven'?HAVEN_PERSONAL:null;
+    if(personal){const outcome=this.teamFor(student)?.runs?.[student.id]?.outcome;return {id:outcome||'pending',label:personal[outcome]||'Operation pending'};}
+    if(this.state.config.cartridgeId==='ironbreak'){const o=this.teamFor(student)?.runs?.[student.id]?.outcome;return {id:o||'pending',label:IRONBREAK.personal[o]||'Suit operation pending'};}
     if(expansionFor(this)){
       const outcome=this.teamFor(student)?.runs?.[student.id]?.outcome;
       return {id:outcome||'pending',label:outcome==='success'?'Reached the bus':['setback','lost'].includes(outcome)?'Did not make it out alive':outcome==='teacher_advanced'?'Closed by mission control':outcome==='timed_out'?'Awaiting review':'Crossing not recorded'};
@@ -825,9 +833,11 @@ export class QuestSession {
       ...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.route,r.equipment,r.adverseCount,r.status,r.outcome,r.activeElapsedMs,r.detections,r.integrityRemaining,r.checkpoint,r.fallbackUsed,r.startedAt,r.completedAt,r.clientBuild,r.mapRevision]),
       [],['TEAM OUTCOMES'],['Team','Final action','Ending','Credits','Route','Equipment','Completion reason'],...report.teams.map(t=>[t.name,t.finalAction,t.endingId,t.currency,t.route,t.inventory.join('|'),t.extraction?.completionReason])
     ];
-    if(expansionFor(this))rows.push([],[`${this.state.config.cartridgeTitle} · ENGAGEMENT ONLY`],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
+    if(['nightfall','nightfall-false-haven'].includes(this.state.config.cartridgeId))rows.push([],[`${this.state.config.cartridgeTitle} · ENGAGEMENT ONLY`],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
     rows.push([],['FIRST RESPONSE · ENGAGEMENT ONLY'],['Student ID','Alias','Team','Phase','Route','Mode','Outcome','Closure reason','Attempts','Retries'],...report.rescueEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.phase,r.route,r.mode,r.outcome,r.closureReason,r.attempts,r.retries]));
     rows.push([],['LIVE EXTENSIONS'],['Batch ID','Time','Student ID','Alias','Added','Total assigned','Gate index','Difficulty'],...(report.extensions||[]).flatMap(batch=>batch.targets.map(t=>[batch.id,batch.at,t.studentId,t.alias,t.count,t.total,t.gateIndex===null?'Last Checkpoint':t.gateIndex+1,batch.policy])),[],['ATTEMPT EXTENSION CONTEXT'],['Item ID','Student ID','Batch ID'],...report.attempts.map(a=>[a.itemId,a.studentId,a.extensionBatchId||'initial']));
+    if(this.state.config.cartridgeId==='ironbreak')rows.push([],['IRONBREAK · ENGAGEMENT ONLY'],['Student ID','Mode','Outcome','Closure reason','Attempts','Lives remaining','Checkpoint','Active ms','Upgrades','Boss HP','Guided steps','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.mode,r.outcome,r.closureReason,r.attempt,r.lives,r.checkpoint,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.enemies?.find(e=>e.type==='boss')?.hp,r.guidedStep,r.validation]));
+    if(this.state.config.cartridgeId==='coastal-escape')rows.push([],['COASTAL ESCAPE · ENGAGEMENT ONLY'],['Student ID','Mode','Outcome','Active ms','Loadout','Lives remaining','Checkpoint','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.lives,r.snapshot?.checkpoint,r.validation]));
     rows.push([],['V0.9 GAMEPLAY DETAILS'],['Student ID','Threat','Objectives','Door uses','Doors broken','Distractions','Toolkit checkpoints','Mode','Engine revision','Cloak used','Broken windows','Dispatch horde'],...report.gameplayEvidence.map(r=>[r.studentId,r.threat,Object.keys(r.snapshot?.tasks||r.objectives||{}).filter(k=>(r.snapshot?.tasks||r.objectives)[k]).join('|'),r.snapshot?.doorUses,r.snapshot?.doorsBroken,r.snapshot?.distractionsUsed,(r.jams||[]).join('|'),r.mode|| (r.fallbackUsed?'assisted':'action'),r.engineVersion||r.clientBuild,!!r.cloakUsed,Object.keys(r.snapshot?.windows||{}).join('|'),!!r.snapshot?.hordeTriggered]));
     return "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
   }

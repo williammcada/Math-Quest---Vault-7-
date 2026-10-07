@@ -1,0 +1,13 @@
+{
+  "browser": "153.0.8010.0",
+  "checks": [
+    "Actual classroom Blackline host mounts",
+    "Action start and keyboard release",
+    "Pause/resume",
+    "Audio adapter initializes without errors",
+    "Guided completion saved by local Worker"
+  ],
+  "errors": [],
+  "physicalDevices": "Not run",
+  "backend": "Local Worker with in-memory storage; authenticated test fixture"
+}

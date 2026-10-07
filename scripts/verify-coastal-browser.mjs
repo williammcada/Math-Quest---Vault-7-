@@ -1,0 +1,40 @@
+import http from 'node:http';
+import {readFile,writeFile} from 'node:fs/promises';
+import {resolve,extname} from 'node:path';
+import assert from 'node:assert/strict';
+import worker,{QuestSession} from '../src/worker.js';
+const {chromium}=await import(process.env.AERIAL_PLAYWRIGHT_MODULE||'/tmp/aerial-browser/node_modules/playwright-core/index.mjs');
+const data=new Map(),ctx={storage:{get:async k=>structuredClone(data.get(k)),put:async(k,v)=>data.set(k,structuredClone(v)),setAlarm:async()=>{}},blockConcurrencyWhile:fn=>fn()},room=new QuestSession(ctx);
+const env={CORS_ALLOWED_ORIGINS:'http://127.0.0.1:8768',SESSIONS:{idFromName:x=>x,get:()=>room}};
+const root=resolve('.');
+const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://127.0.0.1:8768');if(url.pathname.startsWith('/api/')){const chunks=[];for await(const c of req)chunks.push(c);const r=await worker.fetch(new Request(url,{method:req.method,headers:req.headers,...(chunks.length?{body:Buffer.concat(chunks)}:{})}),env);res.writeHead(r.status,Object.fromEntries(r.headers));res.end(Buffer.from(await r.arrayBuffer()));return;}const file=resolve(root,'.'+url.pathname+(url.pathname.endsWith('/')?'index.html':''));if(!file.startsWith(root+'/'))throw Error('path');const bytes=await readFile(file);res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.webp':'image/webp','.mp3':'audio/mpeg','.wav':'audio/wav','.json':'application/json'})[extname(file)]||'application/octet-stream');res.end(bytes);}catch(e){res.writeHead(404);res.end(e.message);}});
+await new Promise(r=>server.listen(8768,'127.0.0.1',r));
+const credentials={a:'coastal-test-a-credential-123456789',b:'coastal-test-b-credential-123456789'};
+async function call(path,body,id){const headers={'content-type':'application/json'};if(id)headers.authorization='Bearer '+(id==='teacher'?'teacher':credentials[id]);const res=await room.fetch(new Request('https://test'+path,{method:body?'POST':'GET',headers,...(body?{body:JSON.stringify(body)}:{})}));const out=await res.json();assert.ok(res.ok,out.error);return out;}
+const cmd=(type,extra={},id='teacher')=>call('/command',{type,commandId:crypto.randomUUID(),...(id==='teacher'?{teacherKey:'teacher'}:{deviceId:id}),...extra},id);
+await call('/init',{code:'COAST1',teacherKey:'teacher',config:{cartridgeId:'coastal-escape',gateCount:3,teamNames:['Crew'],modules:[{id:'number.gcf',itemCount:3,band:'beginner'}]}});
+for(const id of ['a','b'])await cmd('student.join',{teamPin:room.state.teams['team-1'].pin},id);
+await cmd('teacher.start');for(const id of ['a','b'])await cmd('briefing.ready',{},id);
+const browser=await chromium.launch({executablePath:process.env.AERIAL_BROWSER_EXECUTABLE||'/tmp/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+const context=await browser.newContext({viewport:{width:844,height:390},hasTouch:true,isMobile:true,deviceScaleFactor:1});const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+const checks=[];
+try{
+ await page.goto('http://127.0.0.1:8768/public/coastal-escape-preview.html');await page.locator('h1').waitFor();assert.match(await page.locator('h1').textContent(),/Hangar/);
+ await page.getByRole('button',{name:'Play music',exact:true}).click();assert.equal(await page.evaluate(()=>document.querySelector('#story img').naturalWidth>0),true);
+ await page.getByRole('button',{name:'Enter the hangar'}).click();await page.getByRole('button',{name:'Review next scene'}).click();await page.locator('[data-choice="records"]').click();await page.getByRole('button',{name:'Review next scene'}).click();await page.getByRole('button',{name:'Review next scene'}).click();await page.getByRole('button',{name:'Review final decision without flying'}).click();await page.locator('[data-choice="exchange"]').click();assert.match(await page.locator('h1').textContent(),/Price of Open Water/);checks.push('Mobile owner preview: illustrated briefing, gate scenes, records branch and exchange epilogue; soundtrack starts by gesture.');
+ await page.screenshot({path:'docs/releases/coastal-v0.3.0-evidence/story-mobile.png'});
+ await page.addInitScript(()=>{localStorage.setItem('mq-device-COAST1','a');localStorage.setItem('mq-student-COAST1','coastal-test-a-credential-123456789');});
+ await page.goto('http://127.0.0.1:8768/public/?session=COAST1&student=1');await page.waitForSelector('.mission-head');assert.match(await page.locator('body').innerText(),/Silent Frequency/);
+ async function solve(){for(const id of ['a','b']){await call('/state?deviceId='+id,null,id);await cmd('math.submit',{answer:room.state.students[id].currentItem.answer},id);}}
+ await solve();for(const id of ['a','b'])await cmd('choice.vote',{choice:'operator'},id);await cmd('choice.resolve',{},'a');await solve();await solve();
+ await page.reload();await page.waitForSelector('[data-equipment="agility"]');await page.locator('[data-equipment="agility"]').click();await page.locator('[data-action="market.ready"]').click();await cmd('market.propose',{items:['agility']},'b');await cmd('market.ready',{},'b');await cmd('market.commit',{},'b');await cmd('market.continue',{},'b');
+ await page.reload();await page.waitForSelector('[data-start]:not([disabled])');await page.locator('[data-start]').click();await page.waitForFunction(()=>document.querySelector('.flight-overlay').hidden);
+ const dpad=await page.locator('[data-direction="right"]').boundingBox(),cdp=await context.newCDPSession(page);const point={x:dpad.x+dpad.width/2,y:dpad.y+dpad.height/2,id:1};await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});await page.waitForTimeout(400);await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ await page.locator('[data-pause]').click();await page.waitForTimeout(400);assert.equal(room.state.teams['team-1'].runs.a.started,true);checks.push('Actual classroom frontend: authenticated earned loadout, issued flight, native touch contact/release, pause and server save.');
+ await cmd('teacher.pause');await page.waitForTimeout(3500);assert.equal(await page.locator('[data-pause]').isDisabled(),true);await cmd('teacher.pause');await page.waitForTimeout(3500);assert.equal(await page.locator('[data-pause]').isDisabled(),false);
+ await page.reload();await page.waitForSelector('[data-start]:not([disabled])');assert.match(await page.locator('[data-start]').innerText(),/Resume/);checks.push('Teacher pause blocks control; resume and page reload restore the same issued flight.');
+ await page.locator('[data-assist]').click();await page.locator('[data-confirm]').click();for(const choice of [0,1,0])await page.locator(`[data-choice="${choice}"]`).click();await page.waitForTimeout(1200);assert.equal(room.state.teams['team-1'].runs.a.outcome,'assisted_completed');
+ await cmd('teacher.advanceFinale',{teamId:'team-1'});await page.waitForSelector('[data-exp-vote="destroy"]');await page.locator('[data-exp-vote="destroy"]').click();await cmd('choice.vote',{choice:'destroy'},'b');await page.locator('[data-action="choice.resolve"]').waitFor();await page.waitForFunction(()=>!document.querySelector('[data-action="choice.resolve"]').disabled);await page.locator('[data-action="choice.resolve"]').click();await page.waitForFunction(()=>document.body.innerText.includes('A Sky Without an Owner'));assert.match(await page.locator('body').innerText(),/guided tactical route/);checks.push('Guided completion survives transport; absent crew closes neutrally; every student votes; correct personal record and ending appear.');
+ await page.screenshot({path:'docs/releases/coastal-v0.3.0-evidence/classroom-ending.png'});
+ assert.deepEqual(errors,[]);await writeFile('docs/releases/coastal-v0.3.0-evidence/browser-checks.json',JSON.stringify({browser:browser.version(),environment:'Local actual Worker class with in-memory Durable Object storage; Chromium native touch emulation',checks,errors,physicalIOS:'Not run',cloudflareDeployment:'Not run — credentials unavailable'},null,2));console.log(JSON.stringify({checks,errors}));
+}finally{await browser.close();server.close();}

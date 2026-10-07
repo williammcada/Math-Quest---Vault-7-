@@ -1,0 +1,29 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+
+ ⛅️ wrangler 4.131.0
+────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mThe CommonJS "module" variable is treated as a global variable in an ECMAScript module and may not work as expected[0m [commonjs-variable-in-esm]
+
+    public/games/blackline/sim.js:92:265:
+[37m      92 │ ...lacklineSim=api;if(typeof module!=='undefined')[32mmodule[37m.exports=api;
+         ╵                                                   [32m~~~~~~[0m
+
+  This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    public/games/blackline/sim.js:95:0:
+[37m      95 │ [32mexport[37m default globalThis.BlacklineSim;
+         ╵ [32m~~~~~~[0m
+
+
+Total Upload: 338.06 KiB / gzip: 96.16 KiB
+Your Worker has access to the following bindings:
+Binding                                                                    Resource                  
+env.SESSIONS (QuestSession)                                                Durable Object            
+env.CORS_ALLOWED_ORIGINS ("https://williammcada.github.io,https:...")      Environment Variable      
+
+--dry-run: exiting now.

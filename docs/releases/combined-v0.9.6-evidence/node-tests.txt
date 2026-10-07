@@ -1,0 +1,1368 @@
+TAP version 13
+# Subtest: teacher N is explicit for unequal gates; block counts are pinned and all members finish
+ok 1 - teacher N is explicit for unequal gates; block counts are pinned and all members finish
+  ---
+  duration_ms: 2.407156
+  type: 'test'
+  ...
+# Subtest: shared clock includes late start and disconnect; teacher pause freezes it
+ok 2 - shared clock includes late start and disconnect; teacher pause freezes it
+  ---
+  duration_ms: 1.013851
+  type: 'test'
+  ...
+# Subtest: authenticated commands, duplicate IDs, health monotonicity and terminal precedence
+ok 3 - authenticated commands, duplicate IDs, health monotonicity and terminal precedence
+  ---
+  duration_ms: 4.716565
+  type: 'test'
+  ...
+# Subtest: assisted result records separately with unchanged academic fields
+ok 4 - assisted result records separately with unchanged academic fields
+  ---
+  duration_ms: 0.79452
+  type: 'test'
+  ...
+# Subtest: completion queue survives an in-flight progress request; outage requires resume
+ok 5 - completion queue survives an in-flight progress request; outage requires resume
+  ---
+  duration_ms: 1.467126
+  type: 'test'
+  ...
+# Subtest: fixed step, normalized opposing/diagonal movement, clamps
+ok 6 - fixed step, normalized opposing/diagonal movement, clamps
+  ---
+  duration_ms: 10.054387
+  type: 'test'
+  ...
+# Subtest: save/restore resumes exact enemies, cooldowns, bullets and events
+ok 7 - save/restore resumes exact enemies, cooldowns, bullets and events
+  ---
+  duration_ms: 35.058567
+  type: 'test'
+  ...
+# Subtest: all eight loadouts implement exact movement, hull and damage
+ok 8 - all eight loadouts implement exact movement, hull and damage
+  ---
+  duration_ms: 2.381047
+  type: 'test'
+  ...
+# Subtest: ordinary and heavy damage honor one second protection
+ok 9 - ordinary and heavy damage honor one second protection
+  ---
+  duration_ms: 1.037927
+  type: 'test'
+  ...
+# Subtest: three lives; midpoint rewinds progress not time; armor and spent supplies survive
+ok 10 - three lives; midpoint rewinds progress not time; armor and spent supplies survive
+  ---
+  duration_ms: 1.25761
+  type: 'test'
+  ...
+# Subtest: boss checkpoint restores all components and clears threats
+ok 11 - boss checkpoint restores all components and clears threats
+  ---
+  duration_ms: 0.321876
+  type: 'test'
+  ...
+# Subtest: six stable supply opportunities, replacement, capped repair and replay suppression
+ok 12 - six stable supply opportunities, replacement, capped repair and replay suppression
+  ---
+  duration_ms: 0.26493
+  type: 'test'
+  ...
+# Subtest: terminal precedence: defeat, then boss kill, then active expiry; immutable
+ok 13 - terminal precedence: defeat, then boss kill, then active expiry; immutable
+  ---
+  duration_ms: 1.221315
+  type: 'test'
+  ...
+# Subtest: assisted route freezes action clock, retries and cannot reopen terminal
+ok 14 - assisted route freezes action clock, retries and cannot reopen terminal
+  ---
+  duration_ms: 1.098299
+  type: 'test'
+  ...
+# Subtest: malformed/revision-mismatched snapshots fail explicitly
+ok 15 - malformed/revision-mismatched snapshots fail explicitly
+  ---
+  duration_ms: 0.924777
+  type: 'test'
+  ...
+# Subtest: surface artwork does not damage aircraft; aircraft does
+ok 16 - surface artwork does not damage aircraft; aircraft does
+  ---
+  duration_ms: 0.356939
+  type: 'test'
+  ...
+# Subtest: full authored timeline stays bounded with deterministic evasive input
+ok 17 - full authored timeline stays bounded with deterministic evasive input
+  ---
+  duration_ms: 160.019071
+  type: 'test'
+  ...
+# Subtest: baseline and upgraded aircraft can mechanically complete boss within the 75-second boss section
+ok 18 - baseline and upgraded aircraft can mechanically complete boss within the 75-second boss section
+  ---
+  duration_ms: 25.403953
+  type: 'test'
+  ...
+# Subtest: five-minute level doubles combatants and retains six unique supplies
+ok 19 - five-minute level doubles combatants and retains six unique supplies
+  ---
+  duration_ms: 101.622935
+  type: 'test'
+  ...
+# Subtest: Coastal 3/4/5 gates, both routes, all endings, personal assisted results and restored classroom records
+ok 20 - Coastal 3/4/5 gates, both routes, all endings, personal assisted results and restored classroom records
+  ---
+  duration_ms: 391.593843
+  type: 'test'
+  ...
+# Subtest: Coastal rejects cross-player, legacy minigame and unearned upgrades; closure preserves votes
+ok 21 - Coastal rejects cross-player, legacy minigame and unearned upgrades; closure preserves votes
+  ---
+  duration_ms: 30.674065
+  type: 'test'
+  ...
+# Subtest: Coastal teacher pause shifts deadline once; alarm closes absent flights
+ok 22 - Coastal teacher pause shifts deadline once; alarm closes absent flights
+  ---
+  duration_ms: 22.764512
+  type: 'test'
+  ...
+# Subtest: Unequal gate loads require explicit extra-upgrade count and teacher setting enables it
+ok 23 - Unequal gate loads require explicit extra-upgrade count and teacher setting enables it
+  ---
+  duration_ms: 17.835201
+  type: 'test'
+  ...
+# Subtest: one backend catalog exposes all five cartridge revisions and matching frontend version
+ok 24 - one backend catalog exposes all five cartridge revisions and matching frontend version
+  ---
+  duration_ms: 7.542113
+  type: 'test'
+  ...
+# Subtest: other cartridges cannot consume Ironbreak, Coastal or rescue commands
+ok 25 - other cartridges cannot consume Ironbreak, Coastal or rescue commands
+  ---
+  duration_ms: 63.045367
+  type: 'test'
+  ...
+# Subtest: existing supported room versions reload without losing their issued configuration
+ok 26 - existing supported room versions reload without losing their issued configuration
+  ---
+  duration_ms: 16.29187
+  type: 'test'
+  ...
+# Subtest: combined reports retain cartridge-specific assisted and terminal labels
+ok 27 - combined reports retain cartridge-specific assisted and terminal labels
+  ---
+  duration_ms: 10.490055
+  type: 'test'
+  ...
+# Subtest: Nightfall runs full 3/4/5 gate journeys with all work and independent results
+ok 28 - Nightfall runs full 3/4/5 gate journeys with all work and independent results
+  ---
+  duration_ms: 260.980566
+  type: 'test'
+  ...
+# Subtest: Nightfall rejects unearned baskets, stale stage commands and another player run
+ok 29 - Nightfall rejects unearned baskets, stale stage commands and another player run
+  ---
+  duration_ms: 39.002054
+  type: 'test'
+  ...
+# Subtest: deadline, teacher pause and teacher advancement settle missing players
+ok 30 - deadline, teacher pause and teacher advancement settle missing players
+  ---
+  duration_ms: 77.564515
+  type: 'test'
+  ...
+# Subtest: equipment has concrete, independent effects and cannot recharge on restore
+ok 31 - equipment has concrete, independent effects and cannot recharge on restore
+  ---
+  duration_ms: 0.5098
+  type: 'test'
+  ...
+# Subtest: baseline no-shooting route is completable; movement is normalized and walls block shots
+ok 32 - baseline no-shooting route is completable; movement is normalized and walls block shots
+  ---
+  duration_ms: 20.50274
+  type: 'test'
+  ...
+# Subtest: two teams freeze independent conditions and students see only their own results
+ok 33 - two teams freeze independent conditions and students see only their own results
+  ---
+  duration_ms: 50.026486
+  type: 'test'
+  ...
+# Subtest: command replay produces one result; stale and modified condition payloads are rejected
+ok 34 - command replay produces one result; stale and modified condition payloads are rejected
+  ---
+  duration_ms: 19.150318
+  type: 'test'
+  ...
+# Subtest: third disconnected teammate receives a neutral shared-window closure and cannot block epilogues
+ok 35 - third disconnected teammate receives a neutral shared-window closure and cannot block epilogues
+  ---
+  duration_ms: 15.124866
+  type: 'test'
+  ...
+# Subtest: teacher can pause deadlines, enable accessible route, and advance only unfinished players
+ok 36 - teacher can pause deadlines, enable accessible route, and advance only unfinished players
+  ---
+  duration_ms: 15.791584
+  type: 'test'
+  ...
+# Subtest: Durable Object restart retains checkpoint, integrity and report evidence without changing mastery
+ok 37 - Durable Object restart retains checkpoint, integrity and report evidence without changing mastery
+  ---
+  duration_ms: 17.936264
+  type: 'test'
+  ...
+# Subtest: empty or malformed numeric input never counts as a wrong attempt
+ok 38 - empty or malformed numeric input never counts as a wrong attempt
+  ---
+  duration_ms: 9.849758
+  type: 'test'
+  ...
+# Subtest: intensive review snapshots above one storage value restore complete assessment evidence
+ok 39 - intensive review snapshots above one storage value restore complete assessment evidence
+  ---
+  duration_ms: 60.168627
+  type: 'test'
+  ...
+# Subtest: False Haven authenticated 3/4/5 gate journeys, both leads/routes, all endings and separate evidence
+ok 40 - False Haven authenticated 3/4/5 gate journeys, both leads/routes, all endings and separate evidence
+  ---
+  duration_ms: 201.549313
+  type: 'test'
+  ...
+# Subtest: False Haven team deadline is authoritative, alarm closes absent players and pause extends it
+ok 41 - False Haven team deadline is authoritative, alarm closes absent players and pause extends it
+  ---
+  duration_ms: 63.881054
+  type: 'test'
+  ...
+# Subtest: False Haven ownership and server envelope reject forged config, machinery, resources, enemies and mode
+ok 42 - False Haven ownership and server envelope reject forged config, machinery, resources, enemies and mode
+  ---
+  duration_ms: 26.542083
+  type: 'test'
+  ...
+# Subtest: False Haven reload retains ammunition, mode and monotonic gameplay counters
+ok 43 - False Haven reload retains ammunition, mode and monotonic gameplay counters
+  ---
+  duration_ms: 3.974334
+  type: 'test'
+  ...
+# Subtest: guided route has a distinct result, UI pauses and no classroom commands
+ok 44 - guided route has a distinct result, UI pauses and no classroom commands
+  ---
+  duration_ms: 38.364681
+  type: 'test'
+  ...
+# Subtest: host freezes active clock on pause, restores ended run and clears input
+ok 45 - host freezes active clock on pause, restores ended run and clears input
+  ---
+  duration_ms: 15.065136
+  type: 'test'
+  ...
+# AREA {"chapter1Cells":2936,"chapter2Cells":6872,"ratio":2.3405994550408717,"boundsRatio":2.25}
+# ROUTE {"activeSeconds":148.63333333334376,"walkingDistance":12286.666666665773}
+# Subtest: new world is 2.25x bounds and at least twice reachable area
+ok 46 - new world is 2.25x bounds and at least twice reachable area
+  ---
+  duration_ms: 251.736518
+  type: 'test'
+  ...
+# Subtest: all authored actors spawn in free space, roster stays the same
+ok 47 - all authored actors spawn in free space, roster stays the same
+  ---
+  duration_ms: 2.082105
+  type: 'test'
+  ...
+# Subtest: physical movement and real Use input finish required route without ammunition
+ok 48 - physical movement and real Use input finish required route without ammunition
+  ---
+  duration_ms: 3226.607519
+  type: 'test'
+  ...
+# Subtest: puzzle ordering, occupied track and local speaker cooldown remain recoverable
+ok 49 - puzzle ordering, occupied track and local speaker cooldown remain recoverable
+  ---
+  duration_ms: 1.036566
+  type: 'test'
+  ...
+# Subtest: save restores topology, ammo, elapsed time and terminal state without cross-chapter mutation
+ok 50 - save restores topology, ammo, elapsed time and terminal state without cross-chapter mutation
+  ---
+  duration_ms: 5.970128
+  type: 'test'
+  ...
+# Subtest: bundled QR generator exposes the matrix API used by the teacher dashboard
+ok 51 - bundled QR generator exposes the matrix API used by the teacher dashboard
+  ---
+  duration_ms: 29.822032
+  type: 'test'
+  ...
+# Subtest: join polling does not steal focus from alias or team-code fields
+ok 52 - join polling does not steal focus from alias or team-code fields
+  ---
+  duration_ms: 0.39043
+  type: 'test'
+  ...
+# Subtest: teacher builder exposes cartridge, discipline, module, import, and balanced allocation controls
+ok 53 - teacher builder exposes cartridge, discipline, module, import, and balanced allocation controls
+  ---
+  duration_ms: 0.275225
+  type: 'test'
+  ...
+# Subtest: teacher launch controls survive polling and expose progress and errors
+ok 54 - teacher launch controls survive polling and expose progress and errors
+  ---
+  duration_ms: 0.528969
+  type: 'test'
+  ...
+# Subtest: student interface uses math-native controls and unmistakable team cues
+ok 55 - student interface uses math-native controls and unmistakable team cues
+  ---
+  duration_ms: 6.803226
+  type: 'test'
+  ...
+# Subtest: teacher can privately adjust each student's next unissued preset question
+ok 56 - teacher can privately adjust each student's next unissued preset question
+  ---
+  duration_ms: 0.422758
+  type: 'test'
+  ...
+# Subtest: aerial: failed capture, global release/cancel/lost capture, fresh input
+ok 57 - aerial: failed capture, global release/cancel/lost capture, fresh input
+  ---
+  duration_ms: 26.71268
+  type: 'test'
+  ...
+# Subtest: aerial: touch list releases without pointerup, both multi-touch release orders
+ok 58 - aerial: touch list releases without pointerup, both multi-touch release orders
+  ---
+  duration_ms: 31.751652
+  type: 'test'
+  ...
+# Subtest: aerial: blocked input, interruptions and teardown cannot relatch held contacts
+ok 59 - aerial: blocked input, interruptions and teardown cannot relatch held contacts
+  ---
+  duration_ms: 10.404857
+  type: 'test'
+  ...
+# Subtest: aerial: stationary holds persist; keyboard aliases and touch stay independent
+ok 60 - aerial: stationary holds persist; keyboard aliases and touch stay independent
+  ---
+  duration_ms: 6.09072
+  type: 'test'
+  ...
+# Subtest: aerial: long-press menu and selection are blocked inside play, editable fields remain usable
+ok 61 - aerial: long-press menu and selection are blocked inside play, editable fields remain usable
+  ---
+  duration_ms: 3.705677
+  type: 'test'
+  ...
+# Subtest: buttons: failed capture, global release/cancel/lost capture, fresh input
+ok 62 - buttons: failed capture, global release/cancel/lost capture, fresh input
+  ---
+  duration_ms: 4.100344
+  type: 'test'
+  ...
+# Subtest: buttons: touch list releases without pointerup, both multi-touch release orders
+ok 63 - buttons: touch list releases without pointerup, both multi-touch release orders
+  ---
+  duration_ms: 7.294257
+  type: 'test'
+  ...
+# Subtest: buttons: blocked input, interruptions and teardown cannot relatch held contacts
+ok 64 - buttons: blocked input, interruptions and teardown cannot relatch held contacts
+  ---
+  duration_ms: 6.572769
+  type: 'test'
+  ...
+# Subtest: buttons: stationary holds persist; keyboard aliases and touch stay independent
+ok 65 - buttons: stationary holds persist; keyboard aliases and touch stay independent
+  ---
+  duration_ms: 5.366095
+  type: 'test'
+  ...
+# Subtest: buttons: long-press menu and selection are blocked inside play, editable fields remain usable
+ok 66 - buttons: long-press menu and selection are blocked inside play, editable fields remain usable
+  ---
+  duration_ms: 4.057769
+  type: 'test'
+  ...
+# Subtest: GitHub navigation and QR links preserve the project directory and strip teacher credentials
+ok 67 - GitHub navigation and QR links preserve the project directory and strip teacher credentials
+  ---
+  duration_ms: 2.886861
+  type: 'test'
+  ...
+# Subtest: GitHub paths resolve every scene, style, script, soundtrack, and sprite inside the repository
+ok 68 - GitHub paths resolve every scene, style, script, soundtrack, and sprite inside the repository
+  ---
+  duration_ms: 20.506707
+  type: 'test'
+  ...
+# Subtest: JSON preflight succeeds at the relay without touching session storage; other origins and headers fail
+ok 69 - JSON preflight succeeds at the relay without touching session storage; other origins and headers fail
+  ---
+  duration_ms: 7.622024
+  type: 'test'
+  ...
+# Subtest: cross-origin create, two-player join, launch, answers, polling, and teacher exports retain authorization
+ok 70 - cross-origin create, two-player join, launch, answers, polling, and teacher exports retain authorization
+  ---
+  duration_ms: 25.915667
+  type: 'test'
+  ...
+# Subtest: legacy Netlify and no-Origin requests remain compatible; health check never creates a room
+ok 71 - legacy Netlify and no-Origin requests remain compatible; health check never creates a room
+  ---
+  duration_ms: 0.745937
+  type: 'test'
+  ...
+# Subtest: all browser API calls omit cookies and referrers while preserving the command abort signal
+ok 72 - all browser API calls omit cookies and referrers while preserving the command abort signal
+  ---
+  duration_ms: 0.580236
+  type: 'test'
+  ...
+# Subtest: explicit integer mode serializes positive, negative and zero values without a student denominator
+ok 73 - explicit integer mode serializes positive, negative and zero values without a student denominator
+  ---
+  duration_ms: 4.648011
+  type: 'test'
+  ...
+# Subtest: Ironbreak profile preserves each thumb and reconciles missed releases in both orders
+ok 74 - Ironbreak profile preserves each thumb and reconciles missed releases in both orders
+  ---
+  duration_ms: 27.563686
+  type: 'test'
+  ...
+# Subtest: Ironbreak profile stops outside pad, suppresses native menus and requires fresh input after interruption
+ok 75 - Ironbreak profile stops outside pad, suppresses native menus and requires fresh input after interruption
+  ---
+  duration_ms: 5.668512
+  type: 'test'
+  ...
+# Subtest: Ironbreak 3/4/5 gates, both priorities and every ending retain complete story and separate math evidence
+ok 76 - Ironbreak 3/4/5 gates, both priorities and every ending retain complete story and separate math evidence
+  ---
+  duration_ms: 580.373514
+  type: 'test'
+  ...
+# Subtest: extra mathematics alone unlocks multiple distinct frozen upgrades; loadout tampering is rejected
+ok 77 - extra mathematics alone unlocks multiple distinct frozen upgrades; loadout tampering is rejected
+  ---
+  duration_ms: 41.337942
+  type: 'test'
+  ...
+# Subtest: server alarm closes unstarted/disconnected suits; teacher pause shifts deadline once and stale starts cannot reopen
+ok 78 - server alarm closes unstarted/disconnected suits; teacher pause shifts deadline once and stale starts cannot reopen
+  ---
+  duration_ms: 18.019299
+  type: 'test'
+  ...
+# Subtest: three lives, authoritative retries, new attempt identities and idempotency preserve equipment and elapsed time
+ok 79 - three lives, authoritative retries, new attempt identities and idempotency preserve equipment and elapsed time
+  ---
+  duration_ms: 25.328479
+  type: 'test'
+  ...
+# Subtest: real simulation progress persists and restores without refilling; known identities and bounded state reject tampering
+ok 80 - real simulation progress persists and restores without refilling; known identities and bounded state reject tampering
+  ---
+  duration_ms: 71.745774
+  type: 'test'
+  ...
+# Subtest: guided wrong responses preserve steps; switch is irreversible; student sees only own run; deletion removes saved server state
+ok 81 - guided wrong responses preserve steps; switch is irreversible; student sees only own run; deletion removes saved server state
+  ---
+  duration_ms: 61.630464
+  type: 'test'
+  ...
+# Subtest: real boss fight snapshots pass the live validator through success; checkpoint retries reset only the issued section
+ok 82 - real boss fight snapshots pass the live validator through success; checkpoint retries reset only the issued section
+  ---
+  duration_ms: 184.250131
+  type: 'test'
+  ...
+# Subtest: all 25 preset generators are deterministic and self-checking
+ok 83 - all 25 preset generators are deterministic and self-checking
+  ---
+  duration_ms: 40.623584
+  type: 'test'
+  ...
+# Subtest: math checker supports every v0.4 answer contract
+ok 84 - math checker supports every v0.4 answer contract
+  ---
+  duration_ms: 0.399984
+  type: 'test'
+  ...
+# Subtest: teacher questions are validated before a session begins
+ok 85 - teacher questions are validated before a session begins
+  ---
+  duration_ms: 0.727579
+  type: 'test'
+  ...
+# Subtest: negative exponents render the entire signed exponent as superscript
+ok 86 - negative exponents render the entire signed exponent as superscript
+  ---
+  duration_ms: 0.235495
+  type: 'test'
+  ...
+# Subtest: teacher questions can include a validated HTTPS image
+ok 87 - teacher questions can include a validated HTTPS image
+  ---
+  duration_ms: 0.278811
+  type: 'test'
+  ...
+# Subtest: simplification modules reject an equivalent unreduced fraction
+ok 88 - simplification modules reject an equivalent unreduced fraction
+  ---
+  duration_ms: 0.176186
+  type: 'test'
+  ...
+# Subtest: new answer forms grade exact rational values and reject unsafe/ambiguous formats
+ok 89 - new answer forms grade exact rational values and reject unsafe/ambiguous formats
+  ---
+  duration_ms: 0.219551
+  type: 'test'
+  ...
+# Subtest: scientific operation answers equal the operands and normalize across positive/negative powers
+ok 90 - scientific operation answers equal the operands and normalize across positive/negative powers
+  ---
+  duration_ms: 0.676682
+  type: 'test'
+  ...
+# Subtest: tax and tip use cent-based half-up rounding and give unambiguous amount/total prompts
+ok 91 - tax and tip use cent-based half-up rounding and give unambiguous amount/total prompts
+  ---
+  duration_ms: 0.819027
+  type: 'test'
+  ...
+# Subtest: imported unit/mixed/choice items retain assessment tags and reject missing option answers
+ok 92 - imported unit/mixed/choice items retain assessment tags and reject missing option answers
+  ---
+  duration_ms: 0.290869
+  type: 'test'
+  ...
+# Subtest: neutral builder requires an explicit cartridge and switches metadata without changing the platform brand
+ok 93 - neutral builder requires an explicit cartridge and switches metadata without changing the platform brand
+  ---
+  duration_ms: 173.69109
+  type: 'test'
+  ...
+# Subtest: Nightfall teacher setup accepts the current cartridge revision and creates a session
+ok 94 - Nightfall teacher setup accepts the current cartridge revision and creates a session
+  ---
+  duration_ms: 53.922912
+  type: 'test'
+  ...
+# Subtest: teacher creation opens the GitHub project dashboard; its QR contains the student link
+ok 95 - teacher creation opens the GitHub project dashboard; its QR contains the student link
+  ---
+  duration_ms: 105.005554
+  type: 'test'
+  ...
+# Subtest: join fields retain focus and text across a GitHub-hosted polling refresh
+ok 96 - join fields retain focus and text across a GitHub-hosted polling refresh
+  ---
+  duration_ms: 14.07447
+  type: 'test'
+  ...
+# Subtest: Nightfall join starts neutral, resolves while typing, and clears cartridge identity on expiry
+ok 97 - Nightfall join starts neutral, resolves while typing, and clears cartridge identity on expiry
+  ---
+  duration_ms: 31.979506
+  type: 'test'
+  ...
+# Subtest: failed session lookup displays the connection error without a cartridge fallback
+ok 98 - failed session lookup displays the connection error without a cartridge fallback
+  ---
+  duration_ms: 11.90996
+  type: 'test'
+  ...
+# Subtest: connection page completes both checks and exposes the game link only on success
+ok 99 - connection page completes both checks and exposes the game link only on success
+  ---
+  duration_ms: 15.833047
+  type: 'test'
+  ...
+# Subtest: a missing relay produces an actionable failure and allows another test
+ok 100 - a missing relay produces an actionable failure and allows another test
+  ---
+  duration_ms: 9.211615
+  type: 'test'
+  ...
+# Subtest: Nightfall rendered student flow reaches a personalized ending with no legacy market renderer
+ok 101 - Nightfall rendered student flow reaches a personalized ending with no legacy market renderer
+  ---
+  duration_ms: 169.626386
+  type: 'test'
+  ...
+# Subtest: Nightfall canvas survives polling, pause clears held input, outside pointer release clears movement
+ok 102 - Nightfall canvas survives polling, pause clears held input, outside pointer release clears movement
+  ---
+  duration_ms: 23.915385
+  type: 'test'
+  ...
+# Subtest: Nightfall assisted mode completes and sends one terminal result
+ok 103 - Nightfall assisted mode completes and sends one terminal result
+  ---
+  duration_ms: 51.008941
+  type: 'test'
+  ...
+# Subtest: Nightfall offline terminal result survives reload and retry; practice sends nothing
+ok 104 - Nightfall offline terminal result survives reload and retry; practice sends nothing
+  ---
+  duration_ms: 49.483056
+  type: 'test'
+  ...
+# Subtest: Nightfall no-canvas environment offers assisted route
+ok 105 - Nightfall no-canvas environment offers assisted route
+  ---
+  duration_ms: 6.337493
+  type: 'test'
+  ...
+# Subtest: held keyboard Search/Use reaches the actual game step and survives ordinary polling
+ok 106 - held keyboard Search/Use reaches the actual game step and survives ordinary polling
+  ---
+  duration_ms: 17.222695
+  type: 'test'
+  ...
+# Subtest: live runtime keeps canvas and input node identity across polling, pause and checkpoint save
+ok 107 - live runtime keeps canvas and input node identity across polling, pause and checkpoint save
+  ---
+  duration_ms: 27.650987
+  type: 'test'
+  ...
+# Subtest: accessible extraction supports confirmation, toolkit payoff and terminal evidence
+ok 108 - accessible extraction supports confirmation, toolkit payoff and terminal evidence
+  ---
+  duration_ms: 674.805741
+  type: 'test'
+  ...
+# Subtest: offline queue is stored and recovery preserves detections without resetting to full integrity
+ok 109 - offline queue is stored and recovery preserves detections without resetting to full integrity
+  ---
+  duration_ms: 49.195527
+  type: 'test'
+  ...
+# Subtest: a missing canvas context still allows the full accessible route entry
+ok 110 - a missing canvas context still allows the full accessible route entry
+  ---
+  duration_ms: 7.225784
+  type: 'test'
+  ...
+# Subtest: touch release outside a button and opposite direction clear stale movement
+ok 111 - touch release outside a button and opposite direction clear stale movement
+  ---
+  duration_ms: 5.750226
+  type: 'test'
+  ...
+# Subtest: developer practice completes without network commands or network pause
+ok 112 - developer practice completes without network commands or network pause
+  ---
+  duration_ms: 4.371183
+  type: 'test'
+  ...
+# Subtest: sound switch resumes audio within its interaction and plays a preview
+ok 113 - sound switch resumes audio within its interaction and plays a preview
+  ---
+  duration_ms: 3.589902
+  type: 'test'
+  ...
+# Subtest: question pools allocate exactly and evenly across stable gates
+ok 114 - question pools allocate exactly and evenly across stable gates
+  ---
+  duration_ms: 2.095135
+  type: 'test'
+  ...
+# Subtest: launch requires a student, removes empty teams, and reports the active roster
+ok 115 - launch requires a student, removes empty teams, and reports the active roster
+  ---
+  duration_ms: 29.220389
+  type: 'test'
+  ...
+# Subtest: launch retains every occupied team and locks the roster
+ok 116 - launch retains every occupied team and locks the roster
+  ---
+  duration_ms: 9.08944
+  type: 'test'
+  ...
+# Subtest: teams receive different story-linked secrets and honor recent exclusions
+ok 117 - teams receive different story-linked secrets and honor recent exclusions
+  ---
+  duration_ms: 4.309099
+  type: 'test'
+  ...
+# Subtest: teacher difficulty changes only the next unissued preset question and stays private
+ok 118 - teacher difficulty changes only the next unissued preset question and stays private
+  ---
+  duration_ms: 10.57224
+  type: 'test'
+  ...
+# Subtest: full-class launch stores lightweight plans and generates questions on demand
+ok 119 - full-class launch stores lightweight plans and generates questions on demand
+  ---
+  duration_ms: 35.98066
+  type: 'test'
+  ...
+# Subtest: two students complete briefing, mixed gates, choices, market, cipher, and ending
+ok 120 - two students complete briefing, mixed gates, choices, market, cipher, and ending
+  ---
+  duration_ms: 32.392169
+  type: 'test'
+  ...
+# Subtest: custom questions mix with presets and undersized sessions are rejected
+ok 121 - custom questions mix with presets and undersized sessions are rejected
+  ---
+  duration_ms: 4.364673
+  type: 'test'
+  ...
+# Subtest: authored inventory and all eight distinct upgrade combinations
+ok 122 - authored inventory and all eight distinct upgrade combinations
+  ---
+  duration_ms: 64.105814
+  type: 'test'
+  ...
+# Subtest: fixed-step run speed, agility rate and platform seam crossing
+ok 123 - fixed-step run speed, agility rate and platform seam crossing
+  ---
+  duration_ms: 2.042646
+  type: 'test'
+  ...
+# Subtest: baseline full jump crosses a required 80px gap and lands
+ok 124 - baseline full jump crosses a required 80px gap and lands
+  ---
+  duration_ms: 1.090777
+  type: 'test'
+  ...
+# Subtest: early jump release reduces height; hold does not auto-repeat
+ok 125 - early jump release reduces height; hold does not auto-repeat
+  ---
+  duration_ms: 3.008876
+  type: 'test'
+  ...
+# Subtest: drop-through affects a thin deck, but never a solid floor
+ok 126 - drop-through affects a thin deck, but never a solid floor
+  ---
+  duration_ms: 4.573047
+  type: 'test'
+  ...
+# Subtest: one jump normally, two distinct presses with agility, no third jump
+ok 127 - one jump normally, two distinct presses with agility, no third jump
+  ---
+  duration_ms: 0.530121
+  type: 'test'
+  ...
+# Subtest: double Down enters stationary prone; cancellation clears gesture history
+ok 128 - double Down enters stationary prone; cancellation clears gesture history
+  ---
+  duration_ms: 0.411141
+  type: 'test'
+  ...
+# Subtest: ladder ascends, descends adjacent connector, and jump disengages
+ok 129 - ladder ascends, descends adjacent connector, and jump disengages
+  ---
+  duration_ms: 3.398333
+  type: 'test'
+  ...
+# Subtest: surface swimming has no dive, permits fire, and jumps onto bank
+ok 130 - surface swimming has no dive, permits fire, and jumps onto bank
+  ---
+  duration_ms: 5.092112
+  type: 'test'
+  ...
+# Subtest: all four repair cache positions collect at low health; full health leaves them
+ok 131 - all four repair cache positions collect at low health; full health leaves them
+  ---
+  duration_ms: 4.403602
+  type: 'test'
+  ...
+# Subtest: guard gate blocks all three heights until H01 is defeated
+ok 132 - guard gate blocks all three heights until H01 is defeated
+  ---
+  duration_ms: 2.904978
+  type: 'test'
+  ...
+# Subtest: checkpoints do not refill on first arrival; jumping cannot skip them
+ok 133 - checkpoints do not refill on first arrival; jumping cannot skip them
+  ---
+  duration_ms: 0.291351
+  type: 'test'
+  ...
+# Subtest: three deaths consume exactly three lives, protection prevents stacked hits
+ok 134 - three deaths consume exactly three lives, protection prevents stacked hits
+  ---
+  duration_ms: 4.56769
+  type: 'test'
+  ...
+# Subtest: checkpoint retry resets current/later sections and retains earlier state
+ok 135 - checkpoint retry resets current/later sections and retains earlier state
+  ---
+  duration_ms: 0.34425
+  type: 'test'
+  ...
+# Subtest: deadline wins over a downed retry and never overwrites resolved success
+ok 136 - deadline wins over a downed retry and never overwrites resolved success
+  ---
+  duration_ms: 0.257249
+  type: 'test'
+  ...
+# Subtest: fast bullet segment intersects cover before a target behind it
+ok 137 - fast bullet segment intersects cover before a target behind it
+  ---
+  duration_ms: 0.309558
+  type: 'test'
+  ...
+# Subtest: spread hits boss once per volley; single victory remains terminal
+ok 138 - spread hits boss once per volley; single victory remains terminal
+  ---
+  duration_ms: 0.408367
+  type: 'test'
+  ...
+# Subtest: boss trigger cannot be skipped with a jump; retry restores boss HP only on new attempt
+ok 139 - boss trigger cannot be skipped with a jump; retry restores boss HP only on new attempt
+  ---
+  duration_ms: 0.271741
+  type: 'test'
+  ...
+# Subtest: boss high volley is duckable; low sweep is jumpable without agility
+ok 140 - boss high volley is duckable; low sweep is jumpable without agility
+  ---
+  duration_ms: 7.139284
+  type: 'test'
+  ...
+# Subtest: offscreen enemies cannot launch unseen projectiles
+ok 141 - offscreen enemies cannot launch unseen projectiles
+  ---
+  duration_ms: 8.637236
+  type: 'test'
+  ...
+# Subtest: eight directional sectors and center dead zone
+ok 142 - eight directional sectors and center dead zone
+  ---
+  duration_ms: 0.389048
+  type: 'test'
+  ...
+# Subtest: all emitted effect names have a declared original sound
+ok 143 - all emitted effect names have a declared original sound
+  ---
+  duration_ms: 0.100531
+  type: 'test'
+  ...
+# Subtest: baseline boss encounter can reach success through ordinary controls and damage rules
+ok 144 - baseline boss encounter can reach success through ordinary controls and damage rules
+  ---
+  duration_ms: 60.867708
+  type: 'test'
+  ...
+# Subtest: standing and continuously firing no longer wins the boss fight
+ok 145 - standing and continuously firing no longer wins the boss fight
+  ---
+  duration_ms: 29.087216
+  type: 'test'
+  ...
+# Subtest: approach-triggered hazards show the full warning before damage
+ok 146 - approach-triggered hazards show the full warning before damage
+  ---
+  duration_ms: 1.004818
+  type: 'test'
+  ...
+# Subtest: three new cover beats remain jumpable without agility
+ok 147 - three new cover beats remain jumpable without agility
+  ---
+  duration_ms: 1.766739
+  type: 'test'
+  ...
+# Subtest: second-phase low sweep sends two spaced shots and overhead repeats its warning
+ok 148 - second-phase low sweep sends two spaced shots and overhead repeats its warning
+  ---
+  duration_ms: 6.976288
+  type: 'test'
+  ...
+# Subtest: both maps have clear spawn/checkpoints and toolkit begins with manual charges
+ok 149 - both maps have clear spawn/checkpoints and toolkit begins with manual charges
+  ---
+  duration_ms: 1.852558
+  type: 'test'
+  ...
+# Subtest: fixed simulation has expected speed, jump height, landing and early jump release
+ok 150 - fixed simulation has expected speed, jump height, landing and early jump release
+  ---
+  duration_ms: 6.595032
+  type: 'test'
+  ...
+# Subtest: coyote window and landing buffer allow forgiving keyboard/touch jumps
+ok 151 - coyote window and landing buffer allow forgiving keyboard/touch jumps
+  ---
+  duration_ms: 0.42371
+  type: 'test'
+  ...
+# Subtest: common cover fully occludes light and forecast uses the actual future geometry
+ok 152 - common cover fully occludes light and forecast uses the actual future geometry
+  ---
+  duration_ms: 1.081443
+  type: 'test'
+  ...
+# Subtest: sensor detections consume integrity once per contact and three captures are terminal
+ok 153 - sensor detections consume integrity once per contact and three captures are terminal
+  ---
+  duration_ms: 0.597893
+  type: 'test'
+  ...
+# Subtest: base jump clears the corridor sensor from its launch crate without equipment
+ok 154 - base jump clears the corridor sensor from its launch crate without equipment
+  ---
+  duration_ms: 1.588971
+  type: 'test'
+  ...
+# Subtest: shaft route is traversable at base speed with hazards active and no powerup
+ok 155 - shaft route is traversable at base speed with hazards active and no powerup
+  ---
+  duration_ms: 8.856117
+  type: 'test'
+  ...
+# Subtest: corridor route is traversable with timed sensor crossing and a jump from the launch crate
+ok 156 - corridor route is traversable with timed sensor crossing and a jump from the launch crate
+  ---
+  duration_ms: 4.122276
+  type: 'test'
+  ...
+# Subtest: exit requires holding interact; active timer cannot run past 180 seconds
+ok 157 - exit requires holding interact; active timer cannot run past 180 seconds
+  ---
+  duration_ms: 0.902904
+  type: 'test'
+  ...
+# Subtest: refresh reconciliation is monotonic and terminal server records win
+ok 158 - refresh reconciliation is monotonic and terminal server records win
+  ---
+  duration_ms: 0.282787
+  type: 'test'
+  ...
+# Subtest: accessible scenes have unique text-grounded answers and the same equipment effects
+ok 159 - accessible scenes have unique text-grounded answers and the same equipment effects
+  ---
+  duration_ms: 0.328206
+  type: 'test'
+  ...
+# Subtest: live extension retains issued item, completed evidence and adds only selected student workload
+ok 160 - live extension retains issued item, completed evidence and adds only selected student workload
+  ---
+  duration_ms: 33.906827
+  type: 'test'
+  ...
+# Subtest: live extension preview rejects stale revision, ended sessions and missing teacher credential
+ok 161 - live extension preview rejects stale revision, ended sessions and missing teacher credential
+  ---
+  duration_ms: 11.865253
+  type: 'test'
+  ...
+# Subtest: future gate extension leaves current gate unchanged and supports private difficulty override
+ok 162 - future gate extension leaves current gate unchanged and supports private difficulty override
+  ---
+  duration_ms: 15.843853
+  type: 'test'
+  ...
+# Subtest: Last Checkpoint restores pending narrative choice without erasing votes or inventory
+ok 163 - Last Checkpoint restores pending narrative choice without erasing votes or inventory
+  ---
+  duration_ms: 6.199865
+  type: 'test'
+  ...
+# Subtest: live extension skips students whose minigame has begun
+ok 164 - live extension skips students whose minigame has begun
+  ---
+  duration_ms: 10.995925
+  type: 'test'
+  ...
+# Subtest: Nightfall world is over five times previous area and contains 34 ambient enemies and 8 storefront guards at Standard
+ok 165 - Nightfall world is over five times previous area and contains 34 ambient enemies and 8 storefront guards at Standard
+  ---
+  duration_ms: 4.589213
+  type: 'test'
+  ...
+# Subtest: bus cannot complete until fuse, power, battery, installation and keys prerequisites
+ok 166 - bus cannot complete until fuse, power, battery, installation and keys prerequisites
+  ---
+  duration_ms: 1.137309
+  type: 'test'
+  ...
+# Subtest: manual shot does not rotate toward a nearby enemy; no five-second or 90-second victory
+ok 167 - manual shot does not rotate toward a nearby enemy; no five-second or 90-second victory
+  ---
+  duration_ms: 4.902085
+  type: 'test'
+  ...
+# Subtest: optional rescue reduces local ambush without teleporting enemies
+ok 168 - optional rescue reduces local ambush without teleporting enemies
+  ---
+  duration_ms: 2.084499
+  type: 'test'
+  ...
+# Subtest: held interaction has duration and map tasks are accessible from spawn through unlocked geometry
+ok 169 - held interaction has duration and map tasks are accessible from spawn through unlocked geometry
+  ---
+  duration_ms: 16.24228
+  type: 'test'
+  ...
+# Subtest: resource effects survive recovery and carbine changes actual projectile damage
+ok 170 - resource effects survive recovery and carbine changes actual projectile damage
+  ---
+  duration_ms: 5.629644
+  type: 'test'
+  ...
+# Subtest: all essential objectives have traversable routes, with power enabling the garage
+ok 171 - all essential objectives have traversable routes, with power enabling the garage
+  ---
+  duration_ms: 204.230633
+  type: 'test'
+  ...
+# Subtest: all five threat presets enforce counts and active caps with no aim assist
+ok 172 - all five threat presets enforce counts and active caps with no aim assist
+  ---
+  duration_ms: 238.408754
+  type: 'test'
+  ...
+# Subtest: walls block sight and force sound around the building; closed doors attenuate sound
+ok 173 - walls block sight and force sound around the building; closed doors attenuate sound
+  ---
+  duration_ms: 92.998767
+  type: 'test'
+  ...
+# Subtest: running behind a solid wall does not attract an enemy across it
+ok 174 - running behind a solid wall does not attract an enemy across it
+  ---
+  duration_ms: 47.615765
+  type: 'test'
+  ...
+# Subtest: gunfire draws nearby enemies to the sound position, not hidden player position
+ok 175 - gunfire draws nearby enemies to the sound position, not hidden player position
+  ---
+  duration_ms: 29.506816
+  type: 'test'
+  ...
+# Subtest: pursuit expires after evidence is lost and returns toward the patrol anchor
+ok 176 - pursuit expires after evidence is lost and returns toward the patrol anchor
+  ---
+  duration_ms: 24.063459
+  type: 'test'
+  ...
+# Subtest: an informed pursuer can break a closed door; an uninformed wanderer cannot
+ok 177 - an informed pursuer can break a closed door; an uninformed wanderer cannot
+  ---
+  duration_ms: 136.025631
+  type: 'test'
+  ...
+# Subtest: lures are one-use, barrels spend ammunition and damage enemies locally
+ok 178 - lures are one-use, barrels spend ammunition and damage enemies locally
+  ---
+  duration_ms: 27.991542
+  type: 'test'
+  ...
+# Subtest: collision sliding stays outside real obstacle footprints and fast movement cannot tunnel
+ok 179 - collision sliding stays outside real obstacle footprints and fast movement cannot tunnel
+  ---
+  duration_ms: 0.567107
+  type: 'test'
+  ...
+# Subtest: recovery retains charges, doors, objectives and lures; no purchased medkit
+ok 180 - recovery retains charges, doors, objectives and lures; no purchased medkit
+  ---
+  duration_ms: 1.172892
+  type: 'test'
+  ...
+# Subtest: teacher threat is private and freezes for the entire crew on first start
+ok 181 - teacher threat is private and freezes for the entire crew on first start
+  ---
+  duration_ms: 39.410541
+  type: 'test'
+  ...
+# Subtest: completed supply review unlocks another slot once, independent of credits
+ok 182 - completed supply review unlocks another slot once, independent of credits
+  ---
+  duration_ms: 18.409127
+  type: 'test'
+  ...
+# Subtest: a corrected optional answer earns completion reward without first-attempt credit; imports require consent
+ok 183 - a corrected optional answer earns completion reward without first-attempt credit; imports require consent
+  ---
+  duration_ms: 4.767392
+  type: 'test'
+  ...
+# Subtest: one and five student crews advance only after all runs, then vote; lost students participate
+ok 184 - one and five student crews advance only after all runs, then vote; lost students participate
+  ---
+  duration_ms: 46.761765
+  type: 'test'
+  ...
+# Subtest: invalid regen and success without repair cannot be committed; ending a session is neutral
+ok 185 - invalid regen and success without repair cannot be committed; ending a session is neutral
+  ---
+  duration_ms: 9.445698
+  type: 'test'
+  ...
+# Subtest: Vault panel and card are required; manual toolkit charges do not replenish on recovery
+ok 186 - Vault panel and card are required; manual toolkit charges do not replenish on recovery
+  ---
+  duration_ms: 2.097739
+  type: 'test'
+  ...
+# Subtest: old room commands cannot silently migrate gameplay; export and end remain available
+ok 187 - old room commands cannot silently migrate gameplay; export and end remain available
+  ---
+  duration_ms: 2.964128
+  type: 'test'
+  ...
+# Subtest: pilot joins assign unique aliases, ignore supplied names, and never export credentials
+ok 188 - pilot joins assign unique aliases, ignore supplied names, and never export credentials
+  ---
+  duration_ms: 16.937895
+  type: 'test'
+  ...
+# Subtest: public IDs cannot impersonate, steal cached replies, or export; valid credentials resume joins
+ok 189 - public IDs cannot impersonate, steal cached replies, or export; valid credentials resume joins
+  ---
+  duration_ms: 7.486007
+  type: 'test'
+  ...
+# Subtest: 48-hour expiry is fixed at creation; alarm deletes every chunk without another visit
+ok 190 - 48-hour expiry is fixed at creation; alarm deletes every chunk without another visit
+  ---
+  duration_ms: 2.263168
+  type: 'test'
+  ...
+# Subtest: teacher deletion revokes all access and cannot be undone by queued commands or init
+ok 191 - teacher deletion revokes all access and cannot be undone by queued commands or init
+  ---
+  duration_ms: 1.970246
+  type: 'test'
+  ...
+# Subtest: expired requests fail closed before replay and public routing cannot initialize a room
+ok 192 - expired requests fail closed before replay and public routing cannot initialize a room
+  ---
+  duration_ms: 2.187915
+  type: 'test'
+  ...
+# Subtest: cloak lasts five seconds once, blocks sensors, and cannot recharge on checkpoint or recovery
+ok 193 - cloak lasts five seconds once, blocks sensors, and cannot recharge on checkpoint or recovery
+  ---
+  duration_ms: 1.376178
+  type: 'test'
+  ...
+# Subtest: Interact never spends Toolkit; dedicated Jam does, once per checkpoint
+ok 194 - Interact never spends Toolkit; dedicated Jam does, once per checkpoint
+  ---
+  duration_ms: 0.43649
+  type: 'test'
+  ...
+# Subtest: every Nightfall objective responds to held use with real duration and prerequisites
+ok 195 - every Nightfall objective responds to held use with real duration and prerequisites
+  ---
+  duration_ms: 47.058634
+  type: 'test'
+  ...
+# Subtest: two windows per room break by hold or shot; actual gaps permit walking and persist
+ok 196 - two windows per room break by hold or shot; actual gaps permit walking and persist
+  ---
+  duration_ms: 59.153704
+  type: 'test'
+  ...
+# Subtest: battery, not keys or rescue, spawns one garage rush with instant closed-door breach
+ok 197 - battery, not keys or rescue, spawns one garage rush with instant closed-door breach
+  ---
+  duration_ms: 257.603494
+  type: 'test'
+  ...
+# Subtest: three GAS barrels warn before ignition, halve player health, kill brutes, and do not recharge
+ok 198 - three GAS barrels warn before ignition, halve player health, kill brutes, and do not recharge
+  ---
+  duration_ms: 5.171816
+  type: 'test'
+  ...
+# Subtest: three alarm cars and ordinary cars coexist; distant enemies hear the alarm beyond AI cutoff
+ok 199 - three alarm cars and ordinary cars coexist; distant enemies hear the alarm beyond AI cutoff
+  ---
+  duration_ms: 55.134678
+  type: 'test'
+  ...
+# Subtest: vault-7: actual commands unlock all seven loadout combinations and persist for all clients
+ok 200 - vault-7: actual commands unlock all seven loadout combinations and persist for all clients
+  ---
+  duration_ms: 216.881887
+  type: 'test'
+  ...
+# Subtest: nightfall: actual commands unlock all seven loadout combinations and persist for all clients
+ok 201 - nightfall: actual commands unlock all seven loadout combinations and persist for all clients
+  ---
+  duration_ms: 197.155049
+  type: 'test'
+  ...
+# Subtest: fraction policy covers value, raw form, signs, integer entry and explicit denominator exceptions
+ok 202 - fraction policy covers value, raw form, signs, integer entry and explicit denominator exceptions
+  ---
+  duration_ms: 2.223408
+  type: 'test'
+  ...
+# Subtest: every preset module and difficulty uses the shared final-fraction contract
+ok 203 - every preset module and difficulty uses the shared final-fraction contract
+  ---
+  duration_ms: 15.987529
+  type: 'test'
+  ...
+# Subtest: unsimplified submission is recorded raw, cannot complete a gate, and correction is not first-attempt success
+ok 204 - unsimplified submission is recorded raw, cannot complete a gate, and correction is not first-attempt success
+  ---
+  duration_ms: 5.239624
+  type: 'test'
+  ...
+# Subtest: shared deadline closes late and never-started runs while preserving completed results and answers
+ok 205 - shared deadline closes late and never-started runs while preserving completed results and answers
+  ---
+  duration_ms: 4.321067
+  type: 'test'
+  ...
+# Subtest: alarm interrupts every attack state for its full interval, including distant and newly added mobs
+ok 206 - alarm interrupts every attack state for its full interval, including distant and newly added mobs
+  ---
+  duration_ms: 326.167256
+  type: 'test'
+  ...
+# Subtest: alarm activates on car contact and bullets from both sides but not a near miss
+ok 207 - alarm activates on car contact and bullets from both sides but not a near miss
+  ---
+  duration_ms: 1.720138
+  type: 'test'
+  ...
+# Subtest: store group survives every threat budget, door stays solid, both windows become passages
+ok 208 - store group survives every threat budget, door stays solid, both windows become passages
+  ---
+  duration_ms: 331.458079
+  type: 'test'
+  ...
+# Subtest: shotgun eight-shell reward ignores carbine and pouch; switching/recovery never refill
+ok 209 - shotgun eight-shell reward ignores carbine and pouch; switching/recovery never refill
+  ---
+  duration_ms: 1.745136
+  type: 'test'
+  ...
+# Subtest: garage ingress overrides alarm until entry; dead horde members stay dead after restoration
+ok 210 - garage ingress overrides alarm until entry; dead horde members stay dead after restoration
+  ---
+  duration_ms: 159.508142
+  type: 'test'
+  ...
+# Subtest: third cartridge metadata renders without a title-specific branch; unknowns stay neutral
+ok 211 - third cartridge metadata renders without a title-specific branch; unknowns stay neutral
+  ---
+  duration_ms: 8.519829
+  type: 'test'
+  ...
+# Subtest: alarm light rendering is read-only, localized and uses persisted ready/active/spent state
+ok 212 - alarm light rendering is read-only, localized and uses persisted ready/active/spent state
+  ---
+  duration_ms: 5.583443
+  type: 'test'
+  ...
+# Subtest: root entry shims preserve query and fragment and always select canonical public pages
+ok 213 - root entry shims preserve query and fragment and always select canonical public pages
+  ---
+  duration_ms: 22.721041
+  type: 'test'
+  ...
+# Subtest: proposed address profile preserves new-path joins and keeps teacher credentials out of student links
+ok 214 - proposed address profile preserves new-path joins and keeps teacher credentials out of student links
+  ---
+  duration_ms: 1.426215
+  type: 'test'
+  ...
+# Subtest: rescue host records death before enabling retry, preserves canvas and restores issued attempt across reload
+ok 215 - rescue host records death before enabling retry, preserves canvas and restores issued attempt across reload
+  ---
+  duration_ms: 55.730613
+  type: 'test'
+  ...
+# Subtest: offline reload keeps spent resources; server reconciliation saves them without another Start window
+ok 216 - offline reload keeps spent resources; server reconciliation saves them without another Start window
+  ---
+  duration_ms: 13.936752
+  type: 'test'
+  ...
+# Subtest: timer includes delayed Start, local pause and dialogue; teacher pause freezes display and server expiry wins
+ok 217 - timer includes delayed Start, local pause and dialogue; teacher pause freezes display and server expiry wins
+  ---
+  duration_ms: 17.018497
+  type: 'test'
+  ...
+# Subtest: first vote inserts a shared rescue in every gate configuration and closes absent records via the alarm
+ok 218 - first vote inserts a shared rescue in every gate configuration and closes absent records via the alarm
+  ---
+  duration_ms: 112.208946
+  type: 'test'
+  ...
+# Subtest: teacher pause freezes once; local delay and late starts do not extend; closure beats stale commands
+ok 219 - teacher pause freezes once; local delay and late starts do not extend; closure beats stale commands
+  ---
+  duration_ms: 12.537999
+  type: 'test'
+  ...
+# Subtest: downed retry restores full start or coherent escort checkpoint; stale attempts cannot mutate it
+ok 220 - downed retry restores full start or coherent escort checkpoint; stale attempts cannot mutate it
+  ---
+  duration_ms: 24.916628
+  type: 'test'
+  ...
+# Subtest: personal completion stops replay; shared Gate 2 opens only after all records resolve; teacher closure and reports stay separate
+ok 221 - personal completion stops replay; shared Gate 2 opens only after all records resolve; teacher closure and reports stay separate
+  ---
+  duration_ms: 37.605705
+  type: 'test'
+  ...
+# Subtest: rescue envelope rejects fabricated supplies, population, equipment, follower wins, wrong IDs and duplicate sequences
+ok 222 - rescue envelope rejects fabricated supplies, population, equipment, follower wins, wrong IDs and duplicate sequences
+  ---
+  duration_ms: 23.67367
+  type: 'test'
+  ...
+# Subtest: existing v0.9.2 rooms preserve the direct Gate 2 transition and credentials after Worker update
+ok 223 - existing v0.9.2 rooms preserve the direct Gate 2 transition and credentials after Worker update
+  ---
+  duration_ms: 11.051043
+  type: 'test'
+  ...
+# Subtest: authored inventory and population are exact for both routes; existing final-city defaults remain independent
+ok 224 - authored inventory and population are exact for both routes; existing final-city defaults remain independent
+  ---
+  duration_ms: 38.967852
+  type: 'test'
+  ...
+# Subtest: collision-only traversal and escort work through both windows, alley turns and terminal without teleporting
+ok 225 - collision-only traversal and escort work through both windows, alley turns and terminal without teleporting
+  ---
+  duration_ms: 100.952342
+  type: 'test'
+  ...
+# Subtest: health pickup remains at full health; fuel hurts player but not the follower and cannot spawn extra enemies
+ok 226 - health pickup remains at full health; fuel hurts player but not the follower and cannot spawn extra enemies
+  ---
+  duration_ms: 0.995544
+  type: 'test'
+  ...
+1..226
+# tests 226
+# suites 0
+# pass 226
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3901.511752

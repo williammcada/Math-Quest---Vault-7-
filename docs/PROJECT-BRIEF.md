@@ -129,6 +129,24 @@ User authorized production of Chapter 2 as a cartridge, consistent with the esta
 
 The authoritative five-minute team window begins at `market.continue`; teacher pause extends it, local pause/reload do not. Individual active play is also limited to 300 seconds. Catalog ID/revision prevents the new frontend from creating Chapter 2 against an older Worker. Deployment authentication was unavailable (`wrangler whoami`: not authenticated); do not call the live classroom cartridge verified until the Worker is deployed and tested. See `docs/releases/false-haven-cartridge-v0.2.0.md` for exact candidate and verification evidence.
 
+## Ironbreak cartridge v0.1.0 — 1 October 2026
+
+Owner requested cartridge development around playable shooter alpha.2. Proposed name: Ironbreak. Baselines: main `6631cda52593fde611a3352489814f7d4bfbe3d3` and shooter `b67cd57bcaa09c7bb733c91ab8a24f50b2415dde`; handbook `c50115ba1fea9cb552f3ad1415e670a219118b56` (AI-START-HERE, UNIVERSAL-RULES, CONDITIONAL-STANDARDS S-02/S-03/S-03-A/S-04, RELEASE-CHECKLIST). See [Ironbreak v0.1.0 specification](change-specs/ironbreak-v0.1.0.md). Narrative/name are authored proposals for review under the owner's development instruction, not separately approved final writing.
+
+Reuse current academic and equipment flows. Preserve alpha.2 geometry/combat/audio and other cartridges; replace shooter input with shared held-input mechanism. Add narrative/registry, server-issued individual run identity, three lives, authoritative five-minute team window, checkpoints, recovery, guided alternative and separated engagement reports. U-09 uses existing whole-session deletion/local record registry. U-10 physical device/menu/viewport checks remain required. Existing teacher math configuration stays intact; no claim of synchronized Olivia/Mega Man settings migration. No Math Arcade integration in this change.
+
+Stage: implementation candidate on `feature/ironbreak-cartridge-v0.1`. Frontend and Worker must be deployed together after review. No main update or hosted deployment authorized by this implementation checkpoint.
+
+Release preparation, 1 October: owner requested proceeding with PR #5 and current-main reconciliation. Combine Ironbreak `2d42f3b` with main `59c11c9`, retaining Coastal Escape's preview without importing its separate classroom candidate. No gameplay changes. See [coordinated deployment handoff](releases/ironbreak-v0.1.0-deployment.md). Cloudflare deployment access and physical-device evidence remain outstanding; do not publish the frontend alone or call this a verified classroom release.
+
+## Coastal Escape cartridge v0.3.0 — approved 1 October 2026
+
+See [approved specification](change-specs/coastal-escape-v0.3.0.md). Actual baseline is `6631cda52593fde611a3352489814f7d4bfbe3d3`; handbook `c50115ba1fea9cb552f3ad1415e670a219118b56`. Owner approved fictional Merrow island, operator/records route choice, deliver/exchange/destroy final decisions, Nightfall-style 3–5 math gates, earned team aircraft equipment, one individual five-minute escort and everyone's final vote. Story choices and action outcomes remain independent of academic evidence. Full candidate platform version is v0.9.5, cartridge v0.3.0, unchanged action tuning v0.2.0. Preserve live v0.9.4 frontend until its matching Worker can be deployed. A public owner story preview may ship separately; it produces no classroom evidence.
+
+## Combined cartridges v0.9.6 — 2 October 2026
+
+Owner authorized one combined candidate for Ironbreak and Coastal Escape, preserving main’s False Haven, Nightfall and Vault Seven. See [combined specification](change-specs/combined-cartridges-v0.9.6.md). Canonical combined candidate branch: `release/combined-cartridges-v0.9.6`. Platform identity is v0.9.6; individual game/cartridge revisions remain intact. Publish only the isolated review hub/standalone review ahead of backend deployment. Existing individual-branch deployment instructions are historical; deploy this combined Worker once when ready. No Cloudflare deployment now.
+
 ## DEV homepage revision — 6 October 2026
 
 Owner authorized frontend-only access to preserved review/practice builds. Application checkpoint `af87c3b0188cf240117b340a20c84e3bd67be95d` adds question-free action entry for all six games while retaining story review. See `change-specs/dev-homepage-2026-10-06.md` and `releases/dev-homepage-2026-10-06.md`. No gameplay, artwork, classroom registry or backend changes. Owner playtesting remains pending Thursday October 8, 2026.
@@ -144,3 +162,6 @@ Owner requires Ironbreak and Blackline story artwork to match the detailed illus
 ## Repository and Pages rename — 8 October 2026
 
 Owner renamed the existing repository (unchanged ID 1369013008) to williammcada/mathquest. Canonical Pages entry: https://williammcada.github.io/mathquest/. Update active runtime addresses, local-file diagnostics and current README links; historical source references remain provenance. The Netlify relay, existing Worker and Durable Object storage are unchanged. GitHub Pages origin stays https://williammcada.github.io, so this path-only rename does not require a CORS change. See migrations/mathquest-address-2026-10-08.md.
+## BLACKLINE cartridge v0.2.0 — 2026-10-02
+
+Implemented and tested in MathQuest candidate `2b8adea20407bb8b77a211f2211172830bf658b9` on `implement/blackline-v0.2.0`. Native classroom preparation gates, cargo and final crew votes, earned one-use upgrades, racer adapter with shared input, guided route, original SVG scene art and music, run validation and reconnect are implemented. The approved alpha.2 racer is retained. See the BLACKLINE v0.2.0 verification record. Deployment and physical iOS checks remain pending. This is a cartridge integration candidate, not a claim that the live Worker has been updated.

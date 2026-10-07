@@ -1,6 +1,6 @@
-import {nightfallAdapter} from './adapter.js?v=0.9.4-fh3';
-import {restoreRescue,stepRescue,assistedRescue} from './rescue.js?v=0.9.4-fh3';
-import {RESCUE_REVISION,rescueCaller} from './rescue-world.js?v=0.9.4-fh3';
+import {nightfallAdapter} from './adapter.js?v=0.9.7';
+import {restoreRescue,stepRescue,assistedRescue} from './rescue.js?v=0.9.7';
+import {RESCUE_REVISION,rescueCaller} from './rescue-world.js?v=0.9.7';
 export const rescueAdapter={
  ...nightfallAdapter,id:'nightfall-rescue',title:'Nightfall · First Response',revision:RESCUE_REVISION,commandPrefix:'rescue',
  canvasLabel:'Rescue the selected caller and escort them to the terminal',kitText:'Pistol · 15 rounds · 3 health · no equipment',

@@ -1,0 +1,35 @@
+{
+  "base": "http://127.0.0.1:46749/",
+  "browser": "138.0.7204.0",
+  "results": [
+    {
+      "check": "Review hub and all three entries",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "passed": true
+    },
+    {
+      "check": "Review hub and all three entries",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "passed": true
+    },
+    {
+      "check": "Review hub and all three entries",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "passed": true
+    },
+    {
+      "check": "Old backend and missing cartridge block creation before POST",
+      "passed": true
+    }
+  ],
+  "physicalDevices": "Not run"
+}
