@@ -1,6 +1,6 @@
-import {StealthRuntime} from './stealth.js?v=0.9.4';
-import {TeacherAudio} from './teacher-audio.js?v=0.9.4';
-import {SceneAssets} from './vault7-assets.js?v=0.9.4';
+import {StealthRuntime} from './stealth.js?v=0.9.7';
+import {TeacherAudio} from './teacher-audio.js?v=0.9.7';
+import {SceneAssets} from './vault7-assets.js?v=0.9.7';
 let runtime;
 function restart(){
   if(runtime){runtime.destroy();localStorage.removeItem(runtime.key);}

@@ -1,4 +1,4 @@
-import {HAVEN_SWITCHES,trolleyRect} from './false-haven-world.js?v=0.9.4-fh3';
+import {HAVEN_SWITCHES,trolleyRect} from './false-haven-world.js?v=0.9.7';
 export function drawHaven(c,s){
  const h=s.haven;
  c.save();

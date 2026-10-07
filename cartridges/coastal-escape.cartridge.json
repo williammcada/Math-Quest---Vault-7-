@@ -1,0 +1,10 @@
+{
+ "schemaVersion":"mq.cartridge/1.1","id":"coastal-escape","title":"Coastal Escape","version":"0.3.0","revision":"coastal-escape/1",
+ "narrativeModule":"public/cartridges/coastal-escape.js","serverAdapter":"src/cartridges/coastal-escape/server.js","questionProvider":"src/question-provider.js","gameId":"aerial-shooter","gameAdapter":"public/games/aerial-shooter/adapter.js","classroomHost":"public/games/aerial-shooter/classroom-host.js","practiceEntry":"public/coastal-escape-preview.html",
+ "academicEffectsFromGameplay":false,"resolution":{"type":"final_decision","minigamePlacement":"pre_final_decision"},
+ "duration":{"activeSeconds":300,"teamWindowSeconds":300,"teacherPauseFreezesWindow":true,"localPauseExtendsWindow":false},
+ "attemptPolicy":{"liveRuns":1,"livesPerRun":3,"checkpointsSeconds":[150,225],"technicalClosure":"neutral"},
+ "assetManifest":{"base":"public/assets/coastal-escape/","scenes":["cover.webp","radio.webp","ending.webp"],"music":["ambient.mp3","finale.mp3"],"flightManifest":"public/assets/aerial-shooter/manifest.json"},
+ "evidence":{"kind":"engagement.gameplay","validation":"client-reported; server-validated envelope","masteryImpact":false},
+ "input":{"profile":"public/engine/directional-input.js","sharedOwnership":"public/engine/held-input.js","physicalIOSVerified":false}
+}

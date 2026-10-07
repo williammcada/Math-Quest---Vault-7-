@@ -4,16 +4,15 @@
 
 MathQuest is a cartridge-based classroom mathematics game platform. Teachers configure academic content and a shared classroom session; students complete mathematics, team decisions, resource choices, and individual action-game sequences inside cartridge-specific narratives.
 
-The current cartridges are:
+The v0.9.7 candidate includes Vault Seven, Nightfall: Last Bus Out, False Haven, Ironbreak, Coastal Escape, and Blackline.
 
-* **Vault Seven**
-* **Nightfall: Last Bus Out**
+**Deployment pending:** see [six-cartridge deployment instructions](docs/releases/six-cartridges-v0.9.7.md). The renamed website is live; the combined classroom engine still requires the Cloudflare update.
 
 ## Current address
 
 [Open MathQuest](https://williammcada.github.io/mathquest/) · [Cartridge reviews](https://williammcada.github.io/mathquest/public/cartridge-review.html). Six games are available through Developer tools; the full six-cartridge classroom deployment is being consolidated. Earlier version sections below are historical.
 
-## Canonical project status
+## Historical v0.9.4 project status
 
 **Candidate:** MathQuest v0.9.4, branch `release/v0.9.4`. Nightfall First Response inserts a personal rescue/escort between the first team vote and Gate 2. Unlimited retries share one server-controlled five-minute team window.
 

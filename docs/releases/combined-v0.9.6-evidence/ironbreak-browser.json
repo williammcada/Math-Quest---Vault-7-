@@ -1,0 +1,74 @@
+{
+  "candidate": "ironbreak-0.1.0",
+  "browser": "138.0.7204.0",
+  "results": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "passed": true,
+      "checks": [
+        "live action start",
+        "input release",
+        "network failure/retry",
+        "reload",
+        "guided completion",
+        "final vote",
+        "no overflow or page errors"
+      ]
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 852,
+        "height": 393
+      },
+      "passed": true,
+      "checks": [
+        "live action start",
+        "input release",
+        "network failure/retry",
+        "reload",
+        "guided completion",
+        "final vote",
+        "no overflow or page errors"
+      ]
+    },
+    {
+      "name": "tablet",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "passed": true,
+      "checks": [
+        "live action start",
+        "input release",
+        "network failure/retry",
+        "reload",
+        "guided completion",
+        "final vote",
+        "no overflow or page errors"
+      ]
+    },
+    {
+      "name": "standalone",
+      "passed": true
+    },
+    {
+      "name": "offline cartridge review",
+      "passed": true,
+      "checks": [
+        "required mathematics",
+        "priority vote",
+        "extra mathematics for second upgrade",
+        "equipment confirmation",
+        "guided play",
+        "final vote and epilogue"
+      ]
+    }
+  ],
+  "physicalDevices": "Not run"
+}
