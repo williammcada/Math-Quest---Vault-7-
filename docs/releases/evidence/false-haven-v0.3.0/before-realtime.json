@@ -1,0 +1,139 @@
+{
+  "browser": "153.0.8010.0",
+  "realTime": true,
+  "environment": "Linux headless Chromium; synthetic moving-player combat; 360 fixed steps per scenario; 2x canvas. Not physical Windows/iOS FPS.",
+  "results": [
+    {
+      "scenario": "city",
+      "position": {
+        "x": 1168,
+        "y": 600
+      },
+      "speaker": false,
+      "activeMax": 17,
+      "nav": {
+        "median": 23.600000000558794,
+        "p95": 56,
+        "max": 56,
+        "over16ms": 6
+      },
+      "simulation": {
+        "median": 1.7999999998137355,
+        "p95": 3.2000000001862645,
+        "max": 48.700000000186265,
+        "over16ms": 5
+      },
+      "drawing": {
+        "median": 0.5,
+        "p95": 0.8999999994412065,
+        "max": 5.7000000001862645,
+        "over16ms": 0
+      },
+      "frameIntervals": {
+        "median": 16.699999999999818,
+        "p95": 16.799999999999272,
+        "max": 66.69999999999999,
+        "over16ms": 103
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 640,
+        "y": 1728
+      },
+      "speaker": false,
+      "activeMax": 0,
+      "nav": {
+        "median": 43.700000000186265,
+        "p95": 54.5,
+        "max": 54.5,
+        "over16ms": 6
+      },
+      "simulation": {
+        "median": 0.09999999962747097,
+        "p95": 0.19999999925494194,
+        "max": 0.40000000037252903,
+        "over16ms": 0
+      },
+      "drawing": {
+        "median": 0.40000000037252903,
+        "p95": 0.6000000005587935,
+        "max": 3.099999999627471,
+        "over16ms": 0
+      },
+      "frameIntervals": {
+        "median": 16.69999999999891,
+        "p95": 16.700000000000728,
+        "max": 16.80000000000109,
+        "over16ms": 121
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 1728,
+        "y": 650
+      },
+      "speaker": false,
+      "activeMax": 9,
+      "nav": {
+        "median": 43.5,
+        "p95": 45.5,
+        "max": 45.5,
+        "over16ms": 6
+      },
+      "simulation": {
+        "median": 1.2000000001862645,
+        "p95": 2.6000000005587935,
+        "max": 51.10000000055879,
+        "over16ms": 6
+      },
+      "drawing": {
+        "median": 0.5,
+        "p95": 0.7999999998137355,
+        "max": 1.5,
+        "over16ms": 0
+      },
+      "frameIntervals": {
+        "median": 16.69999999999891,
+        "p95": 16.799999999999272,
+        "max": 50.100000000000364,
+        "over16ms": 156
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 1872,
+        "y": 864
+      },
+      "speaker": true,
+      "activeMax": 12,
+      "nav": {
+        "median": 49.5,
+        "p95": 59,
+        "max": 59,
+        "over16ms": 6
+      },
+      "simulation": {
+        "median": 1.2999999998137355,
+        "p95": 2.6000000005587935,
+        "max": 137.70000000018626,
+        "over16ms": 4
+      },
+      "drawing": {
+        "median": 0.5,
+        "p95": 0.7999999998137355,
+        "max": 2.099999999627471,
+        "over16ms": 0
+      },
+      "frameIntervals": {
+        "median": 16.700000000000728,
+        "p95": 16.799999999999272,
+        "max": 150,
+        "over16ms": 186
+      }
+    }
+  ]
+}

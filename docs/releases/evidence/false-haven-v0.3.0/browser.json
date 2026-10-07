@@ -1,0 +1,46 @@
+{
+  "browser": "153.0.8010.0",
+  "base": "http://127.0.0.1:36067/",
+  "results": [
+    {
+      "story": "5 gates, dispatch route, 3 endings, guided mission, all story art decoded"
+    },
+    {
+      "action": "real host movement/fire/speaker; input release; pause clock; saved reload",
+      "measured": {
+        "steps": {
+          "count": 724,
+          "p95": 1,
+          "max": 18.700000000186265
+        },
+        "draw": {
+          "count": 724,
+          "p95": 0.5,
+          "max": 6.7000000001862645
+        },
+        "shots": 11,
+        "time": 12.066666666666846,
+        "active": 9
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "art": true,
+      "overflow": false
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "art": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "physicalWindowsChrome": "Not run; owner replay pending",
+  "physicalIOS": "Not run"
+}
