@@ -9,13 +9,17 @@ The current cartridges are:
 * **Vault Seven**
 * **Nightfall: Last Bus Out**
 
+## Current address
+
+[Open MathQuest](https://williammcada.github.io/mathquest/) · [Cartridge reviews](https://williammcada.github.io/mathquest/public/cartridge-review.html). Six games are available through Developer tools; the full six-cartridge classroom deployment is being consolidated. Earlier version sections below are historical.
+
 ## Canonical project status
 
 **Candidate:** MathQuest v0.9.4, branch `release/v0.9.4`. Nightfall First Response inserts a personal rescue/escort between the first team vote and Gate 2. Unlimited retries share one server-controlled five-minute team window.
 
 **Starting main source:** merged v0.9.3, `c7ea42d7e54402357b5c56c52c44856666e4c2b9`. Canonical frontend `public/`; session engine `src/`. Both components identify v0.9.4. This feature requires the updated Worker.
 
-**Existing addresses:** repository `williammcada/Math-Quest---Vault-7-`; Pages `https://williammcada.github.io/Math-Quest---Vault-7-/`; Netlify relay `https://vault7mathquest.netlify.app/api/`. The separate address migration remains inactive.
+**Existing addresses:** repository `williammcada/mathquest`; Pages `https://williammcada.github.io/mathquest/`; Netlify relay `https://vault7mathquest.netlify.app/api/`. The repository and Pages address were renamed on 8 October 2026. The relay hostname remains unchanged.
 
 See the [v0.9.4 candidate report](docs/releases/v0.9.4-candidate.md), [change specification](docs/change-specs/v0.9.4.md), and [address migration handoff](docs/migrations/v0.9.3-addresses.md). Earlier candidate reports and specifications remain historical evidence.
 
@@ -69,7 +73,7 @@ Substantial MathQuest revisions follow this sequence:
 
 ## Coastal Escape aerial practice v0.2.0
 
-[Play the aerial practice](https://williammcada.github.io/Math-Quest---Vault-7-/aerial-shooter-practice.html) · [Change specification](docs/change-specs/aerial-shooter-v0.2.0.md) · [Verification and limits](docs/releases/aerial-shooter-v0.2.0.md)
+[Play the aerial practice](https://williammcada.github.io/mathquest/aerial-shooter-practice.html) · [Change specification](docs/change-specs/aerial-shooter-v0.2.0.md) · [Verification and limits](docs/releases/aerial-shooter-v0.2.0.md)
 
 Five-minute flight, double regular enemies, +10% player movement, and shared touch-release/native-menu prevention. See root AGENTS.md and handbook U-10 for required shared input checks. Physical iPhone/iPad retesting remains pending.
 
@@ -79,14 +83,14 @@ Five-minute flight, double regular enemies, +10% player movement, and shared tou
 
 ## Nightfall II: False Haven — v0.1.0 practice candidate
 
-[Play Chapter 2](https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html) · [Specification](docs/change-specs/nightfall-chapter-2-v0.1.0.md) · [Verification and limits](docs/releases/false-haven-v0.1.0.md)
+[Play Chapter 2](https://williammcada.github.io/mathquest/public/practice-false-haven.html) · [Specification](docs/change-specs/nightfall-chapter-2-v0.1.0.md) · [Verification and limits](docs/releases/false-haven-v0.1.0.md)
 
 Escape a compromised safe zone using power, drainage, a speaker trap, movable cargo and the original Nightfall weapons/enemies. Map footprint is 2.25× Chapter 1; measured reachable area is 2.34×. Five active minutes. Practice has no math gate or student evidence; classroom/Arcade integration remains separate. Candidate 0124d53 passed 178 automated tests and hosted smoke checks; physical iPhone/iPad and sustained combat playtesting remain pending.
 
 ## DEV homepage update — 2026-10-06
 
-Open Developer tools on the [MathQuest homepage](https://williammcada.github.io/Math-Quest---Vault-7-/public/) for question-free action practice: Vault 7, Nightfall, Nightfall II, Blackline, Ironbreak and Coastal Escape. Existing story reviews remain available separately (Ironbreak story review retains sample math). Frontend-only update; no new classroom cartridge activation. All six hosted starts checked in desktop Chrome. Owner/device playtesting remains pending October 8. [Verification record](docs/releases/dev-homepage-2026-10-06.md).
+Open Developer tools on the [MathQuest homepage](https://williammcada.github.io/mathquest/public/) for question-free action practice: Vault 7, Nightfall, Nightfall II, Blackline, Ironbreak and Coastal Escape. Existing story reviews remain available separately (Ironbreak story review retains sample math). Frontend-only update; no new classroom cartridge activation. All six hosted starts checked in desktop Chrome. Owner/device playtesting remains pending October 8. [Verification record](docs/releases/dev-homepage-2026-10-06.md).
 
 ### False Haven v0.3.0
 
-Performance repair, explicit unsafe-camp/authority-abandonment narrative, and new chapter-specific illustrated artwork. [Story and playable mission](https://williammcada.github.io/Math-Quest---Vault-7-/public/false-haven-preview.html) · [Direct practice](https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html). See [release evidence](docs/releases/false-haven-v0.3.0.md). 186 tests and Chromium checks pass; Windows Chrome owner replay and physical iOS remain pending. Live classroom Worker activation is separate.
+Performance repair, explicit unsafe-camp/authority-abandonment narrative, and new chapter-specific illustrated artwork. [Story and playable mission](https://williammcada.github.io/mathquest/public/false-haven-preview.html) · [Direct practice](https://williammcada.github.io/mathquest/public/practice-false-haven.html). See [release evidence](docs/releases/false-haven-v0.3.0.md). 186 tests and Chromium checks pass; Windows Chrome owner replay and physical iOS remain pending. Live classroom Worker activation is separate.

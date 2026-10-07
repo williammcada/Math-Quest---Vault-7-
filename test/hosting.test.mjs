@@ -8,7 +8,7 @@ import { SceneAssets } from '../public/vault7-assets.js';
 
 const studentCredentials=new Map();
 const origin = 'https://williammcada.github.io';
-const page = `${origin}/Math-Quest---Vault-7-/`;
+const page = `${origin}/mathquest/`;
 const relay = new URL(HOSTING.relayApiBase).origin;
 function environment() {
   const rooms = new Map();

@@ -139,3 +139,8 @@ Owner reported constant lag in Windows Chrome, worse with visible enemies, uncle
 ## Narrative illustration direction — 8 October 2026
 
 Owner requires Ironbreak and Blackline story artwork to match the detailed illustrated treatment of Coastal Escape, Nightfall and Vault Seven; geometric/procedural SVG narrative illustrations are superseded. Eight raster scenes are saved under public/assets/ironbreak/ and public/assets/blackline/ and embedded in the current standalone reviews. See change-specs/painted-cartridge-art-2026-10-08.md and releases/painted-art-2026-10-08.md. Retain this art on later classroom candidate integration; do not regenerate old geometric review bundles over it. This is a narrative illustration revision, not a replacement of the arcade renderers.
+
+
+## Repository and Pages rename — 8 October 2026
+
+Owner renamed the existing repository (unchanged ID 1369013008) to williammcada/mathquest. Canonical Pages entry: https://williammcada.github.io/mathquest/. Update active runtime addresses, local-file diagnostics and current README links; historical source references remain provenance. The Netlify relay, existing Worker and Durable Object storage are unchanged. GitHub Pages origin stays https://williammcada.github.io, so this path-only rename does not require a CORS change. See migrations/mathquest-address-2026-10-08.md.

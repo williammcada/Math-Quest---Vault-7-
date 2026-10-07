@@ -6,7 +6,7 @@ import vm from 'node:vm';
 import worker, { QuestSession } from '../src/worker.js';
 import { HOSTING } from '../public/hosting-config.js';
 
-const page = 'https://williammcada.github.io/Math-Quest---Vault-7-/';
+const page = 'https://williammcada.github.io/mathquest/';
 const origin = new URL(page).origin;
 const rooms = new Map();
 const env = { SESSIONS: { idFromName: x => x, get(code) {
