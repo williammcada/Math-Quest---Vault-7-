@@ -1,0 +1,31 @@
+{
+  "generator": "Built-in image_gen",
+  "delivery": "Original generated compositions, WebP encoding quality 88 (story) / 90 (tiles); no geometric substitute artwork",
+  "assets": [
+    {
+      "path": "public/assets/false-haven/cover-v3.webp",
+      "sha256": "73909ee9e84b9d9c502263d929ac8f68477fba52e117e2460314045911f0d708",
+      "artDirection": "Illustration-story; fortified evacuation camp, locked vehicle gate, stranded civilian green bus, deserted guard booth, shelter families and departing official vehicles. Cinematic textured pixel-painted 16-bit adventure art, midnight teal and amber rain, no gore or text."
+    },
+    {
+      "path": "public/assets/false-haven/radio-v3.webp",
+      "sha256": "a0d887ac9aef7c008b47ecd4eabd5c3029ec1d07bd43eafdb7a9ed568cd34dcc",
+      "artDirection": "Illustration-story; abandoned camp dispatch radio, transfer orders, breach map, staff badge, empty chair, waiting shelter families beyond window. Midnight teal and amber, richly textured pixel-painted game art, no readable text or gore."
+    },
+    {
+      "path": "public/assets/false-haven/market-v3.webp",
+      "sha256": "56104867ab3da9d203a262a581288b489257fff44f11b97ebc68877720588a3b",
+      "artDirection": "Illustration-story; abandoned wire-mesh supply cage with ammo pouches, vests and racked carbines; escape map, generator and flooded walkway outside. Textured 16-bit game art, amber utility lamp and midnight teal, no text or gore."
+    },
+    {
+      "path": "public/assets/false-haven/ending-v3.webp",
+      "sha256": "c7dc25eee9858be9beef73ccc7474435a8542796be31f5e19da2dcbb6971ecc1",
+      "artDirection": "Illustration-story; open rural camp gate, survivor green bus outside, shelter vans gathering behind, abandoned tower and tents at blue dawn. Hope and moral uncertainty, richly textured pixel-painted game art, no text or gore."
+    },
+    {
+      "path": "public/assets/false-haven/tiles-v3.webp",
+      "sha256": "67d6ce403784a900072296a0814994222cb06ca559f47167ecde762cd2f5e474",
+      "artDirection": "Production texture atlas, 4 by 4 equal seamless material cells, orthographic overhead. Wet gravel; yellow-lined gravel; storage rubber; shelter panels; concrete slabs; wall top; olive canvas; grating; white walkway stripe; beige canvas; drainage stones; steel floor; fence; utility tiles; mud; water. No gutters or labels. Muted olive/slate/teal, legible at 32px."
+    }
+  ]
+}

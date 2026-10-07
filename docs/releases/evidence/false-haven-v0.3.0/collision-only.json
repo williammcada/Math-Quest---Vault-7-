@@ -1,0 +1,114 @@
+{
+  "browser": "153.0.8010.0",
+  "environment": "Linux headless Chromium; synthetic moving-player combat; 360 fixed steps per scenario; 2x canvas. Not physical Windows/iOS FPS.",
+  "results": [
+    {
+      "scenario": "city",
+      "position": {
+        "x": 1168,
+        "y": 600
+      },
+      "speaker": false,
+      "activeMax": 17,
+      "nav": {
+        "median": 0.599999999627471,
+        "p95": 9.599999999627471,
+        "max": 9.599999999627471,
+        "over16ms": 0
+      },
+      "simulation": {
+        "median": 1,
+        "p95": 1.6000000005587935,
+        "max": 3.699999999254942,
+        "over16ms": 0
+      },
+      "drawing": {
+        "median": 0.5,
+        "p95": 42.700000000186265,
+        "max": 61.299999999813735,
+        "over16ms": 32
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 640,
+        "y": 1728
+      },
+      "speaker": false,
+      "activeMax": 0,
+      "nav": {
+        "median": 0.6000000005587935,
+        "p95": 12.599999999627471,
+        "max": 12.599999999627471,
+        "over16ms": 0
+      },
+      "simulation": {
+        "median": 0,
+        "p95": 0.10000000055879354,
+        "max": 0.40000000037252903,
+        "over16ms": 0
+      },
+      "drawing": {
+        "median": 0.2999999998137355,
+        "p95": 39.200000000186265,
+        "max": 49.89999999944121,
+        "over16ms": 26
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 1728,
+        "y": 650
+      },
+      "speaker": false,
+      "activeMax": 9,
+      "nav": {
+        "median": 0.5,
+        "p95": 10.599999999627471,
+        "max": 10.599999999627471,
+        "over16ms": 0
+      },
+      "simulation": {
+        "median": 0.6000000005587935,
+        "p95": 1,
+        "max": 1.5,
+        "over16ms": 0
+      },
+      "drawing": {
+        "median": 0.39999999944120646,
+        "p95": 40.5,
+        "max": 80.69999999925494,
+        "over16ms": 29
+      }
+    },
+    {
+      "scenario": "false-haven",
+      "position": {
+        "x": 1872,
+        "y": 864
+      },
+      "speaker": true,
+      "activeMax": 12,
+      "nav": {
+        "median": 0.5,
+        "p95": 11.200000000186265,
+        "max": 11.200000000186265,
+        "over16ms": 0
+      },
+      "simulation": {
+        "median": 0.8999999994412065,
+        "p95": 1.6000000005587935,
+        "max": 3.7000000001862645,
+        "over16ms": 0
+      },
+      "drawing": {
+        "median": 0.40000000037252903,
+        "p95": 37.10000000055879,
+        "max": 55.60000000055879,
+        "over16ms": 31
+      }
+    }
+  ]
+}

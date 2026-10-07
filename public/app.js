@@ -1,13 +1,13 @@
-import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4-fh2';
+import {RescueHost} from './games/nightfall/rescue-host.js?v=0.9.4-fh3';
 import {equipmentMarkup,bindEquipment} from './equipment-ui.js?v=0.9.4';
 import { hostingFor, fetchApi } from './hosting.js?v=0.9.4';
 import { CATALOG } from './catalog.js?v=0.9.4';
 import { StealthRuntime } from './stealth.js?v=0.9.4';
 import { SceneAssets } from './vault7-assets.js?v=0.9.4';
 import { TeacherAudio } from './teacher-audio.js?v=0.9.4';
-import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4-fh2';
-import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-fh2';
-import { FinaleHost } from './finale-host.js?v=0.9.4-fh2';
+import { CARTRIDGES, cartridgeFor } from './cartridges.js?v=0.9.4-fh3';
+import { expansionBody, bindExpansion } from './expansion-ui.js?v=0.9.4-fh3';
+import { FinaleHost } from './finale-host.js?v=0.9.4-fh3';
 import { CartridgeAudio } from './cartridge-audio.js?v=0.9.4';
 import {bindTeamTools,teamToolsMarkup,teamProgressMarkup} from './engine/team-tools.js?v=0.9.4';
 import {developerTools,extensionDialog} from './engine/teacher-tools.js?v=dev-20261006';

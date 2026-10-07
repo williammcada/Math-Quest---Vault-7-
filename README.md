@@ -86,3 +86,7 @@ Escape a compromised safe zone using power, drainage, a speaker trap, movable ca
 ## DEV homepage update — 2026-10-06
 
 Open Developer tools on the [MathQuest homepage](https://williammcada.github.io/Math-Quest---Vault-7-/public/) for question-free action practice: Vault 7, Nightfall, Nightfall II, Blackline, Ironbreak and Coastal Escape. Existing story reviews remain available separately (Ironbreak story review retains sample math). Frontend-only update; no new classroom cartridge activation. All six hosted starts checked in desktop Chrome. Owner/device playtesting remains pending October 8. [Verification record](docs/releases/dev-homepage-2026-10-06.md).
+
+### False Haven v0.3.0
+
+Performance repair, explicit unsafe-camp/authority-abandonment narrative, and new chapter-specific illustrated artwork. [Story and playable mission](https://williammcada.github.io/Math-Quest---Vault-7-/public/false-haven-preview.html) · [Direct practice](https://williammcada.github.io/Math-Quest---Vault-7-/public/practice-false-haven.html). See [release evidence](docs/releases/false-haven-v0.3.0.md). 186 tests and Chromium checks pass; Windows Chrome owner replay and physical iOS remain pending. Live classroom Worker activation is separate.

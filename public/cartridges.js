@@ -1,4 +1,4 @@
-import {FALSE_HAVEN,havenScene} from './cartridges/false-haven.js?v=0.2.0';
+import {FALSE_HAVEN,havenScene} from './cartridges/false-haven.js?v=0.9.4-fh3';
 // Trusted content registry. Academic selection belongs to question-provider.js.
 export const NIGHTFALL = {
   id: 'nightfall', title: 'Nightfall: Last Bus Out', revision: 'nightfall-city-5',
