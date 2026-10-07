@@ -81,6 +81,6 @@ export class GameHost {
     this.draw();this.frame=requestAnimationFrame(t=>this.tick(t));
   }
   beep(event){this.gameAudio.effect(event.type||event);}
-  draw(){if(this.ctx&&this.art){this.ctx=crispCanvas(this.canvas,640,360);this.adapter.render(this.ctx,this.s,this.art);}this.hud.textContent=this.adapter.hud(this.s)+(this.deadline&&!this.practice?' · CREW WINDOW '+Math.max(0,Math.ceil((this.deadline-(this.paused?(this.pauseClock||Date.now()+this.clockOffset):Date.now()+this.clockOffset))/1000))+'s · local pause does not extend it':'');this.root.querySelector('.mq-objective').textContent=this.adapter.objective(this.s)+(this.s.message&&this.s.time-this.s.messageAt<6?' · '+this.s.message:'');}
+  draw(){if(this.ctx&&this.art){this.ctx=crispCanvas(this.canvas,640,360);this.adapter.render(this.ctx,this.s,this.art);}const hud=this.adapter.hud(this.s)+(this.deadline&&!this.practice?' · CREW WINDOW '+Math.max(0,Math.ceil((this.deadline-(this.paused?(this.pauseClock||Date.now()+this.clockOffset):Date.now()+this.clockOffset))/1000))+'s · local pause does not extend it':'');if(this.hud.textContent!==hud)this.hud.textContent=hud;const objective=this.root.querySelector('.mq-objective'),text=this.adapter.objective(this.s)+(this.s.message&&this.s.time-this.s.messageAt<6?' · '+this.s.message:'');if(objective.textContent!==text)objective.textContent=text;}
   destroy(){this.dead=true;this.root.classList.remove('mq-focus');this.persist();cancelAnimationFrame(this.frame);this.ac.abort();this.clear();this.gameAudio.destroy();}
 }

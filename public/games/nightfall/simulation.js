@@ -1,3 +1,4 @@
+import {collisionGeometry,solidInGeometry} from './world.js?v=0.9.4-fh1';
 import {HAVEN_REVISION,havenEnvironment,havenEnemies,havenComplete,havenTick,havenSwitch,HAVEN_SWITCHES} from './false-haven-world.js';
 import {REVISION,TASKS,PICKUPS,PROPS,DISTRACTIONS,WINDOWS,propBounds,doorRects,solid,lineClear,nextObjective,seededEnemies,worldFor} from './world.js?v=0.9.4-fh1';
 import {threatFor} from './config.js?v=0.9.4-fh1';
@@ -29,20 +30,29 @@ export function damage(s,amount=1,fire=false){
 }
 // Connected-space fields target evidence, never the hidden player's position.
 // Closed doors attenuate sound; solid walls are impassable to sound and sight.
-const cache=new WeakMap();
+const cache=new WeakMap(),navigationGeometry=new WeakMap();
 export function navigationField(s,target,{sound=false}={}){
- const W=worldFor(s).WORLD,C=W.width/W.tile,R=W.height/W.tile;
- let entries=cache.get(s);if(!entries){entries=new Map();cache.set(s,entries);}
- const tx=Math.floor(target.x/32),ty=Math.floor(target.y/32),key=`${tx},${ty}:${s.doorRevision}:${!!s.tasks.power}:${sound}`;
+ const geometry=collisionGeometry(s),W=geometry.world,C=W.width/W.tile,R=W.height/W.tile;
+ let nav=navigationGeometry.get(geometry);
+ if(!nav){
+  const blocked=new Uint8Array(C*R),doorCost=new Uint8Array(C*R);
+  for(let y=0;y<R;y++)for(let x=0;x<C;x++){
+   const k=y*C+x,px=x*32+16,py=y*32+16;
+   blocked[k]=solidInGeometry(geometry,px,py,8,true);
+   doorCost[k]=geometry.doors.some(d=>Math.abs(d.y+8-py)<24&&px>d.x-8&&px<d.x+d.w+8);
+  }
+  nav={blocked,doorCost};navigationGeometry.set(geometry,nav);
+ }
+ let record=cache.get(s);if(record?.geometry!==geometry){record={geometry,entries:new Map()};cache.set(s,record);}
+ const entries=record.entries,tx=Math.floor(target.x/32),ty=Math.floor(target.y/32),key=`${tx},${ty}:${sound}`;
  if(entries.has(key))return entries.get(key);
  const cells=new Float32Array(C*R).fill(Infinity),queue=[],start=ty*C+tx;
- if(start<0||start>=C*R)return cells;cells[start]=0;queue.push(start);
- const doors=doorRects(s).filter(d=>s.doors[d.id]?.closed&&s.doors[d.id].hp>0);
+ if(tx<0||tx>=C||ty<0||ty>=R)return cells;cells[start]=0;queue.push(start);
  for(let i=0;i<queue.length;i++){
   const n=queue[i],x=n%C,y=Math.floor(n/C);
   for(const [a,b]of[[x-1,y],[x+1,y],[x,y-1],[x,y+1]]){
-   if(a<0||a>=C||b<0||b>=R||solid(s,a*32+16,b*32+16,8,true))continue;
-   const k=b*C+a,door=doors.some(d=>Math.abs(d.y+8-(b*32+16))<24&&a*32+16>d.x-8&&a*32+16<d.x+d.w+8),cost=cells[n]+32+(door?(sound?180:96):0);
+   if(a<0||a>=C||b<0||b>=R||nav.blocked[b*C+a])continue;
+   const k=b*C+a,door=nav.doorCost[k],cost=cells[n]+32+(door?(sound?180:96):0);
    if(cost<cells[k]&&cost<6000){cells[k]=cost;queue.push(k);}
   }
  }

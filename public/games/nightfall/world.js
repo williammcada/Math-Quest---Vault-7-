@@ -55,7 +55,7 @@ export const worldFor=s=>s?.scenario==='false-haven'?havenWorld(s):s?.scenario==
 export const doorRects=(s)=>worldFor(s).BUILDINGS.map(b=>({id:b.id,x:b.door,y:b.y+b.h-16,w:80,h:16,door:true}));
 // Circular actors slide around real art footprints instead of oversized square corners.
 const overlap=(x,y,r,b)=>{const nx=Math.max(b.x,Math.min(x,b.x+b.w)),ny=Math.max(b.y,Math.min(y,b.y+b.h));return (x-nx)**2+(y-ny)**2<r*r;};
-export function walls(s,{ignoreDoors=false}={}){
+function buildWalls(s,{ignoreDoors=false}={}){
  const {BUILDINGS,WINDOWS,BARRIERS}=worldFor(s);
  const list=[...BARRIERS];
  for(const b of BUILDINGS){
@@ -72,12 +72,31 @@ export function walls(s,{ignoreDoors=false}={}){
  return list;
 }
 export const propBounds=b=>({...b,x:b.x+(b.art<=3?10:3),y:b.y+(b.art<=3?10:3),w:b.w-(b.art<=3?20:6),h:b.h-(b.art<=3?20:6)});
-export function solid(s,x,y,r=10,ignoreDoors=false){
- const {WORLD,PROPS}=worldFor(s);
- if(x<r||y<r||x>WORLD.width-r||y>WORLD.height-r)return true;
- return walls(s,{ignoreDoors}).some(b=>overlap(x,y,r,b))||PROPS.some(b=>(!b.wire||!s.tasks.power)&&overlap(x,y,r,propBounds(b)));
+// Derived collision data never enters saved runs. Include values as well as the
+// revision so restored/assisted states and direct test fixtures invalidate safely.
+const geometryCache=new WeakMap();
+export function collisionGeometry(s){
+ const h=s.haven||{},t=s.tasks||{};
+ const key=[s.scenario,s.route,s.doorRevision,!!t.power,!!s.garageHordeTriggered,
+  !!t.passage_drained,!!t.service_shortcut,!!t.barrier_released,!!t.depot_shutter,
+  !!h.trapClosed,!!h.barricadeA,!!h.barricadeB,h.trolleyProgress||0,
+  ...Object.entries(s.windows||{}).map(([id,open])=>id+':'+!!open),
+  ...Object.entries(s.doors||{}).map(([id,d])=>id+':'+(!!d.closed&&d.hp>0))].join('|');
+ let g=geometryCache.get(s);if(g?.key===key)return g;
+ const {WORLD,PROPS}=worldFor(s),openWalls=buildWalls(s,{ignoreDoors:true});
+ const closed=doorRects(s).filter(d=>s.doors?.[d.id]?.closed&&s.doors[d.id].hp>0);
+ const props=PROPS.filter(b=>!b.wire||!t.power).map(propBounds);
+ g={key,world:WORLD,openWalls,walls:[...openWalls,...closed],doors:closed,
+  openSolids:[...openWalls,...props],solids:[...openWalls,...closed,...props]};
+ geometryCache.set(s,g);return g;
 }
-export function lineClear(s,a,b){const count=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/8);for(let i=1;i<=count;i++)if(solid(s,a.x+(b.x-a.x)*i/count,a.y+(b.y-a.y)*i/count,2))return false;return true;}
+export function walls(s,{ignoreDoors=false}={}){const g=collisionGeometry(s);return ignoreDoors?g.openWalls:g.walls;}
+export function solidInGeometry(g,x,y,r=10,ignoreDoors=false){
+ if(x<r||y<r||x>g.world.width-r||y>g.world.height-r)return true;
+ return (ignoreDoors?g.openSolids:g.solids).some(b=>overlap(x,y,r,b));
+}
+export function solid(s,x,y,r=10,ignoreDoors=false){return solidInGeometry(collisionGeometry(s),x,y,r,ignoreDoors);}
+export function lineClear(s,a,b){const g=collisionGeometry(s),count=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/8);for(let i=1;i<=count;i++)if(solidInGeometry(g,a.x+(b.x-a.x)*i/count,a.y+(b.y-a.y)*i/count,2))return false;return true;}
 export function nextObjective(s){return worldFor(s).TASKS.find(t=>!t.optional&&!s.tasks[t.id]&&(t.requires||[]).every(id=>s.tasks[id]));}
 export function seededEnemies(threat=1){
  const enemies=[];let seed=1733;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
