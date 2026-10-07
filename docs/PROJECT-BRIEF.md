@@ -245,3 +245,13 @@ change-specs/journey-stage9-integration.md. Runtime jttw-0.1.0-stage9-feedback.
 Cloudflare authentication and actual COMBAT_PUBLIC_BASE custom hostname are
 required deployment gates. No running backend deployment is claimed until
 verified. Prior branch/source headers are historical provenance.
+
+
+## 24. Existing Worker endpoint exception — 8 October 2026
+
+Owner has no purchased domain and authorized proceeding with the existing Worker.
+See change-specs/journey-existing-worker-endpoint.md, superseding the custom-host
+requirement in section 23 and Journey hosting section 13 only for the exact
+https://mathquest-prototype.willmcada-apps.workers.dev endpoint.
+No domain purchase, DNS change, paid plan, frontend migration or academic relay
+replacement. Classroom network/WebSocket/reconnect checks remain Not run.

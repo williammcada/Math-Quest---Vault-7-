@@ -11,9 +11,9 @@ binding and jttw-v1 migration. Update Journey content identity to Stage 9. Add
 Journey solo practice to DEV tools. Retain 180 seconds, three lives, verified
 art/input/audio, existing SESSIONS storage and Netlify academic relay.
 
-No host infrastructure replacement. COMBAT_PUBLIC_BASE must identify the actual
-approved HTTPS custom Worker hostname; no workers.dev substitution or invented
-hostname. Wrangler authentication and live endpoint must be established before
+No host infrastructure replacement. The owner-approved existing Worker endpoint
+exception in journey-existing-worker-endpoint.md supersedes the original custom
+hostname-only requirement. COMBAT_PUBLIC_BASE uses the exact HTTPS endpoint there. Wrangler authentication and live endpoint must be established before
 backend deployment. Frontend and backend live identity/room/socket checks follow.
 
 Check merged Node suite/build, backend dry-run, five-client and teacher/student

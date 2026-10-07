@@ -62,8 +62,11 @@ export async function journeyCommand(room,student,input){const t=room.teamFor(st
   if(input.type==='journey.connect'){
     const base=room.env.COMBAT_PUBLIC_BASE;
     if(!base)return error('The multiplayer endpoint has not been configured.');
-    const url=new URL(base);const local=['localhost','127.0.0.1','[::1]'].includes(url.hostname);
-    if((url.protocol!=='https:'&&!local)||url.username||url.password||url.search||url.hash||url.hostname.endsWith('.workers.dev'))return error('The multiplayer endpoint is not an approved secure host.');
+    let url;try{url=new URL(base);}catch{return error('The multiplayer endpoint is not a valid URL.');}
+    const local=['localhost','127.0.0.1','[::1]'].includes(url.hostname);
+    // Owner-approved existing Worker; other workers.dev deployments remain excluded.
+    const approvedWorker=url.hostname==='mathquest-prototype.willmcada-apps.workers.dev'&&!url.port;
+    if((url.protocol!=='https:'&&!(local&&url.protocol==='http:'))||url.username||url.password||url.search||url.hash||url.pathname!=='/'||(url.hostname.endsWith('.workers.dev')&&!approvedWorker))return error('The multiplayer endpoint is not an approved secure host.');
     const ticket=await runCall(room,t,'/ticket',{studentId:student.id});url.pathname='/api/combat/'+t.journey.runId+'/ws';url.protocol=url.protocol==='https:'?'wss:':'ws:';
     return {...room.snapshot({deviceId:student.id}),combatConnection:{...ticket,url:url.href,runId:t.journey.runId}};
   }

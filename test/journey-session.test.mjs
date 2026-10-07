@@ -18,3 +18,39 @@ test('required gates hand off once without extra team joining or academic comple
 test('optional math earns a personal choice and keeps team inventory unchanged',async()=>{const f=await fixture(),run=await f.prepare();await f.cmd('journey.optional.start','p0');const student=f.room.state.students.p0,item=student.journeyPrep.current.item;assert.equal((await f.cmd('journey.optional.answer','p0',{itemId:item.id,answer:item.answer})).status,200);assert.equal(student.journeyPrep.earned,2);assert.equal(run.model.player('p0').slots,2);assert.equal(run.model.player('p1').slots,1);assert.deepEqual(f.room.state.teams['team-1'].inventory,[]);assert.equal(f.room.state.attempts.at(-1).purpose,'journey-personal-preparation');assert.equal(f.room.state.students.p1.itemsCompleted,3);});
 test('teacher team controls and terminal result produce one separate engagement record',async()=>{const f=await fixture(1),run=await f.prepare();run.model.connect('p0',Date.now());run.model.reserve('p0','wukong',Date.now());await f.cmd('journey.ready','p0',{upgrades:['power']});await f.cmd('teacher.journey.pause',null,{teamId:'team-1'});assert.equal(run.model.paused,true);await f.cmd('teacher.journey.resume',null,{teamId:'team-1'});assert.equal(run.model.paused,false);const before=f.room.state.students.p0.firstAttemptCorrect;await f.cmd('teacher.journey.end',null,{teamId:'team-1'});assert.equal(f.room.state.teams['team-1'].journeyResult.outcome,'interrupted');assert.equal(f.room.report().gameplayEvidence.length,1);assert.equal(f.room.state.students.p0.firstAttemptCorrect,before);assert.match(f.room.reportCsv(),/JOURNEY/);await f.cmd('teacher.journey.end',null,{teamId:'team-1'});assert.equal(f.room.report().gameplayEvidence.length,1);clearInterval(run.timer);});
 test('forged result rejected; hosted session deletion includes child runs',async()=>{const f=await fixture(1),run=await f.prepare();const r=await f.call('/journey-result',{resultKey:'wrong',result:{runId:run.model.s.runId}});assert.equal(r.status,403);const deletion=await f.call('/delete',{},f.teacher);assert.equal(deletion.status,200);assert.equal(run.model,null);assert.equal((await f.call('/state?deviceId=p0',null,f.keys.p0)).status,410);});
+
+
+test('approved existing Worker issues secure combat tickets; invalid endpoints preserve the run',async()=>{
+  const f=await fixture(1);await f.prepare();
+  const team=f.room.state.teams['team-1'],runId=team.journey.runId;
+  for(const base of [
+    'https://mathquest-prototype.willmcada-apps.workers.dev',
+    'https://combat.example.org',
+    'http://127.0.0.1:8787'
+  ]){
+    f.room.env.COMBAT_PUBLIC_BASE=base;
+    const r=await f.cmd('journey.connect','p0');assert.equal(r.status,200,base);
+    assert.equal(r.body.combatConnection.url,base.replace(/^http/,'ws')+'/api/combat/'+runId+'/ws');
+    assert.ok(r.body.combatConnection.ticket);
+    assert.ok(!r.body.combatConnection.url.includes(f.keys.p0));
+  }
+  for(const base of [
+    '', 'not a URL', 'http://mathquest-prototype.willmcada-apps.workers.dev',
+    'https://other.willmcada-apps.workers.dev',
+    'https://mathquest-prototype.willmcada-apps.workers.dev:8443',
+    'https://user:pass@mathquest-prototype.willmcada-apps.workers.dev',
+    'https://mathquest-prototype.willmcada-apps.workers.dev?token=bad',
+    'https://mathquest-prototype.willmcada-apps.workers.dev#fragment',
+    'https://mathquest-prototype.willmcada-apps.workers.dev/unexpected',
+    'ftp://localhost', 'ws://127.0.0.1', 'http://combat.example.org'
+  ]){
+    f.room.env.COMBAT_PUBLIC_BASE=base;
+    const r=await f.cmd('journey.connect','p0');assert.equal(r.status,400,base);
+    assert.ok(r.body.error);assert.equal(r.body.combatConnection,undefined);
+    assert.equal(team.journey.runId,runId);assert.equal(f.runs.size,1);
+    assert.equal(f.room.state.attempts.length,3);
+  }
+  // A corrected deployment setting recovers without repeating academic gates.
+  f.room.env.COMBAT_PUBLIC_BASE='https://mathquest-prototype.willmcada-apps.workers.dev';
+  assert.equal((await f.cmd('journey.connect','p0')).status,200);
+});

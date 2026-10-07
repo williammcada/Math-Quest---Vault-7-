@@ -1,3 +1,5 @@
+Current deployment update (8 October 2026): the approved existing workers.dev endpoint supersedes the historical custom-host requirement below. See docs/change-specs/journey-existing-worker-endpoint.md. Live deployment and school-network checks are still required.
+
 # Thursday 8 October — Journey play-test
 
 This checklist is for Journey only. Other games need their own exact build checks. Do not deploy the whole older Journey branch over current MathQuest main: reconcile current-main changes first.

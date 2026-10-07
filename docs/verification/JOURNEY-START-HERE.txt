@@ -1,3 +1,5 @@
+Current deployment update (8 October 2026): the approved existing workers.dev endpoint supersedes the historical custom-host requirement below. See docs/change-specs/journey-existing-worker-endpoint.md. Live deployment and school-network checks are still required.
+
 JOURNEY — THURSDAY 8 OCTOBER PLAYTEST
 
 1. Download and unzip Journey-Thursday-Playtest.zip on your computer.

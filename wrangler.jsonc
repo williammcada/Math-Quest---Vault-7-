@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "mathquest-prototype",
+  "workers_dev": true,
   "main": "src/worker.js",
   "compatibility_date": "2025-04-01",
   "durable_objects": {
@@ -33,6 +34,7 @@
     "enabled": false
   },
   "vars": {
-    "CORS_ALLOWED_ORIGINS": "https://williammcada.github.io,https://vault7mathquest.netlify.app"
+    "CORS_ALLOWED_ORIGINS": "https://williammcada.github.io,https://vault7mathquest.netlify.app",
+    "COMBAT_PUBLIC_BASE": "https://mathquest-prototype.willmcada-apps.workers.dev"
   }
 }
