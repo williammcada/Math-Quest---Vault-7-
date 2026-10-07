@@ -1,0 +1,32 @@
+JOURNEY — THURSDAY 8 OCTOBER PLAYTEST
+
+1. Download and unzip Journey-Thursday-Playtest.zip on your computer.
+2. Double-click Journey-Solo-Practice-stage8.html. Open it in Chrome or Edge.
+3. Wait for Start solo practice, choose a hero and upgrade, then Start.
+4. Move with arrows/WASD; J attacks, K jumps, L uses magic. Touch controls also exist.
+5. Test every hero, three lives, three-minute run, pickups, four environments and Nezha.
+6. Test Music and Effects separately. Pause freezes the solo run. Changing tabs pauses it.
+7. Finish / choose hero lets you start a fresh practice. Nothing saves to classroom reports.
+
+The single HTML has everything embedded and needs no internet or Cloudflare.
+It is a large file; allow time for artwork to load. On iPhone/iPad, Files/Quick Look
+may show a preview without running JavaScript. That is not a game failure:
+use a real browser-served copy for mobile testing. Desktop double-click is tested.
+
+MULTIPLAYER IS A SEPARATE TEST
+Do not deploy this older isolated branch over current MathQuest main.
+First reconcile current main and the Journey checkpoint. Then configure/deploy
+the matching Cloudflare Worker with SESSIONS and BRAWLS, the jttw-v1 migration,
+the approved HTTPS custom COMBAT_PUBLIC_BASE, CORS and the combat WebSocket route.
+No hostname/credentials have been invented or changed. Cloudflare is NOT deployed.
+Then use a fresh teacher Journey room and two student devices, followed by five.
+Each student completes math, chooses a unique hero/upgrades and presses Ready.
+
+Record: device + OS/browser, hero, win/loss, time, lives used, and problems.
+Especially test: hold+release, two fingers, slide outside, rotate, background,
+lock/unlock, death, pause/resume, reconnect. Check for stuck actions, zoom/layout
+jumps and native selection menus. Test music with hardware silent mode on/off.
+
+Source guide: docs/verification/THURSDAY-JOURNEY-PLAYTEST.md.
+Build: jttw-0.1.0-stage8-playtest. This is a test candidate, not classroom acceptance.
+This package covers Journey only; it does not certify the other games.

@@ -81,6 +81,17 @@ Five-minute flight, double regular enemies, +10% player movement, and shared tou
 
 [Coastal Escape story preview](public/coastal-escape-preview.html) includes the fictional-island story, choices, original artwork/music and existing five-minute flight. It skips math explicitly for owner review and records no classroom evidence. The full v0.3.0 cartridge / v0.9.5 platform candidate is on `coastal-escape-v0.3-candidate`; see [deployment and verification](docs/releases/coastal-escape-v0.3.0.md). The current classroom frontend stays paired with its backend until the candidate Worker is deployed.
 
+## Journey Stage 9 solo playtest candidate — 8 October 2026
+
+Build `jttw-0.1.0-stage9-feedback`: removes geometric range overlays, adds original
+painted baozi/elixir/crate assets, doubles pre-boss crates, improves action Foley,
+and adds Space/Z/X/C keyboard aliases plus Escape pause/Enter resume in solo.
+See [change specification](docs/change-specs/journey-stage9-feedback.md) and
+[local verification](docs/verification/journey-stage9.md). The standalone package
+opens directly in desktop Chrome/Edge; it saves no academic records. Rebuild with
+`scripts/build-journey-practice.mjs` and JOURNEY_ESBUILD pointing to esbuild's main.js.
+Source remains isolated from newer MathQuest main; this is not a classroom release.
+
 ## Nightfall II: False Haven — v0.1.0 practice candidate
 
 [Play Chapter 2](https://williammcada.github.io/mathquest/public/practice-false-haven.html) · [Specification](docs/change-specs/nightfall-chapter-2-v0.1.0.md) · [Verification and limits](docs/releases/false-haven-v0.1.0.md)

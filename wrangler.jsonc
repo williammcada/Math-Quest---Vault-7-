@@ -8,6 +8,10 @@
       {
         "name": "SESSIONS",
         "class_name": "QuestSession"
+      },
+      {
+        "name": "BRAWLS",
+        "class_name": "BrawlRun"
       }
     ]
   },
@@ -16,6 +20,12 @@
       "tag": "v1",
       "new_sqlite_classes": [
         "QuestSession"
+      ]
+    },
+    {
+      "tag": "jttw-v1",
+      "new_sqlite_classes": [
+        "BrawlRun"
       ]
     }
   ],

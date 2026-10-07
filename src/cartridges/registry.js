@@ -1,6 +1,8 @@
+import {journeyServer} from './journey/server.js';
 import {vault7Server} from './vault-7/server.js';
 import {advanceExpansion} from '../expansion.js';
 const registry=new Map([
+ ['journey-west',journeyServer],
  ['vault-7',vault7Server],
  ['nightfall-false-haven',{advance(team){return advanceExpansion(this,team);}}],
  ['nightfall',{advance(team){return advanceExpansion(this,team);}}]

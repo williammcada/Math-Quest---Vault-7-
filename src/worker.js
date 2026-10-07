@@ -1,3 +1,6 @@
+import {JOURNEY_BUILD} from '../public/games/journey/config.js';
+import {isJourney,journeyCommand,journeyTeacher,syncJourney,syncJourneyTeacher,journeyProjection,acceptJourneyResult,deleteJourneyRuns} from './cartridges/journey/server.js';
+export {BrawlRun} from './cartridges/journey/durable-object.js';
 import {settleRescues} from './cartridges/nightfall/rescue-server.js';
 import {equipmentCommand,equipmentSlots,completeEquipmentBlock} from './engine/equipment.js';
 import {serverFor} from './cartridges/registry.js';
@@ -133,8 +136,15 @@ export default {
 
 async function routeRequest(request, env) {
     const url = new URL(request.url);
+    const combat=url.pathname.match(/^\/api\/combat\/([a-f0-9-]{36})\/ws$/i);
+    if(combat){
+      if(!env.BRAWLS)return json({error:'Combat service unavailable'},{status:503});
+      if(request.method!=='GET'||request.headers.get('upgrade')?.toLowerCase()!=='websocket')return json({error:'WebSocket required'},{status:426});
+      if(!request.headers.get('origin'))return json({error:'An approved browser origin is required'},{status:403});
+      const dest=new URL(request.url);dest.pathname='/socket';return env.BRAWLS.get(env.BRAWLS.idFromName(combat[1])).fetch(new Request(dest,request));
+    }
     if (url.pathname === "/api/health" && ["GET", "POST"].includes(request.method)) {
-      return json({ ok: true, version: VERSION, service: "MathQuest", transport: "https-polling", cors: true });
+      return json({ ok: true, version: VERSION, service: "MathQuest", journeyBuild: JOURNEY_BUILD, transport: "https-polling", cors: true });
     }
     if (url.pathname === "/api/catalog" && request.method === "GET") return json({
       version: VERSION,
@@ -167,8 +177,9 @@ async function routeRequest(request, env) {
 }
 
 export class QuestSession {
-  constructor(ctx) {
+  constructor(ctx,env={}) {
     this.ctx = ctx;
+    this.env = env;
     this.state = this.freshState();
     this.ready = ctx.blockConcurrencyWhile(async () => {
       const saved=await ctx.storage.get('state');
@@ -207,6 +218,7 @@ export class QuestSession {
     this.serial=work.catch(()=>{});return work;
   }
   async purge(){
+    if(isJourney(this))await deleteJourneyRuns(this);
     if(!this.ctx.storage.deleteAll)throw Error('Deletion storage capability unavailable.');
     await this.ctx.storage.deleteAll();await this.ctx.storage.deleteAlarm?.();
     this.state={deleted:true};await this.ctx.storage.put('state',this.state);
@@ -220,6 +232,10 @@ export class QuestSession {
     const url = new URL(request.url);
     if(this.state.deleted)return json({error:'This session was deleted. Local exports are unaffected.'},{status:410});
     if(this.state.code&&Date.now()>=this.state.expiresAt){await this.purge();return json({error:'This session expired after 48 hours and was deleted.'},{status:410});}
+    if(url.pathname==='/journey-result'&&request.method==='POST'){
+      if(!isJourney(this))return json({error:'Not found'},{status:404});
+      const result=await acceptJourneyResult(this,await request.json());return json(result,{status:result.status||200});
+    }
     const bearer=request.headers.get('authorization')?.replace(/^Bearer /i,'')||'';
     const legacy=!supportedEngine(this.state.config?.engineVersion);
     const teacherKey=bearer||(legacy?url.searchParams.get('teacherKey'):null);
@@ -236,6 +252,7 @@ export class QuestSession {
       const deviceId = cleanText(url.searchParams.get("deviceId"), 80);
       if(deviceId&&!this.isTeacher(teacherKey)&&this.state.students[deviceId]?.credential!==bearer)return json({error:'Student credential required'},{status:403});
       if(bearer&&!this.isTeacher(teacherKey)&&!deviceId)return json({error:'Invalid session credential'},{status:403});
+      if(isJourney(this)){await syncJourney(this);await this.save();}
       const before=this.state.students[deviceId]?.currentItem;
       const touched=deviceId&&this.state.students[deviceId]&&this.touch(deviceId);
       const snapshot=this.snapshot({teacherKey,deviceId});
@@ -257,7 +274,8 @@ export class QuestSession {
         const current = this.snapshot({ teacherKey: input.teacherKey, deviceId: input.deviceId });
         return json(prior.feedback ? { ...current, feedback: prior.feedback } : current);
       }
-      const result = await this.command(input);
+      let result;
+      try{result=await this.command(input);if(isJourney(this)&&!result.error){await syncJourney(this);result={...result,...this.snapshot({teacherKey:input.teacherKey,deviceId:input.deviceId}),...(result.combatConnection?{combatConnection:result.combatConnection}:{})};}}catch(error){result={error:error.message,status:503};}
       if (commandId && !result.error) {
         this.state.processed[replayKey] = { type: cleanText(input.type, 40), revision: this.state.revision, feedback: result.feedback || null };
         const commandIds = Object.keys(this.state.processed);
@@ -329,12 +347,14 @@ export class QuestSession {
   async command(input) {
     const type = String(input.type || "");
     if(!supportedEngine(this.state.config.engineVersion)&&type!=='teacher.end')return {error:'This room belongs to an older release. Export and end it, then create a fresh v0.9 session.',status:409};
-    if (type.startsWith("teacher.")) return this.teacherCommand(input);
+    if(type.startsWith('teacher.journey.'))return journeyTeacher(this,input);
+    if(type.startsWith('teacher.')){const result=this.teacherCommand(input);if(!result.error)await syncJourneyTeacher(this,input);return result;}
     if (type === "student.join") return this.join(input);
     const student = this.studentFor(input.deviceId);
     if (!student) return { error: "Join the session first.", status: 403 };
     this.touch(student.id);
     if (this.state.status !== "active") return { error: this.state.status === "ended" ? "This session has ended." : "Waiting for the teacher to start." };
+    if(isJourney(this)&&type.startsWith('journey.'))return journeyCommand(this,student,input);
     if(type.startsWith('extraction.'))return extractionCommand(this,student,input);
     if (this.state.paused) return { error: "The teacher has paused the session." };
     if (type === "briefing.ready") return this.briefingReady(student);
@@ -389,7 +409,7 @@ export class QuestSession {
         const usedSecrets = new Set();
         for (const team of activeTeams) {
           team.stage = "briefing";
-          if(!expansionFor(this))this.prepareCipher(team, usedSecrets);
+          if(this.state.config.cartridgeId==='vault-7')this.prepareCipher(team, usedSecrets);
           if (team.cipher?.variantId) usedSecrets.add(team.cipher.variantId);
         }
         if (removedTeams.length) this.addEvent("empty-teams-removed", `Removed ${removedTeams.length} empty team${removedTeams.length === 1 ? "" : "s"}: ${removedTeams.map(team => team.name).join(", ")}`);
@@ -443,6 +463,7 @@ export class QuestSession {
     if (this.state.status !== "setup") return { error: "The roster is locked because the teacher has started the session." };
     const team = Object.values(this.state.teams).find(candidate => candidate.pin === pin);
     if (!team) return { error: "That team code is not valid." };
+    if(isJourney(this)&&this.members(team.id).length>=5)return {error:"This Journey team already has five players. Choose another team."};
     if (Object.values(this.state.students).some(record => record.alias.toLowerCase() === alias.toLowerCase())) return { error: "That student name is already being used." };
     this.state.students[deviceId] = {
       id: deviceId,
@@ -604,6 +625,7 @@ export class QuestSession {
   resolveFinale(student) {return serverFor(this).resolveFinale.call(this,student);}
 
   fateFor(student) {
+    if(isJourney(this)){const outcome=this.teamFor(student)?.journeyResult?.outcome;return {id:outcome||"pending",label:outcome?"Journey: "+outcome:"Journey not completed"};}
     if(expansionFor(this)){
       const outcome=this.teamFor(student)?.runs?.[student.id]?.outcome;
       return {id:outcome||'pending',label:outcome==='success'?'Reached the bus':['setback','lost'].includes(outcome)?'Did not make it out alive':outcome==='teacher_advanced'?'Closed by mission control':outcome==='timed_out'?'Awaiting review':'Crossing not recorded'};
@@ -745,6 +767,7 @@ export class QuestSession {
         fate: team.stage === "victory" ? this.fateFor(member) : null
       })) : undefined
     };
+    if(isJourney(this))return {...projection,journey:visible?journeyProjection(this,team,viewer):null};
     return expansionFor(this)?expansionProjection(this,team,teacher,viewer,projection):projection;
   }
 
@@ -797,6 +820,7 @@ export class QuestSession {
         completedAt: team.completedAt
         ,extraction:extractionSummary(team.extraction),endingId:team.finalAction?`ending.${team.finalAction}`:null
       })),
+      journeyTeamResults:isJourney(this)?Object.values(this.state.teams).map(t=>({teamId:t.id,result:t.journeyResult||null})):undefined,
       attempts: this.state.attempts,
       gameplayEvidence:Object.values(this.state.teams).flatMap(t=>Object.entries(t.runs||t.extraction?.resultsByStudentId||{}).map(([studentId,result])=>({evidenceType:'engagement.gameplay',studentId,teamId:t.id,alias:this.state.students[studentId]?.alias,cartridgeId:this.state.config.cartridgeId,route:t.route,equipment:t.inventory.join('|')||null,adverseCount:t.extraction?.adverseCount||0,finalChoice:t.finalAction,...result}))),
       rescueEvidence:Object.values(this.state.teams).flatMap(t=>Object.entries(t.rescue?.runs||{}).map(([studentId,r])=>({evidenceType:'engagement.gameplay',phase:'early-rescue',studentId,alias:this.state.students[studentId]?.alias,teamId:t.id,route:t.rescue.route,phaseId:t.rescue.phaseId,deadline:t.rescue.deadline,closedAt:t.rescue.closedAt,closureReason:r.closureReason||t.rescue.closeReason,runId:r.runId,mode:r.mode,usedAssisted:!!r.usedAssisted,outcome:r.outcome||r.status,attempts:r.startedAt?r.attempt:0,retries:r.retries,engineVersion:r.engineVersion,configRevision:r.configRevision,validation:r.validation||'not completed',completedAt:r.completedAt}))),
@@ -825,6 +849,7 @@ export class QuestSession {
       ...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.route,r.equipment,r.adverseCount,r.status,r.outcome,r.activeElapsedMs,r.detections,r.integrityRemaining,r.checkpoint,r.fallbackUsed,r.startedAt,r.completedAt,r.clientBuild,r.mapRevision]),
       [],['TEAM OUTCOMES'],['Team','Final action','Ending','Credits','Route','Equipment','Completion reason'],...report.teams.map(t=>[t.name,t.finalAction,t.endingId,t.currency,t.route,t.inventory.join('|'),t.extraction?.completionReason])
     ];
+    if(isJourney(this))rows.push([],['JOURNEY · ENGAGEMENT ONLY'],['Student ID','Alias','Team ID','Run ID','Hero','Personal upgrades','Participation','Team outcome','Reason','Lives used','Active ms','Build','Sample'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.runId,r.hero,(r.upgrades||[]).join('|'),r.participation,r.outcome,r.reason,r.livesUsed,r.activeElapsedMs,r.clientBuild,r.sample]));
     if(expansionFor(this))rows.push([],[`${this.state.config.cartridgeTitle} · ENGAGEMENT ONLY`],['Student ID','Alias','Run ID','Configuration','Mode','Outcome','Active ms','Loadout','Shots','Hits','Vest blocks','Healing uses','Validation'],...report.gameplayEvidence.map(r=>[r.studentId,r.alias,r.runId,r.configRevision,r.mode,r.outcome,r.activeElapsedMs,(r.loadout||[]).join('|'),r.snapshot?.shots,r.snapshot?.hits,r.snapshot?.blocks,r.snapshot?.heals,r.validation]));
     rows.push([],['FIRST RESPONSE · ENGAGEMENT ONLY'],['Student ID','Alias','Team','Phase','Route','Mode','Outcome','Closure reason','Attempts','Retries'],...report.rescueEvidence.map(r=>[r.studentId,r.alias,r.teamId,r.phase,r.route,r.mode,r.outcome,r.closureReason,r.attempts,r.retries]));
     rows.push([],['LIVE EXTENSIONS'],['Batch ID','Time','Student ID','Alias','Added','Total assigned','Gate index','Difficulty'],...(report.extensions||[]).flatMap(batch=>batch.targets.map(t=>[batch.id,batch.at,t.studentId,t.alias,t.count,t.total,t.gateIndex===null?'Last Checkpoint':t.gateIndex+1,batch.policy])),[],['ATTEMPT EXTENSION CONTEXT'],['Item ID','Student ID','Batch ID'],...report.attempts.map(a=>[a.itemId,a.studentId,a.extensionBatchId||'initial']));

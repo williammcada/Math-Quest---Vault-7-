@@ -1,0 +1,11 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> mathquest-prototype@0.9.4 build
+> node scripts/validate-release.mjs
+
+Release validated: 25 modules; preserved Vault 7 assets; Nightfall story and city atlases, three music tracks and effects bank; recursive JavaScript syntax.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

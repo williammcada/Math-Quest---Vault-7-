@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Journey environment review</title><style>body{background:#101e2b;color:#e8eee8;font:16px system-ui;margin:16px}canvas{display:block;width:960px;max-width:100%;image-rendering:pixelated}button{padding:10px;margin:4px}p{max-width:960px}</style></head><body><h1>Journey · environment review</h1><p>Visual fixture, not a playable run. Five heroes and eight enemies stress-test readability. Debug outlines show the unchanged authoritative movement bounds.</p><nav></nav><button id="bounds">Toggle movement bounds</button><canvas width="960" height="420"></canvas><script type="module">
+import {JourneyRenderer} from './games/journey/renderer.js';
+import {ARENA} from './games/journey/config.js';
+const names=['Mountain Path','Cave Approach','Ruined Shrine','Courtyard Supplies','Nezha'];
+const renderer=new JourneyRenderer(document.querySelector('canvas'));let debug=false;
+function set(stage){renderer.set({phase:'running',level:{stage,name:names[stage]},players:['wukong','bajie','wujing','tang','prince'].map((hero,i)=>({id:hero,hero,alias:hero,started:true,visible:true,x:120+i*155,y:335,hp:100,maxHp:100,facing:1,action:'idle'})),enemies:stage===3?[]:stage===4?[{id:'nezha',kind:'nezha',x:800,y:270,hp:280,maxHp:650,facing:-1,phase:'windup',move:'rush',laneY:270,timer:500}]:Array.from({length:8},(_,i)=>({id:'enemy-'+i,kind:['raider','leaper','caster','shield','brute'][i%5],x:100+i*105,y:245+(i%2)*42,hp:100,maxHp:100,facing:-1,phase:i===2?'windup':'walk',timer:600,aim:{x:400,y:330}})),props:[{x:330,y:305,hp:16},{x:550,y:245,hp:16}],pickups:[{x:470,y:340,kind:'health'},{x:640,y:340,kind:'magic'}]});}
+window.review={renderer,set,debug(on){debug=on;}};
+names.forEach((name,i)=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>set(i);document.querySelector('nav').append(b);});
+document.querySelector('#bounds').onclick=()=>debug=!debug;
+function draw(){renderer.draw();if(debug){const c=renderer.ctx;c.strokeStyle='#71ffea';c.lineWidth=2;c.setLineDash([8,5]);c.strokeRect(ARENA.left,ARENA.far,ARENA.right-ARENA.left,ARENA.near-ARENA.far);c.setLineDash([]);}requestAnimationFrame(draw);}set(0);draw();
+</script></body></html>
