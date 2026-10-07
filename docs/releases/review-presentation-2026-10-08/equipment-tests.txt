@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: Coastal 3/4/5 gates, both routes, all endings, personal assisted results and restored classroom records
+ok 1 - Coastal 3/4/5 gates, both routes, all endings, personal assisted results and restored classroom records
+  ---
+  duration_ms: 207.800355
+  type: 'test'
+  ...
+# Subtest: Coastal rejects cross-player, legacy minigame and unearned upgrades; closure preserves votes
+ok 2 - Coastal rejects cross-player, legacy minigame and unearned upgrades; closure preserves votes
+  ---
+  duration_ms: 24.060671
+  type: 'test'
+  ...
+# Subtest: Coastal teacher pause shifts deadline once; alarm closes absent flights
+ok 3 - Coastal teacher pause shifts deadline once; alarm closes absent flights
+  ---
+  duration_ms: 22.418299
+  type: 'test'
+  ...
+# Subtest: Unequal gate loads require explicit extra-upgrade count and teacher setting enables it
+ok 4 - Unequal gate loads require explicit extra-upgrade count and teacher setting enables it
+  ---
+  duration_ms: 14.67172
+  type: 'test'
+  ...
+# Subtest: Ironbreak 3/4/5 gates, both priorities and every ending retain complete story and separate math evidence
+ok 5 - Ironbreak 3/4/5 gates, both priorities and every ending retain complete story and separate math evidence
+  ---
+  duration_ms: 635.974263
+  type: 'test'
+  ...
+# Subtest: extra mathematics alone unlocks multiple distinct frozen upgrades; loadout tampering is rejected
+ok 6 - extra mathematics alone unlocks multiple distinct frozen upgrades; loadout tampering is rejected
+  ---
+  duration_ms: 36.841295
+  type: 'test'
+  ...
+# Subtest: server alarm closes unstarted/disconnected suits; teacher pause shifts deadline once and stale starts cannot reopen
+ok 7 - server alarm closes unstarted/disconnected suits; teacher pause shifts deadline once and stale starts cannot reopen
+  ---
+  duration_ms: 21.322801
+  type: 'test'
+  ...
+# Subtest: three lives, authoritative retries, new attempt identities and idempotency preserve equipment and elapsed time
+ok 8 - three lives, authoritative retries, new attempt identities and idempotency preserve equipment and elapsed time
+  ---
+  duration_ms: 32.492871
+  type: 'test'
+  ...
+# Subtest: real simulation progress persists and restores without refilling; known identities and bounded state reject tampering
+ok 9 - real simulation progress persists and restores without refilling; known identities and bounded state reject tampering
+  ---
+  duration_ms: 71.173164
+  type: 'test'
+  ...
+# Subtest: guided wrong responses preserve steps; switch is irreversible; student sees only own run; deletion removes saved server state
+ok 10 - guided wrong responses preserve steps; switch is irreversible; student sees only own run; deletion removes saved server state
+  ---
+  duration_ms: 16.366992
+  type: 'test'
+  ...
+# Subtest: real boss fight snapshots pass the live validator through success; checkpoint retries reset only the issued section
+ok 11 - real boss fight snapshots pass the live validator through success; checkpoint retries reset only the issued section
+  ---
+  duration_ms: 150.225449
+  type: 'test'
+  ...
+# Subtest: vault-7: actual commands unlock all seven loadout combinations and persist for all clients
+ok 12 - vault-7: actual commands unlock all seven loadout combinations and persist for all clients
+  ---
+  duration_ms: 219.690705
+  type: 'test'
+  ...
+# Subtest: nightfall: actual commands unlock all seven loadout combinations and persist for all clients
+ok 13 - nightfall: actual commands unlock all seven loadout combinations and persist for all clients
+  ---
+  duration_ms: 204.114523
+  type: 'test'
+  ...
+# Subtest: fraction policy covers value, raw form, signs, integer entry and explicit denominator exceptions
+ok 14 - fraction policy covers value, raw form, signs, integer entry and explicit denominator exceptions
+  ---
+  duration_ms: 1.529723
+  type: 'test'
+  ...
+# Subtest: every preset module and difficulty uses the shared final-fraction contract
+ok 15 - every preset module and difficulty uses the shared final-fraction contract
+  ---
+  duration_ms: 16.460327
+  type: 'test'
+  ...
+# Subtest: unsimplified submission is recorded raw, cannot complete a gate, and correction is not first-attempt success
+ok 16 - unsimplified submission is recorded raw, cannot complete a gate, and correction is not first-attempt success
+  ---
+  duration_ms: 5.333126
+  type: 'test'
+  ...
+# Subtest: shared deadline closes late and never-started runs while preserving completed results and answers
+ok 17 - shared deadline closes late and never-started runs while preserving completed results and answers
+  ---
+  duration_ms: 4.000321
+  type: 'test'
+  ...
+# Subtest: alarm interrupts every attack state for its full interval, including distant and newly added mobs
+ok 18 - alarm interrupts every attack state for its full interval, including distant and newly added mobs
+  ---
+  duration_ms: 387.196487
+  type: 'test'
+  ...
+# Subtest: alarm activates on car contact and bullets from both sides but not a near miss
+ok 19 - alarm activates on car contact and bullets from both sides but not a near miss
+  ---
+  duration_ms: 2.627715
+  type: 'test'
+  ...
+# Subtest: store group survives every threat budget, door stays solid, both windows become passages
+ok 20 - store group survives every threat budget, door stays solid, both windows become passages
+  ---
+  duration_ms: 398.723411
+  type: 'test'
+  ...
+# Subtest: shotgun eight-shell reward ignores carbine and pouch; switching/recovery never refill
+ok 21 - shotgun eight-shell reward ignores carbine and pouch; switching/recovery never refill
+  ---
+  duration_ms: 1.947409
+  type: 'test'
+  ...
+# Subtest: garage ingress overrides alarm until entry; dead horde members stay dead after restoration
+ok 22 - garage ingress overrides alarm until entry; dead horde members stay dead after restoration
+  ---
+  duration_ms: 188.036286
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1550.653638
