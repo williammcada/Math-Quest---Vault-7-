@@ -132,3 +132,7 @@ The authoritative five-minute team window begins at `market.continue`; teacher p
 ## DEV homepage revision — 6 October 2026
 
 Owner authorized frontend-only access to preserved review/practice builds. Application checkpoint `af87c3b0188cf240117b340a20c84e3bd67be95d` adds question-free action entry for all six games while retaining story review. See `change-specs/dev-homepage-2026-10-06.md` and `releases/dev-homepage-2026-10-06.md`. No gameplay, artwork, classroom registry or backend changes. Owner playtesting remains pending Thursday October 8, 2026.
+
+## Narrative illustration direction — 8 October 2026
+
+Owner requires Ironbreak and Blackline story artwork to match the detailed illustrated treatment of Coastal Escape, Nightfall and Vault Seven; geometric/procedural SVG narrative illustrations are superseded. Eight raster scenes are saved under public/assets/ironbreak/ and public/assets/blackline/ and embedded in the current standalone reviews. See change-specs/painted-cartridge-art-2026-10-08.md and releases/painted-art-2026-10-08.md. Retain this art on later classroom candidate integration; do not regenerate old geometric review bundles over it. This is a narrative illustration revision, not a replacement of the arcade renderers.

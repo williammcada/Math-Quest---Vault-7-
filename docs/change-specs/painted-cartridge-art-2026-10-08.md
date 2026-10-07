@@ -1,0 +1,9 @@
+# Ironbreak and Blackline illustrated story art — 8 October 2026
+
+Owner explicitly rejects the geometric/procedural narrative artwork and requests the visual treatment used by Coastal Escape, Nightfall and Vault Seven. Baseline main 05b29e5332cb56adc7a48010318491b06611452c, repository williammcada/Math-Quest---Vault-7-.
+
+Replace Ironbreak and Blackline narrative illustrations with detailed generated raster artwork: cinematic environmental storytelling, textured materials, atmospheric depth, cool shadow/warm practical lighting. Use the actual Coastal Escape, Nightfall and Vault Seven cover files as style references. No text embedded in artwork, no geometric SVG stand-ins. Distinct cover, preparation/communication, equipment and ending scenes for both cartridges. Preserve established characters, fictional setting, routes, choices and outcomes; ending illustrations remain neutral across decisions. Story art only: no action mechanics or control changes, no promise to replace the minigame's renderer in this revision.
+
+Publish current static story reviews with embedded WebP assets so standalone delivery remains intact. Save separate source asset files and a reproducible embedding script. Keep mission instruction boxes, DEV action shortcuts and earning rules. Preserve unrelated ongoing False Haven work. Check all scene images decode, standalone/network independence, desktop/mobile composition and browser navigation; publish with a branch-head lease and verify hosted files.
+
+Handbook consulted in this session: AI-START-HERE.md 6557a45aaa6d29d7d1abde808e6d0ac248b08820; UNIVERSAL-RULES.md 6bde7c1f4ccdf5ed2163955e553379ba55186e2f; CONDITIONAL-STANDARDS.md 1a794984142f3702c027a28e492a310aaba9f096; RELEASE-CHECKLIST.md 8aeb2207fb48b65ed9454da370c6021499fcd7d0. Apply preservation, readability, honest verification and delivery standards. No handbook amendment. Full classroom and physical-device controls not retested for this story-art change.

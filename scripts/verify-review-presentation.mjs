@@ -18,11 +18,16 @@ try{
  const page=await browser.newPage({viewport});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  for(const route of ['reviews/Ironbreak-v0.1.0.html','reviews/BLACKLINE-v0.2.0.html','coastal-escape-preview.html','false-haven-preview.html']){
  await page.goto(base+route);await page.locator('.mission-instructions').waitFor();
+ if(route.includes('reviews/')){
+ const decoded=await page.evaluate(async()=>{const out=[];for(const [key,art] of Object.entries(MQ_STORY_ART)){const img=new Image();img.src=art.src;await img.decode();out.push({key,width:img.naturalWidth,webp:art.src.startsWith('data:image/webp;base64,')});}return out;});
+ assert.equal(decoded.length,4);assert.ok(decoded.every(x=>x.width>=1280&&x.webp)); // all raster scenes decode
+ }
+
  assert.equal(await page.locator('img').first().evaluate(async img=>{await img.decode();return img.naturalWidth>0;}),true,route+' artwork');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,route+' overflow');
- if(viewport.width===1280&&route.includes('BLACKLINE'))await page.screenshot({path:'/tmp/blackline-instructions.png',fullPage:true});
- if(viewport.width===1280&&route.includes('Ironbreak'))await page.screenshot({path:'/tmp/ironbreak-artwork.png',fullPage:true});
- if(route.includes('Ironbreak')){assert.equal(await page.locator('.review-cover').getAttribute('alt'),'A teal-visored maintenance suit faces a violet security robot inside the foundry');await page.locator('[data-do="briefing.ready"]').click();await page.locator('#review-answer').waitFor();}
+ if(viewport.width===1280&&route.includes('BLACKLINE'))await page.screenshot({path:'/tmp/blackline-painted.png',fullPage:true});
+ if(viewport.width===1280&&route.includes('Ironbreak'))await page.screenshot({path:'/tmp/ironbreak-painted.png',fullPage:true});
+ if(route.includes('Ironbreak')){assert.equal(await page.locator('.review-cover').getAttribute('alt'),'Mara prepares a remote maintenance machine beside the flooded foundry');await page.locator('[data-do="briefing.ready"]').click();await page.locator('#review-answer').waitFor();}
  else{await page.locator('#next').click();await page.locator('#next').click();await page.locator('[data-choice]').first().click();await page.locator('#next').click();await page.locator('#next').click();assert.equal(await page.locator('input[type=checkbox]').count(),3);await page.locator('input[type=checkbox]').first().check();assert.equal(await page.locator('input:checked').count(),1);await page.locator('#skip').click();await page.locator('[data-choice]').first().click();await page.locator('#endings').waitFor();}
  results.push({route,viewport,artDecoded:true,instructions:true,navigation:true});
  }

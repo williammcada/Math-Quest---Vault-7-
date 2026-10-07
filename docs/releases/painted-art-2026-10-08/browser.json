@@ -1,0 +1,134 @@
+{
+  "browser": "153.0.8010.0",
+  "results": [
+    {
+      "route": "reviews/Ironbreak-v0.1.0.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "reviews/BLACKLINE-v0.2.0.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "coastal-escape-preview.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "false-haven-preview.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "reviews/Ironbreak-v0.1.0.html",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "reviews/BLACKLINE-v0.2.0.html",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "coastal-escape-preview.html",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "false-haven-preview.html",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "reviews/Ironbreak-v0.1.0.html",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "reviews/BLACKLINE-v0.2.0.html",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "coastal-escape-preview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "route": "false-haven-preview.html",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "artDecoded": true,
+      "instructions": true,
+      "navigation": true
+    },
+    {
+      "file": "Ironbreak-v0.1.0.html",
+      "devCanvas": true
+    },
+    {
+      "file": "BLACKLINE-v0.2.0.html",
+      "devCanvas": true
+    }
+  ],
+  "physicalIOS": "Not run"
+}
