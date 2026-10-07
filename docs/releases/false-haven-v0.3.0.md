@@ -20,7 +20,7 @@ Application candidate: GitHub commit `64fe2959588411b6aa53b5c23ff4e5f2be91e85d`,
 | Viewports | Passed: 1280×800, 1024×768 and 844×390; no horizontal story overflow |
 | Windows Chrome owner replay | Not run; reported constant-lag experience still requires owner confirmation |
 | Physical iPhone/iPad | Not run; no physical-device verification claim |
-| Hosted Pages | Pending publication and hosted smoke; see deployment follow-up |
+| Hosted Pages | Passed: v0.3.0 story, all new art, mission movement/fire/speaker, guided ending, pause/reload, and 32/32 changed frontend file SHA-256 hashes |
 | Live classroom Worker | Not deployed in this revision. Existing classroom activation remains separately pending; this frontend repair does not establish its deployment |
 
 ### Measured real-time comparison
@@ -37,3 +37,13 @@ The actual host test (separate from the comparison) measured simulation p95 1.0 
 The earlier non-real-time batch benchmark accumulated canvas commands without refreshes, exaggerating drawing stalls. It is retained as exploratory evidence, not a real-world drawing/FPS claim. Real-time baseline idle already ran smoothly in this environment; the user's constant Windows slowdown was not fully reproduced. The measured enemy-navigation stalls were reproduced and materially reduced.
 
 Evidence: `docs/releases/evidence/false-haven-v0.3.0/`. Reproduce with `npm test`, `npm run build`, `REALTIME=1 node scripts/profile-nightfall.mjs`, and `node scripts/verify-false-haven-v3.mjs` (runtime Playwright and Chromium path documented in scripts).
+
+## Deployment follow-up — 8 October 2026
+
+Published source commit `1c3786b7d35b9065226701be6f5b446550de3fac` (tree `4446a6cb6711ff269ca7674b63932859740de773`) incorporates concurrent main `41aed09` without losing its Ironbreak/Blackline illustrations. Local merge checkpoint `1a93acf` has the identical tree. The merged candidate passed the full 186-test suite and release validation again (`merged-tests.txt`, `merged-build.txt`). No False Haven application changes followed the candidate browser verification.
+
+Live Pages browser checks passed: five story gates, dispatch investigation, all three endings, new images decoded, guided mission, actual action movement/fire/speaker, neutral paused input, active-clock pause and saved reload. All 32 frontend files changed by this repair match local SHA-256 hashes. Hosted action sampled 726 simulation updates, p95 1.3 ms / max 22 ms; draw p95 0.5 ms / max 6.5 ms. This is a Linux Chromium sample, not a guarantee or Windows hardware test. Cold geometry work can still exceed one frame. No live Worker deployment is claimed.
+
+The public-site test required ignoring this environment’s proxy certificate in the isolated Playwright context; SHA-256 confirmed public delivered asset identity. No user browser/security settings were changed. Hosted evidence is `hosted-browser.json` and `hosted-files.json`.
+
+Owner replay: open the story preview or direct practice, confirm v0.3.0 (Ctrl+Shift+R if an older label appears), and play on the same Windows Chrome machine. Report any persistent slowdown and location. Do not clear stored progress merely to refresh assets.

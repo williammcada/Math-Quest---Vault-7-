@@ -1,0 +1,232 @@
+{
+  "sourceCommit": "1c3786b7d35b9065226701be6f5b446550de3fac",
+  "checkedAt": "2026-10-07T22:33:42.277Z",
+  "proxyTLS": "Test context ignores proxy certificate; public asset identity checked by SHA-256",
+  "allMatch": true,
+  "files": [
+    {
+      "path": "public/app.js",
+      "status": 200,
+      "expected": "4dd078aafba80ba850440be91c632e5f2f92a8aa3c2fbee0f2b16419d1e51f18",
+      "served": "4dd078aafba80ba850440be91c632e5f2f92a8aa3c2fbee0f2b16419d1e51f18",
+      "match": true
+    },
+    {
+      "path": "public/assets/false-haven/cover-v3.webp",
+      "status": 200,
+      "expected": "73909ee9e84b9d9c502263d929ac8f68477fba52e117e2460314045911f0d708",
+      "served": "73909ee9e84b9d9c502263d929ac8f68477fba52e117e2460314045911f0d708",
+      "match": true
+    },
+    {
+      "path": "public/assets/false-haven/ending-v3.webp",
+      "status": 200,
+      "expected": "c7dc25eee9858be9beef73ccc7474435a8542796be31f5e19da2dcbb6971ecc1",
+      "served": "c7dc25eee9858be9beef73ccc7474435a8542796be31f5e19da2dcbb6971ecc1",
+      "match": true
+    },
+    {
+      "path": "public/assets/false-haven/market-v3.webp",
+      "status": 200,
+      "expected": "56104867ab3da9d203a262a581288b489257fff44f11b97ebc68877720588a3b",
+      "served": "56104867ab3da9d203a262a581288b489257fff44f11b97ebc68877720588a3b",
+      "match": true
+    },
+    {
+      "path": "public/assets/false-haven/radio-v3.webp",
+      "status": 200,
+      "expected": "a0d887ac9aef7c008b47ecd4eabd5c3029ec1d07bd43eafdb7a9ed568cd34dcc",
+      "served": "a0d887ac9aef7c008b47ecd4eabd5c3029ec1d07bd43eafdb7a9ed568cd34dcc",
+      "match": true
+    },
+    {
+      "path": "public/assets/false-haven/tiles-v3.webp",
+      "status": 200,
+      "expected": "67d6ce403784a900072296a0814994222cb06ca559f47167ecde762cd2f5e474",
+      "served": "67d6ce403784a900072296a0814994222cb06ca559f47167ecde762cd2f5e474",
+      "match": true
+    },
+    {
+      "path": "public/brand.js",
+      "status": 200,
+      "expected": "61ad5f76b92a650dc61681d32c2a7f6d795e43c35b6d12dac0cec6ed5447547b",
+      "served": "61ad5f76b92a650dc61681d32c2a7f6d795e43c35b6d12dac0cec6ed5447547b",
+      "match": true
+    },
+    {
+      "path": "public/cartridges.js",
+      "status": 200,
+      "expected": "5e6d34176e0a0cdebe9ec40d53da17e5a916d4fddec1e39104d05a674441d751",
+      "served": "5e6d34176e0a0cdebe9ec40d53da17e5a916d4fddec1e39104d05a674441d751",
+      "match": true
+    },
+    {
+      "path": "public/cartridges/false-haven.js",
+      "status": 200,
+      "expected": "1569351885159bf03c5b7a88412049c2d1ad9bc13944c01ebbf205e30ce23be2",
+      "served": "1569351885159bf03c5b7a88412049c2d1ad9bc13944c01ebbf205e30ce23be2",
+      "match": true
+    },
+    {
+      "path": "public/coastal-escape-preview.js",
+      "status": 200,
+      "expected": "05e541945f481985eb368af6c2efb4be861b0399b1c1ae05133abe127a138c00",
+      "served": "05e541945f481985eb368af6c2efb4be861b0399b1c1ae05133abe127a138c00",
+      "match": true
+    },
+    {
+      "path": "public/engine/game-host.js",
+      "status": 200,
+      "expected": "c7a4a332bba37bbe82d27023e17905d56031e6472c4899b343b177b7ee81ed4a",
+      "served": "c7a4a332bba37bbe82d27023e17905d56031e6472c4899b343b177b7ee81ed4a",
+      "match": true
+    },
+    {
+      "path": "public/engine/practice-scenes.js",
+      "status": 200,
+      "expected": "8e774458772536cad3b971acd6aa7d74ff20f23fb427ef9f2203ce951c805c22",
+      "served": "8e774458772536cad3b971acd6aa7d74ff20f23fb427ef9f2203ce951c805c22",
+      "match": true
+    },
+    {
+      "path": "public/engine/teacher-tools.js",
+      "status": 200,
+      "expected": "e8919803859791f93df28d25e9a2a25160da6351e248529b5ddd95bcdfd5306a",
+      "served": "e8919803859791f93df28d25e9a2a25160da6351e248529b5ddd95bcdfd5306a",
+      "match": true
+    },
+    {
+      "path": "public/expansion-ui.js",
+      "status": 200,
+      "expected": "4fa0f602c877c6aaf9168657a678fa30f2ff39d7179345c9b84cb81b8249c403",
+      "served": "4fa0f602c877c6aaf9168657a678fa30f2ff39d7179345c9b84cb81b8249c403",
+      "match": true
+    },
+    {
+      "path": "public/false-haven-preview.html",
+      "status": 200,
+      "expected": "5f7847fc957ac1a70ce4c5d04df264448184e82a5b947517d83df8a4c948aa36",
+      "served": "5f7847fc957ac1a70ce4c5d04df264448184e82a5b947517d83df8a4c948aa36",
+      "match": true
+    },
+    {
+      "path": "public/false-haven-preview.js",
+      "status": 200,
+      "expected": "837eeddb2f47ccd50376351a5059d4c5aa7f19fd0dde62dcc7e04de6cc199fe3",
+      "served": "837eeddb2f47ccd50376351a5059d4c5aa7f19fd0dde62dcc7e04de6cc199fe3",
+      "match": true
+    },
+    {
+      "path": "public/finale-host.js",
+      "status": 200,
+      "expected": "f5630fca4eb1213c751b3f30187bb8db780885fa9e3b9158f50aa0e949f94388",
+      "served": "f5630fca4eb1213c751b3f30187bb8db780885fa9e3b9158f50aa0e949f94388",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/adapter.js",
+      "status": 200,
+      "expected": "39fdb041197ca3e58e646ba0327a8495fc47b2a6e0b0685eef67b101249e23a0",
+      "served": "39fdb041197ca3e58e646ba0327a8495fc47b2a6e0b0685eef67b101249e23a0",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/false-haven-adapter.js",
+      "status": 200,
+      "expected": "caecd141ccc634294fb309494b44665d790f2695ee13059fe58886159018afa5",
+      "served": "caecd141ccc634294fb309494b44665d790f2695ee13059fe58886159018afa5",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/false-haven-renderer.js",
+      "status": 200,
+      "expected": "85b515c121a5f9a7e78a325e3d92bd11c5e58f295451a7c90ad413346a16d9ac",
+      "served": "85b515c121a5f9a7e78a325e3d92bd11c5e58f295451a7c90ad413346a16d9ac",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/hardware.js",
+      "status": 200,
+      "expected": "b9ec62623c2278c0548eeff67ba595e4137255745afc39b309d760d603accb75",
+      "served": "b9ec62623c2278c0548eeff67ba595e4137255745afc39b309d760d603accb75",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/renderer.js",
+      "status": 200,
+      "expected": "6ae3d13039986414fe8eebb1934d178b91f158bf0503737aefece80579a29cc0",
+      "served": "6ae3d13039986414fe8eebb1934d178b91f158bf0503737aefece80579a29cc0",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/rescue-adapter.js",
+      "status": 200,
+      "expected": "e0816bc43823a4b3bcb10670b14cb9cce1238468107ed36d44429e9cdcf563b8",
+      "served": "e0816bc43823a4b3bcb10670b14cb9cce1238468107ed36d44429e9cdcf563b8",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/rescue-host.js",
+      "status": 200,
+      "expected": "263930d649302c5026a0a2e73756d2c5375867a1fd27c3c8ca7ec857f68c3efb",
+      "served": "263930d649302c5026a0a2e73756d2c5375867a1fd27c3c8ca7ec857f68c3efb",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/rescue.js",
+      "status": 200,
+      "expected": "7e978e1ee84276f008d9691bc5a831a92578ff5075ebe11072eeb2a76aaf580f",
+      "served": "7e978e1ee84276f008d9691bc5a831a92578ff5075ebe11072eeb2a76aaf580f",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/simulation.js",
+      "status": 200,
+      "expected": "5b5037febcbb6067abebae6c6929261c0504a0c81bfbd0a19cd7f1d66785c34d",
+      "served": "5b5037febcbb6067abebae6c6929261c0504a0c81bfbd0a19cd7f1d66785c34d",
+      "match": true
+    },
+    {
+      "path": "public/games/nightfall/world.js",
+      "status": 200,
+      "expected": "7c0ca86e76f827d45b0407e05619746d24bf1feb085883377855f5b1611c970d",
+      "served": "7c0ca86e76f827d45b0407e05619746d24bf1feb085883377855f5b1611c970d",
+      "match": true
+    },
+    {
+      "path": "public/games/registry.js",
+      "status": 200,
+      "expected": "20e20f27f1958ddf72c05a6136cd5fc084496a60c500f73b21eb597458a1b0b1",
+      "served": "20e20f27f1958ddf72c05a6136cd5fc084496a60c500f73b21eb597458a1b0b1",
+      "match": true
+    },
+    {
+      "path": "public/index.html",
+      "status": 200,
+      "expected": "d63746232860a4a1248401e5243bfd3522e765a1aaff0c3a292bbbf26e735905",
+      "served": "d63746232860a4a1248401e5243bfd3522e765a1aaff0c3a292bbbf26e735905",
+      "match": true
+    },
+    {
+      "path": "public/practice-false-haven.html",
+      "status": 200,
+      "expected": "8f16e90db38e3e1f85fb7d176b329b19e1ae27d66072f45e6607893b01dc8542",
+      "served": "8f16e90db38e3e1f85fb7d176b329b19e1ae27d66072f45e6607893b01dc8542",
+      "match": true
+    },
+    {
+      "path": "public/practice-false-haven.js",
+      "status": 200,
+      "expected": "a850b2169d1fdea537dfdee10752686ac835698f9983dcaf021c52f565e5ec0a",
+      "served": "a850b2169d1fdea537dfdee10752686ac835698f9983dcaf021c52f565e5ec0a",
+      "match": true
+    },
+    {
+      "path": "public/practice-nightfall.js",
+      "status": 200,
+      "expected": "b667b8c86bea5eae165b0861dc259cc7bb6f197f7a8b1806829573ae3b04db9e",
+      "served": "b667b8c86bea5eae165b0861dc259cc7bb6f197f7a8b1806829573ae3b04db9e",
+      "match": true
+    }
+  ]
+}
