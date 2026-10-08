@@ -1,1 +1,5 @@
 .mission-instructions{margin:24px 0;padding:18px 20px;background:#183746;border:1px solid #688e9d;border-left:4px solid #f0c875;border-radius:8px;font-family:system-ui,sans-serif;color:#edf5f7;text-align:left}.mission-instructions h2{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#f0c875;margin:0 0 10px}.mission-instructions p{font:400 15px/1.65 system-ui,sans-serif;color:#edf5f7;margin:10px 0}.mission-instructions p:last-child{margin-bottom:0}
+
+.story-prose{line-height:1.65}.story-prose .story-label{font:700 12px/1.4 system-ui,sans-serif!important;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px!important}.story-prose>p:not(.story-label):not(.transmission){font-family:Georgia,serif}.mission-instructions{display:block;clear:both;box-sizing:border-box}.student-task{border-left:4px solid #2b6e87!important}.student-task>h2{font:700 16px/1.4 system-ui,sans-serif}.scene-card+.mission-instructions{margin-top:20px;margin-bottom:24px}
+
+.student-task{margin-top:20px;padding:16px 20px;background:#edf5fa;color:#172b3b;border:1px solid #9bb6c5;border-radius:8px}.student-task:empty{display:none}

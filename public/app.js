@@ -1,3 +1,4 @@
+import {splitScene,instructionPanel} from './review-presentation.js?v=u11';
 import {JourneyHost} from './games/journey/host.js?v=jttw-stage9-art1';
 let journeyHost=null;
 import {CoastalHost} from './games/aerial-shooter/classroom-host.js?v=0.9.7';
@@ -565,14 +566,12 @@ function renderEnded(item) {
 }
 
 function sceneBlock(item, compact = false) {
-  const scene=item.scene;
-  if (!scene) return '';
-  if(scene.image)return `<section class="panel scene-card"><figure class="scene-image"><img src="${escapeHtml(scene.image)}" width="960" height="540" alt="${escapeHtml(scene.imageAlt||scene.title)}" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure><div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${scene.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
-  const asset=state.cartridge?.id==='vault-7'?(SceneAssets[scene.artId] || SceneAssets['scene.cover']):null;
-  if(!asset)return `<section class="panel scene-card"><h2>${escapeHtml(scene.title)}</h2>${(scene.paragraphs||[]).map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</section>`;
-  return `<section class="panel scene-card ${compact?'compact-scene':''}">
-    <figure class="scene-image" data-art-slot="${escapeHtml(scene.artId)}"><img src="${asset.src}" srcset="${asset.srcset}" sizes="(max-width:600px) calc(100vw - 28px), 672px" alt="${escapeHtml(asset.alt)}" width="960" height="540" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure>
-    <div class="scene-copy"><p class="transmission">${escapeHtml(scene.eyebrow)}</p><h2>${escapeHtml(scene.title)}</h2>${(scene.paragraphs||[]).map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`;
+  const scene=item.scene;if(!scene)return '';
+  const {narrative,instructions}=splitScene(scene,item.stage,state.cartridge.id);
+  const asset=state.cartridge.id==='vault-7'?(SceneAssets[scene.artId]||SceneAssets['scene.cover']):null;
+  const src=scene.image||asset?.src,alt=scene.imageAlt||asset?.alt||scene.title;
+  const illustration=src?`<figure class="scene-image" data-art-slot="${escapeHtml(scene.artId||'')}"><img ${asset?.srcset?`srcset="${escapeHtml(asset.srcset)}" sizes="(max-width:600px) calc(100vw - 28px), 672px"`: ''} src="${escapeHtml(src)}" width="960" height="540" alt="${escapeHtml(alt)}" loading="lazy"><figcaption class="image-fallback" hidden>Scene illustration unavailable. The mission continues below.</figcaption></figure>`:'';
+  return `<section class="panel scene-card ${compact?'compact-scene':''}">${illustration}<div class="scene-copy story-prose"><p class="story-label">Story</p><p class="transmission">${escapeHtml(scene.eyebrow||'')}</p><h2>${escapeHtml(scene.title)}</h2>${narrative.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div></section>`+instructionPanel(instructions,escapeHtml);
 }
 
 function renderExtraction(item, student) {
@@ -587,8 +586,8 @@ function renderExtraction(item, student) {
 }
 
 function renderBriefing(item, student) {
-  if(state.cartridge.id==='journey-west')return sceneBlock(item)+'<section class="panel briefing-card"><p>Complete your mathematics, then choose a hero and personal upgrades with your team. Gameplay results are recorded separately from math accuracy.</p><button class="primary wide" data-action="briefing.ready" '+(student.briefingReady?'disabled':'')+'>'+(student.briefingReady?'Ready for the gates':'Begin preparation')+'</button></section>';
-  return `${sceneBlock(item)}<section class="panel briefing-card">
+  if(state.cartridge.id==='journey-west')return sceneBlock(item)+'<section class="panel briefing-card student-task"><h2>Before you begin</h2><p>Complete your mathematics, then choose a hero and personal upgrades with your team. Gameplay results are recorded separately from math accuracy.</p><button class="primary wide" data-action="briefing.ready" '+(student.briefingReady?'disabled':'')+'>'+(student.briefingReady?'Ready for the gates':'Begin preparation')+'</button></section>';
+  return `${sceneBlock(item)}<section class="panel briefing-card student-task"><h2>Before you begin</h2>
     <div class="secret-preview"><small>SECRET MESSAGE // ${item.secretNumbers.length} SYMBOLS</small><b>${item.secretNumbers.join(" · ")}</b><span>The meaning is hidden until the final gate.</span></div>
     <p class="personal-order">Agent ${escapeHtml(student.alias)}, confirm that you understand: accurate work keeps you alive. Mistakes may change your fate.</p>
     <button class="primary wide" data-action="briefing.ready" ${student.briefingReady ? "disabled" : ""}>${student.briefingReady ? "Mission accepted — waiting for crew" : "Accept mission"}</button>

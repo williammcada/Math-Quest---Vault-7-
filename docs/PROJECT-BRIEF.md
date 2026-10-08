@@ -277,3 +277,12 @@ replacement. Classroom network/WebSocket/reconnect checks remain Not run.
 ## BLACKLINE cartridge v0.2.0 — 2026-10-02
 
 Implemented and tested in MathQuest candidate `2b8adea20407bb8b77a211f2211172830bf658b9` on `implement/blackline-v0.2.0`. Native classroom preparation gates, cargo and final crew votes, earned one-use upgrades, racer adapter with shared input, guided route, original SVG scene art and music, run validation and reconnect are implemented. The approved alpha.2 racer is retained. See the BLACKLINE v0.2.0 verification record. Deployment and physical iOS checks remain pending. This is a cartridge integration candidate, not a claim that the live Worker has been updated.
+
+## Narrative and directions — U-11, 8 October 2026
+
+Owner requires physical and visual separation in every cartridge and going forward.
+Handbook rule saved at 14ab24e. Apply change-specs/narrative-instructions-u11.md:
+shared authored story/instruction roles, separate labeled panels in classroom,
+preview and maintained standalone delivery. Preserve gameplay and academic rules.
+New narrative content should supply separate `scene.paragraphs` (story only) and
+`scene.instructions` arrays, consumed by the shared presentation renderer.

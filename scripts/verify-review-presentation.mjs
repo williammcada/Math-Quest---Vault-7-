@@ -9,7 +9,7 @@ const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'h
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const local=`http://127.0.0.1:${server.address().port}/`,base=process.env.REVIEW_BASE||local;
 const browser=await chromium.launch({executablePath:process.env.SHOOTER_BROWSER||'/tmp/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage'],...(process.env.REVIEW_BASE&&process.env.HTTPS_PROXY?{proxy:{server:process.env.HTTPS_PROXY,bypass:'127.0.0.1,localhost'}}:{})});
-const helper=(await readFile('public/review-presentation.js','utf8')).replace('export function','function');
+const helper=(await readFile('public/review-presentation.js','utf8')).replaceAll('export function','function');
 const style=await readFile('public/review-presentation.css','utf8');
 for(const file of ['Ironbreak-v0.1.0.html','BLACKLINE-v0.2.0.html']){const html=await readFile('public/reviews/'+file,'utf8');assert.ok(html.includes(helper));assert.ok(html.includes(style));}
 const results=[];
