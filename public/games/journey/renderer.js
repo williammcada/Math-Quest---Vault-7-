@@ -2,14 +2,23 @@ import {HERO_ART,HERO_CLIPS} from './hero-art.js';
 import {FRAME_BOUNDS} from './frame-bounds.js';
 import {FRAME_REPAIRS,REPAIR_ATLASES} from './frame-repairs.js';
 import {ENEMY_ART,ENEMY_REPAIR_FILE,enemyClip,enemyBounds} from './enemy-art.js';
-import {ENVIRONMENTS,drawEnvironment} from './environment-art.js';
+import {ENVIRONMENTS,drawEnvironment} from './environment-art.js?v=art1';
 const SOURCE=256;
 const clips=HERO_CLIPS;
 const enemyClips={walk:[2,3,4,5],windup:[6,7],attack:[8,9],recover:[10,11],hurt:[12,13],down:[17]};
 export class JourneyRenderer {
   constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.images={};this.frames=new Map();this.snapshot=null;this.started=performance.now();
-    for(const [key,file] of [...Object.entries(HERO_ART).map(([key,art])=>[key,art.file]),...Object.entries(ENEMY_ART).map(([key,art])=>[key,art.file]),['baozi','baozi-stage9.png'],['elixir','elixir-stage9.png'],['crate','crate-stage9.png'],['enemy-repairs',ENEMY_REPAIR_FILE],['enemy','raider-stage1.png'],['horse','prince-charge-stage3.png'],...Object.entries(REPAIR_ATLASES)]){const img=new Image();img.src=new URL('../../assets/journey/'+file,import.meta.url).href;this.images[key]=img;}this.images.hero=this.images.wukong;
-    for(const env of ENVIRONMENTS){const img=new Image();img.src=new URL('../../assets/journey/'+env.file,import.meta.url).href;this.images['environment-'+env.id]=img;}
+    // Scenery starts first so sprite-atlas downloads cannot starve the backdrop.
+    for(const env of ENVIRONMENTS)this.loadImage('environment-'+env.id,env.file,true);
+    for(const [key,file] of [...Object.entries(HERO_ART).map(([key,art])=>[key,art.file]),...Object.entries(ENEMY_ART).map(([key,art])=>[key,art.file]),['baozi','baozi-stage9.png'],['elixir','elixir-stage9.png'],['crate','crate-stage9.png'],['enemy-repairs',ENEMY_REPAIR_FILE],['enemy','raider-stage1.png'],['horse','prince-charge-stage3.png'],...Object.entries(REPAIR_ATLASES)]){this.loadImage(key,file);}this.images.hero=this.images.wukong;
+
+  }
+  loadImage(key,file,priority=false){
+    const img=new Image();let attempts=0;
+    if(priority)img.fetchPriority='high';
+    const url=new URL('../../assets/journey/'+file,import.meta.url);
+    img.onerror=()=>{if(attempts++<2)setTimeout(()=>{const retry=new URL(url);retry.searchParams.set('retry',attempts);img.src=retry.href;},1000*attempts);};
+    this.images[key]=img;img.src=url.href;return img;
   }
   set(snapshot){this.snapshot=snapshot;}
   sprite(img,frame,x,y,size,facing=1,alpha=1,bounds=null){if(!img||!img.complete||!img.naturalWidth)return;

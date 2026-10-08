@@ -1,9 +1,9 @@
 // Scenery is presentation only. Collision remains in config.js / the server.
 export const ENVIRONMENTS=Object.freeze([
-  {id:'mountain',file:'environment-mountain-stage7.png',floor:'#59624d'},
-  {id:'cave',file:'environment-cave-stage7.png',floor:'#34484d'},
-  {id:'shrine',file:'environment-shrine-stage7.png',floor:'#505b53'},
-  {id:'courtyard',file:'environment-courtyard-stage7.png',floor:'#716956'}
+  {id:'mountain',file:'environment-mountain-stage7.webp',floor:'#59624d'},
+  {id:'cave',file:'environment-cave-stage7.webp',floor:'#34484d'},
+  {id:'shrine',file:'environment-shrine-stage7.webp',floor:'#505b53'},
+  {id:'courtyard',file:'environment-courtyard-stage7.webp',floor:'#716956'}
 ]);
 export function environmentForStage(stage){return ENVIRONMENTS[Number.isInteger(stage)?Math.max(0,Math.min(3,stage)):0];}
 export function drawEnvironment(c,images,s){

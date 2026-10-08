@@ -1,4 +1,4 @@
-import {JourneyHost} from './games/journey/host.js?v=jttw-stage9';
+import {JourneyHost} from './games/journey/host.js?v=jttw-stage9-art1';
 let journeyHost=null;
 import {CoastalHost} from './games/aerial-shooter/classroom-host.js?v=0.9.7';
 import {IronbreakHost} from './games/shooter/host.js?v=ironbreak-0.1.0';

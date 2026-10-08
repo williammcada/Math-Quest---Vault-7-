@@ -1,5 +1,6 @@
 import {checkItem,hashSeed} from '../../math.js';
 import {JOURNEY_BUILD,PROTOCOL} from '../../../public/games/journey/config.js';
+import {ENVIRONMENTS} from '../../../public/games/journey/environment-art.js';
 import {JOURNEY_STORY} from '../../../public/games/journey/story.js';
 
 export const isJourney=room=>room.state.config.cartridgeId==='journey-west';
@@ -11,7 +12,8 @@ export async function runCall(room,team,path,data){
   const result=await res.json();if(!res.ok||result.error)throw Error(result.error||'Combat service unavailable.');return result;
 }
 export function journeyScene(team,members,names){
-  return {title:team.stage==='gate'?names[team.gateIndex]:team.stage==='victory'?'Journey field record':JOURNEY_STORY.title,eyebrow:'AN ORIGINAL JOURNEY ADVENTURE',paragraphs:team.stage==='briefing'?[JOURNEY_STORY.opening[0].text]:team.stage==='gate'?[JOURNEY_STORY.gates[Math.min(team.gateIndex,2)],'Every traveler completes their own questions before the team moves on.']:team.stage==='victory'?[JOURNEY_STORY.endings[team.journeyResult?.outcome]||JOURNEY_STORY.endings.interrupted]:[],artId:null,...(team.stage==='briefing'?{image:'./assets/journey/cast-concept.png',imageAlt:'The five travelers and Nezha'}:{})};
+  const gateArt=ENVIRONMENTS[Math.min(Math.max(team.gateIndex||0,0),3)];
+  return {title:team.stage==='gate'?names[team.gateIndex]:team.stage==='victory'?'Journey field record':JOURNEY_STORY.title,eyebrow:'AN ORIGINAL JOURNEY ADVENTURE',paragraphs:team.stage==='briefing'?[JOURNEY_STORY.opening[0].text]:team.stage==='gate'?[JOURNEY_STORY.gates[Math.min(team.gateIndex,2)],'Every traveler completes their own questions before the team moves on.']:team.stage==='victory'?[JOURNEY_STORY.endings[team.journeyResult?.outcome]||JOURNEY_STORY.endings.interrupted]:[],artId:null,...(team.stage==='briefing'?{image:'./assets/journey/cast-concept.png',imageAlt:'The five travelers and Nezha'}:team.stage==='gate'?{image:'./assets/journey/'+gateArt.file,imageAlt:['Mountain path above the clouds','Lantern-lit cave approach','Ruined mountain shrine','Guardian courtyard'][Math.min(Math.max(team.gateIndex||0,0),3)]}:{})};
 }
 export const journeyServer={scene:journeyScene,advance(team){
   if(!this.members(team.id).every(s=>s.gateComplete))return;
