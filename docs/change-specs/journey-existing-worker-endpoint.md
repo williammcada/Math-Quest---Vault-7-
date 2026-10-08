@@ -39,3 +39,13 @@ Before classroom readiness: test the actual teacher/student school network,
 authenticated WebSocket upgrade and interruption/rejoin, then supported devices
 and intended concurrency. If blocked, do not claim the HTTP relay or polling
 solves WebSockets; retain academic work and investigate the measured failure.
+
+## Reconcile newer live cartridges before first Git build
+
+At owner setup, main advanced to 6cd4953 (v0.9.7 six-cartridge deployment).
+Merge that exact source into Journey 9125cc2 before triggering the connected
+production branch. Preserve all six existing cartridge paths, reports, artwork,
+room compatibility and cache revisions; add Journey as the seventh cartridge.
+Keep platform v0.9.7 with the separate Journey Stage 9 build marker. Checkpoint
+and rerun Node/build/dry-run and local teacher/student browser flow. The owner
+authorized backend/frontend publication and connected this branch to Cloudflare.

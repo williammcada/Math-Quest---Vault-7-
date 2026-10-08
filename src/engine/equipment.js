@@ -21,6 +21,7 @@ export function equipmentCommand(room,student,input){
  }
  if(input.type==='equipment.extend'||input.type==='supply.start'){
   if(!room.isLead(student,t))return fail('Only the Event Lead can request extra preparation.');
+  if(room.state.config.cartridgeId==='coastal-escape'&&!t.supply?.count)return fail('Gate sizes differ. Ask your teacher to set the extra preparation question count.');
   if(equipmentSlots(t)>=3)return fail('All three equipment slots are unlocked.');
   const moduleIds=t.supply?.moduleIds||room.state.config.modules.filter(m=>m.source==='preset').map(m=>m.id);
   if(!moduleIds.length&&!t.supply?.allowReuse)return fail('Ask the teacher to enable reuse of imported questions for extra preparation.');

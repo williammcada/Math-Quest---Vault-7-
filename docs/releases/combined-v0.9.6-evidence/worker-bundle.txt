@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+
+ ⛅️ wrangler 4.131.0
+────────────────────
+Total Upload: 303.91 KiB / gzip: 84.72 KiB
+Your Worker has access to the following bindings:
+Binding                                                                    Resource                  
+env.SESSIONS (QuestSession)                                                Durable Object            
+env.CORS_ALLOWED_ORIGINS ("https://williammcada.github.io,https:...")      Environment Variable      
+
+--dry-run: exiting now.

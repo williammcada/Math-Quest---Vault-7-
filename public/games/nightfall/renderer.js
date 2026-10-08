@@ -1,6 +1,6 @@
-import {drawHaven} from './false-haven-renderer.js?v=0.9.4-fh3';
-import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective,worldFor} from './world.js?v=0.9.4-fh3';
-import {drawCar,drawFixtures} from './hardware.js?v=0.9.4-fh3';
+import {drawHaven} from './false-haven-renderer.js?v=0.9.7';
+import {WORLD,BUILDINGS,TASKS,PICKUPS,PROPS,DISTRACTIONS,doorRects,propBounds,walls,nextObjective,worldFor} from './world.js?v=0.9.7';
+import {drawCar,drawFixtures} from './hardware.js?v=0.9.7';
 const motionPreference=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
 export const MEDIA={actors:'./assets/nightfall/city/actors.png',tiles:'./assets/nightfall/city/tiles.png',props:'./assets/nightfall/city/props.png',ambient:'./assets/nightfall/city/ambient.mp3',danger:'./assets/nightfall/city/danger.mp3',ending:'./assets/nightfall/city/ending.mp3',effects:'./assets/nightfall/city/effects.wav',sfx:Object.fromEntries(['step','shot','shotgun','glass','alarm','moan','enemy-death','breach'].map(k=>[k,'./assets/nightfall/city/v092/'+k+'.wav']))};
 export async function loadArt(media=MEDIA){const art={};await Promise.all(['actors','tiles','props'].map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=async()=>{try{const [width,height]=({tiles:[256,256],props:[512,512],actors:[736,580]})[key];art[key]=globalThis.createImageBitmap?await createImageBitmap(im,{resizeWidth:width,resizeHeight:height,resizeQuality:'pixelated'}):im;resolve();}catch(error){reject(error);}};im.onerror=()=>reject(new Error(`Missing or invalid image: ${media[key]}`));im.src=media[key];})));return art;}
